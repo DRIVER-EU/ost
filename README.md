@@ -27,9 +27,11 @@ An online Observation Support Tool. Part of the DRIVER+ Test-bed software intend
 <dt>OST Configuration</dt>
 <dd>The configuration of OST of Observer Roles, Participant Roles, the links between these Roles,  Observation Type Templates, et cetera, specific for one Trial. An OST Configuration can be saved under a specific name and re-opened, edited, re-saved and used in multiple Trial Sessions.</dd>
 <dt>Participant</dt>
-<dd>Person participating as end-user/practitioner in a Trial Session</dd>
+<dd>Person participating as end-user/practitioner in a Trial Session and using the OST during Trial-breaks and in the evaluation phase to answer observation types (i.e. questions) about the trial, the crisis management performance and/or the solution(s) used. </dd>
 <dt>Participant Role</dt>
 <dd>Role (in the theatrical definition of an actor’s role) that is taken up by a Participant (e.g. Fire chief, Police Officer, Mayor, etc).</dd>
+<dt>Participant UI</dt>
+<dd>The OST’s User Interface available for Participants (i.e. only in breaks in Trial-mode and in Review-mode)</dd>
 <dt>Phase specific Observation Type</dt>
 <dd>An Observation Type that can be observed only during certain phase(s) of the Trial Session. During the progression of a Trial Session, Phase specific Observation Types therefore appear and disappear in the Observer UI.</dd>
 <dt>Review-mode</dt>
