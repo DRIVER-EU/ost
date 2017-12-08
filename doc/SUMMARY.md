@@ -5,3 +5,4 @@
 * [Constraints](constraints.md)
 * [Design](design.md)
 * [Implementation](implementation.md)
+* [Setup](setup.md)
