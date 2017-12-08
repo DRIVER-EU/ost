@@ -1,0 +1,7 @@
+{
+    "root": "./doc",
+    "title": "Functional specification of the test-bed",
+    "author": "Grzegorz Taberski, Erik Vullings",
+    "plugins": {
+    }
+}
