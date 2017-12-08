@@ -1,4 +1,4 @@
-For the full specifications, please go [here](https://driver-eu.gitbooks.io/specification-of-the-online-observer-support-tool)
+For the full specifications, please go [here](https://driver-eu.gitbooks.io/specification-of-the-online-observer-support-tool).
 
 # Online Observation Support Tool
 An online Observation Support Tool. Part of the DRIVER+ Test-bed software intended to gather observations during a Trial.
