@@ -6,9 +6,9 @@ An online Observation Support Tool. Part of the DRIVER+ Test-bed software intend
 ## Definitions
 
 <dl>
-<dt>Build-mode</dt>
+<dt><b>Build-mode</b></dt>
 <dd>Phase in which a Trial is being prepared. In this mode the OST is configured by the Observation Manager for use in a specific Trial.</dd>
-<dt>Observation Form</dt>
+<dt><b>Observation Form</dt>
 <dd>Form in the Observer UI that is dynamically composed containing the one or more Observation Types which are being observed, based on the Templates of these Observation Type(s), section to mark which of the Participants the Observation applies to and room to add free text and/or photo/video/audio.   </dd>
 <dt>Observation Manager</dt>
 <dd>Person who configures the OST up front of a Trial, manages all Observers during the Trial and has overall control over the OST system during a Trial.</dd>
