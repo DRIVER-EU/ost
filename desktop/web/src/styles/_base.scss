@@ -1,0 +1,20 @@
+/*
+Application Settings Go Here
+------------------------------------
+This file acts as a bundler for all variables/mixins/themes, so they
+can easily be swapped out without `core.scss` ever having to know.
+
+For example:
+*/
+@import 'colors';
+
+@font-face {
+    font-family: NotesEsaReg;
+    src: url("/fonts/NotesEsaReg.otf") format("opentype");
+}
+
+@font-face {
+    font-family: NotesEsaBol;
+    font-weight: bold;
+    src: url("/fonts/NotesEsaBol.otf") format("opentype");
+}
