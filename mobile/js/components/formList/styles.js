@@ -34,11 +34,6 @@ export default{
     alignSelf: 'stretch',
     marginTop: 10,
   },
-  shadow: {
-    height: 350,
-    width: null,
-    flex: 1,
-  },
   thumbnailContainerStyle: {
     marginBottom: 10,
   },

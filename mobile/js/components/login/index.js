@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, AsyncStorage, View } from 'react-native';
+import { Image, Text, AsyncStorage, View, Dimensions } from 'react-native';
 import firebase from 'firebase';
 import {
   Container,
@@ -28,6 +28,8 @@ class Login extends Component {
       error: '',
       loading: false,
       loggedIn: null,
+      heightEl: null,
+      widthEl: null,
     };
   }
 
@@ -40,6 +42,14 @@ class Login extends Component {
         this.setState({ loggedIn: false });
       }
       AsyncStorage.setItem('loggedIn', JSON.stringify(this.state.loggedIn));
+    });
+  }
+
+  onLayout(e) {
+    const { width, height } = Dimensions.get('window');
+    this.setState({
+      widthEl: width,
+      heightEl: height,
     });
   }
 
@@ -88,39 +98,47 @@ class Login extends Component {
   }
 
   render() {
+    const { widthEl, heightEl } = this.state;
     return (
-      <Container>
+      <Container style={{ backgroundColor: '#FBFAFA' }}>
         <Header style={{ backgroundColor: '#00497E' }} />
-        <Content style={{ backgroundColor: '#FBFAFA' }}>
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }} >
-            <Image source={background} style={styles.shadow} />
-            <View style={styles.containerStyle}>
-              <CardSection>
-                <Input
-                  label="Email"
-                  placeholder="user@gmail.com"
-                  value={this.state.email}
-                  onChangeText={email => this.setState({ email })}
-                />
-              </CardSection>
-              <CardSection>
-                <Input
-                  label="Password"
-                  secureTextEntry
-                  placeholder="password"
-                  value={this.state.password}
-                  onChangeText={password => this.setState({ password })}
-                />
-              </CardSection>
-              <Text style={styles.errorTextStyle}>
-                {this.state.error}
-              </Text>
-              <CardSection>
-                <View style={{ flex: 1 }}>
-                  {this.renderButton()}
-                </View>
-              </CardSection>
-            </View>
+        <Content>
+          <Image
+            onLayout={this.onLayout.bind(this)}
+            source={background}
+            style={{
+              flex: 1,
+              marginTop: 40,
+              marginBottom: 40,
+              width: null,
+              height: heightEl > widthEl ? 200 : 350 }}
+          />
+          <View style={styles.containerStyle}>
+            <CardSection>
+              <Input
+                label="Email"
+                placeholder="user@gmail.com"
+                value={this.state.email}
+                onChangeText={email => this.setState({ email })}
+              />
+            </CardSection>
+            <CardSection>
+              <Input
+                label="Password"
+                secureTextEntry
+                placeholder="password"
+                value={this.state.password}
+                onChangeText={password => this.setState({ password })}
+              />
+            </CardSection>
+            <Text style={styles.errorTextStyle}>
+              {this.state.error}
+            </Text>
+            <CardSection>
+              <View style={{ flex: 1 }}>
+                {this.renderButton()}
+              </View>
+            </CardSection>
           </View>
         </Content>
       </Container>

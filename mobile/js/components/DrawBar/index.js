@@ -12,6 +12,7 @@ import {
 import firebase from 'firebase';
 
 const routes = [{ name: 'Home', display: 'Selected Trial' }];
+const background = require('../../../images/driver-logo.png');
 
 export default class DrawBar extends React.Component {
   static navigationOptions = {
@@ -28,45 +29,40 @@ export default class DrawBar extends React.Component {
     return (
       <Container>
         <Content>
-          <Image
-            source={{
-              uri: 'https://github.com/GeekyAnts/NativeBase-KitchenSink/raw/react-navigation/img/drawer-cover.png',
-            }}
-            style={{
-              height: 120,
-              alignSelf: 'stretch',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <TouchableOpacity
+          <View>
+            <Image
+              source={background}
               style={{
                 height: 120,
+                width: null,
+                flex: 1,
+                marginRight: 40,
                 alignSelf: 'stretch',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => this.props.navigation.navigate('DrawerClose')}
             >
-              <Image
-                square
-                style={{ height: 80, width: 70 }}
-                source={{
-                  uri: 'https://github.com/GeekyAnts/NativeBase-KitchenSink/raw/react-navigation/img/logo.png',
+              <TouchableOpacity
+                style={{
+                  height: 120,
+                  alignSelf: 'stretch',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
+                onPress={() => this.props.navigation.navigate('DrawerClose')}
               />
-              <View
-                style={{ top: 10, right: 10, position: 'absolute' }}
-              >
-                <Button
-                  transparent
-                  onPress={this.logOut}
-                >
-                  <Icon active name="power" style={{ color: '#00497E' }} />
-                </Button>
-              </View>
-            </TouchableOpacity>
-          </Image>
+            </Image>
+          </View>
+          <View
+            style={{ top: 0, right: 0, position: 'absolute' }}
+          >
+            <Button
+              transparent
+              onPress={this.logOut}
+            >
+              <Icon active name="power" style={{ color: '#00497E' }} />
+            </Button>
+          </View>
           <List
             dataArray={routes}
             renderRow={data => (

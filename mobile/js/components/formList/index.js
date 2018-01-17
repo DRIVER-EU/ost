@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Image } from 'react-native';
+import { View, Image, Dimensions } from 'react-native';
 import {
   Container,
   Header,
@@ -29,11 +29,27 @@ class FormList extends Component {
     openDrawer: React.PropTypes.func,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      heightEl: null,
+      widthEl: null,
+    };
+  }
+
+  onLayout(e) {
+    const { width, height } = Dimensions.get('window');
+    this.setState({
+      widthEl: width,
+      heightEl: height,
+    });
+  }
+
   render() {
-    const { props: { name, index, list } } = this;
+    const { props: { name } } = this;
+    const { widthEl, heightEl } = this.state;
     return (
       <Container style={styles.container}>
-
         <Header style={{ backgroundColor: '#00497E' }}>
           <Left>
             <Button transparent onPress={() => this.props.navigation.goBack()}>
@@ -48,7 +64,7 @@ class FormList extends Component {
           <Right />
         </Header>
         <Content padder>
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1, flexDirection: 'column' }}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>
                 Observer Support Tool
@@ -74,9 +90,15 @@ class FormList extends Component {
                 Information about trial
               </Text>
             </View>
-            <View style={styles.thumbnailContainerStyle}>
-              <Image source={background} style={styles.shadow} />
-            </View>
+            <Image
+              onLayout={this.onLayout.bind(this)}
+              source={background}
+              style={{
+                marginVertical: 40,
+                height: heightEl > widthEl ? 200 : 350,
+                width: null,
+                flex: 1 }}
+            />
             <View style={{ marginBottom: 15, flex: 1 }}>
               <Button
                 full

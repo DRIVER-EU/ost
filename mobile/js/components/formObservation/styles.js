@@ -3,7 +3,7 @@ const React = require('react-native');
 
 const { StyleSheet, Dimensions } = React;
 
-const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
 
 export default {
   titleObservationContainer: {
@@ -58,5 +58,57 @@ export default {
     shadowRadius: 2,
     elevation: 1,
     marginTop: 10,
+  },
+  locationContainer: {
+    width: (deviceWidth / 2) - 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  locationLabel: {
+    flex: 2,
+  },
+  locationInput: {
+    flex: 3,
+    color: '#000',
+    borderColor: '#000',
+  },
+  buttonLocation: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    borderRadius: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
+    backgroundColor: '#f4f4f4',
+    borderColor: '#ddd',
+    borderTopWidth: 1,
+    flex: 3,
+    height: 30,
+  },
+  buttonLocContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  addPhoto: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
+    backgroundColor: '#f4f4f4',
+    alignSelf: 'stretch',
+    padding: 5,
+    borderColor: '#ddd',
+    borderTopWidth: 1,
   },
 };
