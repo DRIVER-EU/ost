@@ -5,11 +5,6 @@ const { StyleSheet } = React;
 
 
 export default {
-  shadow: {
-    flex: 1,
-    width: null,
-    height: 350,
-  },
   input: {
     marginBottom: 20,
   },
