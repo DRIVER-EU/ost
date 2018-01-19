@@ -16,4 +16,4 @@ class TrialsView extends Component {
   }
 }
 
-export default Trials
+export default TrialsView

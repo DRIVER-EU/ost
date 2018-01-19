@@ -6,12 +6,6 @@ import '../../styles/core.scss'
 import { connect } from 'react-redux'
 
 const styles = {
-  height: '82%',
-  marginTop: '70px',
-  position: 'absolute',
-  left: 'calc(1% + 224px)',
-  right: '1%',
-  overflowY: 'scroll',
   toastStyle: {
     backgroundColor: 'green',
     textAlign: 'center'
@@ -56,11 +50,11 @@ class CoreLayout extends Component {
       <div className='core-container'>
         <div />
         <div className='view-container'>
-          <div className='hidden-to-print' style={styles.menubox}>
+          <div style={styles.menubox}>
             <Menu role={this.state.role} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
-            <div className='hidden-to-print' style={styles.menubox}/>
+            <div style={styles.menubox} />
             {this.props.children}
           </div>
         </div>

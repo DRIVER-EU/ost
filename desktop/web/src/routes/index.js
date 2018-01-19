@@ -11,7 +11,7 @@ export const createRoutes = (store) => ({
   component   : CoreLayout,
   indexRoute  : Home,
   childRoutes : [
-    Trials(store),
+    Trials(store)
   ]
 })
 

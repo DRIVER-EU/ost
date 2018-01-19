@@ -4,7 +4,7 @@ import createStore from './store/createStore'
 import AppContainer from './containers/AppContainer'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import { lightBlue500, lightBlue700, pinkA200, grey900 } from 'material-ui/styles/colors'
+import { green500, green300, orange500, grey900 } from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 require('es6-promise').polyfill()
 injectTapEventPlugin()
@@ -32,6 +32,49 @@ if (!Array.prototype.find) {
     }
   })
 }
+
+if (!String.prototype.includes) {
+  String.prototype.includes = function (search, start) {
+    if (typeof start !== 'number') {
+      start = 0
+    }
+
+    if (start + search.length > this.length) {
+      return false
+    } else {
+      return this.indexOf(search, start) !== -1
+    }
+  }
+}
+
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function (searchElement /*, fromIndex */) {
+    'use strict'
+    var O = Object(this)
+    var len = parseInt(O.length) || 0
+    if (len === 0) {
+      return false
+    }
+    var n = parseInt(arguments[1]) || 0
+    var k
+    if (n >= 0) {
+      k = n
+    } else {
+      k = len + n
+      if (k < 0) { k = 0 }
+    }
+    var currentElement
+    while (k < len) {
+      currentElement = O[k]
+      if (searchElement === currentElement ||
+         (searchElement !== searchElement && currentElement !== currentElement)) { // NaN !== NaN
+        return true
+      }
+      k++
+    }
+    return false
+  }
+}
 // ========================================================
 // Store Instantiation
 // ========================================================
@@ -45,11 +88,11 @@ const MOUNT_NODE = document.getElementById('root')
 
 const muiTheme = getMuiTheme({
   palette: {
-    primary1Color: lightBlue700,
-    primary2Color: lightBlue500,
-    accent1Color: pinkA200,
-    textColor: grey900,
-    pickerHeaderColor: lightBlue500
+    primary1Color: '#00497E',
+    primary2Color: '#053451',
+    accent1Color: '#FDB913',
+    textColor: '#282829',
+    pickerHeaderColor: green300
   }
 })
 
@@ -57,7 +100,9 @@ let render = () => {
   const routes = require('./routes/index').default(store)
 
   ReactDOM.render(
-      <AppContainer store={store} routes={routes} />,
+    <MuiThemeProvider muiTheme={muiTheme}>
+      <AppContainer store={store} routes={routes} />
+    </MuiThemeProvider>,
     MOUNT_NODE
   )
 }
