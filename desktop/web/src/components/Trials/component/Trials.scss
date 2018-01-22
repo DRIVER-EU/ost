@@ -21,4 +21,20 @@
   .dropdown-title {
       font-size: 12px;
   }
+  .icons-color {
+    color: black;
+    padding: 7px;
+    font-size: 30px;
+  }
+  .sort-style {
+    display: -webkit-flex;
+    display: flex;
+    height: 27px;
+  }
+  .sort-style-icon {
+    padding-top: 5px;
+  }
+  .sort-cursor {
+    cursor: pointer;
+  }
 }
