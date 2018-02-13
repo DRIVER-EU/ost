@@ -11,10 +11,13 @@ Events with information about them and time are called Simulation Phases.
 
 ### Events sent by Test-bed
 Firstly OST Server has to subscribe Test-bed. Each time when new event is prepared, OST server received a notification about it and forward this message to Trial Manager and User. 
+![](/doc/img/sequence1.png)
+
+
 ### Events sent by Trial Manager
 If events are prepared by Trial Manager, he sends it to OST Server. From that repository event is published in Test-bed and also displayed to User. 
 
-
+![](/doc/img/seq2.png)
 
 
 
