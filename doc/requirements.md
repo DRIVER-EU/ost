@@ -3,5 +3,5 @@
 Provide an overview of the functional requirements, and the performance requirements.  
 Preferably, we can link these later to features.
 
-![](ost/doc/img/Class Diagram.png)
+![](/doc/img/class-diagram.png)
 
