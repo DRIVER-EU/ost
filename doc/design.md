@@ -4,6 +4,18 @@ Including UML diagrams.
 
 ![architecture](./img/architecture.png)
 
-## Scenario
-![](/doc/img/loginto.png)
-![](/doc/img/notification.png)
+## OST and Test-bed Integration
+There exists integration between Observer Support Tool Server and Test-Bed as an external system. Test-bed prepares data about events: names, description, trigger and time. Packages with that information are sent to OST Server. OST Server provides reacting on a trigger and displaying correctly events in time to user. 
+In fact not only Test-bed is responsible for sending events. There is also possibility that Trial Manager sends such packages directly to users. 
+Events with information about them and time are called Simulation Phases. 
+
+### Events sent by Test-bed
+Firstly OST Server has to subscribe Test-bed. Each time when new event is prepared, OST server received a notification about it and forward this message to Trial Manager and User. 
+### Events sent by Trial Manager
+If events are prepared by Trial Manager, he sends it to OST Server. From that repository event is published in Test-bed and also displayed to User. 
+
+
+
+
+
+
