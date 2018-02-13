@@ -12,23 +12,11 @@ If it comes to connection Question – Role, it means that both Observers and Pa
 Trial has a description and name. Each stage of trial is an event, which are being added in time. 
 Assigning roles and creating questions occur on trial level. 
 ## Event
-Event is a particular stage of scenario. It has following attributes: 
-•	Name
-•	Description
-•	Time
-•	Trigger
+Event is a particular stage of scenario. It has following attributes: name, description, time and trigger.
 Each event is assigned to a trial and many question with question types are assigned to an event. User will have displayed a notification when a new event is added. That is why, event is a trigger. It is a key, because each new event has influence on generated questions. So, questions are very strongly dependent on time. 
 Trigger in Event Class on a diagram is a key, unique ID which can affect changing questions. 
 All data about events can be send do tool database from external system – Test-bed.  
 ## Questions
-Question is described by name, short description and Answer Type. Following Answer Types exist: 
-•	Checkboxes
-•	Radio buttons
-•	Text field 
-•	Sliders
+Question is described by name, short description and Answer Type. Following Answer Types exist: checkboxes, radio buttons, text field and sliders.
 Each answer types determines a value of an answer. Observations that are filled by Observer dependent on answer type are stored in QuestionItem Class.
-To observation user can also add some attachments which also have types:
-•	Location
-•	Picture 
-•	Voice
-•	Description
+To observation user can also add some attachments which also have types:location, picture, voice and description.
