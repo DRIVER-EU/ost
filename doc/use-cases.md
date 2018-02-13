@@ -9,6 +9,7 @@ Observer Support Tool’s aim is to  collect observations, inform observers abou
 
 ### Use Case: Trial Manager
 ![](/doc/img/use-cases-trial-manager.png)
+![](ost/doc/img/Class Diagram.png)
 
 
 ## Actors
