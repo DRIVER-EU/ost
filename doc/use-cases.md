@@ -21,7 +21,6 @@ Observer has a possibility to log into the app or register by entering an email 
 
 Trial Manager is a person who is responsible for managing not only the event but also the user. He has different view for OST than Observer, he uses Desktop version of a tool. Trial Manager is responsible for confirming user account and assigning registered users to a role in a trial. The role may be the Observer or Participant. He also has to fill in list of Participants to be observed, assign Participants to Observer roles and send messages to them. If it comes to managing an event, Trial Manager creates observation types and groups them into packages. What Trial Manager have displayed is received observations,  messages which has been send in table  and locations of collected observations on the map. What is more, he can see the summary of observations in time on a diagram and change the range of time if it is needed. There is also a table with simple summary with observations, which present collected data about them.  Table  indicates observer’s role and name. It also shows observation type for each user, observation that was sent and some attachments. Trial Manager can filter results. The table with sent messages contains information about time it was sent, to which user with which role and what text was typed into. There is a possibility of filtering results. To make analysing more comfortable, Trial Manager can export collected data to CSV file. 
 
-### Summary
 
 
 
