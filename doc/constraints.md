@@ -6,3 +6,21 @@ Mention the constraints of the technical solution:
 - has a standalone server that can be run without the test-bed
 - the server can communicate with the test-bed (Apache Kafka) to send and receive observations
 - ...
+
+## Observer Support Tool - Mobile
+- Web browser
+- Android (tablet and smartphone)
+- iOS (tablet and smartphone)
+
+## Observer Management Tool - Desktop
+- Web browser
+
+
+
+
+
+
+
+
+
+
