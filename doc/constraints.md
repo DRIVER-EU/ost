@@ -12,8 +12,13 @@ Mention the constraints of the technical solution:
 - Android (tablet and smartphone)
 - iOS (tablet and smartphone)
 
+![](/doc/img/obsView.png)
+Sample view for User
+
 ## Observer Management Tool - Desktop
 - Web browser
+![](/doc/img/TMView.png)
+Sample view for Trial Manager
 
 ## Server
 Observer Support Tool has its own server, which can be run independently from test-bed. However, it can communicate in order to exchnage some data based on publish-subscribe pattern. 
