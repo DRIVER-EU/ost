@@ -11,8 +11,8 @@ Mention the constraints of the technical solution:
 - Web browser
 - Android (tablet and smartphone)
 - iOS (tablet and smartphone)
+![](/doc/img/obsEventView.png)
 
-![](/doc/img/obsView.png)
 Sample view for User
 
 ## Observer Management Tool - Desktop
