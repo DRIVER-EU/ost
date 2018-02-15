@@ -2,7 +2,7 @@
 
 ## Class Model
 
-![](/doc/img/classReq.jpg)
+![](/img/classReq.jpg)
 
 ### User
 User Class stores data about each user of an Observer Support Tool. User is always assigned to a particular Role, which can be an Observer or Participant. 
