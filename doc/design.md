@@ -18,8 +18,3 @@ Firstly OST Server has to subscribe Test-bed. Each time when new event is prepar
 If events are prepared by Trial Manager, he sends it to OST Server. From that repository event is published in Test-bed and also displayed to User. 
 
 ![seq2](./img/seq2.png)
-
-![seq2](./img/seq2.png)
-
-
-![seq2](./img/seq2.png)
