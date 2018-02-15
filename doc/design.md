@@ -19,6 +19,7 @@ If events are prepared by Trial Manager, he sends it to OST Server. From that re
 
 ![seq2](./img/seq2.png)
 
+![seq2](./img/seq2.png)
 
 
-
+![seq2](./img/seq2.png)
