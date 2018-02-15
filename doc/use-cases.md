@@ -5,10 +5,10 @@ Observer Support Tool’s aim is to  collect observations, inform observers abou
 ## Use cases
 
 ### Use case: Observer
-![](/doc/img/use-cases-observer.png)
+![](./img/use-cases-observer.png)
 
 ### Use Case: Trial Manager
-![](/doc/img/use-cases-trial-manager.png)
+![](./img/use-cases-trial-manager.png)
 
 
 ## Actors
