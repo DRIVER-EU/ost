@@ -19,6 +19,10 @@ If events are prepared by Trial Manager, he sends it to OST Server. From that re
 
 ![seq2](./img/seq2.png)
 
+### Observations sent by User
+![sek3](./img/sek3.jpg)
+
+
 ## Common Alerting Protocol 
 Common Alerting Protocol Version 1.2 is the OASIS Standard we want to use modelling three processes in Observer Support Tool connected with relationship between Trial Manager and Observer and Test – bed.  
 
