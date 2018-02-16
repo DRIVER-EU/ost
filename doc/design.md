@@ -19,9 +19,12 @@ If events are prepared by Trial Manager, he sends it to OST Server. From that re
 
 ![seq2](./img/seq2.png)
 
-
 ## Common Alerting Protocol 
 Common Alerting Protocol Version 1.2 is the OASIS Standard we want to use modelling three processes in Observer Support Tool connected with relationship between Trial Manager and Observer and Test – bed.  
+
+![Relation-TM-Observers](./img/Relation-TM-Observers.jpg)
+
+Diagram shows how 
 
 According to OASIS Standard CAP consists of following elements: 
 ![CAP](./img/CAP.jpg)
