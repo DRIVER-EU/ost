@@ -34,7 +34,7 @@ Common Alerting Protocol Version 1.2 is the OASIS Standard we want to use modell
 
 ![Relation-TM-Observers](./img/Relation-TM-Observers.jpg)
 
-Diagram shows how 
+Diagram shows how looks relation between mobile version of a tool and desktop version, so how in fact looks relation between Trial Manager and Observers. 
 
 According to OASIS Standard CAP consists of following elements: 
 ![CAP](./img/CAP.jpg)
