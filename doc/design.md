@@ -18,3 +18,11 @@ Firstly OST Server has to subscribe Test-bed. Each time when new event is prepar
 If events are prepared by Trial Manager, he sends it to OST Server. From that repository event is published in Test-bed and also displayed to User. 
 
 ![seq2](./img/seq2.png)
+
+
+## Common Alerting Protocol 
+Common Alerting Protocol Version 1.2 is the OASIS Standard we want to use modelling three processes in Observer Support Tool connected with relationship between Trial Manager and Observer and Test – bed.  
+
+According to OASIS Standard CAP consists of following elements: 
+
+
