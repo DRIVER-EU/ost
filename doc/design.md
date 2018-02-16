@@ -26,4 +26,5 @@ Common Alerting Protocol Version 1.2 is the OASIS Standard we want to use modell
 According to OASIS Standard CAP consists of following elements: 
 ![CAP](./img/CAP.jpg)
 
+### Mapping CAP standard with OST functionalities:
 
