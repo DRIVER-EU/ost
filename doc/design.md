@@ -20,6 +20,8 @@ If events are prepared by Trial Manager, he sends it to OST Server. From that re
 ![seq2](./img/seq2.png)
 
 ### Observations sent by User
+Observation is sent directly to OST Server, which sends notification to the Trial Manager.
+
 ![sek3](./img/sek3.jpg)
 
 
