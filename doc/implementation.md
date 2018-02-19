@@ -15,7 +15,7 @@ Below are presented asmple views for Observer and Trial Manager.
 
 #### Trial
 <img src="./img/trial.png" width="300">
-<img src="./img/desc1.png" width="300">
+
 #### Events
 <img src="./img/obsEventView.png" width="300">
 
