@@ -12,5 +12,6 @@
 ![](./img/slider1.png)
 ![](./img/type.png)
 ![](./img/TMView.png)
-![test](http://url.to/trial.png)
+
+![test](/img/trial.png)
 <img src="http://url.to/trial.png" width="48">
