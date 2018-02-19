@@ -7,7 +7,7 @@
 
 
 
-<img src="./img/radiobut1.png" width="100">
+<img src="./img/radiobut1.png" width="200">
 ![](./img/radiobut2.png)
 ![](./img/chckbx1.png)
 ![](./img/chbox2.png)
