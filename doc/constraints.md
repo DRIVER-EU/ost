@@ -26,7 +26,6 @@ There will be provided Project Information Sheet, which will be available for ea
 
 While registering and sending observation, User will have to check the box: 
 - "I have read and understood the Project Information Sheet stated DD/MM/YYYY." 
-and something like
 - "I understand my personal details such as phone number and address will not be revealed to people outside the project.".
 
 
