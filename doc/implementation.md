@@ -3,10 +3,10 @@
 ![1](/doc/img/1.png)
 ![2](./img/2.png)
 ![3](./img/3.png)
-![trial](./img/trial.png | width=48)
+![trial](./img/trial.png)
 ![welcome](./img/welcome.png)
 ![welcome2](./img/welcome2.png)
-![](./img/obsEventView.png)
+<img src="./img/trial.png" width="48">
 ![](./img/radiobut1.png)
 ![](./img/radiobut2.png)
 ![](./img/chckbx1.png)
