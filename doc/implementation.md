@@ -3,7 +3,7 @@
 ![1](/doc/img/1.png)
 ![2](./img/2.png)
 ![3](./img/3.png)
-![trial](./img/trial.png){:height="50%" width="50%"
+![trial](./img/trial.png){:height="50%" width="50%"}
 ![welcome](./img/welcome.png)
 ![welcome2](./img/welcome2.png)
 ![](./img/obsEventView.png)
