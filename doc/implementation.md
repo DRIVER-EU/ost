@@ -6,13 +6,13 @@
 
 
 
-
+<img src="./img/trial.png" width="400">
 <img src="./img/radiobut1.png" width="400">
-![](./img/radiobut2.png)
-![](./img/chckbx1.png)
-![](./img/chbox2.png)
-![](./img/slider1.png)
-![](./img/type.png)
-![](./img/TMView.png)
+<img src="./img/radiobut2.png" width="400">
+<img src="./img/chckbx1.png" width="400">
+<img src="./img/chbox2.png" width="400">
+<img src="./img/slider1.png" width="400">
+<img src="./img/type.png" width="400">
+<img src="./img/TMView.png" width="400">
 
 
