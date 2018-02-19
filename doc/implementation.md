@@ -6,6 +6,8 @@
 
 
 ![](./img/radiobut1.png)
+
+<img src="./img/radiobut1.png" width="48">
 ![](./img/radiobut2.png)
 ![](./img/chckbx1.png)
 ![](./img/chbox2.png)
@@ -14,4 +16,3 @@
 ![](./img/TMView.png)
 
 
-<img src="./img/radiobut1.png" width="48">
