@@ -42,7 +42,8 @@ According to OASIS Standard CAP consists of following elements:
 ### Mapping CAP standard with OST functionalities:
 #### Sending Observation from Observer to the Server
 ![cap1](./img/cap1.png)
-
+#### Sending Messages and Events from Trial Manager to Observer
 ![cap2](./img/cap2.png)
+#### Sending Events from Test - bed to Observer
 ![cap3](./img/cap3.png)
 
