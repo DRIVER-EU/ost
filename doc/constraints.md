@@ -26,7 +26,7 @@ There will be provided Project Information Sheet, which will be available for ea
 - Strategies for assuring ethical use of the data: procedures for safeguarding personal information, maintaining confidentiality and anonymising data, especially in relation to data archiving and reuse
 - Details of the research: funding source, sponsoring institution, name of project, contact details for researchers, how to file a complaint.
 
-While registering and sending observation, User will have to check consent forms, such as for example: 
+While registering User will have to check consent forms, such as for example: 
 - "I have read and understood the Project Information Sheet stated DD/MM/YYYY." 
 - "I understand my personal details such as phone number and address will not be revealed to people outside the project.".
 
