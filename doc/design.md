@@ -40,6 +40,7 @@ According to OASIS Standard CAP consists of following elements:
 ![CAP](./img/CAP.jpg)
 
 ### Mapping CAP standard with OST functionalities:
+#### Sending Observation from Observer to the Server
 ![CAP](./img/cap1.png)
 
 
