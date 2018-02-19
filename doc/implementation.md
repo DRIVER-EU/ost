@@ -7,10 +7,10 @@
 
 
 ![trial](./img/trial.png)
-<img src="http://url.to/trial.png" width="48">
+<img src="http://url.to/trial.png" width="100">
 ![welcome](./img/welcome.png)
 ![welcome2](./img/welcome2.png)
-<img src="./img/trial.png" width="48">
+
 ![](./img/radiobut1.png)
 ![](./img/radiobut2.png)
 ![](./img/chckbx1.png)
