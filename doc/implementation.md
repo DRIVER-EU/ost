@@ -13,5 +13,5 @@
 ![](./img/type.png)
 ![](./img/TMView.png)
 
-![test](/img/trial.png)
-<img src="http://url.to/trial.png" width="48">
+
+<img src="./img/radiobut1.png" width="48">
