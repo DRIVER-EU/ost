@@ -6,8 +6,8 @@
 
 
 
-![trial](./img/trial.png)
-![]<img src="http://url.to/trial.png" width="48">
+![trial](http://url.to/image.png)
+<img src="http://url.to/trial.png" width="48">
 ![welcome](./img/welcome.png)
 ![welcome2](./img/welcome2.png)
 
