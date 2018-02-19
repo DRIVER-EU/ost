@@ -28,6 +28,8 @@ Below are presented asmple views for Observer and Trial Manager.
 <img src="./img/chckbx1.png" width="300">
 <img src="./img/chbox2.png" width="300">
 <img src="./img/slider1.png" width="300">
+<img src="./img/slider2.png">
+
 
 
 
