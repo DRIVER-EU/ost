@@ -14,4 +14,4 @@
 ![](./img/slider1.png)
 ![](./img/type.png)
 ![](./img/TMView.png)
-![](./img/loginto.png)
+
