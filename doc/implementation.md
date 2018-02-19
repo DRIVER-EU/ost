@@ -1,6 +1,6 @@
 # Implementation details
 
-![1](/doc/img/1.png)
+![1](/doc/img/1.png|width=100)
 ![2](./img/2.png)
 ![3](./img/3.png)
 ![trial](./img/trial.png)
