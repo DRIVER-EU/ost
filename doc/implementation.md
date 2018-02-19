@@ -13,7 +13,6 @@ Below are presented asmple views for Observer and Trial Manager.
 #### Welcome Window
 <img src="./img/welcome.png" width="300">
 
-
 #### Trial
 <img src="./img/trial.png" width="300">
 <img src="./img/desc1.png" width="300">
