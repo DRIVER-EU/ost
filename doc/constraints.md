@@ -14,19 +14,8 @@
 Observer Support Tool has its own server, which can be run independently from test-bed. However, it can communicate in order to exchnage some data based on publish-subscribe pattern. 
 
 ## Ethics
+
 ![approval](./img/approval.png)
-
-
-
-
-
-
-
-
-
-
-
-
 
 There will be provided Project Information Sheet, which will be available for each User. This document will include such issues (according to https://www.ukdataservice.ac.uk/manage-data/legal-ethical/consent-data-sharing/consent-forms) as: 
 - Purpose of the research
