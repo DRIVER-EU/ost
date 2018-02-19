@@ -1,11 +1,11 @@
 # Implementation details
 
-![] (./img/1.png)
-![] (./img/2.png)
-![] (./img/3.png)
-![] (./img/trial.png)
-![] (./img/welcome.png)
-![] (./img/welcome2.png)
+![1] (./img/1.png)
+![2] (./img/2.png)
+![3] (./img/3.png)
+![trial] (./img/trial.png)
+![welcome] (./img/welcome.png)
+![welcome2] (./img/welcome2.png)
 ![] (./img/obsEventView.png)
 ![] (./img/radiobut1.png)
 ![] (./img/radiobut2.png)
