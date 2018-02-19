@@ -1,5 +1,5 @@
 # Implementation details
-Below are presented asmple views for Observer and Trial Manager.
+Below are presented sample views for Observer and Trial Manager.
 
 ## Trial Manager View
 
