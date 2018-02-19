@@ -40,4 +40,6 @@ According to OASIS Standard CAP consists of following elements:
 ![CAP](./img/CAP.jpg)
 
 ### Mapping CAP standard with OST functionalities:
+![CAP](./img/cap1.png)
+
 
