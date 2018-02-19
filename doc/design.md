@@ -41,6 +41,8 @@ According to OASIS Standard CAP consists of following elements:
 
 ### Mapping CAP standard with OST functionalities:
 #### Sending Observation from Observer to the Server
-![CAP](./img/cap1.png)
+![cap1](./img/cap1.png)
 
+![cap2](./img/cap2.png)
+![cap3](./img/cap3.png)
 
