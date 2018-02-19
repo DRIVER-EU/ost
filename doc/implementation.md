@@ -1,4 +1,17 @@
 # Implementation details
 
-
-
+![] (./img/1.png)
+![] (./img/2.png)
+![] (./img/3.png)
+![] (./img/trial.png)
+![] (./img/welcome.png)
+![] (./img/welcome2.png)
+![] (./img/obsEventView.png)
+![] (./img/radiobut1.png)
+![] (./img/radiobut2.png)
+![] (./img/chckbx1.png)
+![] (./img/chbox2.png)
+![] (./img/slider1.png)
+![] (./img/type.png)
+![] (./img/TMView.png)
+![] (./img/loginto.png)
