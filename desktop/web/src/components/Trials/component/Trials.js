@@ -207,11 +207,33 @@ class Trials extends Component {
     }
   }
 
-  sendMessage () {
+  getSelectedUser () {
+    if(this.state.userValue === 0) {
+      return 'All'
+    }
+    else if(this.state.userValue === 1) {
+      return 'User1'
+    }
+    else if(this.state.userValue === 2) {
+      return 'User2'
+    }
+  }
+  getSelectedRole () {
+    if(this.state.roleValue === 0) {
+      return 'All'
+    }
+    else if(this.state.roleValue === 1) {
+      return 'Role1'
+    }
+    else if(this.state.roleValue === 2) {
+      return 'Role2'
+    }
+  }
 
+  sendMessage () {
     this.props.sendMessage({
-        selectUser: this.state.userValue,
-        role: this.state.roleValue,
+        selectUser: this.getSelectedUser() ,
+        role: this.getSelectedRole(),
         message: this.state.messageValue,
         time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
     })

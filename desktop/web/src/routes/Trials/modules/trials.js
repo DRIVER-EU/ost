@@ -54,7 +54,7 @@ export const getMessages = () => {
 export const sendMessage = (message) => {
     return (dispatch) => {
       return new Promise((resolve) => {
-        axios.post(`http://${origin}/api/anonymous/message`, getHeaders(), message)
+        axios.post(`http://${origin}/api/anonymous/message`, message, getHeaders())
          .then((response) => {
            dispatch(sendMessageAction(message))
            resolve()
