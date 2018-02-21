@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
 import Trials from '../components/Trials'
-import getObservation from '../modules/trials'
+import { getMessages, sendMessage } from './../modules/trials'
 
 const mapDispatchToProps = {
-  getObservation
+  getMessages,
+  sendMessage
 }
 
 const mapStateToProps = (state) => ({
-  observation: state.trials.observation
+  messages: state.trials.messages,
+  isSendMessage: state.trials.isSendMessage
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trials)

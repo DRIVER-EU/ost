@@ -169,13 +169,21 @@ class Trials extends Component {
   }
 
   static propTypes = {
-    getObservation: PropTypes.func,
-    observation: PropTypes.array
+    getMessages: PropTypes.func,
+    messages: PropTypes.array,
+    isSendMessage: PropTypes.any,
+    sendMessage: PropTypes.func
+  }
+
+  componentWillMount () {
+    setInterval(function () {
+      this.props.getMessages()
+    }.bind(this), 3000)
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.observation) {
-      console.log(nextProps)
+    if (nextProps.messages && this.props.messages !== this.state.messageValue) {
+      this.setState({ messageValue: nextProps.messages })
     }
   }
 
@@ -199,6 +207,15 @@ class Trials extends Component {
     if (this.state.changeDataTable === tableThree) {
       this.setState({ changeDataTable: tableOne })
     }
+  }
+
+  sendMessage () {
+    this.props.sendMessage({
+      selectUser: this.state.userValue,
+      role: this.state.roleValue,
+      message: this.state.messageValue,
+      time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
+    })
   }
 
   getData () {
@@ -412,7 +429,8 @@ class Trials extends Component {
                   style={{ marginLeft: '20px', marginRight: '20px' }}
                   label='Send'
                   primary
-                  labelStyle={{ color: '#FDB913' }} />
+                  labelStyle={{ color: '#FDB913' }}
+                  onClick={this.sendMessage.bind(this)} />
               </div>
             </Card>
             <Card style={{ margin: '20px 30px' }}>
@@ -436,13 +454,13 @@ class Trials extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {tableTwo.map((row, index) => (
+                  {this.props.messages.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn>
-                        {row.time}
+                        {row.dateTime}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {row.user}
+                        {row.selectUser}
                       </TableRowColumn>
                       <TableRowColumn>
                         {row.role}
