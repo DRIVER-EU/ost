@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Trials from '../../../components/Trials'
+import PropTypes from 'prop-types'
 
 class TrialsView extends Component {
   constructor (props) {
@@ -7,10 +8,22 @@ class TrialsView extends Component {
     this.state = {}
   }
 
+  static propTypes = {
+    getMessages: PropTypes.func,
+    messages: PropTypes.any,
+    isSendMessage: PropTypes.any,
+    sendMessage: PropTypes.func
+  }
+
   render () {
     return (
       <div className='background-home'>
-        <Trials />
+        <Trials
+        messages={this.props.messages}
+        getMessages={this.props.getMessages}
+        isSendMessage={this.props.isSendMessage}
+        sendMessage={this.props.sendMessage}
+        />
       </div>
     )
   }
