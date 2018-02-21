@@ -163,7 +163,7 @@ class Trials extends Component {
       observationValue: '',
       sortObservation: true,
       sourceValue: '',
-      changeDataTable: tableOne,
+      changeDataTable: [],
       timeRange: 5
     }
   }
@@ -423,7 +423,7 @@ class Trials extends Component {
                     value={this.state.messageValue}
                     hintText='enter the message'
                     onChange={this.handleChangeTextField.bind(this, 'messageValue')}
-                 />
+                  />
                 </div>
                 <RaisedButton
                   style={{ marginLeft: '20px', marginRight: '20px' }}
