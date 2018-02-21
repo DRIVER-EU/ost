@@ -179,6 +179,9 @@ class Trials extends Component {
   }
 
   componentWillMount () {
+    this.props.getMessages()
+    this.props.getObservation()
+
     setInterval(function () {
       this.props.getMessages()
       this.props.getObservation()
