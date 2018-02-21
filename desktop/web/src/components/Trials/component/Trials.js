@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Trials.scss'
+import ReactTooltip from 'react-tooltip'
 
 const tableOne = [
   { time: '10:00:10',
@@ -164,7 +165,8 @@ class Trials extends Component {
       sortObservation: true,
       sourceValue: '',
       changeDataTable: tableOne,
-      timeRange: 5
+      timeRange: 5,
+      observations: []
     }
   }
 
@@ -172,18 +174,20 @@ class Trials extends Component {
     getMessages: PropTypes.func,
     messages: PropTypes.array,
     isSendMessage: PropTypes.any,
-    sendMessage: PropTypes.func
+    sendMessage: PropTypes.func,
+    getObservation: PropTypes.func
   }
 
   componentWillMount () {
     setInterval(function () {
       this.props.getMessages()
+      this.props.getObservation()
     }.bind(this), 3000)
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.messages && this.props.messages !== this.state.messageValue) {
-      this.setState({ messageValue: nextProps.messages })
+    if(nextProps.observation && nextProps.observation.length) {
+      this.setState({observations: nextProps.observation})
     }
   }
 
@@ -343,19 +347,19 @@ class Trials extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.state.changeDataTable.map((row, index) => (
+                  {this.state.observations.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn >
-                        {row.time}
+                        {row.dateTime}
                       </TableRowColumn>
                       <TableRowColumn >
-                        {row.user}
+                        {row.selectUser}
                       </TableRowColumn>
                       <TableRowColumn>
                         {row.role}
                       </TableRowColumn>
                       <TableRowColumn >
-                        {row.type}
+                        {row.observationType}
                       </TableRowColumn>
                       <TableRowColumn >
                         {row.who}
@@ -364,7 +368,8 @@ class Trials extends Component {
                         {row.what}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {row.attachment}
+                        <p data-tip={row.attachment}>   <i className="material-icons">announcement</i></p>
+                        <ReactTooltip />
                       </TableRowColumn>
                     </TableRow>
                 ))}
