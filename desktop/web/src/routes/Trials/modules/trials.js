@@ -5,13 +5,14 @@ export let origin = window.location.hostname
 // if (origin === 'localhost' || origin === '192.168.1.15:8080') {
 //   origin = '192.168.1.15:8080'
 // } else {
-  origin = '192.168.1.15:8080'
+origin = '192.168.1.15:8080'
 // }
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
 
 export const GET_MESSAGES = 'GET_MESSAGES'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
+export const GET_OBSERVATION = 'GET_OBSERVATION'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -24,15 +25,24 @@ export const getMessagesAction = (data = null) => {
 }
 
 export const sendMessageAction = (data = null) => {
+  return {
+    type: SEND_MESSAGE,
+    data: data
+  }
+}
+
+export const getObservationAction = (data = null) => {
     return {
-      type: SEND_MESSAGE,
+      type: GET_OBSERVATION,
       data: data
     }
   }
 
+
 export const actions = {
   getMessages,
-  sendMessage
+  sendMessage,
+  getObservation
 }
 
 export const getMessages = () => {
@@ -63,9 +73,27 @@ export const sendMessage = (message) => {
            errorHandle(error.response.status)
            resolve()
          })
+    })
+  }
+}
+
+export const getObservation = () => {
+    return (dispatch) => {
+      return new Promise((resolve) => {
+        axios.get(`http://${origin}/api/anonymous/observation`, getHeaders())
+          .then((response) => {
+            dispatch(getObservationAction(response.data))
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            resolve()
+          })
       })
     }
   }
+
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -81,6 +109,12 @@ const ACTION_HANDLERS = {
       ...state,
       isSendMessage: action.data
     }
+  },
+  [GET_OBSERVATION]: (state, action) => {
+    return {
+      ...state,
+      observation: action.data
+    }
   }
 }
 // ------------------------------------
@@ -88,7 +122,8 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   messages: [],
-  isSendMessage: {}
+  isSendMessage: {},
+  observation: []
 }
 
 export default function messagesReducer (state = initialState, action) {

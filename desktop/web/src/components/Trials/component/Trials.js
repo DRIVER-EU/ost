@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Table, TableBody,
   TableHeader, TableHeaderColumn,
@@ -8,10 +9,9 @@ import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'Recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Trials.scss'
-import PropTypes from 'prop-types'
 
 const tableOne = [
   { time: '10:00:10',
@@ -175,14 +175,16 @@ class Trials extends Component {
     sendMessage: PropTypes.func
   }
 
-  componentWillMount() {
-    setInterval(function() {
+  componentWillMount () {
+    setInterval(function () {
       this.props.getMessages()
-    }.bind(this),3000)
+    }.bind(this), 3000)
   }
 
-  componentWillReceiveProps(nextProps) {
-
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.messages && this.props.messages !== this.state.messageValue) {
+      this.setState({ messageValue: nextProps.messages })
+    }
   }
 
   handleChangeDropDown (stateName, event, index, value) {
@@ -451,7 +453,7 @@ class Trials extends Component {
                   label='Send'
                   primary
                   labelStyle={{ color: '#FDB913' }}
-                  onClick={this.sendMessage.bind(this)}/>
+                  onClick={this.sendMessage.bind(this)} />
               </div>
             </Card>
             <Card style={{ margin: '20px 30px' }}>
