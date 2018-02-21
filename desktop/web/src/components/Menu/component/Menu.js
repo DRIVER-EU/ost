@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { IndexLink } from 'react-router'
-import { Nav, Navbar } from 'react-bootstrap'
+import AppBar from 'material-ui/AppBar'
+import { List, ListItem } from 'material-ui/List'
+
 import './Menu.scss'
 
 class MenuLeft extends Component {
@@ -23,18 +25,23 @@ class MenuLeft extends Component {
   render () {
     return (
       <div>
-        <Navbar fluid bsStyle='pills' className='nav nav-pills menu'>
-          <Navbar.Header>
-            <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav pullRight>
-              <li><IndexLink to='/' activeClassName='active'>Home</IndexLink></li>
-              <li><IndexLink to='trials' activeClassName=''>Trials</IndexLink></li>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
+        <AppBar
+          zDepth={3}
+          style={{ backgroundColor: 'white' }}
+          iconElementLeft={<img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />}
+          iconElementRight={
+            <List style={{ display: 'flex' }}>
+              <ListItem
+                primaryText='Home'
+                style={{ color: '#00497E' }}
+                containerElement={<IndexLink to='/' activeClassName='route--active' />} />
+              <ListItem
+                primaryText='Trials'
+                style={{ color: '#00497E' }}
+                containerElement={<IndexLink to='trials' activeClassName='route--active' />} />
+            </List>
+          }
+  />
       </div>
     )
   }

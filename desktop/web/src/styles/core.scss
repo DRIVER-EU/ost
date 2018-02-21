@@ -16,6 +16,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: 'Roboto';
 }
 body {
   color: $main-text-color;
@@ -28,7 +29,7 @@ body {
 
 * {
   box-sizing: inherit;
-  font-family: "NotesEsaReg";
+  font-family: "Roboto";
 }
 .menu, .menu ul, .nav.menu .open>a {
   background: $menu-background-color;
