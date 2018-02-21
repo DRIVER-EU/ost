@@ -11,6 +11,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
+import ReactTooltip from 'react-tooltip'
 import './Trials.scss'
 import _ from 'lodash'
 
@@ -62,7 +63,7 @@ class Trials extends Component {
       sourceValue: '',
       changeDataTable: [],
       sort: { type: 'dateTime', order: 'asc' },
-      timeRange: 5
+      observations: []
     }
   }
 
@@ -76,15 +77,19 @@ class Trials extends Component {
   }
 
   componentWillMount () {
+    this.props.getMessages()
+    this.props.getObservation()
+
     setInterval(function () {
       this.props.getMessages()
+      this.props.getObservation()
     }.bind(this), 3000)
     this.props.getObservation()
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.messages && this.props.messages !== this.state.messageValue) {
-      this.setState({ messageValue: nextProps.messages })
+    if(nextProps.observation && nextProps.observation.length) {
+      this.setState({observations: nextProps.observation})
     }
     if (nextProps.observation && this.props.observation !== this.state.changeDataTable) {
       this.setState({ changeDataTable: nextProps.observation })
@@ -153,13 +158,35 @@ class Trials extends Component {
     let changeDataTable = [...this.state.changeDataTable]
     let order = _.orderBy(changeDataTable, ['dateTime'], ['asc'])
     let data = []
-    for (let i = 0; i < order.length; i++) {
+    if(order.length){
+
+    let range = moment(order[0].dateTime).format('DD/MM/YYYY h:mm:ss') + 60*15*1000
+    data.push({
+      name: order[0]['what'],
+      answer: 1,
+      date: order[0]['dateTime']
+    })
+let count = 1
+    for (let i = 1; i < order.length; i++) {
+console.log(moment(order[i].dateTime).format('DD/MM/YYYY h:mm:ss'))
+      if(moment(order[i].dateTime).format('DD/MM/YYYY h:mm:ss').unix() < range)
       data.push({
         name: order[i]['what'],
-        answer: 234,
+        answer: count++,
         date: order[i]['dateTime']
       })
+      else {
+        range = moment(order[i].dateTime).format('DD/MM/YYYY h:mm:ss') !== 'Invalid date' ? moment(order[i].dateTime).format('DD/MM/YYYY h:mm:ss') + 60*15*1000 : new Date().getTime()
+        count = 1
+        data.push({
+          name: order[i]['what'],
+          answer: 1,
+          date: order[i]['dateTime']
+        })
+
+      }
     }
+  }
     return data
   }
 
@@ -258,7 +285,7 @@ class Trials extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.state.changeDataTable.map((row, index) => (
+                  {this.state.observations.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn >
                         {row.dateTime}
@@ -279,7 +306,8 @@ class Trials extends Component {
                         {row.what}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {row.attachment}
+                        <p data-tip={row.attachment}>   <i className="material-icons">announcement</i></p>
+                        <ReactTooltip />
                       </TableRowColumn>
                     </TableRow>
                 ))}
