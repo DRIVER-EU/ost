@@ -13,6 +13,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import DateComponent from '../../DateComponent/DateComponent'
 import './Trials.scss'
 import ReactTooltip from 'react-tooltip'
+import _ from 'lodash'
 
 const tableOne = [
   { time: '10:00:10',
@@ -189,8 +190,9 @@ class Trials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if(nextProps.observation && nextProps.observation.length) {
-      this.setState({observations: nextProps.observation})
+    if(nextProps.observation && nextProps.observation.length
+      && !_.isEqual(nextProps.observation.sort(),this.state.observations.sort())) {
+      this.setState({ observations: [...nextProps.observation] })
     }
   }
 
