@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Trials from '../../../components/Trials'
 
 class TrialsView extends Component {
@@ -7,10 +8,18 @@ class TrialsView extends Component {
     this.state = {}
   }
 
+  static propTypes = {
+    getObservation: PropTypes.func,
+    observation: PropTypes.array
+  }
+
   render () {
     return (
       <div className='background-home'>
-        <Trials />
+        <Trials
+          getObservation={this.props.getObservation}
+          observation={this.props.observation}
+        />
       </div>
     )
   }

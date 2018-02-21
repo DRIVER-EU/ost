@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Table, TableBody,
   TableHeader, TableHeaderColumn,
@@ -8,7 +9,7 @@ import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'Recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Trials.scss'
 
@@ -167,7 +168,16 @@ class Trials extends Component {
     }
   }
 
-  static propTypes = { }
+  static propTypes = {
+    getObservation: PropTypes.func,
+    observation: PropTypes.array
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.observation) {
+      console.log(nextProps)
+    }
+  }
 
   handleChangeDropDown (stateName, event, index, value) {
     let change = {}
