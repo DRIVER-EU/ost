@@ -12,60 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Trials.scss'
-
-const tableOne = [
-  { time: '10:00:10',
-    user: 'Mike001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '40%',
-    attachment: 'attachment 1' },
-  { time: '10:01:20',
-    user: 'John001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '80%',
-    attachment: 'attachment 2' },
-  { time: '10:05:20',
-    user: 'Mary11',
-    role: 'Team 2',
-    type: 'Observation ZZ',
-    who: 'participant 2',
-    what: 'option 1, option2',
-    attachment: 'attachment 3' }
-]
-
-const tableThree = [
-  { time: '10:05:20',
-    user: 'Mary11',
-    role: 'Team 2',
-    type: 'Observation ZZ',
-    who: 'participant 2',
-    what: 'option 1, option2',
-    attachment: 'attachment 3' },
-  { time: '10:01:20',
-    user: 'John001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '80%',
-    attachment: 'attachment 2' },
-  { time: '10:00:10',
-    user: 'Mike001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '40%',
-    attachment: 'attachment 1' }
-]
-
-const tableTwo = [
-  { time: '10:00:10', user: 'All', role: 'All', message: 'Trial started' },
-  { time: '10:01:20', user: 'John001', role: 'Team 1', message: 'Focus on Participant 1' },
-  { time: '10:05:20', user: 'All', role: 'Team 2', message: 'Some message' }
-]
+import _ from 'lodash'
 
 const userList = [
   { id: 0, name: 'All' },
@@ -88,56 +35,6 @@ const rangeList = [
   { id: 3, name: '1 day' },
   { id: 4, name: '7 days' },
   { id: 5, name: '1 month' }
-]
-
-const dataOne = [
-  { name: 'Observation 1', answer: 240, date: '01/01/2018' },
-  { name: 'Observation 2', answer: 139, date: '02/01/2018' },
-  { name: 'Observation 3', answer: 980, date: '03/01/2018' },
-  { name: 'Observation 4', answer: 390, date: '04/01/2018' },
-  { name: 'Observation 5', answer: 480, date: '05/01/2018' },
-  { name: 'Observation 6', answer: 380, date: '06/01/2018' },
-  { name: 'Observation 7', answer: 230, date: '07/01/2018' },
-  { name: 'Observation 8', answer: 430, date: '08/01/2018' },
-  { name: 'Observation 9', answer: 11, date: '09/01/2018' },
-  { name: 'Observation 10', answer: 430, date: '10/01/2018' },
-  { name: 'Observation 11', answer: 180, date: '11/01/2018' },
-  { name: 'Observation 12', answer: 100, date: '12/01/2018' },
-  { name: 'Observation 13', answer: 200, date: '13/01/2018' },
-  { name: 'Observation 14', answer: 145, date: '14/01/2018' },
-  { name: 'Observation 15', answer: 13, date: '15/01/2018' },
-  { name: 'Observation 16', answer: 888, date: '16/01/2018' },
-  { name: 'Observation 17', answer: 321, date: '17/01/2018' },
-  { name: 'Observation 18', answer: 431, date: '18/01/2018' },
-  { name: 'Observation 19', answer: 0, date: '19/01/2018' },
-  { name: 'Observation 20', answer: 512, date: '20/01/2018' },
-  { name: 'Observation 21', answer: 199, date: '21/01/2018' },
-  { name: 'Observation 22', answer: 50, date: '22/01/2018' },
-  { name: 'Observation 23', answer: 20, date: '23/01/2018' },
-  { name: 'Observation 24', answer: 210, date: '24/01/2018' },
-  { name: 'Observation 25', answer: 412, date: '25/01/2018' },
-  { name: 'Observation 26', answer: 150, date: '26/01/2018' },
-  { name: 'Observation 27', answer: 80, date: '27/01/2018' },
-  { name: 'Observation 28', answer: 156, date: '28/01/2018' },
-  { name: 'Observation 29', answer: 670, date: '29/01/2018' },
-  { name: 'Observation 30', answer: 309, date: '30/01/2018' },
-  { name: 'Observation 31', answer: 724, date: '31/01/2018' }
-]
-
-const dataTwo = [
-  { name: 'Observation 1', answer: 240, date: '10:00:00' },
-  { name: 'Observation 2', answer: 139, date: '10:15:00' },
-  { name: 'Observation 3', answer: 980, date: '10:30:00' },
-  { name: 'Observation 4', answer: 390, date: '10:45:00' },
-  { name: 'Observation 5', answer: 480, date: '11:00:00' },
-  { name: 'Observation 6', answer: 380, date: '11:15:00' },
-  { name: 'Observation 7', answer: 230, date: '11:30:00' },
-  { name: 'Observation 8', answer: 430, date: '11:45:00' },
-  { name: 'Observation 9', answer: 11, date: '12:00:00' },
-  { name: 'Observation 10', answer: 430, date: '12:15:00' },
-  { name: 'Observation 11', answer: 180, date: '12:30:00' },
-  { name: 'Observation 12', answer: 100, date: '12:45:00' },
-  { name: 'Observation 13', answer: 300, date: '13:00:00' }
 ]
 
 const styles = {
@@ -164,6 +61,7 @@ class Trials extends Component {
       sortObservation: true,
       sourceValue: '',
       changeDataTable: [],
+      sort: { type: 'dateTime', order: 'asc' },
       timeRange: 5
     }
   }
@@ -172,18 +70,24 @@ class Trials extends Component {
     getMessages: PropTypes.func,
     messages: PropTypes.array,
     isSendMessage: PropTypes.any,
-    sendMessage: PropTypes.func
+    sendMessage: PropTypes.func,
+    getObservation: PropTypes.func,
+    observation: PropTypes.array
   }
 
   componentWillMount () {
     setInterval(function () {
       this.props.getMessages()
     }.bind(this), 3000)
+    this.props.getObservation()
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.messages && this.props.messages !== this.state.messageValue) {
       this.setState({ messageValue: nextProps.messages })
+    }
+    if (nextProps.observation && this.props.observation !== this.state.changeDataTable) {
+      this.setState({ changeDataTable: nextProps.observation })
     }
   }
 
@@ -200,29 +104,63 @@ class Trials extends Component {
   }
 
   sortFunction () {
+    let changeDataTable = { ...this.state.changeDataTable }
+    let sort = { ...this.state.sort }
+    let orderBy = ''
+    if (this.state.sort.order === 'asc') {
+      orderBy = 'desc'
+    } else {
+      orderBy = 'asc'
+    }
+    let order = _.orderBy(changeDataTable, ['dateTime'], [orderBy])
+    sort['order'] = orderBy
     this.setState({
       sortObservation: !this.state.sortObservation,
-      changeDataTable: tableThree
+      changeDataTable: order,
+      sort: sort
     })
-    if (this.state.changeDataTable === tableThree) {
-      this.setState({ changeDataTable: tableOne })
+  }
+
+  getSelectedUser () {
+    if (this.state.userValue === 0) {
+      return 'All'
+    } else if (this.state.userValue === 1) {
+      return 'User1'
+    } else if (this.state.userValue === 2) {
+      return 'User2'
+    }
+  }
+  getSelectedRole () {
+    if (this.state.roleValue === 0) {
+      return 'All'
+    } else if (this.state.roleValue === 1) {
+      return 'Role1'
+    } else if (this.state.roleValue === 2) {
+      return 'Role2'
     }
   }
 
   sendMessage () {
     this.props.sendMessage({
-      selectUser: this.state.userValue,
-      role: this.state.roleValue,
+      selectUser: this.getSelectedUser(),
+      role: this.getSelectedRole(),
       message: this.state.messageValue,
       time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
     })
   }
 
   getData () {
-    if (this.state.timeRange === 0) {
-      return dataTwo
+    let changeDataTable = [...this.state.changeDataTable]
+    let order = _.orderBy(changeDataTable, ['dateTime'], ['asc'])
+    let data = []
+    for (let i = 0; i < order.length; i++) {
+      data.push({
+        name: order[i]['what'],
+        answer: 234,
+        date: order[i]['dateTime']
+      })
     }
-    return dataOne
+    return data
   }
 
   render () {
@@ -323,16 +261,16 @@ class Trials extends Component {
                   {this.state.changeDataTable.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn >
-                        {row.time}
+                        {row.dateTime}
                       </TableRowColumn>
                       <TableRowColumn >
-                        {row.user}
+                        {row.selectUser}
                       </TableRowColumn>
                       <TableRowColumn>
                         {row.role}
                       </TableRowColumn>
                       <TableRowColumn >
-                        {row.type}
+                        {row.observationType}
                       </TableRowColumn>
                       <TableRowColumn >
                         {row.who}
@@ -369,7 +307,7 @@ class Trials extends Component {
               <ResponsiveContainer width='100%' height={400}>
                 <BarChart data={this.getData()}
                   margin={{ top: 30, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey='date' />
+                  <XAxis dataKey='name' />
                   <YAxis />
                   <CartesianGrid strokeDasharray='3 3' />
                   <Tooltip />

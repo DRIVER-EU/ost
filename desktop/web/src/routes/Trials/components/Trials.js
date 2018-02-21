@@ -12,7 +12,9 @@ class TrialsView extends Component {
     getMessages: PropTypes.func,
     messages: PropTypes.any,
     isSendMessage: PropTypes.any,
-    sendMessage: PropTypes.func
+    sendMessage: PropTypes.func,
+    getObservation: PropTypes.func,
+    observation: PropTypes.array
   }
 
   render () {
@@ -23,6 +25,8 @@ class TrialsView extends Component {
           getMessages={this.props.getMessages}
           isSendMessage={this.props.isSendMessage}
           sendMessage={this.props.sendMessage}
+          getObservation={this.props.getObservation}
+          observation={this.props.observation}
         />
       </div>
     )
