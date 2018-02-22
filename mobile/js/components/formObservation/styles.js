@@ -19,14 +19,20 @@ export default {
     alignSelf: 'flex-start',
     fontWeight: '600',
   },
+  desObservContainer: {
+    flex: 1,
+    alignSelf: 'stretch',
+    paddingHorizontal: 30,
+  },
   desObservationContainer: {
     flex: 1,
     alignSelf: 'stretch',
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
   },
   desObservation: {
     fontSize: 16,
+    fontWeight: 'bold',
     alignSelf: 'flex-start',
   },
   inputStyle: {
@@ -110,5 +116,15 @@ export default {
     padding: 5,
     borderColor: '#ddd',
     borderTopWidth: 1,
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  text: {
+    fontSize: 25,
+    textAlign: 'center',
   },
 };

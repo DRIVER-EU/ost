@@ -3,53 +3,10 @@ import {
   View,
   Text,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 import { CardSection } from './';
 
-class SingleCard extends Component {
-
-  static propTypes = {
-    data: React.PropTypes.array,
-  };
-
-  goNext() {
-    if (this.props.goNext) {
-      return () => this.props.goNext();
-    }
-    return null;
-  }
-
-  render() {
-    return (
-      <View>
-        {this.props.data.map((data, i) => (
-          <TouchableOpacity key={i} onPress={this.goNext()}>
-            <CardSection>
-              <View style={styles.thumbnailContainerStyle}>
-                <Text style={styles.thumnailStyle}>{data.label.substring(0, 1)}</Text>
-              </View>
-              <View style={styles.headerContentStyle}>
-                <View style={styles.titleDate}>
-                  <Text style={styles.headerTextStyle}>
-                    {data.label}
-                  </Text>
-                  {data.date &&
-                  <Text style={styles.dateTextStyle}>
-                    {data.date}
-                  </Text>
-                  }
-                </View>
-                <Text style={styles.subHeaderTextStyle}>
-                  {data.description}
-                </Text>
-              </View>
-            </CardSection>
-          </TouchableOpacity>
-            ))}
-      </View>
-    );
-  }
-}
 
 const styles = {
   thumbnailContainerStyle: {
@@ -71,24 +28,73 @@ const styles = {
   headerContentStyle: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    position: 'relative',
+    flex: 1,
   },
   headerTextStyle: {
     fontSize: 18,
-    flex: 2,
   },
   subHeaderTextStyle: {
     fontSize: 10,
     paddingRight: 65,
   },
-  titleDate: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
   dateTextStyle: {
-    fontSize: 12,
-    flex: 1,
-    paddingRight: 65,
+    alignItems: 'stretch',
+    position: 'absolute',
+    top: 5,
+    right: 5,
   },
 };
+
+class SingleCard extends Component {
+
+  static propTypes = {
+    data: React.PropTypes.Array,
+    goNext: React.PropTypes.func,
+  };
+
+  goNext(i, title, description) {
+    if (this.props.data[i].id !== undefined) {
+      AsyncStorage.setItem('numberOfQuestion', JSON.stringify(this.props.data[i].id));
+      AsyncStorage.setItem('title', JSON.stringify(title));
+      AsyncStorage.setItem('description', JSON.stringify(description));
+    }
+    if (this.props.goNext) {
+      return this.props.goNext();
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <View>
+        {this.props.data.map((data, i) => (
+          <TouchableOpacity key={i} onPress={this.goNext.bind(this, i, data.label, data.description)}>
+            <CardSection>
+              <View style={styles.thumbnailContainerStyle}>
+                <Text style={styles.thumnailStyle}>{data.label.substring(0, 1)}</Text>
+              </View>
+              {data.date &&
+                <View style={styles.dateTextStyle}>
+                  <Text style={{ fontSize: 12 }}>
+                    {data.date}
+                  </Text>
+                </View>}
+              <View style={styles.headerContentStyle}>
+                <Text style={styles.headerTextStyle}>
+                  {data.label}
+                </Text>
+                <Text style={styles.subHeaderTextStyle}>
+                  {data.description}
+                </Text>
+              </View>
+            </CardSection>
+          </TouchableOpacity>
+            ))}
+      </View>
+    );
+  }
+}
 
 export default SingleCard;

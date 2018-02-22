@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
-import firebase from 'firebase';
 import {
   Container,
   Header,
@@ -28,20 +27,8 @@ import SingleCard from '../common/SingleCard';
 
 const dataArr = [
   {
-    label: 'A Trial XYZ',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'B Trial One',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'C Trial Two',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'Trial Three',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
+    label: 'Mini-Trial',
+    description: 'Example trial of TNO’s csCOP-tool',
   },
 ];
 
@@ -51,8 +38,7 @@ class Home extends Component {
   };
 
   logOut = () => {
-    firebase.auth().signOut();
-    AsyncStorage.removeItem('loggedIn');
+    // AsyncStorage.removeItem('loggedIn');
     DrawerNav.dispatch(
       NavigationActions.reset({
         index: 0,
@@ -67,12 +53,12 @@ class Home extends Component {
       <Container style={styles.container}>
         <Header style={{ backgroundColor: '#00497E' }}>
           <Left>
-            <Button
+            {/* <Button
               transparent
               onPress={() => DrawerNav.navigate('DrawerOpen')}
             >
               <Icon active name="menu" />
-            </Button>
+            </Button> */}
           </Left>
           <Body>
             <Title>Selected Trial</Title>

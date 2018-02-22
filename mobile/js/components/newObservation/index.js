@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
 import {
   Container,
   Header,
@@ -12,46 +11,41 @@ import {
   Body,
 } from 'native-base';
 import SingleCard from '../common/SingleCard';
-import styles from './styles';
 
 const dataArr = [
   {
-    label: 'Observation One',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
+    category: 'Communication between teams A and B',
+    description: 'Good communication is defined as information sharing in an effective manner by the sender and correct information reception by the receiver.Poor communication shows a lack in effectiveness, completeness and or incorrect understanding by the receiver.',
+    id: 1,
+    label: 'Communication between teams A and B',
   },
   {
-    label: 'Observation Two',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
+    category: 'Situational awareness',
+    description: 'Good situational awareness is observed if location based information is well handled and no mistakes are made between (pieces of) information received.Poor situational awareness is observed when location based information is missed, mixed up, incomplete or incorrectly handled.',
+    id: 1,
+    label: 'Situational awareness',
   },
   {
-    label: 'Observation Three',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
+    category: 'Incident location shared',
+    description: 'Note down this observation if incident source location is shared.',
+    id: 2,
+    label: 'Incident location shared',
   },
   {
-    label: 'Observation Four',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'Observation Five',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'Observation Six',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'Observation Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-  },
-  {
-    label: 'Observation Eight',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
+    category: 'COP-tool use',
+    description: 'Note down this observation if the COP-tool is used.',
+    id: 3,
+    label: 'COP-tool use',
   },
 ];
 
 class NewObservation extends Component {
   static navigationOptions = {
     header: null,
+  };
+
+  static propTypes = {
+    navigation: React.PropTypes.func,
   };
 
   render() {
