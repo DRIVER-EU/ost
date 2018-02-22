@@ -32,12 +32,11 @@ export const sendMessageAction = (data = null) => {
 }
 
 export const getObservationAction = (data = null) => {
-    return {
-      type: GET_OBSERVATION,
-      data: data
-    }
+  return {
+    type: GET_OBSERVATION,
+    data: data
   }
-
+}
 
 export const actions = {
   getMessages,
@@ -54,7 +53,7 @@ export const getMessages = () => {
          resolve()
        })
        .catch((error) => {
-         errorHandle(error.response.status)
+         errorHandle(error)
          resolve()
        })
     })
@@ -62,9 +61,9 @@ export const getMessages = () => {
 }
 
 export const sendMessage = (message) => {
-    return (dispatch) => {
-      return new Promise((resolve) => {
-        axios.post(`http://${origin}/api/anonymous/message`, message, getHeaders())
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.post(`http://${origin}/api/anonymous/message`, message, getHeaders())
          .then((response) => {
            dispatch(sendMessageAction(message))
            resolve()
@@ -78,9 +77,9 @@ export const sendMessage = (message) => {
 }
 
 export const getObservation = () => {
-    return (dispatch) => {
-      return new Promise((resolve) => {
-        axios.get(`http://${origin}/api/anonymous/observation`, getHeaders())
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/anonymous/observation`, getHeaders())
           .then((response) => {
             dispatch(getObservationAction(response.data))
             resolve()
@@ -89,10 +88,9 @@ export const getObservation = () => {
             errorHandle(error)
             resolve()
           })
-      })
-    }
+    })
   }
-
+}
 
 // ------------------------------------
 // Action Handlers
