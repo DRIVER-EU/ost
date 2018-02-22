@@ -15,7 +15,6 @@ import ReactTooltip from 'react-tooltip'
 import './Trials.scss'
 import _ from 'lodash'
 
-
 const userList = [
   { id: 0, name: 'All' },
   { id: 1, name: 'User 1' },
@@ -52,8 +51,9 @@ const styles = {
 class Trials extends Component {
   constructor (props) {
     super(props)
+    const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
-      time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss'),
+      time: t,
       userValue: 0,
       roleValue: 0,
       messageValue: '',
@@ -65,7 +65,10 @@ class Trials extends Component {
       changeDataTable: [],
       sort: { type: 'dateTime', order: 'asc' },
       observations: [],
-      chartData: []
+      chartData: [],
+      changeDataTableSorted: [],
+      messages: [],
+      messageTime: ''
     }
   }
 
@@ -88,15 +91,41 @@ class Trials extends Component {
     }.bind(this), 3000)
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    for (var key in this.state) {
+      for (var nextKey in nextState) {
+        if (nextKey === key && this.state[key] !== nextState[nextKey]) {
+          return true
+        }
+        if (key === nextKey && typeof (this.state[key]) === 'object' &&
+        !_.isEqual(this.state[key], nextState[nextKey])) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
   componentWillReceiveProps (nextProps) {
-    if(nextProps.observation && nextProps.observation.length
-      && !_.isEqual(nextProps.observation.sort(),this.state.observations.sort())) {
-      this.setState({ observations: [...nextProps.observation] }, () =>{
+    if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
+      let change = nextProps.observation
+      this.setState({ changeDataTable: change }, () => {
+        this.sortFunction()
         this.getData()
       })
     }
-    if (nextProps.observation && this.props.observation !== this.state.changeDataTable) {
-      this.setState({ changeDataTable: nextProps.observation })
+    if (nextProps.messages &&
+      nextProps.messages.length !== this.state.messages.length) {
+      let change = nextProps.messages
+      this.setState({ messages:  change })
+    }
+    if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
+      this.setState({ messageTime: nextProps.isSendMessage.time }, () => {
+        this.props.getMessages()
+      })
+    }
+    if (this.props.messages && this.props.observation && this.props.isSendMessage) {
+      // eslint
     }
   }
 
@@ -113,19 +142,26 @@ class Trials extends Component {
   }
 
   sortFunction () {
-    let changeDataTable = { ...this.state.changeDataTable }
+    let observations = [ ...this.state.changeDataTable ]
     let sort = { ...this.state.sort }
     let orderBy = ''
+    for (let i = 0; i < observations.length; i++) {
+      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+    }
     if (this.state.sort.order === 'asc') {
       orderBy = 'desc'
     } else {
       orderBy = 'asc'
     }
-    let order = _.orderBy(changeDataTable, ['dateTime'], [orderBy])
+    let order = _.orderBy(observations, ['dateTime'], [orderBy])
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    }
+
     sort['order'] = orderBy
     this.setState({
       sortObservation: !this.state.sortObservation,
-      changeDataTable: order,
+      changeDataTableSorted: order,
       sort: sort
     })
   }
@@ -154,7 +190,7 @@ class Trials extends Component {
       selectUser: this.getSelectedUser(),
       role: this.getSelectedRole(),
       message: this.state.messageValue,
-      time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
+      time: moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     })
   }
 
@@ -162,41 +198,31 @@ class Trials extends Component {
     let changeDataTable = [...this.state.changeDataTable]
     let order = _.orderBy(changeDataTable, ['dateTime'], ['asc'])
     let data = []
-    if(order.length){
+    if (order.length) {
+      let range = moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
 
-    let range = moment(order[0].dateTime,'DD/MM/YYYY h:mm:ss').unix() + 60*15*1000
-
-let count = 0
-data.push({
-  name: order[0]['what'],
-  answer: 1,
-  date: moment(order[0].dateTime).format('DD/MM/YYYY h:mm')
-})
-    for (let i = 1; i < order.length; i++) {
-      if(order[i].dateTime == 'Invalid date'){
-        order[i].dateTime = moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
+      data.push({
+        name: order[0]['what'],
+        answer: 1,
+        date: moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY hh:mm')
+      })
+      for (let i = 1; i < order.length; i++) {
+        if (order[i].dateTime === 'Invalid date') {
+          order[i].dateTime = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+        }
+        if (moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 < range) {
+          data[data.length - 1].answer++
+        } else {
+          range = moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
+          data.push({
+            name: order[i]['what'],
+            answer: 1,
+            date: order[i].dateTime
+          })
+        }
       }
-
-      if(moment(order[i].dateTime,'DD/MM/YYYY h:mm:ss').unix() < range){
-         data[data.length-1].answer++
-    console.log(moment(order[i].dateTime,'DD/MM/YYYY h:mm:ss').unix(),range)
     }
-      else {
-        range =  moment(order[i].dateTime,'DD/MM/YYYY h:mm:ss').unix() + 60*15*1000
-
-        data.push({
-          name: order[i]['what'],
-          answer: 1,
-          date: moment(order[i].dateTime).format('DD/MM/YYYY h:mm')
-        })
-
-
-      }
-      console.log(i)
-    }
-  }
-  console.log(data)
-   this.setState({chartData: data})
+    this.setState({ chartData: data })
   }
 
   render () {
@@ -294,7 +320,7 @@ data.push({
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.state.observations.map((row, index) => (
+                  {this.state.changeDataTableSorted.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn >
                         {row.dateTime}
@@ -315,7 +341,9 @@ data.push({
                         {row.what}
                       </TableRowColumn>
                       <TableRowColumn>
-                        <p data-tip={row.attachment}>   <i className="material-icons">announcement</i></p>
+                        <p data-tip={row.attachment}>
+                          <i className='material-icons'>announcement</i>
+                        </p>
                         <ReactTooltip />
                       </TableRowColumn>
                     </TableRow>
@@ -323,7 +351,7 @@ data.push({
                 </TableBody>
               </Table>
             </Card>
-            <Card style={{ margin: '20px 30px' }}>
+            {this.state.chartData.length > 0 && <Card style={{ margin: '20px 30px' }}>
               <div style={{ padding: '20px' }}>
                 <div className='dropdown-title'>select range of time</div>
                 <DropDownMenu
@@ -344,17 +372,17 @@ data.push({
               <ResponsiveContainer width='100%' height={400}>
                 <BarChart data={this.state.chartData}
                   margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
-                  <XAxis dataKey='name'/>
-
+                  <XAxis dataKey='name' hide='true' />
                   <YAxis />
                   <CartesianGrid strokeDasharray='3 3' />
                   <Tooltip />
                   <Bar dataKey='answer' fill='#00497E' background={{ fill: '#eee' }} >
-                  <LabelList dataKey="date" position="bottom" offset="30" />
+                    <LabelList dataKey='date' position='bottom' offset='10' />
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
-            </Card>
+
+            </Card>}
             <div className='trials-title'>
               <div>Events / messages send to observers</div>
             </div>
@@ -432,7 +460,7 @@ data.push({
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.props.messages.map((row, index) => (
+                  {this.state.messages.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn>
                         {row.dateTime}
