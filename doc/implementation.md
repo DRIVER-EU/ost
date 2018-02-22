@@ -24,15 +24,15 @@ Below are presented sample views for Observer and Trial Manager.
 
 #### Sample questions
 
-#### Radio buttons
+#### 1. Radio buttons
 <img src="./img/radiobut1.png" width="300">
 <img src="./img/radiobut2.png" width="300">
 
-#### Checkboxes
+#### 2. Checkboxes
 <img src="./img/chckbx1.png" width="300">
 <img src="./img/chbox2.png" width="300">
 
-#### Slider
+#### 3. Slider
 <img src="./img/slider1.png" width="300">
 <img src="./img/slider2.png" width="300">
 
