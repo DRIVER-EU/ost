@@ -17,16 +17,13 @@ import _ from 'lodash'
 
 const userList = [
   { id: 0, name: 'All' },
-  { id: 1, name: 'User 1' },
-  { id: 2, name: 'user 2' },
-  { id: 3, name: 'user 3' }
+  { id: 1, name: 'Test User 1' },
+  { id: 2, name: 'Test User 2' }
 ]
 
 const roleList = [
   { id: 0, name: 'All' },
-  { id: 1, name: 'Role 1' },
-  { id: 2, name: 'Role 2' },
-  { id: 3, name: 'Role 3' }
+  { id: 1, name: 'Team 1' }
 ]
 
 const rangeList = [
@@ -170,18 +167,16 @@ class Trials extends Component {
     if (this.state.userValue === 0) {
       return 'All'
     } else if (this.state.userValue === 1) {
-      return 'User1'
+      return 'Test User 1'
     } else if (this.state.userValue === 2) {
-      return 'User2'
+      return 'Test User 2'
     }
   }
   getSelectedRole () {
     if (this.state.roleValue === 0) {
       return 'All'
     } else if (this.state.roleValue === 1) {
-      return 'Role1'
-    } else if (this.state.roleValue === 2) {
-      return 'Role2'
+      return 'Team 1'
     }
   }
 
@@ -195,15 +190,23 @@ class Trials extends Component {
   }
 
   getData () {
-    let changeDataTable = [...this.state.changeDataTable]
-    let order = _.orderBy(changeDataTable, ['dateTime'], ['asc'])
+    let observations = [ ...this.state.changeDataTable ]
+    for (let i = 0; i < observations.length; i++) {
+      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+    }
+
+    let order = _.orderBy(observations, ['dateTime'], ['asc'])
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    }
+
     let data = []
     if (order.length) {
       let range = moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
 
       data.push({
         name: order[0]['what'],
-        answer: 1,
+        answers: 1,
         date: moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY hh:mm')
       })
       for (let i = 1; i < order.length; i++) {
@@ -211,17 +214,18 @@ class Trials extends Component {
           order[i].dateTime = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
         }
         if (moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 < range) {
-          data[data.length - 1].answer++
+          data[data.length - 1].answers++
         } else {
           range = moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
           data.push({
             name: order[i]['what'],
-            answer: 1,
+            answers: 1,
             date: order[i].dateTime
           })
         }
       }
     }
+
     this.setState({ chartData: data })
   }
 
@@ -376,7 +380,7 @@ class Trials extends Component {
                   <YAxis />
                   <CartesianGrid strokeDasharray='3 3' />
                   <Tooltip />
-                  <Bar dataKey='answer' fill='#00497E' background={{ fill: '#eee' }} >
+                  <Bar dataKey='answers' fill='#00497E' background={{ fill: '#eee' }} >
                     <LabelList dataKey='date' position='bottom' offset='10' />
                   </Bar>
                 </BarChart>
