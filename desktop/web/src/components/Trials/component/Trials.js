@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Table, TableBody,
   TableHeader, TableHeaderColumn,
@@ -8,76 +9,21 @@ import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'Recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
+import ReactTooltip from 'react-tooltip'
 import './Trials.scss'
-
-const tableOne = [
-  { time: '10:00:10',
-    user: 'Mike001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '40%',
-    attachment: 'attachment 1' },
-  { time: '10:01:20',
-    user: 'John001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '80%',
-    attachment: 'attachment 2' },
-  { time: '10:05:20',
-    user: 'Mary11',
-    role: 'Team 2',
-    type: 'Observation ZZ',
-    who: 'participant 2',
-    what: 'option 1, option2',
-    attachment: 'attachment 3' }
-]
-
-const tableThree = [
-  { time: '10:05:20',
-    user: 'Mary11',
-    role: 'Team 2',
-    type: 'Observation ZZ',
-    who: 'participant 2',
-    what: 'option 1, option2',
-    attachment: 'attachment 3' },
-  { time: '10:01:20',
-    user: 'John001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '80%',
-    attachment: 'attachment 2' },
-  { time: '10:00:10',
-    user: 'Mike001',
-    role: 'Team 1',
-    type: 'Behaviour of team 1',
-    who: 'participant 1',
-    what: '40%',
-    attachment: 'attachment 1' }
-]
-
-const tableTwo = [
-  { time: '10:00:10', user: 'All', role: 'All', message: 'Trial started' },
-  { time: '10:01:20', user: 'John001', role: 'Team 1', message: 'Focus on Participant 1' },
-  { time: '10:05:20', user: 'All', role: 'Team 2', message: 'Some message' }
-]
+import _ from 'lodash'
 
 const userList = [
   { id: 0, name: 'All' },
-  { id: 1, name: 'User 1' },
-  { id: 2, name: 'user 2' },
-  { id: 3, name: 'user 3' }
+  { id: 1, name: 'Test User 1' },
+  { id: 2, name: 'Test User 2' }
 ]
 
 const roleList = [
   { id: 0, name: 'All' },
-  { id: 1, name: 'Role 1' },
-  { id: 2, name: 'Role 2' },
-  { id: 3, name: 'Role 3' }
+  { id: 1, name: 'Team 1' }
 ]
 
 const rangeList = [
@@ -87,56 +33,6 @@ const rangeList = [
   { id: 3, name: '1 day' },
   { id: 4, name: '7 days' },
   { id: 5, name: '1 month' }
-]
-
-const dataOne = [
-  { name: 'Observation 1', answer: 240, date: '01/01/2018' },
-  { name: 'Observation 2', answer: 139, date: '02/01/2018' },
-  { name: 'Observation 3', answer: 980, date: '03/01/2018' },
-  { name: 'Observation 4', answer: 390, date: '04/01/2018' },
-  { name: 'Observation 5', answer: 480, date: '05/01/2018' },
-  { name: 'Observation 6', answer: 380, date: '06/01/2018' },
-  { name: 'Observation 7', answer: 230, date: '07/01/2018' },
-  { name: 'Observation 8', answer: 430, date: '08/01/2018' },
-  { name: 'Observation 9', answer: 11, date: '09/01/2018' },
-  { name: 'Observation 10', answer: 430, date: '10/01/2018' },
-  { name: 'Observation 11', answer: 180, date: '11/01/2018' },
-  { name: 'Observation 12', answer: 100, date: '12/01/2018' },
-  { name: 'Observation 13', answer: 200, date: '13/01/2018' },
-  { name: 'Observation 14', answer: 145, date: '14/01/2018' },
-  { name: 'Observation 15', answer: 13, date: '15/01/2018' },
-  { name: 'Observation 16', answer: 888, date: '16/01/2018' },
-  { name: 'Observation 17', answer: 321, date: '17/01/2018' },
-  { name: 'Observation 18', answer: 431, date: '18/01/2018' },
-  { name: 'Observation 19', answer: 0, date: '19/01/2018' },
-  { name: 'Observation 20', answer: 512, date: '20/01/2018' },
-  { name: 'Observation 21', answer: 199, date: '21/01/2018' },
-  { name: 'Observation 22', answer: 50, date: '22/01/2018' },
-  { name: 'Observation 23', answer: 20, date: '23/01/2018' },
-  { name: 'Observation 24', answer: 210, date: '24/01/2018' },
-  { name: 'Observation 25', answer: 412, date: '25/01/2018' },
-  { name: 'Observation 26', answer: 150, date: '26/01/2018' },
-  { name: 'Observation 27', answer: 80, date: '27/01/2018' },
-  { name: 'Observation 28', answer: 156, date: '28/01/2018' },
-  { name: 'Observation 29', answer: 670, date: '29/01/2018' },
-  { name: 'Observation 30', answer: 309, date: '30/01/2018' },
-  { name: 'Observation 31', answer: 724, date: '31/01/2018' }
-]
-
-const dataTwo = [
-  { name: 'Observation 1', answer: 240, date: '10:00:00' },
-  { name: 'Observation 2', answer: 139, date: '10:15:00' },
-  { name: 'Observation 3', answer: 980, date: '10:30:00' },
-  { name: 'Observation 4', answer: 390, date: '10:45:00' },
-  { name: 'Observation 5', answer: 480, date: '11:00:00' },
-  { name: 'Observation 6', answer: 380, date: '11:15:00' },
-  { name: 'Observation 7', answer: 230, date: '11:30:00' },
-  { name: 'Observation 8', answer: 430, date: '11:45:00' },
-  { name: 'Observation 9', answer: 11, date: '12:00:00' },
-  { name: 'Observation 10', answer: 430, date: '12:15:00' },
-  { name: 'Observation 11', answer: 180, date: '12:30:00' },
-  { name: 'Observation 12', answer: 100, date: '12:45:00' },
-  { name: 'Observation 13', answer: 300, date: '13:00:00' }
 ]
 
 const styles = {
@@ -152,8 +48,9 @@ const styles = {
 class Trials extends Component {
   constructor (props) {
     super(props)
+    const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
-      time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss'),
+      time: t,
       userValue: 0,
       roleValue: 0,
       messageValue: '',
@@ -162,12 +59,72 @@ class Trials extends Component {
       observationValue: '',
       sortObservation: true,
       sourceValue: '',
-      changeDataTable: tableOne,
-      timeRange: 5
+      changeDataTable: [],
+      sort: { type: 'dateTime', order: 'asc' },
+      observations: [],
+      chartData: [],
+      changeDataTableSorted: [],
+      messages: [],
+      messageTime: ''
     }
   }
 
-  static propTypes = { }
+  static propTypes = {
+    getMessages: PropTypes.func,
+    messages: PropTypes.array,
+    isSendMessage: PropTypes.any,
+    sendMessage: PropTypes.func,
+    getObservation: PropTypes.func,
+    observation: PropTypes.array
+  }
+
+  componentWillMount () {
+    this.props.getMessages()
+    this.props.getObservation()
+
+    setInterval(function () {
+      this.props.getMessages()
+      this.props.getObservation()
+    }.bind(this), 3000)
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    for (var key in this.state) {
+      for (var nextKey in nextState) {
+        if (nextKey === key && this.state[key] !== nextState[nextKey]) {
+          return true
+        }
+        if (key === nextKey && typeof (this.state[key]) === 'object' &&
+        !_.isEqual(this.state[key], nextState[nextKey])) {
+          return true
+        }
+      }
+    }
+
+    return false
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
+      let change = nextProps.observation
+      this.setState({ changeDataTable: change }, () => {
+        this.sortFunction()
+        this.getData()
+      })
+    }
+    if (nextProps.messages &&
+      nextProps.messages.length !== this.state.messages.length) {
+      let change = nextProps.messages
+      this.setState({ messages:  change })
+    }
+    if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
+      this.setState({ messageTime: nextProps.isSendMessage.time }, () => {
+        this.props.getMessages()
+      })
+    }
+    if (this.props.messages && this.props.observation && this.props.isSendMessage) {
+      // eslint
+    }
+  }
 
   handleChangeDropDown (stateName, event, index, value) {
     let change = {}
@@ -182,20 +139,94 @@ class Trials extends Component {
   }
 
   sortFunction () {
+    let observations = [ ...this.state.changeDataTable ]
+    let sort = { ...this.state.sort }
+    let orderBy = ''
+    for (let i = 0; i < observations.length; i++) {
+      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+    }
+    if (this.state.sort.order === 'asc') {
+      orderBy = 'desc'
+    } else {
+      orderBy = 'asc'
+    }
+    let order = _.orderBy(observations, ['dateTime'], [orderBy])
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    }
+
+    sort['order'] = orderBy
     this.setState({
       sortObservation: !this.state.sortObservation,
-      changeDataTable: tableThree
+      changeDataTableSorted: order,
+      sort: sort
     })
-    if (this.state.changeDataTable === tableThree) {
-      this.setState({ changeDataTable: tableOne })
+  }
+
+  getSelectedUser () {
+    if (this.state.userValue === 0) {
+      return 'All'
+    } else if (this.state.userValue === 1) {
+      return 'Test User 1'
+    } else if (this.state.userValue === 2) {
+      return 'Test User 2'
+    }
+  }
+  getSelectedRole () {
+    if (this.state.roleValue === 0) {
+      return 'All'
+    } else if (this.state.roleValue === 1) {
+      return 'Team 1'
     }
   }
 
+  sendMessage () {
+    this.props.sendMessage({
+      selectUser: this.getSelectedUser(),
+      role: this.getSelectedRole(),
+      message: this.state.messageValue,
+      time: moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+    })
+  }
+
   getData () {
-    if (this.state.timeRange === 0) {
-      return dataTwo
+    let observations = [ ...this.state.changeDataTable ]
+    for (let i = 0; i < observations.length; i++) {
+      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
     }
-    return dataOne
+
+    let order = _.orderBy(observations, ['dateTime'], ['asc'])
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    }
+
+    let data = []
+    if (order.length) {
+      let range = moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
+
+      data.push({
+        name: order[0]['what'],
+        answers: 1,
+        date: moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY hh:mm')
+      })
+      for (let i = 1; i < order.length; i++) {
+        if (order[i].dateTime === 'Invalid date') {
+          order[i].dateTime = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+        }
+        if (moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 < range) {
+          data[data.length - 1].answers++
+        } else {
+          range = moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
+          data.push({
+            name: order[i]['what'],
+            answers: 1,
+            date: order[i].dateTime
+          })
+        }
+      }
+    }
+
+    this.setState({ chartData: data })
   }
 
   render () {
@@ -293,19 +324,19 @@ class Trials extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.state.changeDataTable.map((row, index) => (
+                  {this.state.changeDataTableSorted.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn >
-                        {row.time}
+                        {row.dateTime}
                       </TableRowColumn>
                       <TableRowColumn >
-                        {row.user}
+                        {row.selectUser}
                       </TableRowColumn>
                       <TableRowColumn>
                         {row.role}
                       </TableRowColumn>
                       <TableRowColumn >
-                        {row.type}
+                        {row.observationType}
                       </TableRowColumn>
                       <TableRowColumn >
                         {row.who}
@@ -314,14 +345,17 @@ class Trials extends Component {
                         {row.what}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {row.attachment}
+                        <p data-tip={row.attachment}>
+                          <i className='material-icons'>announcement</i>
+                        </p>
+                        <ReactTooltip />
                       </TableRowColumn>
                     </TableRow>
                 ))}
                 </TableBody>
               </Table>
             </Card>
-            <Card style={{ margin: '20px 30px' }}>
+            {this.state.chartData.length > 0 && <Card style={{ margin: '20px 30px' }}>
               <div style={{ padding: '20px' }}>
                 <div className='dropdown-title'>select range of time</div>
                 <DropDownMenu
@@ -340,16 +374,19 @@ class Trials extends Component {
                 </DropDownMenu>
               </div>
               <ResponsiveContainer width='100%' height={400}>
-                <BarChart data={this.getData()}
-                  margin={{ top: 30, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis dataKey='date' />
+                <BarChart data={this.state.chartData}
+                  margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
+                  <XAxis dataKey='name' hide='true' />
                   <YAxis />
                   <CartesianGrid strokeDasharray='3 3' />
                   <Tooltip />
-                  <Bar dataKey='answer' fill='#00497E' background={{ fill: '#eee' }} />
+                  <Bar dataKey='answers' fill='#00497E' background={{ fill: '#eee' }} >
+                    <LabelList dataKey='date' position='bottom' offset='10' />
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
-            </Card>
+
+            </Card>}
             <div className='trials-title'>
               <div>Events / messages send to observers</div>
             </div>
@@ -396,13 +433,14 @@ class Trials extends Component {
                     value={this.state.messageValue}
                     hintText='enter the message'
                     onChange={this.handleChangeTextField.bind(this, 'messageValue')}
-                 />
+                  />
                 </div>
                 <RaisedButton
                   style={{ marginLeft: '20px', marginRight: '20px' }}
                   label='Send'
                   primary
-                  labelStyle={{ color: '#FDB913' }} />
+                  labelStyle={{ color: '#FDB913' }}
+                  onClick={this.sendMessage.bind(this)} />
               </div>
             </Card>
             <Card style={{ margin: '20px 30px' }}>
@@ -426,13 +464,13 @@ class Trials extends Component {
                   </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false} showRowHover>
-                  {tableTwo.map((row, index) => (
+                  {this.state.messages.map((row, index) => (
                     <TableRow key={index} selectable={false}>
                       <TableRowColumn>
-                        {row.time}
+                        {row.dateTime}
                       </TableRowColumn>
                       <TableRowColumn>
-                        {row.user}
+                        {row.selectUser}
                       </TableRowColumn>
                       <TableRowColumn>
                         {row.role}
