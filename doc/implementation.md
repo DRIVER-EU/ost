@@ -3,9 +3,9 @@ Below are presented sample views for Observer and Trial Manager.
 
 ## Trial Manager View
 
-#### Summary of Observation
+#### Summary of Observations
 ![1](./img/1.png)
-#### Summary of Observation in Time
+#### Summary of Observations in Time
 ![2](./img/2.png)
 #### Events and Messages sent to Observer
 ![3](./img/3.png)
