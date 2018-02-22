@@ -2,6 +2,11 @@ For the full specifications, please go [here](https://driver-eu.gitbooks.io/spec
 
 # Online Observation Support Tool
 An online Observation Support Tool. Part of the DRIVER+ Test-bed software intended to gather observations during a Trial.
+Observation Support Tool is the part of the DRIVER+ Test-bed software intended to gather observations during a Trial.
+
+It will allow a registered observer to input their observations to the application defining the context e.g. type of event it relates to, phase of the crisis, type of the problem, its importance, and specifying the observed issue itself possibly indicating other related observations from the system database. An example of context-building data would be scenario description and events description. It will attach automatically an author of the observation, a timestamp, location. An observer will be able to illustrate the observation by taking picture, recording video or audio. All the data will be stored in the central database.
+
+OST will be also available using Internet browser on the desktop computer or laptop. A registered Analyst will be able to access the gathered observations in the tabular form, orchestrate them on the timeline and/or a situation map group them and develop lessons learned out of them. An analyst will be also able to formulate recommendations as the final stage of the process. An application will allow to generate the reports containing observations, lessons as well as recommendations.
 
 ## Definitions
 
