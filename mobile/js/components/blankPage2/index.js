@@ -106,7 +106,7 @@ class BlankPage2 extends Component {
     for (let i = 0; i < observations.length; i++) {
       observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix();
     }
-    const order = _.orderBy(observations, ['dateTime'], ['asc']);
+    const order = _.orderBy(observations, ['dateTime'], ['desc']);
     for (let i = 0; i < order.length; i++) {
       order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm');
     }
@@ -116,6 +116,7 @@ class BlankPage2 extends Component {
   }
 
   render() {
+    console.log(this.state.changeDataTableSorted);
     return (
       <Container>
         <Header style={{ backgroundColor: '#00497E' }}>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  AsyncStorage,
+  TouchableOpacity,
 } from 'react-native';
 import { CardSection } from './';
 
@@ -55,6 +57,7 @@ class ObservationCard extends Component {
     super();
     this.state = {
       data: [],
+      selectUser: '',
     };
   }
 
@@ -62,6 +65,7 @@ class ObservationCard extends Component {
     this.setState({
       data: this.props.data,
     });
+    AsyncStorage.getItem('selectUser').then(value => this.setState({ selectUser: JSON.parse(value) }));
   }
 
 
@@ -77,16 +81,18 @@ class ObservationCard extends Component {
     return (
       <View>
         {this.state.data.map((data, i) => (
-          <CardSection key={i}>
-            <View style={styles.thumbnailContainerStyle}>
-              <Text style={styles.thumnailStyle}>{data.message ? 'M' : 'O'}</Text>
-            </View>
-            <View style={styles.dateTextStyle}>
-              <Text style={{ fontSize: 12 }}>
-                {data.dateTime}
-              </Text>
-            </View>
-            {data.message &&
+          (data.selectUser === this.state.selectUser || data.selectUser === 'All') &&
+          <TouchableOpacity key={i}>
+            <CardSection>
+              <View style={styles.thumbnailContainerStyle}>
+                <Text style={styles.thumnailStyle}>{data.message ? 'M' : 'O'}</Text>
+              </View>
+              <View style={styles.dateTextStyle}>
+                <Text style={{ fontSize: 12 }}>
+                  {data.dateTime}
+                </Text>
+              </View>
+              {typeof (data.message) === 'string' &&
               <View style={styles.headerContentStyle}>
                 <Text style={styles.headerTextStyle}>
                   Message
@@ -96,7 +102,7 @@ class ObservationCard extends Component {
                 </Text>
               </View>
               }
-            {data.observationType &&
+              {typeof (data.observationType) === 'string' &&
               <View style={styles.headerContentStyle}>
                 <Text style={styles.headerTextStyle}>
                   {data.observationType}
@@ -106,7 +112,8 @@ class ObservationCard extends Component {
                 </Text>
               </View>
               }
-          </CardSection>
+            </CardSection>
+          </TouchableOpacity>
             ))}
       </View>
     );
