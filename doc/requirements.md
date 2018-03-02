@@ -2,7 +2,7 @@
 
 ## Class Model
 
-![](./img/classDiagram.jpg)
+![](./img/CorrectClassModel.jpg)
 
 
 ### User
