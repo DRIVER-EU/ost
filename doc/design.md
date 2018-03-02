@@ -28,22 +28,3 @@ Observation is sent directly to OST Server, which sends notification to the Tria
 
 ![sek3](./img/sek3.jpg)
 
-
-## Common Alerting Protocol 
-Common Alerting Protocol Version 1.2 is the OASIS Standard we want to use modelling three processes in Observer Support Tool connected with relationship between Trial Manager and Observer and Test – bed.  
-
-![Relation-TM-Observers](./img/Relation-TM-Observers.jpg)
-
-Diagram shows how looks relation between mobile version of a tool and desktop version, so how in fact looks relation between Trial Manager and Observers. 
-
-According to OASIS Standard CAP consists of following elements: 
-![CAP](./img/CAP.jpg)
-
-### Mapping CAP standard with OST functionalities:
-#### Sending Observation from Observer to the Server
-![cap1](./img/cap1.png)
-#### Sending Messages and Events from Trial Manager to Observer
-![cap2](./img/cap2.png)
-#### Sending Events from Test - bed to Observer
-![cap3](./img/cap3.png)
-
