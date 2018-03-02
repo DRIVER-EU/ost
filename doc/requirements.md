@@ -22,21 +22,4 @@ Question is described by name, short description and Answer Type. Following Answ
 Each answer type determines a value of an answer. Observations that are filled by Observer dependent on answer type are stored in QuestionItem Class.
 To observation user can also add some attachments which also have types: location, picture, voice and description.
 
-### Category
-Category class became created because of integration with Common Alerting Protocol.It says about the category of event or observation sent.
-It can have followiong values: 
-- “Geo” - Geophysical 
-- “Met” - Meteorological 
-- “Safety” - General emergency and public safety
-- “Security” - Law enforcement, military, homeland and local/private security
-- “Rescue” - Rescue and recovery
-- “Fire” - Fire suppression and rescue
-- “Health” - Medical and public health
-- “Env” - Pollution and other environmental
-- “Transport” - Public and private transportation
-- “Infra” - Utility, telecommunication, other non-transport infrastructure
-- “CBRNE” – Chemical, Biological, Radiological, Nuclear or High-Yield Explosive threat or attack
-- “Other” - Other events
 
-Category class is used differently dependent on the process. 
-In process of sending Events from Trial Manager ot Test-bed to the User, Category is defined based on Event.  In process of sending Observations from the User to Trial Manager, category is defined based on Observation Type. 
