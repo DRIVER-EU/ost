@@ -9,7 +9,6 @@ import {
   Content,
   Icon,
 } from 'native-base';
-import firebase from 'firebase';
 
 const routes = [{ name: 'Home', display: 'Selected Trial' }];
 const background = require('../../../images/driver-logo.png');
@@ -20,8 +19,9 @@ export default class DrawBar extends React.Component {
   };
 
   logOut = () => {
-    firebase.auth().signOut();
-    AsyncStorage.removeItem('loggedIn');
+    // AsyncStorage.removeItem('loggedIn');
+    AsyncStorage.removeItem('selectUser');
+    AsyncStorage.removeItem('role');
     this.props.navigation.navigate('Login');
   }
 

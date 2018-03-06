@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import CodePush from 'react-native-code-push';
-import firebase from 'firebase';
 import { Container, Content, Text, View } from 'native-base';
 import Modal from 'react-native-modalbox';
 import MainStackRouter from './Routers/MainStackRouter';
@@ -32,17 +31,6 @@ class App extends Component {
       showInstalling: false,
       downloadProgress: 0,
     };
-  }
-
-  componentWillMount = () => {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyC00x0IZcNXwUmewYfsRuDW6uN-QgvP5po',
-      authDomain: 'authentication-671b3.firebaseapp.com',
-      databaseURL: 'https://authentication-671b3.firebaseio.com',
-      projectId: 'authentication-671b3',
-      storageBucket: 'authentication-671b3.appspot.com',
-      messagingSenderId: '579205546055',
-    });
   }
 
   componentDidMount() {
