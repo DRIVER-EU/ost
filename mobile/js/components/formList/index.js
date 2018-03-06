@@ -11,7 +11,6 @@ import {
   Icon,
   Left,
   Right,
-  Body,
 } from 'native-base';
 
 import styles from './styles';
@@ -24,9 +23,7 @@ class FormList extends Component {
   };
   static propTypes = {
     name: React.PropTypes.string,
-    index: React.PropTypes.number,
-    list: React.PropTypes.arrayOf(React.PropTypes.object),
-    openDrawer: React.PropTypes.func,
+    navigation: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -37,12 +34,28 @@ class FormList extends Component {
     };
   }
 
-  onLayout(e) {
+  onLayout() {
     const { width, height } = Dimensions.get('window');
     this.setState({
       widthEl: width,
       heightEl: height,
     });
+  }
+
+  imageHeight() {
+    const { widthEl, heightEl } = this.state;
+    switch (true) {
+      case (heightEl > widthEl && widthEl > 650) :
+        return 350;
+      case (widthEl > heightEl && widthEl > 900) :
+        return 500;
+      case (heightEl > widthEl && widthEl < 650) :
+        return 200;
+      case (widthEl > heightEl && widthEl < 900) :
+        return 350;
+      default:
+        return 200;
+    }
   }
 
   render() {
@@ -56,11 +69,7 @@ class FormList extends Component {
               <Icon name="ios-arrow-back" />
             </Button>
           </Left>
-
-          <Body>
-            <Title>{name ? this.props.name : 'Trial XYZ'}</Title>
-          </Body>
-
+          <Title style={{ alignSelf: 'center', justifyContent: 'center', marginHorizontal: 30 }}>{name ? this.props.name : 'Mass rescue operation in sea disaster'}</Title>
           <Right />
         </Header>
         <Content padder>
@@ -72,30 +81,20 @@ class FormList extends Component {
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.description}>
-                Welcome to trial XYZ
+              Example trial of TNO’s csCOP-tool.
               </Text>
             </View>
             <View style={styles.descriptionContainer}>
               <Text style={styles.descriptionText}>
-                Information about trial
-              </Text>
-            </View>
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionText}>
-                Information about trial
-              </Text>
-            </View>
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionText}>
-                Information about trial
+              Example trial of TNO’s csCOP-tool. Session 1 without and Session 2 with this COP-tool. The scenario is about a tire recycling factory on fire with effects in two regions.
               </Text>
             </View>
             <Image
               onLayout={this.onLayout.bind(this)}
               source={background}
               style={{
-                marginVertical: 40,
-                height: heightEl > widthEl ? 200 : 350,
+                marginVertical: 20,
+                height: this.imageHeight(),
                 width: null,
                 flex: 1 }}
             />

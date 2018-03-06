@@ -12,85 +12,37 @@ import {
   Body,
 } from 'native-base';
 import moment from 'moment';
-import SingleCard from '../common/SingleCard';
+import axios from 'axios';
+import _ from 'lodash';
+import ObservationCard from '../common/ObservationCard';
 import styles from './styles';
 
 
 const dataArr = [
   {
-    label: 'A Trial XYZ',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
+    label: 'Communication Channel',
+    description: 'Communication channel with vessel is created',
+    date: '01/01/2018 11:48',
   },
   {
-    label: 'B Trial One',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
+    label: 'Calling services',
+    description: 'Organisation  calls other emergency services',
+    date: '02/01/2018 12:32',
   },
   {
-    label: 'C Trial Two',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
+    label: 'Passenger list',
+    description: 'Providing crew and passenger lists',
+    date: '03/01/2018 18:31',
   },
   {
-    label: 'Trial Three',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
+    label: 'Sending help',
+    description: 'Sending ships and helicopters',
+    date: '04/01/2018 00:42',
   },
   {
-    label: 'Trial Four',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'Trial Five',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'A Trial Six',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
-  },
-  {
-    label: 'B Trial Seven',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin consequat rutrum. Etiam ut libero sagittis, vestibulum enim in, sollicitudin ipsum. Donec sagittis, justo in porta porttitor, tellus tellus efficitur nulla',
-    date: '04/01/2018 12:42',
+    label: 'List of delivered',
+    description: 'Creating list of delivered people and publication',
+    date: '05/01/2018 17:05',
   },
 ];
 
@@ -99,7 +51,72 @@ class BlankPage2 extends Component {
     header: null,
   };
 
+  static propTypes = {
+    navigation: React.PropTypes.func,
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      answers: [],
+      sort: { type: 'dateTime', order: 'asc' },
+      changeDataTableSorted: [],
+      sortObservation: true,
+    };
+  }
+
+  componentDidMount() {
+    this.getData();
+    this.interval = setInterval(() => this.getData(), 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+
+  getData() {
+    const dataArray = [];
+    axios.get('http://192.168.1.15:8080/api/anonymous/observation')
+      .then((response) => {
+        response.data.map(data => (
+          dataArray.push(data)
+        ));
+        axios.get('http://192.168.1.15:8080/api/anonymous/message')
+        .then((responseTwo) => {
+          responseTwo.data.map(data => (
+            dataArray.push(data)
+          ));
+          this.setState({
+            answers: dataArray,
+          });
+          this.sortFunction();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  sortFunction() {
+    const observations = [...this.state.answers];
+    for (let i = 0; i < observations.length; i++) {
+      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix();
+    }
+    const order = _.orderBy(observations, ['dateTime'], ['desc']);
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm');
+    }
+    this.setState({
+      changeDataTableSorted: order,
+    });
+  }
+
   render() {
+    console.log(this.state.changeDataTableSorted);
     return (
       <Container>
         <Header style={{ backgroundColor: '#00497E' }}>
@@ -118,7 +135,7 @@ class BlankPage2 extends Component {
         </Header>
 
         <Content>
-          <SingleCard data={dataArr} />
+          <ObservationCard data={this.state.changeDataTableSorted} />
         </Content>
         <TouchableOpacity style={styles.buttonAddContainer} onPress={() => this.props.navigation.navigate('NewObservation')}>
           <Icon name="add" style={styles.buttonAddStyle} />

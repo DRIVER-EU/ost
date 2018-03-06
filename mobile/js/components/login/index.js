@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Image, Text, AsyncStorage, View, Dimensions } from 'react-native';
-import firebase from 'firebase';
 import {
   Container,
   Content,
@@ -18,7 +17,7 @@ class Login extends Component {
     header: null,
   };
   static propTypes = {
-    navigation: React.PropTypes.object,
+    navigation: React.PropTypes.func,
   };
   constructor(props) {
     super(props);
@@ -30,22 +29,11 @@ class Login extends Component {
       loggedIn: null,
       heightEl: null,
       widthEl: null,
+      log: false,
     };
   }
 
-  componentWillMount = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.setState({ loggedIn: true });
-        this.props.navigation.navigate('Home');
-      } else {
-        this.setState({ loggedIn: false });
-      }
-      AsyncStorage.setItem('loggedIn', JSON.stringify(this.state.loggedIn));
-    });
-  }
-
-  onLayout(e) {
+  onLayout() {
     const { width, height } = Dimensions.get('window');
     this.setState({
       widthEl: width,
@@ -53,16 +41,51 @@ class Login extends Component {
     });
   }
 
+  imageHeight() {
+    const { widthEl, heightEl } = this.state;
+    switch (true) {
+      case (heightEl > widthEl && widthEl > 650) :
+        return 370;
+      case (widthEl > heightEl && widthEl > 900) :
+        return 350;
+      case (heightEl > widthEl && widthEl < 650) :
+        return 200;
+      case (widthEl > heightEl && widthEl < 900) :
+        return 350;
+      default:
+        return 200;
+    }
+  }
+
   onButtonPress = () => {
     const { email, password } = this.state;
     this.setState({ error: '', loading: true });
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(this.onLoginSuccess.bind(this))
-    .catch(() => {
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(this.onLoginSuccess.bind(this))
-            .catch(this.onLoginFail.bind(this));
-    });
+    if (email === 'test1@test.com' && password === 'test') {
+      AsyncStorage.setItem('role', JSON.stringify('Team 1'));
+      AsyncStorage.setItem('selectUser', JSON.stringify('Test User 1'));
+      this.setState({
+        loading: false,
+        email: '',
+        password: '',
+        error: '',
+      });
+      this.props.navigation.navigate('Home');
+    } else if (email === 'test2@test.com' && password === 'test') {
+      AsyncStorage.setItem('role', JSON.stringify('Team 1'));
+      AsyncStorage.setItem('selectUser', JSON.stringify('Test User 2'));
+      this.setState({
+        loading: false,
+        email: '',
+        password: '',
+        error: '',
+      });
+      this.props.navigation.navigate('Home');
+    } else {
+      this.setState({
+        loading: false,
+        error: 'Authentication failed.',
+      });
+    }
   }
 
   onLoginSuccess() {
@@ -110,8 +133,9 @@ class Login extends Component {
               flex: 1,
               marginTop: 40,
               marginBottom: 40,
+              marginHorizontal: widthEl > heightEl && widthEl > 800 ? 150 : 20,
               width: null,
-              height: heightEl > widthEl ? 200 : 350 }}
+              height: this.imageHeight() }}
           />
           <View style={styles.containerStyle}>
             <CardSection>
