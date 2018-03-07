@@ -15,6 +15,8 @@ export default{
     flex: 1,
     alignSelf: 'stretch',
     marginTop: 20,
+    paddingRight: 20,
+    paddingLeft: 20,
   },
   title: {
     fontSize: 20,
@@ -33,8 +35,7 @@ export default{
     flex: 1,
     alignSelf: 'stretch',
     marginTop: 10,
-  },
-  thumbnailContainerStyle: {
-    marginBottom: 10,
+    paddingRight: 20,
+    paddingLeft: 20,
   },
 };
