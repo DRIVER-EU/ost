@@ -246,7 +246,7 @@ class AdminTrials extends Component {
     return (
       <div className='main-container'>
         <div className='pages-box'>
-          <div className='trials-container'>
+          <div className='admin-trials-container'>
             <div className='trials-header'>
               <div>Summary of observations</div>
               <DateComponent />
