@@ -115,6 +115,7 @@ class Trials extends Component {
     if (nextProps.messages &&
       nextProps.messages.length !== this.state.messages.length) {
       let change = nextProps.messages
+      change = this.getMessagesSorted(change)
       this.setState({ messages:  change })
     }
     if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
@@ -137,6 +138,18 @@ class Trials extends Component {
     let change = {}
     change[name] = e.target.value
     this.setState(change)
+  }
+
+  getMessagesSorted (messages) {
+    for (let i = 0; i < messages.length; i++) {
+      messages[i].dateTime = moment(messages[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+    }
+
+    let order = _.orderBy(messages, ['dateTime'], ['desc'])
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    }
+    return order
   }
 
   sortFunction () {
