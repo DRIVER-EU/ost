@@ -124,7 +124,7 @@ const initialState = {
   observation: []
 }
 
-export default function trialsReducer (state = initialState, action) {
+export default function adminTrialsReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state
