@@ -24,7 +24,7 @@ Each Observation Template can have many questions with different answer types.
 ### Trial Session
 Trial has very important feature - it is run in many sessions, which can be ended or in progress. 
 In each session there can be new assignment of Roles to Users. On the session level there is a process of making Observations. 
-From the Test - bed there are sent events defined as TrialStages and events which are triggers - they have an influence on changing the questions. 
+From the Test - bed there are sent events defined as Events and events which are triggers (TrialStages) - they have an influence on changing the questions. 
 ### Translation
 This model shows also new functionality of the tool. The application will be provided in different languages dependently on User's language. 
 
