@@ -15,7 +15,6 @@ On the Trial Lebel there are defined following issues:
 - assignment of Roles to Users and assignment of 'Roles to Roles'. That means that Trial Manager gives regisered User a role (Participant or Observer) and then assignes Observers to Participants. 
 - TrialStage – the stage of a Trial displayed to User. In one TrialStage ObservationTypes are defined - groups of questions, which are defined by description and name. 
 - Roles assigned to ObservationTypes – Each ObservationType has defined some Participants, who are performed by checkboxes. That assignment shows that dependently from ObservationTypes there are displayed different Participants.
-- Role przypisuje się też na poziomie Triala – Trial Manager decyduje wtedy ilu jest potrzebnych Observerów, ilu Participantów i którzy Userzy są przypisani do konkretnej roli. 
 - Roles are also assigned on the Trial level - Trial Manager decides how many Observers and Participants are needed.
 
 ### Questions
