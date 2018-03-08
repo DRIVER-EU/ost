@@ -4,6 +4,7 @@
 
 ![architecture](./img/architecture.png)
 
+![](./img/screenshot.png) 
 ## OST and Test-bed Integration
 
 There exists integration between Observer Support Tool Server and Test-Bed as an external system. Test-bed prepares data about events: names, description, trigger and time. Packages with that information are sent to OST Server. OST Server provides reacting on a trigger and displaying correctly events in time to user. 
