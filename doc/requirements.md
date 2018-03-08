@@ -14,7 +14,7 @@ Trial is defined by description, default language (english) and name.
 On the Trial Lebel there are defined following issues: 
 - assignment of Roles to Users and assignment of 'Roles to Roles'. That means that Trial Manager gives regisered User a role (Participant or Observer) and then assignes Observers to Participants. 
 - TrialStage – the stage of a Trial displayed to User. In one TrialStage ObservationTypes are defined - groups of questions, which are defined by description and name. 
-- Roles assigned to ObservationTypes – Each ObservationType has defined some Participants, who are performed by checkboxes. That assignment pays attention on Każdy ObservationType ma zdefiniowanych jakichś uczestników (Participants), którzy są przedstawieni za pomocą checkboxów. That assignment shows that dependently from ObservationTypes there are displayed different Participants.
+- Roles assigned to ObservationTypes – Each ObservationType has defined some Participants, who are performed by checkboxes. That assignment shows that dependently from ObservationTypes there are displayed different Participants.
 - Role przypisuje się też na poziomie Triala – Trial Manager decyduje wtedy ilu jest potrzebnych Observerów, ilu Participantów i którzy Userzy są przypisani do konkretnej roli. 
 - Roles are also assigned on the Trial level - Trial Manager decides how many Observers and Participants are needed.
 
@@ -22,8 +22,8 @@ On the Trial Lebel there are defined following issues:
 Question is described by name, short description and Answer Type. Following Answer Types exist: checkboxes, radio buttons, text field and slider.
 Each answer type determines a value of an answer. Observations that are filled by Observer dependent on answer type are stored in QuestionItem Class.
 To observation user can also add some attachments which also have types: location, picture, voice and description.
-Ważną cechą Triala jest jego sesyjność. Oznacza to, że jeden Trial może być prowadzony w kilku sesjach, które mogą być wygaśnięte, lub w toku. 
-### Trial Session
+Each Observation Template can have many questions with different answer types. 
+Trial has very important features - it is run in many sessions, which can be ended or in progress. 
 In each session there can be new assignment of Roles to Users. On the session level there is a process of making Observations. 
 From the Test - bed there are sent events defined as TrialStages and events which are triggers - they have an influence on changing the questions. 
 ### Translation
