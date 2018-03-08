@@ -4,8 +4,6 @@
 
 ![](./img/TranslationClass.jpg)
 
-![](./img/ObsHierarchy.bmp)
-![](./img/TrialHierarchy.bmp)
 ### User
 User Class stores data about each user of an Observer Support Tool. User is always assigned to a particular Role, which can be an Observer or Participant. 
 Except of the fact, that User is connected with Observation, there is also association between Observation and Role, which refers to a view with Observation, where Observer can choose which Participants he observes. 
