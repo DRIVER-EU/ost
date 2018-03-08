@@ -3,7 +3,7 @@
 ## Class Model
 
 ![](./img/TranslationClass.jpg)
-
+![](./img/screenshot.png)
 
 ### User
 User Class stores data about each user of an Observer Support Tool. User is always assigned to a particular Role, which can be an Observer or Participant. 
