@@ -10,25 +10,25 @@ origin = '192.168.1.15:8080'
 // import axios from 'axios'
 // import { getHeaders, errorHandle } from '../../../store/addons'
 
-export const GET_TRIALS = 'GET_TRIALS'
+export const GET_VIEW_TRIALS = 'GET_VIEW_TRIALS'
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export const getTrialsAction = (data = null) => {
+export const getViewTrialsAction = (data = null) => {
   return {
-    type: GET_TRIALS,
+    type: GET_VIEW_TRIALS,
     data: data
   }
 }
 
 export const actions = {
-  getTrials
+  getViewTrials
 }
 
-export const getTrials = () => {
+export const getViewTrials = () => {
   return (dispatch) => {
-    dispatch(getTrialsAction({
+    dispatch(getViewTrialsAction({
       total: 6,
       data: [
         {
@@ -63,7 +63,7 @@ export const getTrials = () => {
     // return new Promise((resolve) => {
     //   axios.get(`http://${origin}/api/anonymous/trials`, getHeaders())
     //    .then((response) => {
-    //      dispatch(getTrialsAction(response.data))
+    //      dispatch(getViewTrialsAction(response.data))
     //      resolve()
     //    })
     //    .catch((error) => {
@@ -78,10 +78,10 @@ export const getTrials = () => {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_TRIALS]: (state, action) => {
+  [GET_VIEW_TRIALS]: (state, action) => {
     return {
       ...state,
-      listOfTrials: action.data
+      viewTrials: action.data
     }
   }
 }
@@ -89,10 +89,10 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  listOfTrials: []
+  viewTrials: []
 }
 
-export default function trialsReducer (state = initialState, action) {
+export default function viewTrialsReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state
