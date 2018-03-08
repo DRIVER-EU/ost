@@ -41,7 +41,7 @@ class ViewTrials extends Component {
         <div className='pages-box'>
           <div className='view-trials-container'>
             <div className='trials-header'>
-              <div>Select observation</div>
+              <div>List of events</div>
               <DateComponent />
             </div>
             <Accordion>

@@ -18,14 +18,20 @@
   }
 
   .react-sanfona-item-title {
+    background-color: #fafafa;
+    color: #064C7B;
+    transition: background-color .3s;
     display: block;
     font-weight: 400;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 24px;
     position: relative;
     border: 1px solid #FCB636;
-    padding: 10px 34px 10px;
-    background: #C4D1DB;
+    padding: 20px 38px;
+  }
+
+  .react-sanfona-item-title:hover {
+    background-color: #C4D1DB;
   }
 
   .react-sanfona-item.react-sanfona-item-expanded {
@@ -39,9 +45,9 @@
     content: '\e086';
     position: absolute;
     left: 10px;
-    top: 10px;
-    color: #FCB636;
-    font-size: 20px;
+    top: 20px;
+    color: #fcb636;
+    font-size: 24px;
     display: block;
     transition: transform 300ms;
   }
@@ -51,20 +57,13 @@
     content: '\e114';
     position: absolute;
     right: 10px;
-    top: 10px;
+    top: 20px;
     display: block;
     transition: transform 300ms;
   }
 
   .react-sanfona-item.react-sanfona-item-expanded:after {
     transform: rotateZ(180deg);
-  }
-
-  .react-sanfona-item-title {
-    background-color: #fafafa;
-    color: #064C7B;
-    padding: 10px 34px 10px;
-    transition: background-color .3s;
   }
 
   .react-sanfona-item-body-wrapper {
