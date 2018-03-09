@@ -59,6 +59,7 @@ class Trials extends Component {
       observationValue: '',
       sortObservation: true,
       sourceValue: '',
+      dataTable: [],
       changeDataTable: [],
       sort: { type: 'dateTime', order: 'asc' },
       observations: [],
@@ -114,6 +115,7 @@ class Trials extends Component {
     if (nextProps.messages &&
       nextProps.messages.length !== this.state.messages.length) {
       let change = nextProps.messages
+      change = this.getMessagesSorted(change)
       this.setState({ messages:  change })
     }
     if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
@@ -138,6 +140,18 @@ class Trials extends Component {
     this.setState(change)
   }
 
+  getMessagesSorted (messages) {
+    for (let i = 0; i < messages.length; i++) {
+      messages[i].dateTime = moment(messages[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+    }
+
+    let order = _.orderBy(messages, ['dateTime'], ['desc'])
+    for (let i = 0; i < order.length; i++) {
+      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    }
+    return order
+  }
+
   sortFunction () {
     let observations = [ ...this.state.changeDataTable ]
     let sort = { ...this.state.sort }
@@ -154,9 +168,9 @@ class Trials extends Component {
     for (let i = 0; i < order.length; i++) {
       order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
     }
-
     sort['order'] = orderBy
     this.setState({
+      observations: order,
       sortObservation: !this.state.sortObservation,
       changeDataTableSorted: order,
       sort: sort
