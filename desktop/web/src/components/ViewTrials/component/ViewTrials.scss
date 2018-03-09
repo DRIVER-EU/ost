@@ -1,9 +1,9 @@
-.trials-container {
+.view-trials-container {
   width: 100%;
   height: 100%;
   padding: 20px;
   box-sizing: border-box;
-  background-color: #fff;
+  background-color: white;
   overflow-y: auto;
 
   .trials-header {
@@ -17,6 +17,7 @@
     margin: 5px 0;
   }
 
+
   .react-sanfona-item-title {
     background-color: #fafafa;
     color: #064C7B;
@@ -24,10 +25,10 @@
     display: block;
     font-weight: 400;
     text-decoration: none;
-    font-size: 24px;
+    font-size: 20px;
     position: relative;
     border: 1px solid #FCB636;
-    padding: 20px 38px;
+    padding: 10px 34px 10px;
   }
 
   .react-sanfona-item-title:hover {
@@ -45,9 +46,9 @@
     content: '\e086';
     position: absolute;
     left: 10px;
-    top: 20px;
-    color: #fcb636;
-    font-size: 24px;
+    top: 10px;
+    color: #FCB636;
+    font-size: 20px;
     display: block;
     transition: transform 300ms;
   }
@@ -57,7 +58,7 @@
     content: '\e114';
     position: absolute;
     right: 10px;
-    top: 20px;
+    top: 10px;
     display: block;
     transition: transform 300ms;
   }

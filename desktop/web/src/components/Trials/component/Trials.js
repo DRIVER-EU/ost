@@ -1,54 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import { Table, TableBody,
-  TableHeader, TableHeaderColumn,
-  TableRow, TableRowColumn } from 'material-ui/Table'
-import { Card } from 'material-ui/Card'
-import DropDownMenu from 'material-ui/DropDownMenu'
-import MenuItem from 'material-ui/MenuItem'
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
-import ReactTooltip from 'react-tooltip'
 import './Trials.scss'
-import _ from 'lodash'
-
-const userList = [
-  { id: 0, name: 'All' },
-  { id: 1, name: 'Test User 1' },
-  { id: 2, name: 'Test User 2' }
-]
-
-const roleList = [
-  { id: 0, name: 'All' },
-  { id: 1, name: 'Team 1' }
-]
-
-const rangeList = [
-  { id: 0, name: '15 minutes' },
-  { id: 1, name: '30 minutes' },
-  { id: 2, name: '1 hour' },
-  { id: 3, name: '1 day' },
-  { id: 4, name: '7 days' },
-  { id: 5, name: '1 month' }
-]
-
-const styles = {
-  searchPanelContainer: {
-    width: '100%',
-    justifyContent: 'flex-start',
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap'
-  }
-}
+import { Accordion, AccordionItem } from 'react-sanfona'
+import RaisedButton from 'material-ui/RaisedButton'
+import { browserHistory } from 'react-router'
 
 class Trials extends Component {
   constructor (props) {
     super(props)
-    const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
       time: t,
       userValue: 0,
@@ -71,85 +31,20 @@ class Trials extends Component {
   }
 
   static propTypes = {
-    getMessages: PropTypes.func,
-    messages: PropTypes.array,
-    isSendMessage: PropTypes.any,
-    sendMessage: PropTypes.func,
-    getObservation: PropTypes.func,
-    observation: PropTypes.array
+    getTrials: PropTypes.func,
+    listOfTrials: PropTypes.array
   }
 
   componentWillMount () {
-    this.props.getMessages()
-    this.props.getObservation()
-
-    setInterval(function () {
-      this.props.getMessages()
-      this.props.getObservation()
-    }.bind(this), 3000)
+    this.props.getTrials()
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    for (var key in this.state) {
-      for (var nextKey in nextState) {
-        if (nextKey === key && this.state[key] !== nextState[nextKey]) {
-          return true
-        }
-        if (key === nextKey && typeof (this.state[key]) === 'object' &&
-        !_.isEqual(this.state[key], nextState[nextKey])) {
-          return true
-        }
-      }
-    }
-
-    return false
-  }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
-      let change = nextProps.observation
-      this.setState({ changeDataTable: change }, () => {
-        this.sortFunction()
-        this.getData()
-      })
+    if (nextProps.listOfTrials.data &&
+      nextProps.listOfTrials.data !== this.state.listOfTrials &&
+      nextProps.listOfTrials.data !== this.props.listOfTrials) {
+      this.setState({ listOfTrials: nextProps.listOfTrials.data })
     }
-    if (nextProps.messages &&
-      nextProps.messages.length !== this.state.messages.length) {
-      let change = nextProps.messages
-      change = this.getMessagesSorted(change)
-      this.setState({ messages:  change })
-    }
-    if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
-      this.setState({ messageTime: nextProps.isSendMessage.time }, () => {
-        this.props.getMessages()
-      })
-    }
-    if (this.props.messages && this.props.observation && this.props.isSendMessage) {
-      // eslint
-    }
-  }
-
-  handleChangeDropDown (stateName, event, index, value) {
-    let change = {}
-    change[stateName] = value
-    this.setState(change)
-  }
-
-  handleChangeTextField (name, e) {
-    let change = {}
-    change[name] = e.target.value
-    this.setState(change)
-  }
-
-  getMessagesSorted (messages) {
-    for (let i = 0; i < messages.length; i++) {
-      messages[i].dateTime = moment(messages[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
-    }
-
-    let order = _.orderBy(messages, ['dateTime'], ['desc'])
-    for (let i = 0; i < order.length; i++) {
-      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
-    }
-    return order
   }
 
   sortFunction () {
@@ -249,254 +144,28 @@ class Trials extends Component {
         <div className='pages-box'>
           <div className='trials-container'>
             <div className='trials-header'>
-              <div>Summary of observations</div>
+              <div>Select trial</div>
               <DateComponent />
             </div>
-
-            <Card style={{ padding: '20px', margin: '20px 30px' }}>
-              <div style={styles.searchPanelContainer}>
-                <div style={{ marginRight: '20px' }}>
-                  <div className='dropdown-title'>Source</div>
-                  <TextField
-                    style={{ width: '250px' }}
-                    value={this.state.sourceValue}
-                    hintText='enter the message'
-                    onChange={this.handleChangeTextField.bind(this, 'sourceValue')}
-                 />
-                </div>
-                <div style={{ marginRight: '20px' }}>
-                  <div className='dropdown-title'>Observation type</div>
-                  <TextField
-                    style={{ width: '250px' }}
-                    value={this.state.observationValue}
-                    hintText='enter the message'
-                    onChange={this.handleChangeTextField.bind(this, 'observationValue')}
-                 />
-                </div>
-                <div style={{ marginRight: '20px' }}>
-                  <div className='dropdown-title'>Who</div>
-                  <TextField
-                    style={{ width: '250px' }}
-                    value={this.state.whoValue}
-                    hintText='enter the message'
-                    onChange={this.handleChangeTextField.bind(this, 'whoValue')}
-                 />
-                </div>
-                <div>
-                  <div className='dropdown-title'>What</div>
-                  <TextField
-                    style={{ width: '250px' }}
-                    value={this.state.whatValue}
-                    hintText='enter the message'
-                    onChange={this.handleChangeTextField.bind(this, 'whatValue')}
-                 />
-                </div>
-                <RaisedButton
-                  style={{ marginLeft: '20px', marginRight: '20px' }}
-                  label='Search'
-                  primary
-                  labelStyle={{ color: '#FDB913' }} />
-              </div>
-            </Card>
-
-            <Card style={{ margin: '20px 30px' }}>
-              <Table
-                bodyStyle={{ overflowX: undefined, overflowY: undefined }}
-                fixedFooter={false} >
-                <TableHeader
-                  displaySelectAll={false}
-                  adjustForCheckbox={false}
-                >
-                  <TableRow>
-                    <TableHeaderColumn onTouchTap={() => this.sortFunction()}>
-                      <div className='sort-style'>
-                        <div className='sort-style-icon sort-cursor'>Time</div>
-                        <div className='sort-cursor'>
-                          {this.state.sortObservation ? <i className='material-icons'>keyboard_arrow_up</i>
-                      : <i className='material-icons'>keyboard_arrow_down</i>}
-                        </div>
+            <Accordion>
+              {this.state.listOfTrials.map((object) => {
+                return (
+                  <AccordionItem title={object.title} expanded={false}>
+                    <div>
+                      <p>{object.description}</p>
+                      <div style={{ display: 'table', margin: '0 auto' }}>
+                        <RaisedButton
+                          buttonStyle={{ width: '200px' }}
+                          backgroundColor='#244C7B'
+                          labelColor='#FCB636'
+                          onClick={this.viewTrial.bind(this, object.id)}
+                          label='Ok' />
                       </div>
-                    </TableHeaderColumn>
-                    <TableHeaderColumn >
-                      User
-                    </TableHeaderColumn>
-                    <TableHeaderColumn >
-                      Role
-                    </TableHeaderColumn>
-                    <TableHeaderColumn >
-                      Observation Type
-                    </TableHeaderColumn>
-                    <TableHeaderColumn >
-                      Who
-                    </TableHeaderColumn>
-                    <TableHeaderColumn >
-                      What
-                    </TableHeaderColumn>
-                    <TableHeaderColumn>
-                      Attachment
-                    </TableHeaderColumn>
-                  </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.state.changeDataTableSorted.map((row, index) => (
-                    <TableRow key={index} selectable={false}>
-                      <TableRowColumn >
-                        {row.dateTime}
-                      </TableRowColumn>
-                      <TableRowColumn >
-                        {row.selectUser}
-                      </TableRowColumn>
-                      <TableRowColumn>
-                        {row.role}
-                      </TableRowColumn>
-                      <TableRowColumn >
-                        {row.observationType}
-                      </TableRowColumn>
-                      <TableRowColumn >
-                        {row.who}
-                      </TableRowColumn>
-                      <TableRowColumn >
-                        {row.what}
-                      </TableRowColumn>
-                      <TableRowColumn>
-                        <p data-tip={row.attachment}>
-                          <i className='material-icons'>announcement</i>
-                        </p>
-                        <ReactTooltip />
-                      </TableRowColumn>
-                    </TableRow>
-                ))}
-                </TableBody>
-              </Table>
-            </Card>
-            {this.state.chartData.length > 0 && <Card style={{ margin: '20px 30px' }}>
-              <div style={{ padding: '20px' }}>
-                <div className='dropdown-title'>select range of time</div>
-                <DropDownMenu
-                  style={{ width: '220px' }}
-                  value={this.state.timeRange}
-                  underlineStyle={{ marginLeft: '0' }}
-                  labelStyle={{ color: '#282829', paddingLeft: '0' }}
-                  onChange={this.handleChangeDropDown.bind(this, 'timeRange')}>
-                  {rangeList.map((index) => (
-                    <MenuItem
-                      key={index.id}
-                      value={index.id}
-                      style={{ color: 'grey' }}
-                      primaryText={index.name} />
-                ))}
-                </DropDownMenu>
-              </div>
-              <ResponsiveContainer width='100%' height={400}>
-                <BarChart data={this.state.chartData}
-                  margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
-                  <XAxis dataKey='name' hide='true' />
-                  <YAxis />
-                  <CartesianGrid strokeDasharray='3 3' />
-                  <Tooltip />
-                  <Bar dataKey='answers' fill='#00497E' background={{ fill: '#eee' }} >
-                    <LabelList dataKey='date' position='bottom' offset='10' />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-
-            </Card>}
-            <div className='trials-title'>
-              <div>Events / messages send to observers</div>
-            </div>
-            <Card style={{ padding: '20px', margin: '20px 30px' }}>
-              <div style={styles.searchPanelContainer}>
-                <div>
-                  <div className='dropdown-title'>Select User</div>
-                  <DropDownMenu
-                    style={{ width: '220px' }}
-                    value={this.state.userValue}
-                    underlineStyle={{ marginLeft: '0' }}
-                    labelStyle={{ color: '#282829', paddingLeft: '0' }}
-                    onChange={this.handleChangeDropDown.bind(this, 'userValue')}>
-                    {userList.map((index) => (
-                      <MenuItem
-                        key={index.id}
-                        value={index.id}
-                        style={{ color: 'grey' }}
-                        primaryText={index.name} />
-                ))}
-                  </DropDownMenu>
-                </div>
-                <div>
-                  <div className='dropdown-title'>Select Role</div>
-                  <DropDownMenu
-                    style={{ width: '220px' }}
-                    value={this.state.roleValue}
-                    underlineStyle={{ marginLeft: '0' }}
-                    labelStyle={{ color: '#282829', paddingLeft: '0' }}
-                    onChange={this.handleChangeDropDown.bind(this, 'roleValue')}>
-                    {roleList.map((index) => (
-                      <MenuItem
-                        key={index.id}
-                        value={index.id}
-                        style={{ color: 'grey' }}
-                        primaryText={index.name} />
-                ))}
-                  </DropDownMenu>
-                </div>
-                <div>
-                  <div className='dropdown-title'>Message</div>
-                  <TextField
-                    style={{ width: '300px' }}
-                    value={this.state.messageValue}
-                    hintText='enter the message'
-                    onChange={this.handleChangeTextField.bind(this, 'messageValue')}
-                  />
-                </div>
-                <RaisedButton
-                  style={{ marginLeft: '20px', marginRight: '20px' }}
-                  label='Send'
-                  primary
-                  labelStyle={{ color: '#FDB913' }}
-                  onClick={this.sendMessage.bind(this)} />
-              </div>
-            </Card>
-            <Card style={{ margin: '20px 30px' }}>
-              <Table
-                bodyStyle={{ overflowX: undefined, overflowY: undefined }}
-                fixedFooter={false} >
-                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                  <TableRow>
-                    <TableHeaderColumn>
-                      Time
-                    </TableHeaderColumn>
-                    <TableHeaderColumn>
-                      User
-                    </TableHeaderColumn>
-                    <TableHeaderColumn>
-                      Role
-                    </TableHeaderColumn>
-                    <TableHeaderColumn>
-                      Message
-                    </TableHeaderColumn>
-                  </TableRow>
-                </TableHeader>
-                <TableBody displayRowCheckbox={false} showRowHover>
-                  {this.state.messages.map((row, index) => (
-                    <TableRow key={index} selectable={false}>
-                      <TableRowColumn>
-                        {row.dateTime}
-                      </TableRowColumn>
-                      <TableRowColumn>
-                        {row.selectUser}
-                      </TableRowColumn>
-                      <TableRowColumn>
-                        {row.role}
-                      </TableRowColumn>
-                      <TableRowColumn>
-                        {row.message}
-                      </TableRowColumn>
-                    </TableRow>
-                ))}
-                </TableBody>
-              </Table>
-            </Card>
+                    </div>
+                  </AccordionItem>
+                )
+              })}
+            </Accordion>
           </div>
         </div>
       </div>
