@@ -9,24 +9,16 @@ class TrialsView extends Component {
   }
 
   static propTypes = {
-    getMessages: PropTypes.func,
-    messages: PropTypes.any,
-    isSendMessage: PropTypes.any,
-    sendMessage: PropTypes.func,
-    getObservation: PropTypes.func,
-    observation: PropTypes.array
+    getTrials: PropTypes.func,
+    listOfTrials: PropTypes.array
   }
 
   render () {
     return (
       <div className='background-home'>
         <Trials
-          messages={this.props.messages}
-          getMessages={this.props.getMessages}
-          isSendMessage={this.props.isSendMessage}
-          sendMessage={this.props.sendMessage}
-          getObservation={this.props.getObservation}
-          observation={this.props.observation}
+          getTrials={this.props.getTrials}
+          listOfTrials={this.props.listOfTrials}
         />
       </div>
     )

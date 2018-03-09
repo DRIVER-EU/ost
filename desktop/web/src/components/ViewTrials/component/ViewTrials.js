@@ -1,51 +1,51 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import DateComponent from '../../DateComponent/DateComponent'
-import './Trials.scss'
+import './ViewTrials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 
-class Trials extends Component {
+class ViewTrials extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfTrials: []
+      viewTrials: []
     }
   }
 
   static propTypes = {
-    getTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    getViewTrials: PropTypes.func,
+    viewTrials: PropTypes.array
   }
 
   componentWillMount () {
-    this.props.getTrials()
+    this.props.getViewTrials()
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfTrials.data &&
-      nextProps.listOfTrials.data !== this.state.listOfTrials &&
-      nextProps.listOfTrials.data !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.data })
+    if (nextProps.viewTrials.data &&
+      nextProps.viewTrials.data !== this.state.viewTrials &&
+      nextProps.viewTrials.data !== this.props.viewTrials) {
+      this.setState({ viewTrials: nextProps.viewTrials.data })
     }
   }
 
   viewTrial (id) {
-    browserHistory.push(`/trials/${id}`)
+    browserHistory.push(`/trials`)
   }
 
   render () {
     return (
       <div className='main-container'>
         <div className='pages-box'>
-          <div className='trials-container'>
+          <div className='view-trials-container'>
             <div className='trials-header'>
-              <div>Select trial</div>
+              <div>List of events</div>
               <DateComponent />
             </div>
             <Accordion>
-              {this.state.listOfTrials.map((object) => {
+              {this.state.viewTrials.map((object) => {
                 return (
                   <AccordionItem title={object.title} expanded={false}>
                     <div>
@@ -70,4 +70,4 @@ class Trials extends Component {
   }
 }
 
-export default Trials
+export default ViewTrials
