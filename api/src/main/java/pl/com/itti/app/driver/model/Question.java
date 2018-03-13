@@ -11,7 +11,6 @@ import org.hibernate.annotations.Parameter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -21,15 +20,14 @@ import java.time.LocalDateTime;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "trial_stage_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "question_seq")}
 )
-public class TrialStage extends PersistentObject implements Serializable {
+public class Question extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false)
-    private String name;
+    private String description;
 
     @Column(nullable = false)
-    private LocalDateTime simulationTime;
+    private String name;
 }

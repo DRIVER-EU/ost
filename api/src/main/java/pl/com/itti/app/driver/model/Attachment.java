@@ -10,8 +10,9 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -21,15 +22,16 @@ import java.time.LocalDateTime;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "trial_stage_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "attachment_seq")}
 )
-public class TrialStage extends PersistentObject implements Serializable {
+public class Attachment extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private LocalDateTime simulationTime;
+    private AnswerType type;
 }
