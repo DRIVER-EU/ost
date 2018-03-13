@@ -20,14 +20,14 @@ public class ObservationController {
 
     @Autowired
     private ObservationService observationService;
-
-    @FindAllGetMapping
-    public List<Observation> findAll() {
-        return observationService.findAll();
-    }
-
-    @PostMapping()
-    public ResponseEntity<Observation> postMessage(@RequestBody ObservationDTO formItem) {
-        return new ResponseEntity<>(observationService.addObservation(formItem), HttpStatus.CREATED);
-    }
+//
+//    @FindAllGetMapping
+//    public List<Observation> findAll() {
+//        return observationService.findAll();
+//    }
+//
+//    @PostMapping()
+//    public ResponseEntity<Observation> postMessage(@RequestBody ObservationDTO formItem) {
+//        return new ResponseEntity<>(observationService.addObservation(formItem), HttpStatus.CREATED);
+//    }
 }

@@ -16,22 +16,22 @@ public class ObservationService {
     @Autowired
     private ObservationRepository observationRepository;
 
-    public List<Observation> findAll() {
-        return observationRepository.findAll();
-    }
-
-    public Observation addObservation(ObservationDTO dto) {
-        Observation observation = Observation.builder()
-                .name(dto.getName())
-                .selectUser(dto.getSelectUser())
-                .role(dto.getRole())
-                .observationType(dto.getObservationType())
-                .who(dto.getWho())
-                .what(dto.getWhat())
-                .attachment(dto.getAttachment())
-                .dateTime(dto.getDateTime())
-                .build();
-
-        return observationRepository.save(observation);
-    }
+//    public List<Observation> findAll() {
+//        return observationRepository.findAll();
+//    }
+//
+//    public Observation addObservation(ObservationDTO dto) {
+//        Observation observation = Observation.builder()
+//                .name(dto.getName())
+//                .selectUser(dto.getSelectUser())
+//                .role(dto.getRole())
+//                .observationType(dto.getObservationType())
+//                .who(dto.getWho())
+//                .what(dto.getWhat())
+//                .attachment(dto.getAttachment())
+//                .dateTime(dto.getDateTime())
+//                .build();
+//
+//        return observationRepository.save(observation);
+//    }
 }

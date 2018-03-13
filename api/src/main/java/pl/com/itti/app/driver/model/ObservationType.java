@@ -20,15 +20,14 @@ import java.io.Serializable;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "observation_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "observation_type_seq")}
 )
-public class Observation extends PersistentObject implements Serializable {
+public class ObservationType extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false)
-    private int sentRealTime;
+    private String description;
 
     @Column(nullable = false)
-    private String value;
+    private String name;
 }

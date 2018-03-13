@@ -10,7 +10,10 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -20,15 +23,16 @@ import java.io.Serializable;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "observation_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "trial_session_seq")}
 )
-public class Observation extends PersistentObject implements Serializable {
+public class TrialSession extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Column(nullable = false)
-    private int sentRealTime;
+    private LocalDateTime startTime;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String value;
+    private SessionStatus status;
 }

@@ -10,6 +10,8 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.io.Serializable;
 
 @Data
@@ -20,15 +22,24 @@ import java.io.Serializable;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "observation_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "event_seq")}
 )
-public class Observation extends PersistentObject implements Serializable {
+public class Event extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(nullable = false)
-    private int sentRealTime;
+    private String description;
 
     @Column(nullable = false)
-    private String value;
+    private int eventId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Languages language;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String time;
 }
