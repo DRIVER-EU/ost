@@ -1,6 +1,7 @@
 package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,8 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
@@ -25,6 +25,11 @@ import java.io.Serializable;
 public class ObservationType extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "trial_id", nullable = false)
+    private Trial trial;
 
     private String description;
 

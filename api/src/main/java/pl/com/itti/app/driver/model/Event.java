@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

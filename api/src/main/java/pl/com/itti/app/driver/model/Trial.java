@@ -7,12 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import pl.com.itti.app.driver.model.enums.Languages;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -36,4 +36,12 @@ public class Trial extends PersistentObject implements Serializable {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
+    @Builder.Default
+    private List<TrialStage> trialStages = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
+    @Builder.Default
+    private List<ObservationType> observationTypes = new ArrayList<>();
 }

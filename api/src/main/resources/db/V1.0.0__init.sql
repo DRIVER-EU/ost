@@ -1,4 +1,47 @@
 ---------------------------------------
+---------- Table: trial ---------------
+---------------------------------------
+
+CREATE TABLE public.trial
+(
+	id bigint NOT NULL,
+	description varchar,
+    "language" varchar NOT NULL,
+	name varchar NOT NULL,
+
+	CONSTRAINT trial_pkey PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE public.trial_seq
+    START 1
+    INCREMENT 1
+    MINVALUE 1;
+
+
+---------------------------------------
+---------- Table: trial_stage ---------
+---------------------------------------
+
+CREATE TABLE public.trial_stage
+(
+	id bigint NOT NULL,
+	trial_id bigint NOT NULL,
+	name varchar NOT NULL,
+	simulation_time timestamp without time zone NOT NULL,
+
+	CONSTRAINT trial_stage_pkey PRIMARY KEY (id),
+	CONSTRAINT fk8hdr6y2t8ociyirupjmvp9mvn FOREIGN KEY (trial_id)
+          REFERENCES public.trial (id) MATCH SIMPLE
+          ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE SEQUENCE public.trial_stage_seq
+    START 1
+    INCREMENT 1
+    MINVALUE 1;
+
+
+---------------------------------------
 ---------- Table: attachment ----------
 ---------------------------------------
 
@@ -86,10 +129,14 @@ CREATE SEQUENCE public.observation_seq
 CREATE TABLE public.observation_type
 (
 	id bigint NOT NULL,
+	trial_id bigint NOT NULL,
 	description varchar,
 	name varchar NOT NULL,
 
-	CONSTRAINT observation_type_pkey PRIMARY KEY (id)
+	CONSTRAINT observation_type_pkey PRIMARY KEY (id),
+    CONSTRAINT fkfc50ecuo2xskui5mkb033fx1n FOREIGN KEY (trial_id)
+          REFERENCES public.trial (id) MATCH SIMPLE
+          ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
 CREATE SEQUENCE public.observation_type_seq
@@ -138,26 +185,6 @@ CREATE SEQUENCE public.question_item_seq
 
 
 ---------------------------------------
----------- Table: trial ---------------
----------------------------------------
-
-CREATE TABLE public.trial
-(
-	id bigint NOT NULL,
-	description varchar,
-    "language" varchar NOT NULL,
-	name varchar NOT NULL,
-
-	CONSTRAINT trial_pkey PRIMARY KEY (id)
-);
-
-CREATE SEQUENCE public.trial_seq
-    START 1
-    INCREMENT 1
-    MINVALUE 1;
-
-
----------------------------------------
 ---------- Table: trial_session -------
 ---------------------------------------
 
@@ -171,25 +198,6 @@ CREATE TABLE public.trial_session
 );
 
 CREATE SEQUENCE public.trial_session_seq
-    START 1
-    INCREMENT 1
-    MINVALUE 1;
-
-
----------------------------------------
----------- Table: trial_stage ---------
----------------------------------------
-
-CREATE TABLE public.trial_stage
-(
-	id bigint NOT NULL,
-	name varchar NOT NULL,
-	simulation_time timestamp without time zone NOT NULL,
-
-	CONSTRAINT trial_stage_pkey PRIMARY KEY (id)
-);
-
-CREATE SEQUENCE public.trial_stage_seq
     START 1
     INCREMENT 1
     MINVALUE 1;
