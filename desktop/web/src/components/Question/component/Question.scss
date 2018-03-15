@@ -5,4 +5,30 @@
     box-sizing: border-box;
     background-color: #fff;
     overflow-y: auto;
+
+    .trials-header {
+        font-size: 16pt;
+    }
+    .submit {
+        width: 100%;
+        text-align: center;
+    }
+
+    .title-obs {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 15px 0;
+    }
+
+    .desc-obs {
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0 15px;
+        margin: 15px 0;
+    }
+
+    .point-obs {
+        font-size: 16px;
+        font-weight: 600;
+    }
 }
