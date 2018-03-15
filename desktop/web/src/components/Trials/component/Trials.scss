@@ -6,12 +6,21 @@
   background-color: #fff;
   overflow-y: auto;
 
+  .trial-select {
+    margin-left: auto;
+    margin-right: auto;
+  }
   .trials-header {
       display: flex;
       justify-content: space-between;
       color: #282829;
       font-size: 20px;
   }
+  .trials-header:first-child {
+    font-size: 25px;
+    padding-bottom: 10px;
+  }
+
 
   .react-sanfona-item {
     margin: 5px 0;

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { SchemaForm } from 'react-schema-form'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Question.scss'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Question extends Component {
   constructor (props) {
@@ -45,8 +46,9 @@ class Question extends Component {
         'comment'
       ],
       schema: {
+        'title': 'Incident location shared',
+        'description': 'A simple form example.',
         'type': 'object',
-        'title': 'Types',
         'properties': {
           'string': {
             'type': 'string',
@@ -89,13 +91,17 @@ class Question extends Component {
     console.log(logged, this.state.model)
   }
 
+  submitObservation () {
+
+  }
+
   render () {
     return (
       <div className='main-container'>
         <div className='pages-box'>
           <div className='question-container'>
             <div className='trials-header'>
-              <div>Summary of observations</div>
+              <div>Observation</div>
             </div>
             <DateComponent />
             <SchemaForm
@@ -103,6 +109,14 @@ class Question extends Component {
               form={this.state.form}
               model={this.state.model}
               onModelChange={this.log.bind(this)} />
+            <div className={'submit'}>
+              <RaisedButton
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                onClick={this.submitObservation.bind(this)}
+                label='Submit' />
+            </div>
           </div>
         </div>
       </div>

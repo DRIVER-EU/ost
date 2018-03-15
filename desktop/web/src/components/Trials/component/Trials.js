@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import DateComponent from '../../DateComponent/DateComponent'
 import './Trials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -41,8 +40,7 @@ class Trials extends Component {
         <div className='pages-box'>
           <div className='trials-container'>
             <div className='trials-header'>
-              <div>Select trial</div>
-              <DateComponent />
+              <div className={'trial-select'}>Select trial</div>
             </div>
             <Accordion>
               {this.state.listOfTrials.map((object) => {
