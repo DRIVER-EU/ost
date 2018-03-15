@@ -39,4 +39,8 @@ public class TrialStage extends PersistentObject implements Serializable {
 
     @Column(nullable = false)
     private LocalDateTime simulationTime;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialStage")
+    @Builder.Default
+    private List<ObservationType> observationTypes = new ArrayList<>();
 }

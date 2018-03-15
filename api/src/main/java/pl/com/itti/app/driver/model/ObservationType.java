@@ -11,6 +11,8 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -31,8 +33,18 @@ public class ObservationType extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_id", nullable = false)
     private Trial trial;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "trial_stage_id", nullable = false)
+    private TrialStage trialStage;
+
+
     private String description;
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
+    @Builder.Default
+    private List<Question> questions = new ArrayList<>();
 }
