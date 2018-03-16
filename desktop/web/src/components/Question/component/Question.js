@@ -104,8 +104,15 @@ class Question extends Component {
     console.log(logged, this.state.model)
   }
 
-  submitObservation () {
+  submitObservation (e, object) {
+    console.log('obiekt', object)
+    console.log(this.state.formData)
 
+  }
+
+  changeObservation(e, object) {
+    this.setState({ formData: object.formData })
+    console.log('change', object)
   }
 
   setDate = (dateTime) => this.setState({ dateTime })
@@ -179,13 +186,16 @@ class Question extends Component {
               schema={this.state.schema}
               formData={this.state.formData}
               uiSchema={uiSchema}
-              widgets={widgets} />
+              widgets={widgets}
+              onChange={(value) => this.changeObservation(this, value)}
+              onSubmit={(value) => this.submitObservation(this, value)}
+              onError={console.log("errors")}
+              noValidate={true} />
             <div className={'submit'}>
               <RaisedButton
                 buttonStyle={{ width: '200px' }}
                 backgroundColor='#244C7B'
                 labelColor='#FCB636'
-                onClick={this.submitObservation.bind(this)}
                 label='Submit' />
             </div>
           </div>
