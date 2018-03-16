@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { SchemaForm } from 'react-schema-form'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Question.scss'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -10,6 +9,7 @@ import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from 'material-ui/Slider'
 import ComposedComponent from 'react-schema-form/lib/ComposedComponent'
+import Form from 'react-jsonschema-form-mui'
 
 const styles = {
   checkbox: {
@@ -17,8 +17,24 @@ const styles = {
   }
 }
 
-let mapper = {
-  'rc-slider': ComposedComponent(Slider)
+const MyCustomWidget = (props) => {
+  return (
+    <div>dsfdf<input type="text"
+      className="custom"
+      value={props.value}
+      required={props.required}
+      onChange={(event) => props.onChange(event.target.value)} /></div>
+  );
+};
+
+const widgets = {
+  myCustomWidget: MyCustomWidget
+}
+
+const uiSchema = {
+  "name": {
+    "ui:widget": "myCustomWidget"
+  }
 }
 
 class Question extends Component {
@@ -34,87 +50,53 @@ class Question extends Component {
         { id: 4, name: 'Andrzej' },
         { id: 6, name: 'Mikołaj' }
       ],
-      form: [
-        'string',
-        'anotherstring',
-        {
-          'key': 'slider',
-          'type': 'rc-slider'
-        },
-        'number',
-        'boolean',
-        {
-          'key':'dropdown',
-          'validationMessage': 'Select at least one value',
-          'type':'select',
-          'titleMap':[
-            { 'value':'A', 'name':'A' },
-            { 'value':'B', 'name':'B' },
-            { 'value':'C', 'name':'C' }
-          ]
-        },
-        {
-          'key': 'radios',
-          'type': 'radios',
-          'titleMap': [
-            {
-              'value': 'c',
-              'name': 'C'
-            },
-            {
-              'value': 'b',
-              'name': 'B'
-            },
-            {
-              'value': 'a',
-              'name': 'A'
-            }
-          ]
-        },
-        'date',
-        'comment'
-      ],
+      formData: {
+        'firstName': 'Chuck',
+        'lastName': 'Norris',
+        'age': 75,
+        'bio': 'Roundhouse kicking asses since 1940',
+        'password': 'noneed',
+        'telephone':'',
+       "name": ''
+      },
       schema: {
-        'title': 'Incident location shared',
+        'title': 'A registration form',
         'description': 'A simple form example.',
         'type': 'object',
         'properties': {
-          'string': {
+          'firstName': {
             'type': 'string',
+            'title': 'First name'
+          },
+          'lastName': {
+            'type': 'string',
+            'title': 'Last name'
+          },
+          'age': {
+            'type': 'integer',
+            'title': 'Age'
+          },
+          'bio': {
+            'type': 'string',
+            'title': 'Bio'
+          },
+          'password': {
+            'type': 'string',
+            'title': 'Password',
             'minLength': 3
           },
-          'anotherstring': {
+          'telephone': {
             'type': 'string',
-            'minLength': 3
+            'title': 'Telephone',
+            'minLength': 10
           },
-          'slider': {
-            'description': 'Slider',
-            'type': 'rc-slider'
-          },
-          'number': {
-            'type': 'number'
-          },
-          'boolean': {
-            'type': 'boolean'
-          },
-          'date': {
-            'title': 'Date',
-            'type': 'date'
-          },
-          'comment': {
-            'title': 'Comment',
-            'type': 'string',
-            'maxLength': 20,
-            'validationMessage': "Don't be greedy!",
-            'description': 'Please write your comment here.'
-          }
-        },
-        'required': [
-          'number',
-          'comment'
-        ]
+
+            'name' :
+            {"type": 'string'}
+
+
+        }
       },
-      model: {},
       listOfParticipants: [],
       dateTime: null
     }
@@ -124,7 +106,7 @@ class Question extends Component {
   }
 
   submitObservation () {
-
+console.log(1, this.state.formData)
   }
 
   setDate = (dateTime) => this.setState({ dateTime })
@@ -194,12 +176,15 @@ class Question extends Component {
               onCheck={this.handleAllParticipants.bind(this)}
               style={styles.checkbox} />
             <p className='point-obs'>What:</p>
-            <SchemaForm
+            <Form
+            noValidate={true}
               schema={this.state.schema}
-              form={this.state.form}
-              model={this.state.model}
-              onModelChange={this.log.bind(this)}
-              mapper={mapper} />
+              uiSchema={uiSchema}
+              formData={this.state.formData}
+              widgets={widgets}
+              onChange={(value) => console.log(value)}
+              onSubmit={console.log("submitted")}
+              onError={console.log("errors")} />
             <div className={'submit'}>
               <RaisedButton
                 buttonStyle={{ width: '200px' }}
