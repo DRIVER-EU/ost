@@ -5,6 +5,8 @@ import Trials from './Trials'
 import Question from './Question'
 import ViewTrials from './ViewTrials'
 import AdminTrials from './AdminTrials'
+import SelectObservationComponent from './SelectObservation'
+
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
@@ -19,6 +21,7 @@ export const createRoutes = (store) => ({
       path: 'trials',
       childRoutes: [
         ViewTrials(store),
+        SelectObservationComponent(store),
         Question(store)
       ]
     }

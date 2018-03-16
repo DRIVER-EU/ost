@@ -19,8 +19,8 @@ const styles = {
 
 const MyCustomWidget = (props) => {
   return (
-    <div>asdasdasd<input type="text"
-      className="custom"
+    <div>dsfdf<input type='text'
+      className='custom'
       value={props.value}
       required={props.required}
       onChange={(event) => props.onChange(event.target.value)} /></div>
@@ -32,7 +32,9 @@ const widgets = {
 }
 
 const uiSchema = {
-  "ui:widget": 'myCustomWidget'
+  'name': {
+    'ui:widget': 'myCustomWidget'
+  }
 }
 
 class Question extends Component {
@@ -54,16 +56,13 @@ class Question extends Component {
         'age': 75,
         'bio': 'Roundhouse kicking asses since 1940',
         'password': 'noneed',
-        'myCustomWidget': ""
+        'telephone':'',
+        'name': ''
       },
       schema: {
         'title': 'A registration form',
         'description': 'A simple form example.',
         'type': 'object',
-        'required': [
-          'firstName',
-          'lastName'
-        ],
         'properties': {
           'firstName': {
             'type': 'string',
@@ -91,9 +90,10 @@ class Question extends Component {
             'title': 'Telephone',
             'minLength': 10
           },
-          'myCustomWidget': {
-            'type': 'string'
-          }
+
+          'name' :
+            { 'type': 'string' }
+
         }
       },
       listOfParticipants: [],
@@ -104,13 +104,11 @@ class Question extends Component {
     console.log(logged, this.state.model)
   }
 
-  submitObservation (e, object) {
-    console.log('obiekt', object)
-    console.log(this.state.formData)
-
+  submitObservation () {
+    console.log(1, this.state.formData)
   }
 
-  changeObservation(e, object) {
+  changeObservation (e, object) {
     this.setState({ formData: object.formData })
     console.log('change', object)
   }
@@ -183,14 +181,14 @@ class Question extends Component {
               style={styles.checkbox} />
             <p className='point-obs'>What:</p>
             <Form
+              noValidate
               schema={this.state.schema}
-              formData={this.state.formData}
               uiSchema={uiSchema}
+              formData={this.state.formData}
               widgets={widgets}
-              onChange={(value) => this.changeObservation(this, value)}
-              onSubmit={(value) => this.submitObservation(this, value)}
-              onError={console.log("errors")}
-              noValidate={true} />
+              onChange={(value) => console.log(value)}
+              onSubmit={console.log('submitted')}
+              onError={console.log('errors')} />
             <div className={'submit'}>
               <RaisedButton
                 buttonStyle={{ width: '200px' }}

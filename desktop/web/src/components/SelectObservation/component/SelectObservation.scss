@@ -1,0 +1,104 @@
+.view-trials-container {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    overflow-y: auto;
+
+    .trials-header {
+        display: flex;
+        justify-content: space-between;
+        color: #282829;
+        font-size: 20px;
+    }
+
+    .trials-header div:first-child {
+      font-size: 22px;
+      padding-bottom: 10px;
+    }
+    .time {
+      font-size: 12px;
+      color:black;
+      padding-top: 5px;
+    }
+    .trial-title {
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 25px;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    .react-sanfona-item {
+      margin: 5px 0;
+    }
+
+    .react-sanfona-item-title {
+      margin: 0;
+    }
+
+    .react-sanfona-item-title {
+      background-color: #fafafa;
+      color: #064C7B;
+      transition: background-color .3s;
+      display: block;
+      font-weight: 400;
+      text-decoration: none;
+      font-size: 20px;
+      position: relative;
+      border: 1px solid #FCB636;
+      padding: 10px 34px 10px;
+    }
+
+    .react-sanfona-item-title:hover {
+      background-color: #C4D1DB;
+    }
+
+    .react-sanfona-item.react-sanfona-item-expanded {
+      .react-sanfona-item-title:after {
+        transform: rotateZ(180deg);
+      }
+    }
+
+    .react-sanfona-item-title:before {
+      font-family:'Glyphicons Halflings';
+      content: '\e086';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      color: #FCB636;
+      font-size: 20px;
+      display: block;
+      transition: transform 300ms;
+    }
+
+    .react-sanfona-item-title:after {
+      font-family:'Glyphicons Halflings';
+      content: '\e114';
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      display: block;
+      transition: transform 300ms;
+    }
+
+    .react-sanfona-item.react-sanfona-item-expanded:after {
+      transform: rotateZ(180deg);
+    }
+
+    .react-sanfona-item-body-wrapper {
+      color: #666;
+      padding: 20px;
+      position: relative;
+      border-top: none;
+      border-right: 1px solid #FCB636;
+      border-left: 1px solid #FCB636;
+      border-bottom: 1px solid #FCB636;
+    }
+    .observation-add {
+      float: right;
+      margin-right: 5px;
+      margin-top: 10px;
+    }
+  }
