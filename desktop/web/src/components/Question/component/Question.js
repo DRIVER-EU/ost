@@ -3,15 +3,44 @@ import { SchemaForm } from 'react-schema-form'
 import DateComponent from '../../DateComponent/DateComponent'
 import './Question.scss'
 import RaisedButton from 'material-ui/RaisedButton'
+import Checkbox from 'material-ui/Checkbox'
+import _ from 'lodash'
+import DateTimePicker from 'material-ui-datetimepicker'
+import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
+import Slider from 'material-ui/Slider'
+import ComposedComponent from 'react-schema-form/lib/ComposedComponent'
+
+const styles = {
+  checkbox: {
+    marginBottom: 5
+  }
+}
+
+let mapper = {
+  'rc-slider': ComposedComponent(Slider)
+}
 
 class Question extends Component {
   constructor (props) {
     super()
     this.state = {
+      title: 'Incident location shared',
+      desc: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      participants: [
+        { id: 1, name: 'Amadeusz' },
+        { id: 3, name: 'Janusz' },
+        { id: 4, name: 'Andrzej' },
+        { id: 6, name: 'Mikołaj' }
+      ],
       form: [
         'string',
         'anotherstring',
-        'integer',
+        {
+          'key': 'slider',
+          'type': 'rc-slider'
+        },
         'number',
         'boolean',
         {
@@ -58,8 +87,9 @@ class Question extends Component {
             'type': 'string',
             'minLength': 3
           },
-          'integer': {
-            'type': 'integer'
+          'slider': {
+            'description': 'Slider',
+            'type': 'rc-slider'
           },
           'number': {
             'type': 'number'
@@ -84,7 +114,9 @@ class Question extends Component {
           'comment'
         ]
       },
-      model: {}
+      model: {},
+      listOfParticipants: [],
+      dateTime: null
     }
   }
   log (logged) {
@@ -93,6 +125,42 @@ class Question extends Component {
 
   submitObservation () {
 
+  }
+
+  setDate = (dateTime) => this.setState({ dateTime })
+
+  handleParticipants (id) {
+    let change = [ ...this.state.listOfParticipants ]
+    let chosenIndex = _.findIndex(change, { id: id })
+    if (chosenIndex === -1) {
+      change.push({ id: id })
+    } else {
+      change.splice(chosenIndex, 1)
+    }
+    this.setState({ listOfParticipants: change })
+  }
+
+  handleAllParticipants () {
+    let change = [ ...this.state.listOfParticipants ]
+    if (this.state.participants.length > this.state.listOfParticipants.length) {
+      change.splice(0, this.state.listOfParticipants.length)
+      for (let i = 0; i < this.state.participants.length; i++) {
+        change.push({ id: this.state.participants[i].id })
+      }
+    } else {
+      change.splice(0, this.state.listOfParticipants.length)
+    }
+    this.setState({ listOfParticipants: change })
+  }
+
+  handleChecked (id) {
+    let change = [ ...this.state.listOfParticipants ]
+    let check = false
+    let chosenIndex = _.findIndex(change, { id: id })
+    if (chosenIndex !== -1) {
+      check = true
+    }
+    return check
   }
 
   render () {
@@ -104,11 +172,34 @@ class Question extends Component {
               <div>Observation</div>
             </div>
             <DateComponent />
+            <p className='title-obs'>{this.state.title}</p>
+            <p className='desc-obs'>{this.state.desc}</p>
+            <p className='point-obs'>When:</p>
+            <DateTimePicker
+              onChange={this.setDate}
+              DatePicker={DatePickerDialog}
+              TimePicker={TimePickerDialog}
+              format='YYYY/MM/DD H:mm' />
+            <p className='point-obs'>Who:</p>
+            {this.state.participants.map((object) => (
+              <Checkbox
+                label={object.name}
+                checked={this.handleChecked(object.id)}
+                onCheck={this.handleParticipants.bind(this, object.id)}
+                style={styles.checkbox} />
+              ))}
+            <Checkbox
+              label='All'
+              checked={this.state.listOfParticipants.length === this.state.participants.length}
+              onCheck={this.handleAllParticipants.bind(this)}
+              style={styles.checkbox} />
+            <p className='point-obs'>What:</p>
             <SchemaForm
               schema={this.state.schema}
               form={this.state.form}
               model={this.state.model}
-              onModelChange={this.log.bind(this)} />
+              onModelChange={this.log.bind(this)}
+              mapper={mapper} />
             <div className={'submit'}>
               <RaisedButton
                 buttonStyle={{ width: '200px' }}
