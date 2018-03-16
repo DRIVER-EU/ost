@@ -8,7 +8,6 @@ import DateTimePicker from 'material-ui-datetimepicker'
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from 'material-ui/Slider'
-import ComposedComponent from 'react-schema-form/lib/ComposedComponent'
 import Form from 'react-jsonschema-form-mui'
 
 const styles = {
@@ -17,23 +16,13 @@ const styles = {
   }
 }
 
-const MyCustomWidget = (props) => {
-  return (
-    <div>dsfdf<input type='text'
-      className='custom'
-      value={props.value}
-      required={props.required}
-      onChange={(event) => props.onChange(event.target.value)} /></div>
-  )
-}
-
 const widgets = {
-  myCustomWidget: MyCustomWidget
+  Slider: Slider
 }
 
 const uiSchema = {
-  'name': {
-    'ui:widget': 'myCustomWidget'
+  'slider': {
+    'ui:widget': 'Slider'
   }
 }
 
@@ -57,7 +46,7 @@ class Question extends Component {
         'bio': 'Roundhouse kicking asses since 1940',
         'password': 'noneed',
         'telephone':'',
-        'name': ''
+        'slider': ''
       },
       schema: {
         'title': 'A registration form',
@@ -90,10 +79,10 @@ class Question extends Component {
             'title': 'Telephone',
             'minLength': 10
           },
-
-          'name' :
-            { 'type': 'string' }
-
+          'slider': {
+            'type': 'integer',
+            'title': 'Slider'
+          }
         }
       },
       listOfParticipants: [],
