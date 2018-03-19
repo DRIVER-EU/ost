@@ -91,27 +91,6 @@ CREATE SEQUENCE public.event_seq
 
 
 ---------------------------------------
----------- Table: message -------------
----------------------------------------
-
-CREATE TABLE public.message
-(
-	id bigint NOT NULL,
-	select_user varchar,
-	role varchar,
-    message varchar,
-	date_time varchar,
-
-	CONSTRAINT message_pkey PRIMARY KEY (id)
-);
-
-CREATE SEQUENCE public.message_seq
-    START 1
-    INCREMENT 1
-    MINVALUE 1;
-
-
----------------------------------------
 ---------- Table: observation ---------
 ---------------------------------------
 
