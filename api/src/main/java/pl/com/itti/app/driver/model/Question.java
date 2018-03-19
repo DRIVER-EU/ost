@@ -33,9 +33,10 @@ public class Question extends PersistentObject implements Serializable {
     @JoinColumn(name = "observation_type_id", nullable = false)
     private ObservationType observationType;
 
+    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")

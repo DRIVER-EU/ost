@@ -38,10 +38,10 @@ public class ObservationType extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_stage_id", nullable = false)
     private TrialStage trialStage;
 
-
+    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")

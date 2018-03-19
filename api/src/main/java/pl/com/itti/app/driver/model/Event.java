@@ -32,6 +32,7 @@ public class Event extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_session_id", nullable = false)
     private TrialSession trialSession;
 
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
@@ -41,7 +42,7 @@ public class Event extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private Languages language;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Column(nullable = false)

@@ -28,13 +28,14 @@ public class Trial extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Column(nullable = false)
     private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Languages language;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")

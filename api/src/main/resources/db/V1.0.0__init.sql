@@ -5,9 +5,9 @@
 CREATE TABLE public.trial
 (
 	id bigint NOT NULL,
-	description varchar,
+	description varchar NOT NULL,
     "language" varchar NOT NULL,
-	name varchar NOT NULL,
+	name varchar(50) NOT NULL,
 
 	CONSTRAINT trial_pkey PRIMARY KEY (id)
 );
@@ -26,7 +26,7 @@ CREATE TABLE public.trial_stage
 (
 	id bigint NOT NULL,
 	trial_id bigint NOT NULL,
-	name varchar NOT NULL,
+	name varchar(50) NOT NULL,
 	simulation_time timestamp without time zone NOT NULL,
 
 	CONSTRAINT trial_stage_pkey PRIMARY KEY (id),
@@ -75,7 +75,7 @@ CREATE TABLE public.event
     description varchar NOT NULL,
 	event_id int NOT NULL,
 	"language" varchar NOT NULL,
-	name varchar NOT NULL,
+	name varchar(50) NOT NULL,
 	"time" varchar NOT NULL,
 
 	CONSTRAINT event_pkey PRIMARY KEY (id),
@@ -142,7 +142,7 @@ CREATE TABLE public.attachment
 (
 	id bigint NOT NULL,
     observation_id bigint NOT NULL,
-	name varchar NOT NULL,
+	name varchar(50) NOT NULL,
 	type varchar NOT NULL,
 
 	CONSTRAINT attachment_pkey PRIMARY KEY (id),
@@ -166,8 +166,8 @@ CREATE TABLE public.observation_type
 	id bigint NOT NULL,
 	trial_id bigint NOT NULL,
     trial_stage_id bigint NOT NULL,
-	description varchar,
-	name varchar NOT NULL,
+	description varchar NOT NULL,
+	name varchar(50) NOT NULL,
 
 	CONSTRAINT observation_type_pkey PRIMARY KEY (id),
     CONSTRAINT fkfc50ecuo2xskui5mkb033fx1n FOREIGN KEY (trial_id)
@@ -192,8 +192,8 @@ CREATE TABLE public.question
 (
 	id bigint NOT NULL,
 observation_type_id bigint NOT NULL,
-	description varchar,
-	name varchar NOT NULL,
+	description varchar NOT NULL,
+	name varchar(50) NOT NULL,
 
 	CONSTRAINT question_pkey PRIMARY KEY (id),
     CONSTRAINT fk9s3t36iggg00ss7aasqh13cib FOREIGN KEY (observation_type_id)

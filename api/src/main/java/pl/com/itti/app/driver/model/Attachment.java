@@ -32,7 +32,7 @@ public class Attachment extends PersistentObject implements Serializable {
     @JoinColumn(name = "observation_id", nullable = false)
     private Observation observation;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)

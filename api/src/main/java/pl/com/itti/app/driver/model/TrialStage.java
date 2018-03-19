@@ -34,7 +34,7 @@ public class TrialStage extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_id", nullable = false)
     private Trial trial;
 
-    @Column(nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
 
     @Column(nullable = false)
