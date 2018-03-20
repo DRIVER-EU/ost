@@ -91,23 +91,24 @@ CREATE SEQUENCE public.event_seq
 
 
 ---------------------------------------
----------- Table: observation ---------
+---------- Table: answer --------------
 ---------------------------------------
 
-CREATE TABLE public.observation
+CREATE TABLE public.answer
 (
 	id bigint NOT NULL,
     trial_session_id bigint NOT NULL,
     sent_real_time int NOT NULL,
+    simulation_time int NOT NULL,
     "value" varchar NOT NULL,
 
-	CONSTRAINT observation_pkey PRIMARY KEY (id),
+	CONSTRAINT answer_pkey PRIMARY KEY (id),
     CONSTRAINT fkgq4p5xvw0a7tueotl81gu4ti0 FOREIGN KEY (trial_session_id)
         REFERENCES public.trial_session (id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE SEQUENCE public.observation_seq
+CREATE SEQUENCE public.answer_seq
     START 1
     INCREMENT 1
     MINVALUE 1;
@@ -120,13 +121,13 @@ CREATE SEQUENCE public.observation_seq
 CREATE TABLE public.attachment
 (
 	id bigint NOT NULL,
-    observation_id bigint NOT NULL,
+    answer_id bigint NOT NULL,
 	name varchar(50) NOT NULL,
 	type varchar NOT NULL,
 
 	CONSTRAINT attachment_pkey PRIMARY KEY (id),
-    CONSTRAINT fk6nkewgbarvyv69wgy0nhu4i6c FOREIGN KEY (observation_id)
-        REFERENCES public.observation (id) MATCH SIMPLE
+    CONSTRAINT fk6nkewgbarvyv69wgy0nhu4i6c FOREIGN KEY (answer_id)
+        REFERENCES public.answer (id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
@@ -147,6 +148,7 @@ CREATE TABLE public.observation_type
     trial_stage_id bigint NOT NULL,
 	description varchar NOT NULL,
 	name varchar(50) NOT NULL,
+    multiplicity boolean NOT NULL,
 
 	CONSTRAINT observation_type_pkey PRIMARY KEY (id),
     CONSTRAINT fkfc50ecuo2xskui5mkb033fx1n FOREIGN KEY (trial_id)
@@ -170,9 +172,10 @@ CREATE SEQUENCE public.observation_type_seq
 CREATE TABLE public.question
 (
 	id bigint NOT NULL,
-observation_type_id bigint NOT NULL,
+    observation_type_id bigint NOT NULL,
 	description varchar NOT NULL,
 	name varchar(50) NOT NULL,
+    answer_type varchar NOT NULL,
 
 	CONSTRAINT question_pkey PRIMARY KEY (id),
     CONSTRAINT fk9s3t36iggg00ss7aasqh13cib FOREIGN KEY (observation_type_id)
@@ -187,6 +190,28 @@ CREATE SEQUENCE public.question_seq
 
 
 ---------------------------------------
+---------- Table: answer_item ---------
+---------------------------------------
+
+CREATE TABLE public.answer_item
+(
+	id bigint NOT NULL,
+	answer_id bigint NOT NULL,
+	"value" varchar NOT NULL,
+
+	CONSTRAINT answer_item_pkey PRIMARY KEY (id),
+    CONSTRAINT fk5u83bhoj6e69p23anb6iocqdt FOREIGN KEY (answer_id)
+        REFERENCES public.answer (id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE SEQUENCE public.answer_item_seq
+    START 1
+    INCREMENT 1
+    MINVALUE 1;
+
+
+---------------------------------------
 ---------- Table: question_item -------
 ---------------------------------------
 
@@ -194,17 +219,16 @@ CREATE TABLE public.question_item
 (
 	id bigint NOT NULL,
     question_id bigint NOT NULL,
-    observation_id bigint NOT NULL,
-	answer_type varchar NOT NULL,
+    answer_item_id bigint NOT NULL,
 	"language" varchar NOT NULL,
-	"value" varchar NOT NULL,
+	name varchar(50) NOT NULL,
 
 	CONSTRAINT question_item_pkey PRIMARY KEY (id),
-    CONSTRAINT fk5u83bhoj6e69p23anb6iocqdt FOREIGN KEY (observation_id)
-        REFERENCES public.observation (id) MATCH SIMPLE
-        ON UPDATE NO ACTION ON DELETE NO ACTION,
     CONSTRAINT fkihye3qj9w91whtr2hoqrthuxk FOREIGN KEY (question_id)
         REFERENCES public.question (id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
+    CONSTRAINT fkfph8skkk9223b3cavve118r1m FOREIGN KEY (answer_item_id)
+        REFERENCES public.answer_item (id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 

@@ -22,28 +22,21 @@ import java.util.List;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "observation_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "answer_item_seq")}
 )
-public class Observation extends PersistentObject implements Serializable {
+public class AnswerItem extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "trial_session_id", nullable = false)
-    private TrialSession trialSession;
-
-    @Column(nullable = false)
-    private int sentRealTime;
+    @JoinColumn(name = "answer_id", nullable = false)
+    private Answer answer;
 
     @Column(nullable = false)
     private String value;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "observation")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answerItem")
     @Builder.Default
-    private List<Attachment> attachments = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "observation")
-    @Builder.Default
-    private List<QuestionItem> questionItems = new ArrayList<>();
+    private List<QuestionItem> questionItems= new ArrayList<>();
 }

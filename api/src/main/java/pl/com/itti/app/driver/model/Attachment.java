@@ -29,8 +29,8 @@ public class Attachment extends PersistentObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "observation_id", nullable = false)
-    private Observation observation;
+    @JoinColumn(name = "answer_id", nullable = false)
+    private Answer answer;
 
     @Column(length = 50, nullable = false)
     private String name;

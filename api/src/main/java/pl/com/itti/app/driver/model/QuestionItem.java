@@ -35,17 +35,13 @@ public class QuestionItem extends PersistentObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "observation_id", nullable = false)
-    private Observation observation;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AnswerType answerType;
+    @JoinColumn(name = "answer_item_id", nullable = false)
+    private AnswerItem answerItem;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Languages language;
 
-    @Column(nullable = false)
-    private String value;
+    @Column(length = 50, nullable = false)
+    private String name;
 }

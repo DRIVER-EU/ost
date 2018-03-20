@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import pl.com.itti.app.driver.model.enums.AnswerType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -38,6 +39,10 @@ public class Question extends PersistentObject implements Serializable {
 
     @Column(length = 50, nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AnswerType answerType;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
     @Builder.Default

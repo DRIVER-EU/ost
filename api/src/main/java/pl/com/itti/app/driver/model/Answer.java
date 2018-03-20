@@ -22,32 +22,31 @@ import java.util.List;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = {@Parameter(name = "sequence_name", value = "observation_type_seq")}
+        parameters = {@Parameter(name = "sequence_name", value = "answer_seq")}
 )
-public class ObservationType extends PersistentObject implements Serializable {
+public class Answer extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "trial_id", nullable = false)
-    private Trial trial;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "trial_stage_id", nullable = false)
-    private TrialStage trialStage;
+    @JoinColumn(name = "trial_session_id", nullable = false)
+    private TrialSession trialSession;
 
     @Column(nullable = false)
-    private String description;
-
-    @Column(length = 50, nullable = false)
-    private String name;
+    private int sentRealTime;
 
     @Column(nullable = false)
-    private Boolean multiplicity;
+    private int simulationTime;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
+    @Column(nullable = false)
+    private String value;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
-    private List<Question> questions = new ArrayList<>();
+    private List<Attachment> attachments = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
+    @Builder.Default
+    private List<AnswerItem> answerItems= new ArrayList<>();
 }
