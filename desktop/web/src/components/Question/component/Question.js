@@ -7,7 +7,7 @@ import _ from 'lodash'
 import DateTimePicker from 'material-ui-datetimepicker'
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
-import Slider from 'material-ui/Slider'
+import Slider from './Slider'
 import Form from 'react-jsonschema-form-mui'
 
 const styles = {
@@ -17,7 +17,9 @@ const styles = {
 }
 
 const widgets = {
-  Slider: Slider
+  Slider: (props) => {
+    return Slider(props)
+  }
 }
 
 const uiSchema = {
@@ -31,57 +33,29 @@ class Question extends Component {
     super()
     this.state = {
       title: 'Incident location shared',
-      desc: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`,
+      desc: `Note down this observation if indcident source is shared`,
       participants: [
-        { id: 1, name: 'Amadeusz' },
-        { id: 3, name: 'Janusz' },
-        { id: 4, name: 'Andrzej' },
-        { id: 6, name: 'Mikołaj' }
+        { id: 1, name: 'Participant 1' },
+        { id: 2, name: 'Participant 2' }
       ],
       formData: {
-        'firstName': 'Chuck',
-        'lastName': 'Norris',
-        'age': 75,
-        'bio': 'Roundhouse kicking asses since 1940',
-        'password': 'noneed',
-        'telephone':'',
-        'slider': ''
+        'info': '',
+        'slider': 1
       },
       schema: {
-        'title': 'A registration form',
-        'description': 'A simple form example.',
         'type': 'object',
         'properties': {
-          'firstName': {
+          'info': {
             'type': 'string',
-            'title': 'First name'
-          },
-          'lastName': {
-            'type': 'string',
-            'title': 'Last name'
-          },
-          'age': {
-            'type': 'integer',
-            'title': 'Age'
-          },
-          'bio': {
-            'type': 'string',
-            'title': 'Bio'
-          },
-          'password': {
-            'type': 'string',
-            'title': 'Password',
-            'minLength': 3
-          },
-          'telephone': {
-            'type': 'string',
-            'title': 'Telephone',
-            'minLength': 10
+            'title': 'How accurate was the sharing of information?'
           },
           'slider': {
+            'title': 'How long id this information sharing take?',
             'type': 'integer',
-            'title': 'Slider'
+            'min': 1,
+            'max':10,
+            'value': 2,
+            'step': 1
           }
         }
       },
@@ -176,15 +150,15 @@ class Question extends Component {
               formData={this.state.formData}
               widgets={widgets}
               onChange={(value) => console.log(value)}
-              onSubmit={console.log('submitted')}
-              onError={console.log('errors')} />
-            <div className={'submit'}>
-              <RaisedButton
-                buttonStyle={{ width: '200px' }}
-                backgroundColor='#244C7B'
-                labelColor='#FCB636'
-                label='Submit' />
-            </div>
+              onError={console.log('errors')} >
+              <div className={'submit'}>
+                <RaisedButton
+                  buttonStyle={{ width: '200px' }}
+                  backgroundColor='#244C7B'
+                  labelColor='#FCB636'
+                  label='Submit' />
+              </div>
+            </Form>
           </div>
         </div>
       </div>
