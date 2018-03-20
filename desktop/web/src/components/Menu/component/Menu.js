@@ -38,7 +38,7 @@ class MenuLeft extends Component {
               <ListItem
                 primaryText='Trials'
                 style={{ color: '#00497E' }}
-                containerElement={<IndexLink to='trials' activeClassName='route--active' />} />
+                containerElement={<IndexLink to='/trials' activeClassName='route--active' />} />
             </List>
           }
   />
