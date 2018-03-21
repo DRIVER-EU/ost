@@ -2,6 +2,7 @@
 import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
 import Trials from './Trials'
+import LoginRoute from './Login'
 import Question from './Question'
 import ViewTrials from './ViewTrials'
 import AdminTrials from './AdminTrials'
@@ -17,6 +18,7 @@ export const createRoutes = (store) => ({
   childRoutes : [
     AdminTrials(store),
     Trials(store),
+    LoginRoute(store),
     {
       path: 'trials',
       childRoutes: [
