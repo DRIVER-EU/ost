@@ -1,6 +1,7 @@
 package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
+import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,10 @@ public class Answer extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_session_id", nullable = false)
     private TrialSession trialSession;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private TrialUser trialUser;
+
     @Column(nullable = false)
     private int sentRealTime;
 
@@ -40,7 +45,7 @@ public class Answer extends PersistentObject implements Serializable {
     private int simulationTime;
 
     @Column(nullable = false)
-    private String value;
+    private String fieldValue;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
@@ -49,4 +54,8 @@ public class Answer extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<AnswerItem> answerItems= new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
+    @Builder.Default
+    private List<TrialRole> trialRoles = new ArrayList<>();
 }

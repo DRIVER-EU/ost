@@ -40,11 +40,11 @@ public class Event extends PersistentObject implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Languages language;
+    private Languages languageVersion;
 
     @Column(length = 50, nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String time;
+    private String eventTime;
 }

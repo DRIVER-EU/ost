@@ -40,7 +40,7 @@ public class QuestionItem extends PersistentObject implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Languages language;
+    private Languages languageVersion;
 
     @Column(length = 50, nullable = false)
     private String name;

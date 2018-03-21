@@ -33,7 +33,7 @@ public class Trial extends PersistentObject implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Languages language;
+    private Languages languageVersion;
 
     @Column(length = 50, nullable = false)
     private String name;
@@ -49,4 +49,8 @@ public class Trial extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
     @Builder.Default
     private List<TrialSession> trialSessions = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
+    @Builder.Default
+    private List<TrialRole> trialRoles = new ArrayList<>();
 }
