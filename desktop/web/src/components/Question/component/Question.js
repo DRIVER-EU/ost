@@ -40,7 +40,7 @@ class Question extends Component {
       ],
       formData: {
         'info': '',
-        'slider': 1
+        'slider': null
       },
       schema: {
         'type': 'object',
