@@ -43,7 +43,7 @@ class SelectObservation extends Component {
                   style={key % 2 === 0 ? { backgroundColor: '#1f497e12' } : { backgroundColor: '#feb91221' }}
                   primaryText={object.title}
                   secondaryText={object.description}
-                  onClick={this.newObservation(object.id)}
+                  onClick={()=>this.newObservation(object.id)}
                   />
               })}
             </List>
