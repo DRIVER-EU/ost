@@ -15,7 +15,7 @@ class SelectObservation extends Component {
 
   static propTypes = {
     getObservations: PropTypes.func,
-    listOfObservations: PropTypes.array
+    listOfObservations: PropTypes.any
   }
 
   componentWillMount () {
@@ -23,7 +23,7 @@ class SelectObservation extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfObservations.data &&
+    if (nextProps.listOfObservations.data && this.props.listOfObservations &&
       !_.isEqual(this.state.listOfObservations.sort(), nextProps.listOfObservations.data.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations.data })
     }
@@ -40,21 +40,22 @@ class SelectObservation extends Component {
           <div className='view-trials-container'>
             <div className='trial-title' />
             <div>New observation</div>
-          </div>
-          <div className='trials-header'>
-            <List style={{ width: '100%' }}>
-              { this.state.listOfObservations.map((object, key) => {
-                <ListItem
-                  style={key % 2 === 0 ? { backgroundColor: '#1f497e12' } : { backgroundColor: '#feb91221' }}
-                  primaryText={object.title}
-                  secondaryText={object.description}
-                  onClick={() => this.newObservation(object.id)}
+            <div className='trials-header'>
+              <List style={{ width: '100%' }}>
+                { this.state.listOfObservations.map((object, key) => (
+                  <ListItem
+                    style={key % 2 === 0 ? { backgroundColor: '#1f497e12' } : { backgroundColor: '#feb91221' }}
+                    primaryText={object.title}
+                    secondaryText={object.description}
+                    onClick={() => this.newObservation(object.id)}
                   />
-              })}
-            </List>
+              ))}
+              </List>
+            </div>
           </div>
         </div>
       </div>
+
     )
   }
 }
