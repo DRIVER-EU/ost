@@ -29,11 +29,11 @@ export const actions = {
 export const getObservations = () => {
   return (dispatch) => {
     dispatch(getObservationsAction({
-      total: 10,
+      total: 3,
       data: [
-        { id: 1, title: 'Profile photo', desc: 'Change your Google+ profile photo' },
-        { id: 2, title: 'Show your status', desc: 'Your status is visible to everyone you use with' },
-        { id: 3, title: 'Profile porno', desc: 'Change your Boobs+ profile porno' }
+        { id: 1, title: 'Profile photo', description: 'Change your Google+ profile photo' },
+        { id: 2, title: 'Show your status', description: 'Your status is visible to everyone you use with' },
+        { id: 3, title: 'Profile porno', description: 'Change your Boobs+ profile porno' }
       ]
     }))
     // return new Promise((resolve) => {

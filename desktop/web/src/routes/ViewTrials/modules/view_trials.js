@@ -34,6 +34,7 @@ export const getViewTrials = () => {
         {
           id: 1,
           title: 'Lorem ipsum dolor sit amet',
+          type: 'message',
           description: `Lorem ipsum dolor sit amet,
           consectetur adipiscing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua.
@@ -53,7 +54,7 @@ export const getViewTrials = () => {
           title: 'At vero eos et accusamus et iusto odio dignissimos',
           description: `At vero eos et accusamus et iusto odio dignissimos
           ducimus qui blanditiis praesentium voluptatum deleniti
-          atque corrupti quos dolores et quas molestias excepturi sint 
+          atque corrupti quos dolores et quas molestias excepturi sint
           occaecati cupiditate non provident, similique sunt in culpa qui
           officia deserunt mollitia animi, id est laborum et dolorum fuga.`
         }

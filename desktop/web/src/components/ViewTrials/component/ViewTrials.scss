@@ -73,6 +73,11 @@
     transition: transform 300ms;
   }
 
+  .react-sanfona-item-title.message:before {
+    @extend .react-sanfona-item-title:before;
+    content: "\2709";
+  }
+
   .react-sanfona-item-title:after {
     font-family:'Glyphicons Halflings';
     content: '\e114';
