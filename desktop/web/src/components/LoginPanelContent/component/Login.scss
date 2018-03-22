@@ -1,0 +1,15 @@
+.pages-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .login-box {
+        width: 100%;
+        max-width: 400px;
+
+        button {
+            width: 100;
+            margin-top: 30px;
+        }
+    }
+}
