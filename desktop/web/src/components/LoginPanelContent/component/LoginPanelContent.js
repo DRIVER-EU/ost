@@ -42,7 +42,7 @@ class LoginPanelContent extends Component {
       let errorPass = name + 'ErrorText'
       let change = {}
       if (this.state[name] === '') {
-        change[errorPass] = 'The field is required'
+        change[errorPass] = 'The field is required.'
       } else {
         change[errorPass] = ''
       }
@@ -111,6 +111,8 @@ class LoginPanelContent extends Component {
             <RaisedButton
               label='Sign in'
               style={styles.forgot}
+              backgroundColor='#244C7B'
+              labelColor='#FCB636'
               onClick={() => {
                 this.isDisabled(['name', 'password'])
                 this.props.logIn(this.state.name, this.state.password)

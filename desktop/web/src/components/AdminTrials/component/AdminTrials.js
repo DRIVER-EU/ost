@@ -43,6 +43,14 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     flexWrap: 'wrap'
+  },
+  default: {
+    color: '#064C7B',
+    backgroundColor: '#fff'
+  },
+  active: {
+    color: '#fff',
+    backgroundColor: '#064C7B'
   }
 }
 
@@ -248,7 +256,7 @@ class AdminTrials extends Component {
     this.setState({
       value: value
     })
-  };
+  }
 
   render () {
     return (
@@ -258,7 +266,10 @@ class AdminTrials extends Component {
             <Tabs
               value={this.state.value}
               onChange={this.handleChange}>
-              <Tab label='Summary of observations' value='a'>
+              <Tab
+                style={this.state.value === 'a' ? styles.active : styles.default}
+                label='Summary of observations'
+                value='a'>
                 <div>
                   <div className='trials-header'>
                     <div>Summary of observations</div>
@@ -407,7 +418,10 @@ class AdminTrials extends Component {
                   </Card>}
                 </div>
               </Tab>
-              <Tab label='Events / messages send to observers' value='b'>
+              <Tab
+                style={this.state.value === 'b' ? styles.active : styles.default}
+                label='Events / messages send to observers'
+                value='b'>
                 <div>
                   <div className='trials-header'>
                     <div>Events / messages send to observers</div>
