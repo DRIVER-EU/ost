@@ -7,10 +7,11 @@ export let origin = window.location.hostname
 // } else {
 origin = '192.168.1.15:8080'
 // }
-// import axios from 'axios'
-// import { getHeaders, errorHandle } from '../../../store/addons'
+import axios from 'axios'
+import { getHeaders, errorHandle } from '../../../store/addons'
 
 export const GET_SCHEMA = 'GET_SCHEMA'
+export const SEND_OBSERVATION = 'SEND_OBSERVATION'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -22,8 +23,16 @@ export const getSchemaAction = (data = null) => {
   }
 }
 
+export const sendObservationAction = (data = null) => {
+  return {
+    type: SEND_OBSERVATION,
+    data: data
+  }
+}
+
 export const actions = {
-  getSchema
+  getSchema,
+  sendObservation
 }
 
 export const getSchema = () => {
@@ -69,6 +78,22 @@ export const getSchema = () => {
   }
 }
 
+export const sendObservation = () => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
+          .then((response) => {
+            dispatch(sendObservationAction(response.data))
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            resolve()
+          })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -78,13 +103,20 @@ const ACTION_HANDLERS = {
       ...state,
       questionSchema: action.data
     }
+  },
+  [SEND_OBSERVATION]: (state, action) => {
+    return {
+      ...state,
+      observation: action.data
+    }
   }
 }
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
-  questionSchema: {}
+  questionSchema: {},
+  observation: {}
 }
 
 export default function newobservationReducer (state = initialState, action) {

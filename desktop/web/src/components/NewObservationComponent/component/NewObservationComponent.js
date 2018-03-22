@@ -42,13 +42,16 @@ class NewObservationComponent extends Component {
       dateTime: null
     }
   }
+
   log (logged) {
     console.log(logged, this.state.model)
   }
 
   static propTypes = {
     getSchema: PropTypes.func,
-    questionSchema: PropTypes.any
+    questionSchema: PropTypes.any,
+    sendObservation: PropTypes.func,
+    observation: PropTypes.any
   }
 
   componentWillMount () {
@@ -56,7 +59,6 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps.questionSchema)
     if (nextProps.questionSchema && this.props.questionSchema &&
         this.state.questionSchema !== nextProps.questionSchema) {
       let change = { ...this.state.questionSchema }
@@ -67,12 +69,18 @@ class NewObservationComponent extends Component {
   }
 
   submitObservation () {
-    console.log(1, this.state.formData)
+    let send = { ...this.state.formData }
+    let tab = []
+    send['dateTime'] = this.state.dateTime
+    for (let i = 0; i < this.state.listOfParticipants.length; i++) {
+      tab.push(this.state.listOfParticipants[i].id)
+    }
+    send['listOfParticipants'] = tab
+    // this.props.sendObservation(send)
   }
 
-  changeObservation (e, object) {
+  changeObservation (object) {
     this.setState({ formData: object.formData })
-    console.log('change', object)
   }
 
   setDate = (dateTime) => this.setState({ dateTime })
@@ -148,14 +156,15 @@ class NewObservationComponent extends Component {
               uiSchema={this.state.questionSchema.uiSchema}
               formData={this.state.formData}
               widgets={widgets}
-              onChange={(value) => console.log(value)}
+              onChange={(value) => this.changeObservation(value)}
               onError={console.log('errors')} >
               <div className={'submit'}>
                 <RaisedButton
                   buttonStyle={{ width: '200px' }}
                   backgroundColor='#244C7B'
                   labelColor='#FCB636'
-                  label='Submit' />
+                  label='Submit'
+                  onClick={this.submitObservation.bind(this)} />
               </div>
             </Form>
           </div>
