@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import pl.com.itti.app.driver.model.enums.AnswerType;
 import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.persistence.*;
@@ -35,8 +34,8 @@ public class QuestionItem extends PersistentObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "answer_item_id", nullable = false)
-    private AnswerItem answerItem;
+    @JoinColumn(name = "answer_question_item_id", nullable = false)
+    private AnswerQuestionItem answerQuestionItem;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

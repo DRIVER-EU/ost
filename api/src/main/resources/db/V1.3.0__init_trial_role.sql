@@ -28,3 +28,23 @@ CREATE SEQUENCE public.trial_role_seq
     INCREMENT 1
     MINVALUE 1;
 
+
+-------------------------------------------
+---------- Table: trial_role_m2m ----------
+-------------------------------------------
+
+
+CREATE TABLE public.trial_role_m2m_trial_role
+(
+    trial_role_id_a bigint NOT NULL,
+    trial_role_id_b bigint NOT NULL,
+
+    CONSTRAINT trial_role_m2m_pkey PRIMARY KEY(trial_role_id_a, trial_role_id_b),
+    CONSTRAINT tm2234fgfg4354334h23iuh234iq FOREIGN KEY (trial_role_id_a)
+        REFERENCES trial_role (id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
+    CONSTRAINT a0dk3wosfg4354334h56ty8234iq FOREIGN KEY (trial_role_id_b)
+        REFERENCES trial_role (id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+

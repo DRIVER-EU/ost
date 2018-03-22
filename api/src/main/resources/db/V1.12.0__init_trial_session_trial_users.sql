@@ -15,7 +15,7 @@ CREATE TABLE public.trial_session_trial_users
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE SEQUENCE public.trial_session_trial_users
+CREATE SEQUENCE public.trial_session_trial_users_seq
      START 1
      INCREMENT 1
      MINVALUE 1;

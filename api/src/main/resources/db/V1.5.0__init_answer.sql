@@ -7,8 +7,8 @@ CREATE TABLE public.answer
 	id bigint NOT NULL,
     trial_session_id bigint NOT NULL,
     trial_user_id bigint NOT NULL,
-    sent_real_time int NOT NULL,
-    simulation_time int NOT NULL,
+    sent_real_time timestamp without time zone NOT NULL,
+    simulation_time timestamp without time zone NOT NULL,
     field_value varchar NOT NULL,
 
 	CONSTRAINT answer_pkey PRIMARY KEY (id),

@@ -52,4 +52,16 @@ public class TrialRole extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialRole")
     @Builder.Default
     private List<ObservationType> observationTypes = new ArrayList<>();
+
+    @ManyToMany(
+            cascade={CascadeType.PERSIST, CascadeType.MERGE},
+            targetEntity=pl.com.itti.app.driver.model.TrialRole.class
+    )
+    @JoinTable(
+            name="trial_role_m2m_trial_role",
+            joinColumns=@JoinColumn(name="trial_role_id_a"),
+            inverseJoinColumns=@JoinColumn(name="trial_role_id_b")
+    )
+    private List<TrialRole> trialRoles;
+
 }

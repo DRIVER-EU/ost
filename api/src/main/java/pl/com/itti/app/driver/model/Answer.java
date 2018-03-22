@@ -11,6 +11,7 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +39,10 @@ public class Answer extends PersistentObject implements Serializable {
     private TrialUser trialUser;
 
     @Column(nullable = false)
-    private int sentRealTime;
+    private LocalDateTime sentRealTime;
 
     @Column(nullable = false)
-    private int simulationTime;
+    private LocalDateTime simulationTime;
 
     @Column(nullable = false)
     private String fieldValue;
@@ -50,9 +51,9 @@ public class Answer extends PersistentObject implements Serializable {
     @Builder.Default
     private List<Attachment> attachments = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
-    private List<AnswerItem> answerItems= new ArrayList<>();
+    private AnswerQuestionItem answerQuestionItem = new AnswerQuestionItem();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default

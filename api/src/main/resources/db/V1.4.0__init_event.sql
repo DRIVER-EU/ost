@@ -10,7 +10,7 @@ CREATE TABLE public.event
 	event_id int NOT NULL,
 	language_version varchar NOT NULL,
 	name varchar(50) NOT NULL,
-	event_time varchar NOT NULL,
+	event_time timestamp without time zone NOT NULL,
 
 	CONSTRAINT event_pkey PRIMARY KEY (id),
     CONSTRAINT fktikaqpo3y5yxf0h6jecltd0v3 FOREIGN KEY (trial_session_id)

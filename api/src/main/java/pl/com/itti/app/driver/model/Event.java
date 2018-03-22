@@ -12,6 +12,7 @@ import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -46,5 +47,5 @@ public class Event extends PersistentObject implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private String eventTime;
+    private LocalDateTime eventTime;
 }

@@ -12,6 +12,7 @@ import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,13 +36,13 @@ public class TrialUser extends PersistentObject implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialUser")
     @Builder.Default
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialUser")
     @Builder.Default
-    private List<TrialRole> trialRoles;
+    private List<TrialRole> trialRoles = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "trialUsers")
     @Builder.Default
-    private List<TrialSession> trialSessions;
+    private List<TrialSession> trialSessions = new ArrayList<>();
 }
