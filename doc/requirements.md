@@ -18,7 +18,7 @@ On the Trial Lebel there are defined following issues:
 
 ### Questions
 Question is described by name, short description and Answer Type. Following Answer Types exist: checkboxes, radio buttons, text field and slider.
-Each answer type determines a value of an answer. Observations that are filled by Observer dependent on answer type are stored in QuestionItem Class.
+Each answer type determines a value of an answer. Observations that are filled by Observer dependent on answer type are stored in QuestionItem Class. Observation can have many questions. 
 To observation user can also add some attachments which also have types: location, picture, voice and description.
 Each Observation Template can have many questions with different answer types. 
 ### Trial Session
