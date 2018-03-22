@@ -57,12 +57,13 @@ class ViewTrials extends Component {
               {this.state.viewTrials.map((object) => {
                 return (
                   <AccordionItem title={
-                    <h3 className={'react-sanfona-item-title'}>
+                    <h3 className={'react-sanfona-item-title'+ (object.type === 'message' ? ' message' : '')}>
                       {object.title}
                       <div className={'time'}>09/03/2018 11:17:18</div>
                     </h3>} expanded={false}>
                     <div>
                       <p>{object.description}</p>
+                      { object.type !== 'message' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
                           buttonStyle={{ width: '200px' }}
@@ -71,6 +72,7 @@ class ViewTrials extends Component {
                           onClick={this.viewEvent.bind(this, object.id)}
                           label='View' />
                       </div>
+                      }
                     </div>
                   </AccordionItem>
                 )

@@ -25,6 +25,9 @@ const widgets = {
 const uiSchema = {
   'slider': {
     'ui:widget': 'Slider'
+  },
+  'info': {
+
   }
 }
 
@@ -47,7 +50,7 @@ class Question extends Component {
         'properties': {
           'info': {
             'type': 'string',
-            'title': 'How accurate was the sharing of information?'
+            'title': 'How accurate was the sharing of information?',
           },
           'slider': {
             'title': 'How long id this information sharing take?',
