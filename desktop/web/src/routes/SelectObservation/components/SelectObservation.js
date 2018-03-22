@@ -10,7 +10,7 @@ class SelectObservationComponent extends Component {
 
   static propTypes = {
     getObservations: PropTypes.func,
-    listOfObservations: PropTypes.array
+    listOfObservations: PropTypes.any
   }
 
   render () {

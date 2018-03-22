@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import NewObservationComponent from '../../../components/NewObservationComponent'
 
 class NewObservation extends Component {
@@ -7,11 +8,17 @@ class NewObservation extends Component {
     this.state = {}
   }
 
+  static propTypes = {
+    getSchema: PropTypes.func,
+    questionSchema: PropTypes.any
+  }
+
   render () {
     return (
       <div className='background-home'>
         <NewObservationComponent
-        />
+          getSchema={this.props.getSchema}
+          questionSchema={this.props.questionSchema} />
       </div>
     )
   }

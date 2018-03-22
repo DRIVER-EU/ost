@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import DateComponent from '../../DateComponent/DateComponent'
 import './NewObservationComponent.scss'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -22,15 +23,6 @@ const widgets = {
   }
 }
 
-const uiSchema = {
-  'slider': {
-    'ui:widget': 'Slider'
-  },
-  'info': {
-
-  }
-}
-
 class NewObservationComponent extends Component {
   constructor (props) {
     super()
@@ -41,26 +33,10 @@ class NewObservationComponent extends Component {
         { id: 1, name: 'Participant 1' },
         { id: 2, name: 'Participant 2' }
       ],
-      formData: {
-        'info': '',
-        'slider': null
-      },
-      schema: {
-        'type': 'object',
-        'properties': {
-          'info': {
-            'type': 'string',
-            'title': 'How accurate was the sharing of information?'
-          },
-          'slider': {
-            'title': 'How long id this information sharing take?',
-            'type': 'integer',
-            'min': 1,
-            'max':10,
-            'value': 2,
-            'step': 1
-          }
-        }
+      formData: {},
+      questionSchema: {
+        schema: {},
+        uiSchema: {}
       },
       listOfParticipants: [],
       dateTime: null
@@ -68,6 +44,26 @@ class NewObservationComponent extends Component {
   }
   log (logged) {
     console.log(logged, this.state.model)
+  }
+
+  static propTypes = {
+    getSchema: PropTypes.func,
+    questionSchema: PropTypes.any
+  }
+
+  componentWillMount () {
+    this.props.getSchema()
+  }
+
+  componentWillReceiveProps (nextProps) {
+    console.log(nextProps.questionSchema)
+    if (nextProps.questionSchema && this.props.questionSchema &&
+        this.state.questionSchema !== nextProps.questionSchema) {
+      let change = { ...this.state.questionSchema }
+      change['schema'] = nextProps.questionSchema.schema
+      change['uiSchema'] = nextProps.questionSchema.uiSchema
+      this.setState({ questionSchema: change })
+    }
   }
 
   submitObservation () {
@@ -148,8 +144,8 @@ class NewObservationComponent extends Component {
             <p className='point-obs'>What:</p>
             <Form
               noValidate
-              schema={this.state.schema}
-              uiSchema={uiSchema}
+              schema={this.state.questionSchema.schema}
+              uiSchema={this.state.questionSchema.uiSchema}
               formData={this.state.formData}
               widgets={widgets}
               onChange={(value) => console.log(value)}
