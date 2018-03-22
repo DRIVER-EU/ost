@@ -24,8 +24,8 @@ class SelectObservation extends Component {
     }
   }
 
-  viewTrial (id) {
-    browserHistory.push(`/trials/${id}`)
+  newObservation (id) {
+    browserHistory.push(`/trials/1/new-observation/${id}`)
   }
 
   render () {
@@ -33,22 +33,20 @@ class SelectObservation extends Component {
       <div className='main-container'>
         <div className='pages-box'>
           <div className='view-trials-container'>
-            <div className='trial-title'>
-              <div>New observation</div>
-            </div>
-            <div className='trials-header'>
-
-              <List style={{ width: '100%' }}>
+            <div className='trial-title' />
+            <div>New observation</div>
+          </div>
+          <div className='trials-header'>
+            <List style={{ width: '100%' }}>
+              { this.state.listOfObservations.map((object, key) => {
                 <ListItem
-                  primaryText='Profile photo'
-                  secondaryText='Change your Google+ profile photo'
-          />
-                <ListItem
-                  primaryText='Show your status'
-                  secondaryText='Your status is visible to everyone you use with'
-          />
-              </List>
-            </div>
+                  style={key % 2 === 0 ? { backgroundColor: '#1f497e12' } : { backgroundColor: '#feb91221' }}
+                  primaryText={object.title}
+                  secondaryText={object.description}
+                  onClick={this.newObservation(object.id)}
+                  />
+              })}
+            </List>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import DateComponent from '../../DateComponent/DateComponent'
-import './Question.scss'
+import './NewObservationComponent.scss'
 import RaisedButton from 'material-ui/RaisedButton'
 import Checkbox from 'material-ui/Checkbox'
 import _ from 'lodash'
@@ -31,7 +31,7 @@ const uiSchema = {
   }
 }
 
-class Question extends Component {
+class NewObservationComponent extends Component {
   constructor (props) {
     super()
     this.state = {
@@ -169,5 +169,5 @@ class Question extends Component {
   }
 }
 
-export default Question
+export default NewObservationComponent
 
