@@ -7,7 +7,7 @@ CREATE TABLE public.event
     id bigint NOT NULL,
     trial_session_id bigint NOT NULL,
     description varchar NOT NULL,
-	event_id int NOT NULL,
+	id_event int NOT NULL,
 	language_version varchar NOT NULL,
 	name varchar(50) NOT NULL,
 	event_time timestamp without time zone NOT NULL,
