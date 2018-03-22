@@ -37,16 +37,13 @@ class SelectObservation extends Component {
               <div>New observation</div>
             </div>
             <div className='trials-header'>
-
               <List style={{ width: '100%' }}>
-                <ListItem
-                  primaryText='Profile photo'
-                  secondaryText='Change your Google+ profile photo'
-          />
-                <ListItem
-                  primaryText='Show your status'
-                  secondaryText='Your status is visible to everyone you use with'
-          />
+                {this.state.listOfObservations.map((object) => {
+                  <ListItem
+                    primaryText={object.title}
+                    secondaryText={object.desc} />
+                })
+              }
               </List>
             </div>
           </div>
