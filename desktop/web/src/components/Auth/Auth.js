@@ -9,7 +9,9 @@ class Auth extends Component {
       publicPaths: [
         '',
         '/',
-        '/login'
+        '/login',
+        '/trials',
+        '/admin-trials'
       ]
     }
   }
