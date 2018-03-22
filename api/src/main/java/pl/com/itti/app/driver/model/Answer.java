@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
-import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

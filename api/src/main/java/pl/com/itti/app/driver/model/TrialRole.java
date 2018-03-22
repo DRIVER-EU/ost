@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
-import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +39,7 @@ public class TrialRole extends PersistentObject implements Serializable {
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer;
 
+    @ManyToOne(fetch = FetchType.EAGER)
     private TrialUser trialUser;
 
     @Column(length = 50, nullable = false)

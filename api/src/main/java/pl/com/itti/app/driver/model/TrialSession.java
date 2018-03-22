@@ -35,6 +35,11 @@ public class TrialSession extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_id", nullable = false)
     private Trial trial;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "trial_users_id")
+    private List<TrialUser> trialUsers;
+
     @Column(nullable = false)
     private LocalDateTime startTime;
 
