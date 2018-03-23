@@ -2,6 +2,8 @@ web/node_modules
 target/
 npm-debug.log
 .vscode
+web/dist/
+
 
 ### Linux ###
 *~
