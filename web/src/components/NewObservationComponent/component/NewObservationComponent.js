@@ -43,10 +43,6 @@ class NewObservationComponent extends Component {
     }
   }
 
-  log (logged) {
-    console.log(logged, this.state.model)
-  }
-
   static propTypes = {
     getSchema: PropTypes.func,
     questionSchema: PropTypes.any
@@ -74,7 +70,6 @@ class NewObservationComponent extends Component {
       tab.push(this.state.listOfParticipants[i].id)
     }
     send['listOfParticipants'] = tab
-    // this.props.sendObservation(send)
   }
 
   changeObservation (object) {
@@ -154,8 +149,7 @@ class NewObservationComponent extends Component {
               uiSchema={this.state.questionSchema.uiSchema}
               formData={this.state.formData}
               widgets={widgets}
-              onChange={(value) => this.changeObservation(value)}
-              onError={console.log('errors')} >
+              onChange={(value) => this.changeObservation(value)} >
               <div className={'submit'}>
                 <RaisedButton
                   buttonStyle={{ width: '200px' }}

@@ -66,18 +66,6 @@ class Question extends Component {
       dateTime: null
     }
   }
-  log (logged) {
-    console.log(logged, this.state.model)
-  }
-
-  submitObservation () {
-    console.log(1, this.state.formData)
-  }
-
-  changeObservation (e, object) {
-    this.setState({ formData: object.formData })
-    console.log('change', object)
-  }
 
   setDate = (dateTime) => this.setState({ dateTime })
 
@@ -151,9 +139,7 @@ class Question extends Component {
               schema={this.state.schema}
               uiSchema={uiSchema}
               formData={this.state.formData}
-              widgets={widgets}
-              onChange={(value) => console.log(value)}
-              onError={console.log('errors')} >
+              widgets={widgets} >
               <div className={'submit'}>
                 <RaisedButton
                   buttonStyle={{ width: '200px' }}
