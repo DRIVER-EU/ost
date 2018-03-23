@@ -57,9 +57,9 @@ class ViewTrials extends Component {
               {this.state.viewTrials.map((object) => {
                 return (
                   <AccordionItem title={
-                    <h3 className={'react-sanfona-item-title'}>
+                    <h3 className={'react-sanfona-item-title cursor-pointer'}>
                       {object.title}
-                      <div className={'time'}>09/03/2018 11:17:18</div>
+                      <div className={'time'}>{object.date}</div>
                     </h3>} expanded={false}>
                     <div>
                       <p>{object.description}</p>

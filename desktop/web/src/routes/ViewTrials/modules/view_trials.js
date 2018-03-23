@@ -33,15 +33,17 @@ export const getViewTrials = () => {
       data: [
         {
           id: 1,
+          date: '09/03/2018 11:18:18',
           title: 'Lorem ipsum dolor sit amet',
-          description: `Lorem ipsum dolor sit amet,
-          consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
-          Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea commodo consequat.`
+          description: `At vero eos et accusamus et iusto odio dignissimos
+          ducimus qui blanditiis praesentium voluptatum deleniti
+          atque corrupti quos dolores et quas molestias excepturi sint 
+          occaecati cupiditate non provident, similique sunt in culpa qui
+          officia deserunt mollitia animi, id est laborum et dolorum fuga.`
         },
         {
           id: 2,
+          date: '09/03/2018 11:17:18',
           title: 'Sed ut perspiciatis unde omnis iste natus error',
           description: `Sed ut perspiciatis unde omnis iste natus error
           sit voluptatem accusantium doloremque laudantium,
@@ -50,6 +52,7 @@ export const getViewTrials = () => {
         },
         {
           id: 3,
+          date: '09/03/2018 11:16:17',
           title: 'At vero eos et accusamus et iusto odio dignissimos',
           description: `At vero eos et accusamus et iusto odio dignissimos
           ducimus qui blanditiis praesentium voluptatum deleniti
