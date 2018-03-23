@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import './SelectObservation.scss'
 import { browserHistory } from 'react-router'
 import { List, ListItem } from 'material-ui/List'
+import _ from 'lodash'
 
 class SelectObservation extends Component {
   constructor (props) {
@@ -13,19 +14,23 @@ class SelectObservation extends Component {
   }
 
   static propTypes = {
+    getObservations: PropTypes.func,
     listOfObservations: PropTypes.any
   }
 
+  componentWillMount () {
+    this.props.getObservations()
+  }
+
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfObservations.data &&
-      nextProps.listOfObservations.data !== this.state.listOfObservations &&
-      nextProps.listOfObservations.data !== this.props.listOfObservations) {
+    if (nextProps.listOfObservations.data && this.props.listOfObservations &&
+      !_.isEqual(this.state.listOfObservations.sort(), nextProps.listOfObservations.data.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations.data })
     }
   }
 
-  viewTrial (id) {
-    browserHistory.push(`/trials/${id}`)
+  newObservation (id) {
+    browserHistory.push(`/trials/1/new-observation/${id}`)
   }
 
   render () {
@@ -33,25 +38,24 @@ class SelectObservation extends Component {
       <div className='main-container'>
         <div className='pages-box'>
           <div className='view-trials-container'>
-            <div className='trial-title'>
-              <div>New observation</div>
-            </div>
+            <div className='trial-title' />
+            <div>New observation</div>
             <div className='trials-header'>
-
               <List style={{ width: '100%' }}>
-                <ListItem
-                  primaryText='Profile photo'
-                  secondaryText='Change your Google+ profile photo'
-          />
-                <ListItem
-                  primaryText='Show your status'
-                  secondaryText='Your status is visible to everyone you use with'
-          />
+                { this.state.listOfObservations.map((object, key) => (
+                  <ListItem
+                    style={key % 2 === 0 ? { backgroundColor: '#1f497e12' } : { backgroundColor: '#feb91221' }}
+                    primaryText={object.title}
+                    secondaryText={object.description}
+                    onClick={() => this.newObservation(object.id)}
+                  />
+              ))}
               </List>
             </div>
           </div>
         </div>
       </div>
+
     )
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import SelectObservation from '../../../components/SelectObservation'
 
 class SelectObservationComponent extends Component {
@@ -7,11 +8,17 @@ class SelectObservationComponent extends Component {
     this.state = {}
   }
 
+  static propTypes = {
+    getObservations: PropTypes.func,
+    listOfObservations: PropTypes.any
+  }
+
   render () {
     return (
       <div className='background-home'>
         <SelectObservation
-        />
+          getObservations={this.props.getObservations}
+          listOfObservations={this.props.listOfObservations} />
       </div>
     )
   }

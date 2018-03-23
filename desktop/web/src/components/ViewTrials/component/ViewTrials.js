@@ -63,6 +63,7 @@ class ViewTrials extends Component {
                     </h3>} expanded={false}>
                     <div>
                       <p>{object.description}</p>
+                      { object.type !== 'message' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
                           buttonStyle={{ width: '200px' }}
@@ -71,6 +72,7 @@ class ViewTrials extends Component {
                           onClick={this.viewEvent.bind(this, object.id)}
                           label='View' />
                       </div>
+                      }
                     </div>
                   </AccordionItem>
                 )
