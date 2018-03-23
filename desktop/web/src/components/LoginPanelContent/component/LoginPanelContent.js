@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import './Login.scss'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
-import Checkbox from 'material-ui/Checkbox'
 import { browserHistory } from 'react-router'
 
 const styles = {
@@ -83,6 +82,8 @@ class LoginPanelContent extends Component {
       <div className='main-container'>
         <div className='pages-box pages-flex'>
           <div className='login-box' onKeyPress={this._handleKeyPress}>
+            <p className='singin-title'>Sing in</p>
+
             <TextField
               type='email'
               onChange={this.handleChange.bind(this, 'name')}
@@ -99,9 +100,6 @@ class LoginPanelContent extends Component {
               fullWidth
               errorText={this.state.passwordErrorText !== '' ? this.state.passwordErrorText : ''} />
 
-            <Checkbox
-              label='Remember me'
-              style={styles.checkbox} />
             <span
               className='cursor-pointer'
               onClick={this.forgot.bind(this)}>
