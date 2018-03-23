@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { IndexLink } from 'react-router'
 import AppBar from 'material-ui/AppBar'
 import { List, ListItem } from 'material-ui/List'
+import UserComponent from '../../Bar/User'
 
 import './Menu.scss'
 
@@ -39,6 +40,7 @@ class MenuLeft extends Component {
                 primaryText='Trials'
                 style={{ color: '#00497E' }}
                 containerElement={<IndexLink to='/trials' activeClassName='route--active' />} />
+              <UserComponent />
             </List>
           }
   />

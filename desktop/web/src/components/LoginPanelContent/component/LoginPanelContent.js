@@ -2,19 +2,21 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import './Login.scss'
-import { Button, FormGroup, FormControl, Col, Checkbox, ControlLabel, HelpBlock } from 'react-bootstrap'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
 import { browserHistory } from 'react-router'
 
 const styles = {
-  button: {
-    width: 100,
-    marginTop: '30px'
+  checkbox: {
+    marginTop: 15,
+    marginBottom: 15
   },
-  form: {
-    width: '100%',
-    maxWidth: '400px'
+  forgot: {
+    marginTop: 15,
+    display: 'block'
   }
 }
+
 class LoginPanelContent extends Component {
   constructor (props) {
     super(props)
@@ -39,7 +41,7 @@ class LoginPanelContent extends Component {
       let errorPass = name + 'ErrorText'
       let change = {}
       if (this.state[name] === '') {
-        change[errorPass] = 'The field is required'
+        change[errorPass] = 'The field is required.'
       } else {
         change[errorPass] = ''
       }
@@ -77,58 +79,44 @@ class LoginPanelContent extends Component {
 
   render () {
     return (
-      <div style={styles.form} onKeyPress={this._handleKeyPress}>
-        <FormGroup controlId='formHorizontalEmail' validationState={this.state.nameErrorText !== '' ? 'error' : ''}>
-          <Col componentClass={ControlLabel} >
-              Login / Email
-            </Col>
-          <Col>
-            <FormControl type='email'
+      <div className='main-container'>
+        <div className='pages-box pages-flex'>
+          <div className='login-box' onKeyPress={this._handleKeyPress}>
+            <p className='singin-title'>Sing in</p>
+
+            <TextField
+              type='email'
               onChange={this.handleChange.bind(this, 'name')}
               value={this.state.name}
-              placeholder='Email' />
-            <HelpBlock>{this.state.nameErrorText}</HelpBlock>
-          </Col>
-        </FormGroup>
+              floatingLabelText='Login / Email'
+              fullWidth
+              errorText={this.state.nameErrorText !== '' ? this.state.nameErrorText : ''} />
 
-        <FormGroup
-          controlId='formHorizontalPassword'
-          validationState={this.state.passwordErrorText !== '' ? 'error' : ''}>
-          <Col componentClass={ControlLabel}>
-              Password
-            </Col>
-          <Col>
-            <FormControl type='password'
+            <TextField
+              type='password'
               onChange={this.handleChange.bind(this, 'password')}
               value={this.state.password}
-              placeholder='Password' />
-            <HelpBlock>{this.state.passwordErrorText}</HelpBlock>
-          </Col>
-        </FormGroup>
+              floatingLabelText='Password'
+              fullWidth
+              errorText={this.state.passwordErrorText !== '' ? this.state.passwordErrorText : ''} />
 
-        <FormGroup>
-          <Col>
-            <Checkbox>Remember me</Checkbox>
             <span
               className='cursor-pointer'
               onClick={this.forgot.bind(this)}>
               Forgot your password?
             </span>
-          </Col>
-        </FormGroup>
 
-        <FormGroup>
-          <Col>
-            <Button bsStyle='primary'
+            <RaisedButton
+              label='Sign in'
+              style={styles.forgot}
+              backgroundColor='#244C7B'
+              labelColor='#FCB636'
               onClick={() => {
                 this.isDisabled(['name', 'password'])
                 this.props.logIn(this.state.name, this.state.password)
-              }
-              }>
-                Sign in
-              </Button>
-          </Col>
-        </FormGroup>
+              }} />
+          </div>
+        </div>
       </div>
     )
   }

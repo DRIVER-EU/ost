@@ -38,4 +38,7 @@
   .sort-cursor {
     cursor: pointer;
   }
+  div div button {
+    z-index: 0!important;
+  }
 }
