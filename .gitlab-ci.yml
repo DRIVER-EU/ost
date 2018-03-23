@@ -13,7 +13,7 @@ variables:
     key: "${CI_PROJECT_NAME}_web"
     untracked: true
     paths:
-    - $CI_PROJECT_DIR/web/node_modules
+    - $CI_PROJECT_DIR/desktop/web/node_modules
     - $CI_PROJECT_DIR/cache
 
 .cache_api_def: &cache_api_def
@@ -154,7 +154,7 @@ develop:web:build:
     when: on_success
     expire_in: 12 hrs
     paths:
-    - web/dist/
+    - desktop/web/dist/
 
 develop:web:analyze:
   stage: analyze
@@ -180,12 +180,12 @@ develop:web:package:
   dependencies:
   - develop:web:build
   script:
-  - cd web/dist ; tar zcvf "dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz" *
+  - cd desktop/web/dist ; tar zcvf "dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz" *
   artifacts:
     when: on_success
     expire_in: 1 week
     paths:
-    - "web/dist/dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz"
+    - "desktop/web/dist/dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz"
 
 develop:web:deploy:
   stage: deploy
@@ -198,7 +198,7 @@ develop:web:deploy:
   - develop:web:package
   <<: *ssh_deploy_key_testing_def
   script: 
-  - scp web/dist/dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz itti@dev.itti.com.pl:/home/itti/driver/dist
+  - scp desktop/web/dist/dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz itti@dev.itti.com.pl:/home/itti/driver/dist
   - ssh itti@dev.itti.com.pl "/home/itti/driver/bin/deploy-web.sh"
   environment:
     name: testing
