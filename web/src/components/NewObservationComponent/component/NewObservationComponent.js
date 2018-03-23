@@ -49,9 +49,7 @@ class NewObservationComponent extends Component {
 
   static propTypes = {
     getSchema: PropTypes.func,
-    questionSchema: PropTypes.any,
-    sendObservation: PropTypes.func,
-    observation: PropTypes.any
+    questionSchema: PropTypes.any
   }
 
   componentWillMount () {
