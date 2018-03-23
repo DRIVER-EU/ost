@@ -168,7 +168,7 @@ develop:web:analyze:
   - mkdir -p $CI_PROJECT_DIR/cache/sonar ; cd $CI_PROJECT_DIR/cache/sonar ; curl --insecure -o ./sonarscanner.zip -L https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778.zip && unzip sonarscanner.zip && rm sonarscanner.zip
   - echo "sonar.host.url=$SONAR_HOST_URL" > $CI_PROJECT_DIR/cache/sonar/sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
   script:
-  - cd $CI_PROJECT_DIR/web ; $CI_PROJECT_DIR/cache/sonar/sonar-scanner-*/bin/sonar-scanner
+  - cd $CI_PROJECT_DIR/desktop/web ; $CI_PROJECT_DIR/cache/sonar/sonar-scanner-*/bin/sonar-scanner
 
 develop:web:package:
   stage: package
