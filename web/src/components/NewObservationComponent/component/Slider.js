@@ -13,6 +13,7 @@ export const Slider = (props) => {
         min={props.schema.min}
         max={props.schema.max}
         step={props.schema.step}
+        disabled={props.disabled}
         />
       <div style={{
         marginTop: '-35px',
@@ -26,7 +27,8 @@ Slider.propTypes = {
   schema: PropTypes.any,
   required: PropTypes.any,
   onChange: PropTypes.func,
-  value: PropTypes.any
+  value: PropTypes.any,
+  disabled: PropTypes.any
 }
 
 export default Slider

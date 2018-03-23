@@ -22,7 +22,8 @@ class NewObservation extends Component {
           getSchema={this.props.getSchema}
           questionSchema={this.props.questionSchema}
           sendObservation={this.props.sendObservation}
-          observation={this.props.observation} />
+          observation={this.props.observation}
+          mode={false} />
       </div>
     )
   }
