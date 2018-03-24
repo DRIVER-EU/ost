@@ -33,7 +33,7 @@ public class Attachment extends PersistentObject implements Serializable {
     private Answer answer;
 
     @Column(length = 50, nullable = false)
-    private String name;
+    private String uri;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

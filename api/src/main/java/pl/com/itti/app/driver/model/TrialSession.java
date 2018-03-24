@@ -35,10 +35,10 @@ public class TrialSession extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_id", nullable = false)
     private Trial trial;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "trial_users_id")
-    private List<TrialUser> trialUsers;
+    @JoinColumn(name = "last_trial_stage_id", nullable = false)
+    private Trial lastTrialStage;
 
     @Column(nullable = false)
     private LocalDateTime startTime;
@@ -46,6 +46,9 @@ public class TrialSession extends PersistentObject implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SessionStatus status;
+
+    @Column(nullable = false)
+    private LocalDateTime pausedTime;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialSession")
     @Builder.Default

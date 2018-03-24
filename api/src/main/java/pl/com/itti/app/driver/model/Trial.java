@@ -38,13 +38,12 @@ public class Trial extends PersistentObject implements Serializable {
     @Column(length = 50, nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
-    @Builder.Default
-    private List<TrialStage> trialStages = new ArrayList<>();
+    @Column(nullable = false)
+    private boolean isDefined;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
     @Builder.Default
-    private List<ObservationType> observationTypes = new ArrayList<>();
+    private List<TrialStage> trialStages = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
     @Builder.Default

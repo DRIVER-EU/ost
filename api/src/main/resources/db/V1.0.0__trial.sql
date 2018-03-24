@@ -8,6 +8,7 @@ CREATE TABLE public.trial
 	description varchar NOT NULL,
     language_version varchar NOT NULL,
 	name varchar(50) NOT NULL,
+	is_defined boolean NOT NULL,
 
 	CONSTRAINT trial_pkey PRIMARY KEY (id)
 );

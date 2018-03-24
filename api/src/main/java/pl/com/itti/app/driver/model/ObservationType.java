@@ -38,11 +38,6 @@ public class ObservationType extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_stage_id", nullable = false)
     private TrialStage trialStage;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "trial_role_id", nullable = false)
-    private TrialRole trialRole;
-
     @Column(nullable = false)
     private String description;
 

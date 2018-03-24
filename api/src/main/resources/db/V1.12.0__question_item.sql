@@ -6,16 +6,11 @@ CREATE TABLE public.question_item
 (
 	id bigint NOT NULL,
     question_id bigint NOT NULL,
-    answer_question_item_id bigint NOT NULL,
-	language_version varchar NOT NULL,
 	name varchar(50) NOT NULL,
 
 	CONSTRAINT question_item_pkey PRIMARY KEY (id),
     CONSTRAINT fkihye3qj9w91whtr2hoqrthuxk FOREIGN KEY (question_id)
         REFERENCES public.question (id) MATCH SIMPLE
-        ON UPDATE NO ACTION ON DELETE NO ACTION,
-    CONSTRAINT fkfph8skkk9223b3cavve118r1m FOREIGN KEY (answer_question_item_id)
-        REFERENCES public.answer_question_item (id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 

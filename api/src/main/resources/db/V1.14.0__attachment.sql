@@ -6,7 +6,7 @@ CREATE TABLE public.attachment
 (
 	id bigint NOT NULL,
     answer_id bigint NOT NULL,
-	name varchar(50) NOT NULL,
+	uri varchar(50) NOT NULL,
 	type varchar NOT NULL,
 
 	CONSTRAINT attachment_pkey PRIMARY KEY (id),

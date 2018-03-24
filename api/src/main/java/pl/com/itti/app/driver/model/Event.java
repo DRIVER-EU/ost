@@ -37,7 +37,7 @@ public class Event extends PersistentObject implements Serializable {
     private String description;
 
     @Column(nullable = false)
-    private int eventId;
+    private int idEvent;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

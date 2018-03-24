@@ -35,14 +35,14 @@ public class Answer extends PersistentObject implements Serializable {
     private TrialSession trialSession;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "trial_user_id", nullable = false)
     private TrialUser trialUser;
 
     @Column(nullable = false)
-    private LocalDateTime sentRealTime;
+    private LocalDateTime simulationTime;
 
     @Column(nullable = false)
-    private LocalDateTime simulationTime;
+    private LocalDateTime sentSimulationTime;
 
     @Column(nullable = false)
     private String fieldValue;
@@ -50,12 +50,4 @@ public class Answer extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<Attachment> attachments = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "answer")
-    @Builder.Default
-    private AnswerQuestionItem answerQuestionItem = new AnswerQuestionItem();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
-    @Builder.Default
-    private List<TrialRole> trialRoles = new ArrayList<>();
 }

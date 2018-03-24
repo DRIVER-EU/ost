@@ -32,15 +32,6 @@ public class QuestionItem extends PersistentObject implements Serializable {
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "answer_question_item_id", nullable = false)
-    private AnswerQuestionItem answerQuestionItem;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Languages languageVersion;
-
     @Column(length = 50, nullable = false)
     private String name;
 }

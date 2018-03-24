@@ -34,14 +34,6 @@ public class TrialRole extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_id", nullable = false)
     private Trial trial;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "answer_id", nullable = false)
-    private Answer answer;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private TrialUser trialUser;
-
     @Column(length = 50, nullable = false)
     private String name;
 
@@ -49,18 +41,14 @@ public class TrialRole extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private RoleType roleType;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialRole")
-    @Builder.Default
-    private List<ObservationType> observationTypes = new ArrayList<>();
-
     @ManyToMany(
             cascade={CascadeType.PERSIST, CascadeType.MERGE},
             targetEntity=pl.com.itti.app.driver.model.TrialRole.class
     )
     @JoinTable(
-            name="trial_role_m2m_trial_role",
-            joinColumns=@JoinColumn(name="trial_role_id_a"),
-            inverseJoinColumns=@JoinColumn(name="trial_role_id_b")
+            name="trial_role_m2m",
+            joinColumns=@JoinColumn(name="trial_observer_id"),
+            inverseJoinColumns=@JoinColumn(name="trial_participant_id")
     )
     private List<TrialRole> trialRoles;
 
