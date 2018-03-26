@@ -88,7 +88,7 @@ class LoginPanelContent extends Component {
               type='email'
               onChange={this.handleChange.bind(this, 'name')}
               value={this.state.name}
-              floatingLabelText='Login / Email'
+              floatingLabelText='Login'
               fullWidth
               errorText={this.state.nameErrorText !== '' ? this.state.nameErrorText : ''} />
 
