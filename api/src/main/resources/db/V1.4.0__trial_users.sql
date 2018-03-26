@@ -22,15 +22,16 @@ CREATE SEQUENCE public.trial_user_seq
 
 
 ------------------------------------------------------
------------- Table: trial_creator ------------
+------------ Table: trial_manager --------------------
 ------------------------------------------------------
 
-CREATE TABLE public.trial_creator
+CREATE TABLE public.trial_manager
 (
   trial_user_id bigint NOT NULL,
   trial_id bigint NOT NULL,
+  management_role character varying(255) NOT NULL,
 
-  CONSTRAINT trial_creator_pkey PRIMARY KEY(trial_user_id, trial_id),
+  CONSTRAINT trial_manager_pkey PRIMARY KEY(trial_user_id, trial_id),
   CONSTRAINT fk2oxoomkaco1q71oxs3ntqk9vn FOREIGN KEY (trial_user_id)
       REFERENCES public.trial_user (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,

@@ -10,7 +10,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @Embeddable
-public class TrialCreatorId implements Serializable {
+public class TrialManagerId implements Serializable {
     private long trialUserId;
     private long trialId;
 }
