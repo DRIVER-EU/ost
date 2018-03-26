@@ -54,7 +54,7 @@ class Trials extends Component {
                           backgroundColor='#244C7B'
                           labelColor='#FCB636'
                           onClick={this.viewTrial.bind(this, object.id)}
-                          label='Ok' />
+                          label='Enter' />
                       </div>
                     </div>
                   </AccordionItem>
