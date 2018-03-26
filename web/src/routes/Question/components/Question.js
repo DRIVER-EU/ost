@@ -10,7 +10,8 @@ class QuestionView extends Component {
 
   static propTypes = {
     getViewSchema: PropTypes.func,
-    viewSchema: PropTypes.any
+    viewSchema: PropTypes.any,
+    params: PropTypes.any
   }
 
   render () {
@@ -19,7 +20,8 @@ class QuestionView extends Component {
         <NewObservationComponent
           getSchema={this.props.getViewSchema}
           questionSchema={this.props.viewSchema}
-          mode />
+          mode
+          params={this.props.params} />
       </div>
     )
   }

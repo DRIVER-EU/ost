@@ -12,7 +12,8 @@ class NewObservation extends Component {
     getSchema: PropTypes.func,
     questionSchema: PropTypes.any,
     sendObservation: PropTypes.func,
-    observation: PropTypes.any
+    observation: PropTypes.any,
+    params: PropTypes.any
   }
 
   render () {
@@ -23,7 +24,8 @@ class NewObservation extends Component {
           questionSchema={this.props.questionSchema}
           sendObservation={this.props.sendObservation}
           observation={this.props.observation}
-          mode={false} />
+          mode={false}
+          params={this.props.params} />
       </div>
     )
   }

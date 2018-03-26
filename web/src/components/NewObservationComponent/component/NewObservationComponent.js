@@ -10,6 +10,7 @@ import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from './Slider'
 import Form from 'react-jsonschema-form-mui'
+import { browserHistory } from 'react-router'
 
 const styles = {
   checkbox: {
@@ -46,7 +47,8 @@ class NewObservationComponent extends Component {
   static propTypes = {
     getSchema: PropTypes.func,
     questionSchema: PropTypes.any,
-    mode: PropTypes.bool
+    mode: PropTypes.bool,
+    params: PropTypes.any
   }
 
   componentWillMount () {
@@ -62,7 +64,7 @@ class NewObservationComponent extends Component {
       this.setState({ questionSchema: change })
     }
     if (nextProps.mode) {
-      this.setState({ listOfParticipants: [2] })
+      this.setState({ listOfParticipants: [1] })
     }
   }
 
@@ -125,6 +127,10 @@ class NewObservationComponent extends Component {
     return check
   }
 
+  back () {
+    browserHistory.push(`/trials/${this.props.params.id}`)
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -166,14 +172,26 @@ class NewObservationComponent extends Component {
               formData={this.state.formData}
               widgets={widgets}
               onChange={(value) => this.changeObservation(value)} >
-              <div style={{ display: this.props.mode ? 'none' : '' }} className={'submit'}>
-                <RaisedButton
-                  disabled={this.props.mode}
-                  buttonStyle={{ width: '200px' }}
-                  backgroundColor='#244C7B'
-                  labelColor='#FCB636'
-                  label='Submit'
-                  onClick={this.submitObservation.bind(this)} />
+              <div className={'buttons-center'}>
+                <div className={'buttons-observation'}>
+                  <RaisedButton
+                    buttonStyle={{ width: '200px' }}
+                    backgroundColor='#244C7B'
+                    labelColor='#FCB636'
+                    label='Back'
+                    secondary
+                    onClick={this.back.bind(this)}
+                  />
+                </div>
+                <div style={{ display: this.props.mode ? 'none' : '' }} className={'submit buttons-observation'}>
+                  <RaisedButton
+                    disabled={this.props.mode}
+                    buttonStyle={{ width: '200px' }}
+                    backgroundColor='#244C7B'
+                    labelColor='#FCB636'
+                    label='Submit'
+                    onClick={this.submitObservation.bind(this)} />
+                </div>
               </div>
             </Form>
           </div>
