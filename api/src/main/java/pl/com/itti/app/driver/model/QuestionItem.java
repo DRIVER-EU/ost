@@ -8,10 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -34,4 +35,8 @@ public class QuestionItem extends PersistentObject implements Serializable {
 
     @Column(length = 50, nullable = false)
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "questionItem")
+    @Builder.Default
+    private List<AnswerQuestionItem> answerQuestionItems = new ArrayList<>();
 }

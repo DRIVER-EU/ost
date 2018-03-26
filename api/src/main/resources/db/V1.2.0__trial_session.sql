@@ -9,7 +9,7 @@ CREATE TABLE public.trial_session
 	start_time timestamp without time zone NOT NULL,
 	status varchar NOT NULL,
 	paused_time timestamp without time zone NOT NULL,
-    last_trial_stage_id bigint NOT NULL,
+    last_trial_stage_id bigint,
 
 	CONSTRAINT trial_session_pkey PRIMARY KEY (id),
     CONSTRAINT fkakpayd7n2tpvsnmpkqb01o015 FOREIGN KEY (trial_id)

@@ -37,7 +37,7 @@ public class TrialSession extends PersistentObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "last_trial_stage_id", nullable = false)
+    @JoinColumn(name = "last_trial_stage_id")
     private Trial lastTrialStage;
 
     @Column(nullable = false)
@@ -57,4 +57,12 @@ public class TrialSession extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialSession")
     @Builder.Default
     private List<Answer> answers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialSession")
+    @Builder.Default
+    private List<TrialSessionManager> trialSessionManagers = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialSession")
+    @Builder.Default
+    private List<UserRoleSession> userRoleSessions = new ArrayList<>();
 }

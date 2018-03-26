@@ -50,4 +50,12 @@ public class Answer extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<Attachment> attachments = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
+    @Builder.Default
+    private List<AnswerTrialRole> answerTrialRoles = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
+    @Builder.Default
+    private List<AnswerQuestionItem> answerQuestionItems = new ArrayList<>();
 }
