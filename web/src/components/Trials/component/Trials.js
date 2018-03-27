@@ -45,7 +45,10 @@ class Trials extends Component {
             <Accordion>
               {this.state.listOfTrials.map((object) => {
                 return (
-                  <AccordionItem title={object.title} expanded={false}>
+                  <AccordionItem title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
+                  {object.title}
+                  <div className={'desc'}>{object.description}</div>
+                  </h3>} expanded={false} >
                     <div>
                       <p>{object.description}</p>
                       <div style={{ display: 'table', margin: '0 auto' }}>
