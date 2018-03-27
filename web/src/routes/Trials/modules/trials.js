@@ -43,17 +43,17 @@ export const getTrials = () => {
         {
           id: 2,
           title: 'Sed ut perspiciatis unde omnis iste natus error',
-          description: `Sed ut perspiciatis unde omnis iste natus error
-          sit voluptatem accusantium doloremque laudantium,
-          totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
-          et quasi architecto beatae vitae dicta sunt explicabo.`
+          description: `Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat.`
         },
         {
           id: 3,
           title: 'At vero eos et accusamus et iusto odio dignissimos',
           description: `At vero eos et accusamus et iusto odio dignissimos
           ducimus qui blanditiis praesentium voluptatum deleniti
-          atque corrupti quos dolores et quas molestias excepturi sint 
+          atque corrupti quos dolores et quas molestias excepturi sint
           occaecati cupiditate non provident, similique sunt in culpa qui
           officia deserunt mollitia animi, id est laborum et dolorum fuga.`
         }
