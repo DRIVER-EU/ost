@@ -34,6 +34,15 @@ class Trials extends Component {
     browserHistory.push(`/trials/${id}`)
   }
 
+  getShortDesc (str) {
+    let desc = str.split(/[.|!|?]\s/)
+    if (desc[1]) {
+      return desc[0] + '. ' + desc[1]
+    } else {
+      return desc[0]
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -46,8 +55,8 @@ class Trials extends Component {
               {this.state.listOfTrials.map((object) => {
                 return (
                   <AccordionItem title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
-                  {object.title}
-                  <div className={'desc'}>{object.description}</div>
+                    {object.title}
+                    <div className={'desc'}>{this.getShortDesc(object.description)}</div>
                   </h3>} expanded={false} >
                     <div>
                       <p>{object.description}</p>
