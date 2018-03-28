@@ -16,8 +16,6 @@ INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_nam
 INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'Observer1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
         'Observer', 'Zandecki', 'observer.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
-UPDATE public.auth_user SET "position_id" = '2', "unit_id" = '1';
-UPDATE public.auth_user SET "position_id" = '1', "unit_id" = '1' WHERE "login" = 'admin';
 
 
 INSERT INTO public.auth_user_m2m_roles ("auth_user_id", "auth_role_id")
