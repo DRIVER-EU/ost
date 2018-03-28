@@ -77,4 +77,4 @@ src/generated
 .factorypath
 .project
 .settings
-.springBeans
+.springBeans.idea
