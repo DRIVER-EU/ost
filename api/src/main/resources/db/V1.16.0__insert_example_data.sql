@@ -169,13 +169,25 @@ INSERT INTO public.trial_role ("id", "trial_id", "name", "role_type")
 
 
 INSERT INTO public.trial_role_m2m ("trial_observer_id", "trial_participant_id")
-    VALUES ('1', '2');
+    VALUES (
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '1' AND "role_type" = 'OBSERVER'),
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '1' AND "name" = 'ratownik')
+    );
 INSERT INTO public.trial_role_m2m ("trial_observer_id", "trial_participant_id")
-    VALUES ('1', '3');
+    VALUES (
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '1' AND "role_type" = 'OBSERVER'),
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '1' AND "name" = 'ofiara')
+    );
 INSERT INTO public.trial_role_m2m ("trial_observer_id", "trial_participant_id")
-    VALUES ('4', '5');
+    VALUES (
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '2' AND "role_type" = 'OBSERVER'),
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '2' AND "name" = 'ratownik')
+    );
 INSERT INTO public.trial_role_m2m ("trial_observer_id", "trial_participant_id")
-    VALUES ('4', '6');
+    VALUES (
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '2' AND "role_type" = 'OBSERVER'),
+        (SELECT "id" FROM public.trial_role WHERE "trial_id" = '2' AND "name" = 'ofiara')
+    );
 
 
 INSERT INTO public.user_role_session ("trial_user_id", "trial_role_id", "trial_session_id")
