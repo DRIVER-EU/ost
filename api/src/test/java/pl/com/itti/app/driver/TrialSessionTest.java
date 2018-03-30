@@ -23,7 +23,7 @@ public class TrialSessionTest {
     private TrialSessionRepository trialSessionRepository;
 
     @Test
-    public void findOneByTest() {
+    public void findOneById() {
 
         // when
         TrialSession trialSession = trialSessionRepository.findOne(1L);
