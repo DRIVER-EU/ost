@@ -2,7 +2,7 @@ package pl.com.itti.app.driver.repository;
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.UserRoleSession;
 
-public interface TrialSessionRepository extends PagingAndSortingRepository<TrialSession, Long>, JpaSpecificationExecutor {
+public interface UserRoleSessionRepository extends PagingAndSortingRepository<UserRoleSession, Long>, JpaSpecificationExecutor {
 }

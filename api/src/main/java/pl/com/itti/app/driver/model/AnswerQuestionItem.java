@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class AnswerQuestionItem {
 
     @EmbeddedId
+    @Builder.Default
     private AnswerQuestionItemId id = new AnswerQuestionItemId();
 
     @ManyToOne
