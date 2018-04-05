@@ -15,7 +15,6 @@ import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.driver.repository.*;
 
 @RunWith(SpringRunner.class)
 @BootstrapWith(SpringBootTestContextBootstrapper.class)

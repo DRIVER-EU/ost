@@ -15,8 +15,6 @@ import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.driver.repository.EventRepository;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
 
 import java.time.LocalDateTime;
 

@@ -16,9 +16,6 @@ import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.driver.repository.TrialSessionManagerRepository;
-import pl.com.itti.app.driver.repository.TrialUserRepository;
-import pl.com.itti.app.driver.repository.UserRoleSessionRepository;
 
 @RunWith(SpringRunner.class)
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
@@ -95,6 +92,5 @@ public class TrialUserTests {
 
         // then
         Assert.assertEquals(Languages.POLISH, trialUserRepository.findOne(2L).getUserLanguage());
-
     }
 }

@@ -15,8 +15,6 @@ import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
-import pl.com.itti.app.driver.repository.ObservationTypeRepository;
-import pl.com.itti.app.driver.repository.QuestionRepository;
 
 @RunWith(SpringRunner.class)
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
