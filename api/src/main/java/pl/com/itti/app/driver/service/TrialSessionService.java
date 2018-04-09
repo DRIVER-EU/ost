@@ -19,7 +19,6 @@ import pl.com.itti.app.driver.util.RepositoryUtils;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Service
 @Transactional(readOnly = true)
 public class TrialSessionService {
