@@ -11,14 +11,14 @@ import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 
 @RestController
-@RequestMapping("/api/anonymous/trialsession")
+@RequestMapping("/api/trialsession")
 public class TrialSessionController {
 
     @Autowired
     private TrialSessionService trialSessionService;
 
     @GetMapping("/active")
-    private Page<TrialSessionDTO.FormItem> findActive(Pageable pageable) {
+    private Page<TrialSessionDTO.MinimalItem> findActive(Pageable pageable) {
         return trialSessionService.findByStatus(SessionStatus.STARTED, pageable);
     }
 }

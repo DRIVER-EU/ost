@@ -3,6 +3,7 @@ package pl.com.itti.app.driver.service;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,19 +40,17 @@ public class TrialSessionService {
     @Autowired
     private AuthUserRepository authUserRepository;
 
-    public Page<TrialSessionDTO.FormItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
-        List<TrialSession> activeTrialSessionList = trialSessionRepository.findByStatus(sessionStatus, pageable);
-        List<TrialSessionDTO.FormItem> activeTrialSessionDtoList = activeTrialSessionList.stream()
-                    .map(TrialSessionDTO.FormItem::new)
-                    .collect(Collectors.toList());
+    public Page<TrialSessionDTO.MinimalItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
+        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
+                .orElseThrow(() -> new IllegalArgumentException());
 
-        AuthUser authUser = authUserRepository.findOne(1L);
         Set<Specification<UserRoleSession>> conditions = new HashSet<>();
         conditions.add(UserRoleSessionSpecification.trailSessionStatus(sessionStatus));
+        conditions.add(UserRoleSessionSpecification.authUser(authUser));
 
         Page<UserRoleSession> userRoleSessions = userRoleSessionRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
 
-        return new PageImpl<>(activeTrialSessionDtoList, pageable, activeTrialSessionDtoList.size());
+        return userRoleSessions.map(source -> new TrialSessionDTO.MinimalItem(source.getTrialSession()));
     }
 
 
