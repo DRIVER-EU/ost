@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.repository;
 
 import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.model.AuthUser_;
 import org.springframework.data.jpa.domain.Specification;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.SessionStatus;

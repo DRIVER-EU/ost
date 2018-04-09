@@ -3,17 +3,12 @@ package pl.com.itti.app.driver.service;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.dto.TrialDTO;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
-import pl.com.itti.app.driver.model.Trial;
-import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
@@ -21,11 +16,9 @@ import pl.com.itti.app.driver.repository.UserRoleSessionRepository;
 import pl.com.itti.app.driver.repository.UserRoleSessionSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
-import java.security.Principal;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Service
 @Transactional(readOnly = true)
@@ -42,7 +35,7 @@ public class TrialSessionService {
 
     public Page<TrialSessionDTO.ListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() ->new IllegalArgumentException("Session for current user is closed"));
 
         Set<Specification<UserRoleSession>> conditions = new HashSet<>();
         conditions.add(UserRoleSessionSpecification.trailSessionStatus(sessionStatus));
