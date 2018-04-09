@@ -56,7 +56,7 @@ public class TrialSessionTests {
 
     @Test
     public void create() {
-        // when
+        // given
         TrialSession trialSession = TrialSession.builder()
                 .trial(trialRepository.findOne(1L))
                 .startTime(LocalDateTime.now())
@@ -64,11 +64,32 @@ public class TrialSessionTests {
                 .pausedTime(LocalDateTime.now())
                 .build();
 
-        trialSessionRepository.save(trialSession);
+        // when
+        TrialSession savedTrialSession = trialSessionRepository.save(trialSession);
         Page<TrialSession> trialSessionPage = trialSessionRepository.findAll(new PageRequest(1, 10));
 
         // then
         Assert.assertEquals(5L, trialSessionPage.getTotalElements());
+        Assert.assertEquals(trialSession.getTrial(), savedTrialSession.getTrial());
+        Assert.assertEquals(trialSession.getStartTime(), savedTrialSession.getStartTime());
+        Assert.assertEquals(trialSession.getStatus(), savedTrialSession.getStatus());
+        Assert.assertEquals(trialSession.getPausedTime(), savedTrialSession.getPausedTime());
+    }
+
+    @Test
+    public void update() {
+        // given
+        TrialSession trialSession = trialSessionRepository.findOne(1L);
+        trialSession.setStatus(SessionStatus.ENDED);
+
+        // when
+        TrialSession savedTrialSession = trialSessionRepository.save(trialSession);
+
+        // then
+        Assert.assertEquals(SessionStatus.ENDED, savedTrialSession.getStatus());
+        Assert.assertEquals(trialSession.getTrial(), savedTrialSession.getTrial());
+        Assert.assertEquals(trialSession.getStartTime(), savedTrialSession.getStartTime());
+        Assert.assertEquals(trialSession.getPausedTime(), savedTrialSession.getPausedTime());
     }
 
     @Test
@@ -80,17 +101,5 @@ public class TrialSessionTests {
 
         // then
         Assert.assertEquals(3L, trialSessionPage.getTotalElements());
-
-    }
-
-    @Test
-    public void update() {
-        // when
-        TrialSession trialSession = trialSessionRepository.findOne(1L);
-        trialSession.setStatus(SessionStatus.ENDED);
-        trialSessionRepository.save(trialSession);
-
-        // then
-        Assert.assertEquals(SessionStatus.ENDED, trialSessionRepository.findOne(1L).getStatus());
     }
 }

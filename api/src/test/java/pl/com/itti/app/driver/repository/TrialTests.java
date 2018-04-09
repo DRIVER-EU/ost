@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.repository;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,18 +73,37 @@ public class TrialTests {
 
     @Test
     public void create() {
-        // when
+        // given
         Trial trial = Trial.builder()
                 .languageVersion(Languages.ENGLISH)
                 .name("test_name")
                 .description("test_description")
                 .build();
 
-        trialRepository.save(trial);
+        // when
+        Trial savedTrial = trialRepository.save(trial);
         Page<Trial> trialPage = trialRepository.findAll(new PageRequest(1, 10));
 
         // then
         Assert.assertEquals(3L, trialPage.getTotalElements());
+        Assert.assertEquals(trial.getLanguageVersion(), savedTrial.getLanguageVersion());
+        Assert.assertEquals(trial.getName(), savedTrial.getName());
+        Assert.assertEquals(trial.getDescription(), savedTrial.getDescription());
+    }
+
+    @Test
+    public void update() {
+        // given
+        Trial trial = trialRepository.findOne(1L);
+        trial.setLanguageVersion(Languages.POLISH);
+
+        // when
+        Trial savedTrial = trialRepository.save(trial);
+
+        // then
+        Assert.assertEquals(Languages.POLISH, trialRepository.findOne(1L).getLanguageVersion());
+        Assert.assertEquals(trial.getName(), savedTrial.getName());
+        Assert.assertEquals(trial.getDescription(), savedTrial.getDescription());
     }
 
     @Test
@@ -106,16 +126,5 @@ public class TrialTests {
 
         // then
         Assert.assertEquals(1L, trialPage.getTotalElements());
-    }
-
-    @Test
-    public void update() {
-        // when
-        Trial trial = trialRepository.findOne(1L);
-        trial.setLanguageVersion(Languages.POLISH);
-        trialRepository.save(trial);
-
-        // then
-        Assert.assertEquals(Languages.POLISH, trialRepository.findOne(1L).getLanguageVersion());
     }
 }

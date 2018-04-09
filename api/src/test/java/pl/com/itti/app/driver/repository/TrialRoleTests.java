@@ -54,17 +54,37 @@ public class TrialRoleTests {
 
     @Test
     public void create() {
-        // when
+        // given
         TrialRole trialRole = TrialRole.builder()
                 .roleType(RoleType.OBSERVER)
                 .trial(trialRepository.findOne(1L))
                 .name("name")
                 .build();
-        trialRoleRepository.save(trialRole);
+
+        // when
+        TrialRole savedTrialRole = trialRoleRepository.save(trialRole);
         Page<TrialRole> trialRolePage = trialRoleRepository.findAll(new PageRequest(1,10));
 
         // then
         Assert.assertEquals(7L, trialRolePage.getTotalElements());
+        Assert.assertEquals(trialRole.getRoleType(), savedTrialRole.getRoleType());
+        Assert.assertEquals(trialRole.getTrial(), savedTrialRole.getTrial());
+        Assert.assertEquals(trialRole.getName(), savedTrialRole.getName());
+    }
+
+    @Test
+    public void update() {
+        // given
+        TrialRole trialRole = trialRoleRepository.findOne(1L);
+        trialRole.setRoleType(RoleType.PARTICIPANT);
+
+        // when
+        TrialRole savedTrialRole = trialRoleRepository.save(trialRole);
+
+        // then
+        Assert.assertEquals(RoleType.PARTICIPANT, savedTrialRole.getRoleType());
+        Assert.assertEquals(trialRole.getName(), savedTrialRole.getName());
+        Assert.assertEquals(trialRole.getTrial(), savedTrialRole.getTrial());
     }
 
     @Test
@@ -76,16 +96,5 @@ public class TrialRoleTests {
 
         // then
         Assert.assertEquals(5L, trialRolePage.getTotalElements());
-    }
-
-    @Test
-    public void update() {
-        // when
-        TrialRole trialRole = trialRoleRepository.findOne(1L);
-        trialRole.setRoleType(RoleType.PARTICIPANT);
-        trialRoleRepository.save(trialRole);
-
-        // then
-        Assert.assertEquals(RoleType.PARTICIPANT, trialRoleRepository.findOne(1L).getRoleType());
     }
 }
