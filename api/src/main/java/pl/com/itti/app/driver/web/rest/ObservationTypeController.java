@@ -19,7 +19,7 @@ public class ObservationTypeController {
     private ObservationTypeService observationTypeService;
 
     @GetMapping
-    public List<ObservationTypeDTO.Item> findAll(@RequestParam("trialSessionId") Long trialSessionId) {
-        return DTO.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.Item.class);
+    public List<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialSessionId") Long trialSessionId) {
+        return DTO.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.ListItem.class);
     }
 }
