@@ -60,7 +60,7 @@ public class TrialSessionTests {
         TrialSession trialSession = TrialSession.builder()
                 .trial(trialRepository.findOne(1L))
                 .startTime(LocalDateTime.now())
-                .status(SessionStatus.STARTED)
+                .status(SessionStatus.ACTIVE)
                 .pausedTime(LocalDateTime.now())
                 .build();
 
