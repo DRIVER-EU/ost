@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class ObservationTypeTrialRole {
 
     @EmbeddedId
+    @Builder.Default
     private ObservationTypeTrialRoleId id = new ObservationTypeTrialRoleId();
 
     @ManyToOne

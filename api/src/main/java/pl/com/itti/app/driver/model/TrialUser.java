@@ -34,6 +34,9 @@ public class TrialUser extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private Languages userLanguage;
 
+    @Column(nullable = false)
+    private Boolean isTrialCreator;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialUser")
     @Builder.Default
     private List<Answer> answers = new ArrayList<>();

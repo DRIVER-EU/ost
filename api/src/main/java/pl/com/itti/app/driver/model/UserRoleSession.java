@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class UserRoleSession {
 
     @EmbeddedId
+    @Builder.Default
     private UserRoleSessionId id = new UserRoleSessionId();
 
     @ManyToOne

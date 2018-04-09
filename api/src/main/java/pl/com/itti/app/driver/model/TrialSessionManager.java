@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class TrialSessionManager {
 
     @EmbeddedId
+    @Builder.Default
     private TrialSessionManagerId id = new TrialSessionManagerId();
 
     @ManyToOne
