@@ -18,7 +18,7 @@ public class TrialSessionController {
     private TrialSessionService trialSessionService;
 
     @GetMapping("/active")
-    private Page<TrialSessionDTO.MinimalItem> findActive(Pageable pageable) {
+    private Page<TrialSessionDTO.ListItem> findActive(Pageable pageable) {
         return trialSessionService.findByStatus(SessionStatus.STARTED, pageable);
     }
 }

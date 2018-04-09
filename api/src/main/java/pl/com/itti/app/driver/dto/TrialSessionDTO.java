@@ -21,11 +21,11 @@ public class TrialSessionDTO {
         }
     }
 
-    public static class FormItem extends MinimalItem {
+    public static class ListItem extends MinimalItem {
         public String trialName;
         public String trialDescription;
 
-        public FormItem(TrialSession trialSession) {
+        public ListItem(TrialSession trialSession) {
             super(trialSession);
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();

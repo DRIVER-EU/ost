@@ -1,592 +1,546 @@
 {
-	"id": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-	"name": "DRIVER",
-	"description": "",
-	"order": [],
-	"folders": [
-		{
-			"id": "abf025cd-777a-1624-814d-b88c0018d082",
-			"name": "/roles",
-			"description": "",
-			"order": [
-				"224ff1bb-a3ca-8cf5-083f-ad3a35dbb91b"
-			],
-			"owner": 0,
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"folders_order": [],
-			"folder": "93159e36-62a1-9b22-066a-f9480e2b47bf"
-		},
-		{
-			"id": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"name": "/users",
-			"description": "",
-			"order": [
-				"f9e9c497-bd2c-4824-3a81-cfcfe8caed1e",
-				"80d77d55-5a70-33b0-d7d0-ebb96309e662",
-				"e5eb5460-8888-18ba-4543-f2cdeee1ec2f",
-				"a9c69a99-5b22-7715-47e4-a8e3ed0bd926",
-				"5dae2497-29f5-e7a3-6bc5-3755f84aa2f3",
-				"6394180a-1ccd-fbfd-712f-7c48ff94c75e",
-				"f56981f4-603c-15cc-6599-ee835101ce2f"
-			],
-			"owner": 0,
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"folders_order": [],
-			"folder": "93159e36-62a1-9b22-066a-f9480e2b47bf"
-		},
-		{
-			"id": "24457bd2-21b3-51b1-e12b-8a95c73546aa",
-			"name": "/users/positions",
-			"description": "",
-			"order": [
-				"57b3aa9c-e988-1307-5c5c-e4d4a234c483"
-			],
-			"owner": 0,
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"folders_order": [],
-			"folder": "93159e36-62a1-9b22-066a-f9480e2b47bf"
-		},
+	"info": {
+		"_postman_id": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
+		"name": "DRIVER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
 		{
 			"name": "auth",
 			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"order": [
-				"400e84fa-2980-fff7-9bbd-a99ae8ef6203",
-				"062a3fe4-a505-dba1-6111-8784e811d7a4"
-			],
-			"owner": 0,
-			"folders_order": [
-				"abf025cd-777a-1624-814d-b88c0018d082",
-				"4e790a83-5dab-d954-3878-d5e8f12117bf",
-				"24457bd2-21b3-51b1-e12b-8a95c73546aa"
-			],
-			"auth": null,
-			"id": "93159e36-62a1-9b22-066a-f9480e2b47bf"
-		}
-	],
-	"folders_order": [
-		"93159e36-62a1-9b22-066a-f9480e2b47bf"
-	],
-	"timestamp": 1521110976571,
-	"owner": 0,
-	"public": false,
-	"events": [],
-	"variables": [],
-	"auth": null,
-	"requests": [
-		{
-			"id": "062a3fe4-a505-dba1-6111-8784e811d7a4",
-			"name": "/auth/logout",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"method": "GET",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}",
-			"dataMode": "raw",
-			"data": [],
-			"rawModeData": "",
-			"url": "http://{{IP-Address}}/api/auth/logout",
-			"responses": [],
-			"queryParams": [],
-			"headerData": [
+			"item": [
 				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": ""
-				}
-			],
-			"collection_id": "e76c5357-0570-e97a-7c52-78cc8a015b6a",
-			"folder": "93159e36-62a1-9b22-066a-f9480e2b47bf",
-			"pathVariables": {}
-		},
-		{
-			"id": "224ff1bb-a3ca-8cf5-083f-ad3a35dbb91b",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
+					"name": "/roles",
 					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/roles",
-			"folder": "abf025cd-777a-1624-814d-b88c0018d082",
-			"queryParams": [],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"time": 1522238570561,
-			"name": "/roles",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			}
-		},
-		{
-			"id": "400e84fa-2980-fff7-9bbd-a99ae8ef6203",
-			"headers": "Authorization: Basic YWRtaW46YWRtaW4=\n",
-			"headerData": [
-				{
-					"key": "Authorization",
-					"value": "Basic YWRtaW46YWRtaW4=",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/login",
-			"folder": "93159e36-62a1-9b22-066a-f9480e2b47bf",
-			"queryParams": [],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"time": 1522238430284,
-			"name": "/auth/login",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin",
-				"saveToRequest": true
-			}
-		},
-		{
-			"id": "57b3aa9c-e988-1307-5c5c-e4d4a234c483",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/users/positions",
-			"folder": "24457bd2-21b3-51b1-e12b-8a95c73546aa",
-			"queryParams": [],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"time": 1522238435090,
-			"name": "/users/positions",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			}
-		},
-		{
-			"id": "5dae2497-29f5-e7a3-6bc5-3755f84aa2f3",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
+					"item": [
+						{
+							"name": "/roles",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/roles",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				},
 				{
-					"key": "Content-Type",
-					"value": "application/json",
+					"name": "/users",
 					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/users/1/change-password",
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"queryParams": [],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "PUT",
-			"data": [],
-			"dataMode": "raw",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"time": 1522239056715,
-			"name": "/users/{id}/change-password",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			},
-			"rawModeData": "{\n\t\"password\": \"admin\"\n}"
-		},
-		{
-			"id": "6394180a-1ccd-fbfd-712f-7c48ff94c75e",
-			"name": "/users/{id}",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"method": "DELETE",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}",
-			"data": [],
-			"rawModeData": "",
-			"url": "http://{{IP-Address}}/api/auth/users/1",
-			"responses": [],
-			"queryParams": [],
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": ""
-				}
-			],
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"collection_id": "e76c5357-0570-e97a-7c52-78cc8a015b6a",
-			"pathVariables": {}
-		},
-		{
-			"id": "80d77d55-5a70-33b0-d7d0-ebb96309e662",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
+					"item": [
+						{
+							"name": "/users",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "sort",
+											"value": "login,asc"
+										},
+										{
+											"key": "sort",
+											"value": "lastName,desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"login\": \"test\",\n\t\"password\": \"null\",\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}"
+								},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/{id}",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users/1",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/{id}",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}"
+								},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users/1",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/{id}/change-password",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"password\": \"admin\"\n}"
+								},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users/1/change-password",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users",
+										"1",
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/{id}",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users/1",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/users/validate-login",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users/validate-login?login=admin",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users",
+										"validate-login"
+									],
+									"query": [
+										{
+											"key": "login",
+											"value": "admin"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				},
 				{
-					"key": "Content-Type",
-					"value": "application/json",
+					"name": "/users/positions",
 					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/users",
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"queryParams": [],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "POST",
-			"data": [],
-			"dataMode": "raw",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"time": 1522239160345,
-			"name": "/users",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			},
-			"rawModeData": "{\n\t\"login\": \"test\",\n\t\"password\": \"null\",\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}"
-		},
-		{
-			"id": "a9c69a99-5b22-7715-47e4-a8e3ed0bd926",
-			"name": "/users/{id}",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"method": "PUT",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json",
-			"dataMode": "raw",
-			"data": [],
-			"rawModeData": "{\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}",
-			"url": "http://{{IP-Address}}/api/auth/users/1",
-			"responses": [],
-			"queryParams": [],
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": ""
+					"item": [
+						{
+							"name": "/users/positions",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "admin",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Auth-Token",
+										"value": "{{X-Auth-Token}}"
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "http://{{IP-Address}}/api/auth/users/positions",
+									"protocol": "http",
+									"host": [
+										"{{IP-Address}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"users",
+										"positions"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				},
 				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": ""
-				}
-			],
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"collection_id": "e76c5357-0570-e97a-7c52-78cc8a015b6a",
-			"pathVariables": {}
-		},
-		{
-			"id": "e5eb5460-8888-18ba-4543-f2cdeee1ec2f",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/users/1",
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"queryParams": [],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
+					"name": "/auth/login",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic YWRtaW46YWRtaW4="
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
 					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"time": 1522238593370,
-			"name": "/users/{id}",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			}
-		},
-		{
-			"id": "f56981f4-603c-15cc-6599-ee835101ce2f",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/users/validate-login?login=admin",
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"queryParams": [
-				{
-					"key": "login",
-					"value": "admin",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"time": 1522238579531,
-			"name": "/users/validate-login",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			}
-		},
-		{
-			"id": "f9e9c497-bd2c-4824-3a81-cfcfe8caed1e",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"url": "http://{{IP-Address}}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc",
-			"folder": "4e790a83-5dab-d954-3878-d5e8f12117bf",
-			"queryParams": [
-				{
-					"key": "page",
-					"value": "0",
-					"equals": true,
-					"description": "",
-					"enabled": true
+					"response": []
 				},
 				{
-					"key": "size",
-					"value": "10",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "sort",
-					"value": "login,asc",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "sort",
-					"value": "lastName,desc",
-					"equals": true,
-					"description": "",
-					"enabled": true
+					"name": "/auth/logout",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{X-Auth-Token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/auth/logout",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"events": [],
-			"pathVariables": {},
-			"pathVariableData": [],
-			"method": "GET",
-			"data": [],
-			"dataMode": "params",
-			"auth": {
-				"type": "basic",
-				"basic": [
+			]
+		},
+		{
+			"name": "/trialsession/active",
+			"request": {
+				"method": "GET",
+				"header": [
 					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
+						"key": "X-Auth-Token",
+						"value": "{{X-Auth-Token}}"
 					},
 					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "",
+						"value": "",
+						"disabled": true
 					}
-				]
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+				},
+				"url": {
+					"raw": "http://{{IP-Address}}/api/anonymous/trialsession/active",
+					"protocol": "http",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"anonymous",
+						"trialsession",
+						"active"
+					]
+				}
 			},
-			"time": 1522238445159,
-			"name": "/users",
-			"description": "",
-			"collectionId": "370c175a-a7e0-aa71-c4d4-99fad601b18f",
-			"responses": [],
-			"currentHelper": "basicAuth",
-			"helperAttributes": {
-				"id": "basic",
-				"username": "admin",
-				"password": "admin"
-			}
+			"response": []
 		}
 	]
 }

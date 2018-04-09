@@ -40,37 +40,15 @@ public class TrialSessionService {
     @Autowired
     private AuthUserRepository authUserRepository;
 
-    public Page<TrialSessionDTO.MinimalItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
+    public Page<TrialSessionDTO.ListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(IllegalArgumentException::new);
 
         Set<Specification<UserRoleSession>> conditions = new HashSet<>();
         conditions.add(UserRoleSessionSpecification.trailSessionStatus(sessionStatus));
         conditions.add(UserRoleSessionSpecification.authUser(authUser));
 
         Page<UserRoleSession> userRoleSessions = userRoleSessionRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
-
-        return userRoleSessions.map(source -> new TrialSessionDTO.MinimalItem(source.getTrialSession()));
+        return userRoleSessions.map(source -> new TrialSessionDTO.ListItem(source.getTrialSession()));
     }
-
-
-//    public Page<TrialDTO.MinimalItem> findTrialWithActiveSessionByTrialSessionManagerId(long trialSessionManagerId, Pageable pageable) {
-//            List<TrialSession> trialSessionList = trialSessionRepository.findByTrialSessionManagerId(trialSessionManagerId);
-//
-//            List<TrialSession> activeTrialSessionList = trialSessionList.stream()
-//                    .filter(t -> SessionStatus.STARTED.equals(t.getStatus()))
-//                    .collect(Collectors.toList());
-//
-//            List<Trial> trialList = activeTrialSessionList.stream()
-//                    .map(TrialSession::getTrial)
-//                    .collect(Collectors.toList());
-//
-//            List<TrialDTO.MinimalItem> trialDtoList = trialList.stream()
-//                    .map(TrialDTO.MinimalItem::new)
-//                    .collect(Collectors.toList());
-//
-//        return new PageImpl<>(trialDtoList, pageable, trialDtoList.size());
-//    }
-
-
 }
