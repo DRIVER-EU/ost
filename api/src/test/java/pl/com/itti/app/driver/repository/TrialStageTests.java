@@ -67,17 +67,37 @@ public class TrialStageTests {
 
     @Test
     public void create() {
-        // when
+        // given
         TrialStage trialStage = TrialStage.builder()
                 .simulationTime(LocalDateTime.now())
                 .name("name")
                 .trial(trialRepository.findOne(1L))
                 .build();
-        trialStageRepository.save(trialStage);
+
+        // when
+        TrialStage savedTrialStage = trialStageRepository.save(trialStage);
         Page<TrialStage> trialStagePage = trialStageRepository.findAll(new PageRequest(1,10));
 
         // then
         Assert.assertEquals(3L, trialStagePage.getTotalElements());
+        Assert.assertEquals(trialStage.getSimulationTime(), savedTrialStage.getSimulationTime());
+        Assert.assertEquals(trialStage.getName(), savedTrialStage.getName());
+        Assert.assertEquals(trialStage.getTrial(), savedTrialStage.getTrial());
+    }
+
+    @Test
+    public void update() {
+        // given
+        TrialStage trialStage = trialStageRepository.findOne(1L);
+        trialStage.setName("name");
+
+        // when
+        TrialStage savedTrialStage = trialStageRepository.save(trialStage);
+
+        // then
+        Assert.assertEquals("name", trialStageRepository.findOne(1L).getName());
+        Assert.assertEquals(trialStage.getSimulationTime(), savedTrialStage.getSimulationTime());
+        Assert.assertEquals(trialStage.getTrial(), savedTrialStage.getTrial());
     }
 
     @Test
@@ -94,16 +114,5 @@ public class TrialStageTests {
 
         // then
         Assert.assertEquals(1L, trialStagePage.getTotalElements());
-    }
-
-    @Test
-    public void update() {
-        // when
-        TrialStage trialStage = trialStageRepository.findOne(1L);
-        trialStage.setName("name");
-        trialStageRepository.save(trialStage);
-
-        // then
-        Assert.assertEquals("name", trialStageRepository.findOne(1L).getName());
     }
 }

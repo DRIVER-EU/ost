@@ -51,18 +51,40 @@ public class QuestionTests {
 
     @Test
     public void create() {
-        // when
+        // given
         Question question = Question.builder()
                 .answerType(AnswerType.CHECKBOX)
                 .name("name")
                 .description("description")
                 .observationType(observationTypeRepository.findOne(1L))
                 .build();
-        questionRepository.save(question);
+
+        // when
+        Question savedQuestion = questionRepository.save(question);
         Page<Question> questionPage = questionRepository.findAll(new PageRequest(1,10));
 
         // then
         Assert.assertEquals(8L, questionPage.getTotalElements());
+        Assert.assertEquals(question.getAnswerType(), savedQuestion.getAnswerType());
+        Assert.assertEquals(question.getName(), savedQuestion.getName());
+        Assert.assertEquals(question.getDescription(), savedQuestion.getDescription());
+        Assert.assertEquals(question.getObservationType(), savedQuestion.getObservationType());
+    }
+
+    @Test
+    public void update() {
+        // given
+        Question question = questionRepository.findOne(1L);
+        question.setAnswerType(AnswerType.CHECKBOX);
+
+        // when
+        Question savedQuestion = questionRepository.save(question);
+
+        // then
+        Assert.assertEquals(AnswerType.CHECKBOX, savedQuestion.getAnswerType());
+        Assert.assertEquals(question.getName(), savedQuestion.getName());
+        Assert.assertEquals(question.getDescription(), savedQuestion.getDescription());
+        Assert.assertEquals(question.getObservationType(), savedQuestion.getObservationType());
     }
 
     @Test
@@ -73,16 +95,5 @@ public class QuestionTests {
 
         // then
         Assert.assertEquals(6L, questionPage.getTotalElements());
-    }
-
-    @Test
-    public void update() {
-        // when
-        Question question = questionRepository.findOne(1L);
-        question.setAnswerType(AnswerType.CHECKBOX);
-        questionRepository.save(question);
-
-        // then
-        Assert.assertEquals(AnswerType.CHECKBOX, questionRepository.findOne(1L).getAnswerType());
     }
 }

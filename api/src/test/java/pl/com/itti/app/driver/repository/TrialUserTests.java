@@ -58,17 +58,37 @@ public class TrialUserTests {
 
     @Test
     public void create() {
-        // when
+        // given
         TrialUser trialUser = TrialUser.builder()
                 .authUser(authUserRepository.findOne(1L))
                 .userLanguage(Languages.POLISH)
                 .isTrialCreator(Boolean.FALSE)
                 .build();
-        trialUserRepository.save(trialUser);
+
+        // when
+        TrialUser savedTrialUser = trialUserRepository.save(trialUser);
         Page<TrialUser> trialUserPage = trialUserRepository.findAll(new PageRequest(1,10));
 
         // then
         Assert.assertEquals(7L, trialUserPage.getTotalElements());
+        Assert.assertEquals(trialUser.getAuthUser(), savedTrialUser.getAuthUser());
+        Assert.assertEquals(trialUser.getUserLanguage(), savedTrialUser.getUserLanguage());
+        Assert.assertEquals(trialUser.getIsTrialCreator(), savedTrialUser.getIsTrialCreator());
+    }
+
+    @Test
+    public void update() {
+        // given
+        TrialUser trialUser = trialUserRepository.findOne(2L);
+        trialUser.setUserLanguage(Languages.POLISH);
+
+        // when
+        TrialUser savedTrialUser = trialUserRepository.save(trialUser);
+
+        // then
+        Assert.assertEquals(Languages.POLISH, savedTrialUser.getUserLanguage());
+        Assert.assertEquals(trialUser.getAuthUser().getLogin(), savedTrialUser.getAuthUser().getLogin());
+        Assert.assertEquals(trialUser.getIsTrialCreator(), savedTrialUser.getIsTrialCreator());
     }
 
     @Test
@@ -81,16 +101,5 @@ public class TrialUserTests {
 
         // then
         Assert.assertEquals(5L, trialUserPage.getTotalElements());
-    }
-
-    @Test
-    public void update() {
-        // when
-        TrialUser trialUser = trialUserRepository.findOne(2L);
-        trialUser.setUserLanguage(Languages.POLISH);
-        trialUserRepository.save(trialUser);
-
-        // then
-        Assert.assertEquals(Languages.POLISH, trialUserRepository.findOne(2L).getUserLanguage());
     }
 }

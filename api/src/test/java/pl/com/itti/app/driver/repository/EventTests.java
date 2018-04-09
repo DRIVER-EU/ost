@@ -53,7 +53,7 @@ public class EventTests {
 
     @Test
     public void create() {
-        // when
+        // given
         Event event = Event.builder()
                 .trialSession(trialSessionRepository.findOne(1L))
                 .idEvent(123)
@@ -62,11 +62,37 @@ public class EventTests {
                 .name("name")
                 .description("description")
                 .build();
-        eventRepository.save(event);
+
+        // when
+        Event savedEvent = eventRepository.save(event);
         Page<Event> eventPage = eventRepository.findAll(new PageRequest(1, 10));
 
         // then
         Assert.assertEquals(7L, eventPage.getTotalElements());
+        Assert.assertEquals(event.getTrialSession(), savedEvent.getTrialSession());
+        Assert.assertEquals(event.getIdEvent(), savedEvent.getIdEvent());
+        Assert.assertEquals(event.getEventTime(), savedEvent.getEventTime());
+        Assert.assertEquals(event.getLanguageVersion(), savedEvent.getLanguageVersion());
+        Assert.assertEquals(event.getName(), savedEvent.getName());
+        Assert.assertEquals(event.getDescription(), savedEvent.getDescription());
+    }
+
+    @Test
+    public void update() {
+        // given
+        Event event = eventRepository.findOne(1L);
+        event.setLanguageVersion(Languages.POLISH);
+
+        // when
+        Event savedEvent = eventRepository.save(event);
+
+        // then
+        Assert.assertEquals(Languages.POLISH, savedEvent.getLanguageVersion());
+        Assert.assertEquals(event.getTrialSession(), savedEvent.getTrialSession());
+        Assert.assertEquals(event.getIdEvent(), savedEvent.getIdEvent());
+        Assert.assertEquals(event.getEventTime(), savedEvent.getEventTime());
+        Assert.assertEquals(event.getName(), savedEvent.getName());
+        Assert.assertEquals(event.getDescription(), savedEvent.getDescription());
     }
 
     @Test
@@ -77,16 +103,5 @@ public class EventTests {
 
         // then
         Assert.assertEquals(5L, eventPage.getTotalElements());
-    }
-
-    @Test
-    public void update() {
-        // when
-        Event event = eventRepository.findOne(1L);
-        event.setLanguageVersion(Languages.POLISH);
-        eventRepository.save(event);
-
-        // then
-        Assert.assertEquals(Languages.POLISH, eventRepository.findOne(1L).getLanguageVersion());
     }
 }
