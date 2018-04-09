@@ -68,13 +68,13 @@ INSERT INTO public.trial_stage ("id", "trial_id", "name", "simulation_time")
 
 
 INSERT INTO public.trial_session ("id", "trial_id", "start_time", "status", "paused_time", "last_trial_stage_id")
-    VALUES (nextval('public.trial_session_seq'), '1', '2018-01-01 12:23', 'STARTED', '2018-01-01 13:45', '1');
+    VALUES (nextval('public.trial_session_seq'), '1', '2018-01-01 12:23', 'ACTIVE', '2018-01-01 13:45', '1');
 INSERT INTO public.trial_session ("id", "trial_id", "start_time", "status", "paused_time", "last_trial_stage_id")
-    VALUES (nextval('public.trial_session_seq'), '1', '2018-01-01 14:22', 'STARTED', '2018-01-01 15:00', '1');
+    VALUES (nextval('public.trial_session_seq'), '1', '2018-01-01 14:22', 'ACTIVE', '2018-01-01 15:00', '1');
 INSERT INTO public.trial_session ("id", "trial_id", "start_time", "status", "paused_time", "last_trial_stage_id")
-    VALUES (nextval('public.trial_session_seq'), '2', '2018-01-01 11:08', 'STARTED', '2018-01-01 11:30', '2');
+    VALUES (nextval('public.trial_session_seq'), '2', '2018-01-01 11:08', 'ACTIVE', '2018-01-01 11:30', '2');
 INSERT INTO public.trial_session ("id", "trial_id", "start_time", "status", "paused_time", "last_trial_stage_id")
-    VALUES (nextval('public.trial_session_seq'), '2', '2018-01-01 12:40', 'STARTED', '2018-01-01 13:15', '2');
+    VALUES (nextval('public.trial_session_seq'), '2', '2018-01-01 12:40', 'ACTIVE', '2018-01-01 13:15', '2');
 
 
 INSERT INTO public.event ("id", "trial_session_id", "description", "id_event", "language_version", "name", "event_time")
