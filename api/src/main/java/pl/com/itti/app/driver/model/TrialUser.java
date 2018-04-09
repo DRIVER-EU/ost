@@ -27,7 +27,7 @@ import java.util.List;
 )
 public class TrialUser extends PersistentObject implements Serializable {
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.LAZY)
     private AuthUser authUser;
 
     @Enumerated(EnumType.STRING)
