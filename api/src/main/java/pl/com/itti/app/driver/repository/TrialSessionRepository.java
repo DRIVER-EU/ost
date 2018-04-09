@@ -5,4 +5,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import pl.com.itti.app.driver.model.TrialSession;
 
 public interface TrialSessionRepository extends PagingAndSortingRepository<TrialSession, Long>, JpaSpecificationExecutor {
-}
+ }
