@@ -60,8 +60,9 @@ class AdminTrials extends Component {
     const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
       time: t,
-      userValue: 0,
-      roleValue: 0,
+      userValue: -1,
+      roleValue: -1,
+      title: '',
       messageValue: '',
       whatValue: '',
       whoValue: '',
@@ -110,9 +111,9 @@ class AdminTrials extends Component {
         }
       }
     }
-
     return false
   }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
@@ -195,6 +196,7 @@ class AdminTrials extends Component {
       return 'Test User 2'
     }
   }
+
   getSelectedRole () {
     if (this.state.roleValue === 0) {
       return 'All'
@@ -204,12 +206,17 @@ class AdminTrials extends Component {
   }
 
   sendMessage () {
-    this.props.sendMessage({
-      selectUser: this.getSelectedUser(),
-      role: this.getSelectedRole(),
-      message: this.state.messageValue,
-      time: moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
-    })
+    let send = {}
+    if (this.state.userValue !== -1) {
+      send.selectUser = this.getSelectedUser()
+      send.role = null
+    } else {
+      send.selectUser = null
+      send.role = this.getSelectedRole()
+    }
+    send.message = this.state.messageValue
+    send.time = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+    this.props.sendMessage(send)
   }
 
   getData () {
@@ -436,7 +443,12 @@ class AdminTrials extends Component {
                           value={this.state.userValue}
                           underlineStyle={{ marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
+                          disabled={this.state.roleValue !== -1}
                           onChange={this.handleChangeDropDown.bind(this, 'userValue')}>
+                          <MenuItem
+                            value={-1}
+                            style={{ color: 'grey' }}
+                            primaryText={' '} />
                           {userList.map((index) => (
                             <MenuItem
                               key={index.id}
@@ -453,7 +465,12 @@ class AdminTrials extends Component {
                           value={this.state.roleValue}
                           underlineStyle={{ marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
+                          disabled={this.state.userValue !== -1}
                           onChange={this.handleChangeDropDown.bind(this, 'roleValue')}>
+                          <MenuItem
+                            value={-1}
+                            style={{ color: 'grey' }}
+                            primaryText={' '} />
                           {roleList.map((index) => (
                             <MenuItem
                               key={index.id}
@@ -462,6 +479,15 @@ class AdminTrials extends Component {
                               primaryText={index.name} />
                 ))}
                         </DropDownMenu>
+                      </div>
+                      <div style={{ marginRight: '20px' }}>
+                        <div className='dropdown-title'>Title</div>
+                        <TextField
+                          style={{ width: '250px' }}
+                          value={this.state.title}
+                          hintText='enter the title'
+                          onChange={this.handleChangeTextField.bind(this, 'title')}
+                  />
                       </div>
                       <div>
                         <div className='dropdown-title'>Message</div>
@@ -496,6 +522,9 @@ class AdminTrials extends Component {
                       Role
                     </TableHeaderColumn>
                           <TableHeaderColumn>
+                      Title
+                    </TableHeaderColumn>
+                          <TableHeaderColumn>
                       Message
                     </TableHeaderColumn>
                         </TableRow>
@@ -511,6 +540,9 @@ class AdminTrials extends Component {
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.role}
+                            </TableRowColumn>
+                            <TableRowColumn>
+                              {row.title}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.message}

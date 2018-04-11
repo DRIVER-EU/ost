@@ -27,6 +27,7 @@ class UserComponent extends Component {
           className='user-name'
           primaryText={`${this.props.user.login}`}
           primaryTogglesNestedList
+          nestedListStyle={{ position: 'absolute', background: '#fff', borderBottom: '1px solid #fdb913' }}
           nestedItems={[
             <ListItem
               primaryText='Profile'
