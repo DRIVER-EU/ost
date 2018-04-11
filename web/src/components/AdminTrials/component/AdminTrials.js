@@ -60,8 +60,8 @@ class AdminTrials extends Component {
     const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
       time: t,
-      userValue: 0,
-      roleValue: 0,
+      userValue: -1,
+      roleValue: -1,
       title: '',
       messageValue: '',
       whatValue: '',
@@ -206,13 +206,17 @@ class AdminTrials extends Component {
   }
 
   sendMessage () {
-    this.props.sendMessage({
-      selectUser: this.getSelectedUser(),
-      role: this.getSelectedRole(),
-      title: this.state.title,
-      message: this.state.messageValue,
-      time: moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
-    })
+    let send = {}
+    if (this.state.userValue !== -1) {
+      send.selectUser = this.getSelectedUser()
+      send.role = null
+    } else {
+      send.selectUser = null
+      send.role = this.getSelectedRole()
+    }
+    send.message = this.state.messageValue
+    send.time = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+    this.props.sendMessage(send)
   }
 
   getData () {
@@ -439,7 +443,12 @@ class AdminTrials extends Component {
                           value={this.state.userValue}
                           underlineStyle={{ marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
+                          disabled={this.state.roleValue !== -1}
                           onChange={this.handleChangeDropDown.bind(this, 'userValue')}>
+                          <MenuItem
+                            value={-1}
+                            style={{ color: 'grey' }}
+                            primaryText={' '} />
                           {userList.map((index) => (
                             <MenuItem
                               key={index.id}
@@ -456,7 +465,12 @@ class AdminTrials extends Component {
                           value={this.state.roleValue}
                           underlineStyle={{ marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
+                          disabled={this.state.userValue !== -1}
                           onChange={this.handleChangeDropDown.bind(this, 'roleValue')}>
+                          <MenuItem
+                            value={-1}
+                            style={{ color: 'grey' }}
+                            primaryText={' '} />
                           {roleList.map((index) => (
                             <MenuItem
                               key={index.id}
