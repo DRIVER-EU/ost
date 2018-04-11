@@ -31,11 +31,13 @@ class UserComponent extends Component {
           nestedItems={[
             <ListItem
               primaryText='Profile'
-              style={{ color: '#00497E' }}
+              className={'list-item'}
+              style={{ color: '#00497E', marginLeft: 0 }}
               containerElement={<IndexLink to='/profile' activeClassName='route--active' />} />,
             <ListItem
               primaryText='Log out'
-              style={{ color: '#00497E' }}
+              className={'list-item'}
+              style={{ color: '#00497E', marginLeft: 0 }}
               onClick={() => { this.props.logOut() }}
               containerElement={<IndexLink activeClassName='route--active' />} />
           ]}
