@@ -527,16 +527,74 @@
 					"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
 				},
 				"url": {
-					"raw": "http://{{IP-Address}}/api/anonymous/trialsession/active",
+					"raw": "http://{{IP-Address}}/api/trialsession/active",
 					"protocol": "http",
 					"host": [
 						"{{IP-Address}}"
 					],
 					"path": [
 						"api",
-						"anonymous",
 						"trialsession",
 						"active"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/event/search?trialsession_id=1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Alice1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Auth-Token",
+						"value": "{{X-Auth-Token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+				},
+				"url": {
+					"raw": "http://{{IP-Address}}/api/event/search?trialsession_id=1",
+					"protocol": "http",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"event",
+						"search"
+					],
+					"query": [
+						{
+							"key": "trialsession_id",
+							"value": "1"
+						}
 					]
 				}
 			},
