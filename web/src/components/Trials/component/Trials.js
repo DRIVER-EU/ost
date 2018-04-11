@@ -23,10 +23,10 @@ class Trials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfTrials.data &&
-      nextProps.listOfTrials.data !== this.state.listOfTrials &&
-      nextProps.listOfTrials.data !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.data })
+    if (nextProps.listOfTrials.content &&
+      nextProps.listOfTrials.content !== this.state.listOfTrials &&
+      nextProps.listOfTrials.content !== this.props.listOfTrials) {
+      this.setState({ listOfTrials: nextProps.listOfTrials.content })
     }
   }
 
@@ -55,11 +55,11 @@ class Trials extends Component {
               {this.state.listOfTrials.map((object) => {
                 return (
                   <AccordionItem title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
-                    {object.title}
-                    <div className={'desc'}>{this.getShortDesc(object.description)}</div>
+                    {object.trialName}
+                    <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                   </h3>} expanded={false} >
                     <div>
-                      <p>{object.description}</p>
+                      <p>{object.trialDescription}</p>
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
                           buttonStyle={{ width: '200px' }}
