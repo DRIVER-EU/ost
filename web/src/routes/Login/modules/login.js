@@ -14,7 +14,7 @@ import { toastr } from 'react-redux-toastr'
 import { browserHistory } from 'react-router'
 
 const getHeaders = () => {
-  let token = localStorage.getItem('neodecstoken')
+  let token = localStorage.getItem('drivertoken')
   let globalHeaders = { headers: { 'x-auth-token': token } }
   return globalHeaders
 }
@@ -51,9 +51,9 @@ export const logIn = (username, password) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
         .then((response) => {
-          localStorage.setItem('neodecstoken', response.headers['x-auth-token'])
-          localStorage.setItem('neodecsuser', JSON.stringify(response.data))
-          localStorage.setItem('neodecsrole', response.data.roles[0])
+          localStorage.setItem('drivertoken', response.headers['x-auth-token'])
+          localStorage.setItem('driveruser', JSON.stringify(response.data))
+          localStorage.setItem('driverrole', response.data.roles[0])
           toastr.success('Login', 'Login correct!', toastrOptions)
           dispatch(logInAction(response.data))
           resolve()
@@ -71,9 +71,9 @@ export const logOut = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/auth/logout`, getHeaders())
         .then((response) => {
-          localStorage.removeItem('neodecstoken')
-          localStorage.removeItem('neodecsuser')
-          localStorage.removeItem('neodecsrole')
+          localStorage.removeItem('drivertoken')
+          localStorage.removeItem('driveruser')
+          localStorage.removeItem('driverrole')
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
           resolve()
@@ -95,9 +95,9 @@ export const checkLogin = () => {
           resolve()
         })
         .catch((error) => {
-          localStorage.removeItem('neodecstoken')
-          localStorage.removeItem('neodecsuser')
-          localStorage.removeItem('neodecsrole')
+          localStorage.removeItem('drivertoken')
+          localStorage.removeItem('driveruser')
+          localStorage.removeItem('driverrole')
           dispatch(logOutAction())
           resolve()
         })
@@ -123,8 +123,8 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  isLoggedIn: !!localStorage.getItem('neodecstoken'),
-  user: JSON.parse(localStorage.getItem('neodecsuser'))
+  isLoggedIn: !!localStorage.getItem('drivertoken'),
+  user: JSON.parse(localStorage.getItem('driveruser'))
 }
 
 export default function loginReducer (state = initialState, action) {
