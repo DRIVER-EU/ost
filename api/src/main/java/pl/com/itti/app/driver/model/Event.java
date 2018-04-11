@@ -50,8 +50,4 @@ public class Event extends PersistentObject implements Serializable {
 
     @Column(nullable = false)
     private LocalDateTime eventTime;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
-    @Builder.Default
-    private List<UserRoleEvent> userRoleEvents = new ArrayList<>();
 }
