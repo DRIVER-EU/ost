@@ -13,6 +13,8 @@ import pl.com.itti.app.driver.model.enums.Languages;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -48,4 +50,14 @@ public class Event extends PersistentObject implements Serializable {
 
     @Column(nullable = false)
     private LocalDateTime eventTime;
+
+    @ManyToMany
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinTable(name = "trial_users_id")
+    private List<TrialUser> trialUsers = new ArrayList<>();
+
+    @ManyToMany
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinTable(name = "trial_roles_id")
+    private List<TrialRole> trialRoles= new ArrayList<>();
 }
