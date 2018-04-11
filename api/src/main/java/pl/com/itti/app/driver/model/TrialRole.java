@@ -64,7 +64,7 @@ public class TrialRole extends PersistentObject implements Serializable {
     @Builder.Default
     private List<AnswerTrialRole> answerTrialRoles = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "trialRoles")
     @Builder.Default
     private List<Event> events = new ArrayList<>();
 }
