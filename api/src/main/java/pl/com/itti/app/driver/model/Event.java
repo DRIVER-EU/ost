@@ -35,6 +35,16 @@ public class Event extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_session_id", nullable = false)
     private TrialSession trialSession;
 
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "trial_user_id")
+    private TrialUser trialUser;
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "trial_role_id")
+    private TrialRole trialRole;
+
     @Column(nullable = false)
     private String description;
 
@@ -50,14 +60,4 @@ public class Event extends PersistentObject implements Serializable {
 
     @Column(nullable = false)
     private LocalDateTime eventTime;
-
-    @ManyToMany
-    @JsonIdentityReference(alwaysAsId = true)
-    @JoinTable(name = "trial_users_id")
-    private List<TrialUser> trialUsers = new ArrayList<>();
-
-    @ManyToMany
-    @JsonIdentityReference(alwaysAsId = true)
-    @JoinTable(name = "trial_roles_id")
-    private List<TrialRole> trialRoles= new ArrayList<>();
 }
