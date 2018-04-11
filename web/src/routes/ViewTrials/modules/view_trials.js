@@ -34,6 +34,7 @@ export const getViewTrials = () => {
         {
           id: 1,
           date: '09/03/2018 11:18:18',
+          type: 'message',
           title: 'Lorem ipsum dolor sit amet',
           description: `At vero eos et accusamus et iusto odio dignissimos
           ducimus qui blanditiis praesentium voluptatum deleniti
@@ -44,6 +45,7 @@ export const getViewTrials = () => {
         {
           id: 2,
           date: '09/03/2018 11:17:18',
+          type: 'observation',
           title: 'Sed ut perspiciatis unde omnis iste natus error',
           description: `Sed ut perspiciatis unde omnis iste natus error
           sit voluptatem accusantium doloremque laudantium,
@@ -53,6 +55,7 @@ export const getViewTrials = () => {
         {
           id: 3,
           date: '09/03/2018 11:16:17',
+          type: 'message',
           title: 'At vero eos et accusamus et iusto odio dignissimos',
           description: `At vero eos et accusamus et iusto odio dignissimos
           ducimus qui blanditiis praesentium voluptatum deleniti
