@@ -62,6 +62,7 @@ class AdminTrials extends Component {
       time: t,
       userValue: 0,
       roleValue: 0,
+      title: '',
       messageValue: '',
       whatValue: '',
       whoValue: '',
@@ -110,9 +111,9 @@ class AdminTrials extends Component {
         }
       }
     }
-
     return false
   }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
@@ -195,6 +196,7 @@ class AdminTrials extends Component {
       return 'Test User 2'
     }
   }
+
   getSelectedRole () {
     if (this.state.roleValue === 0) {
       return 'All'
@@ -207,6 +209,7 @@ class AdminTrials extends Component {
     this.props.sendMessage({
       selectUser: this.getSelectedUser(),
       role: this.getSelectedRole(),
+      title: this.state.title,
       message: this.state.messageValue,
       time: moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     })
@@ -463,6 +466,15 @@ class AdminTrials extends Component {
                 ))}
                         </DropDownMenu>
                       </div>
+                      <div style={{ marginRight: '20px' }}>
+                        <div className='dropdown-title'>Title</div>
+                        <TextField
+                          style={{ width: '250px' }}
+                          value={this.state.title}
+                          hintText='enter the title'
+                          onChange={this.handleChangeTextField.bind(this, 'title')}
+                  />
+                      </div>
                       <div>
                         <div className='dropdown-title'>Message</div>
                         <TextField
@@ -496,6 +508,9 @@ class AdminTrials extends Component {
                       Role
                     </TableHeaderColumn>
                           <TableHeaderColumn>
+                      Title
+                    </TableHeaderColumn>
+                          <TableHeaderColumn>
                       Message
                     </TableHeaderColumn>
                         </TableRow>
@@ -511,6 +526,9 @@ class AdminTrials extends Component {
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.role}
+                            </TableRowColumn>
+                            <TableRowColumn>
+                              {row.title}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.message}
