@@ -51,13 +51,15 @@ class Trials extends Component {
             <div className='trials-header'>
               <div className={'trial-select'}>Select trial</div>
             </div>
+            {this.state.listOfTrials.length === 0 && <div> No trial sessions available</div>}
             <Accordion>
               {this.state.listOfTrials.map((object) => {
                 return (
-                  <AccordionItem title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
-                    {object.trialName}
-                    <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
-                  </h3>} expanded={false} >
+                  <AccordionItem disabled={object.status !== 'ACTIVE'}
+                    title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
+                      {object.trialName}
+                      <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
+                    </h3>} expanded={false} >
                     <div>
                       <p>{object.trialDescription}</p>
                       <div style={{ display: 'table', margin: '0 auto' }}>
