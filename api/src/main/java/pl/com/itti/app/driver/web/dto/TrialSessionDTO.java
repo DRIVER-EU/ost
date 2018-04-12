@@ -1,4 +1,4 @@
-package pl.com.itti.app.driver.dto;
+package pl.com.itti.app.driver.web.dto;
 
 import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.TrialSession;
