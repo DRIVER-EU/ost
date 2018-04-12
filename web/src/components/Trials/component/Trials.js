@@ -49,9 +49,9 @@ class Trials extends Component {
         <div className='pages-box'>
           <div className='trials-container'>
             <div className='trials-header'>
-              <div className={'trial-select'}>Select trial</div>
+              <div className={'trial-select'}>Trial sessions</div>
             </div>
-            {this.state.listOfTrials.length === 0 && <div> No trial sessions available</div>}
+            {this.state.listOfTrials.length === 0 && <div className={'no-sessions'}> No trial sessions available</div>}
             <Accordion>
               {this.state.listOfTrials.map((object) => {
                 return (
