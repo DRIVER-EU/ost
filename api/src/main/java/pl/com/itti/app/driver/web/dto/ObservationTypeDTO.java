@@ -1,7 +1,10 @@
 package pl.com.itti.app.driver.web.dto;
 
 import co.perpixel.dto.EntityDTO;
+import com.fasterxml.jackson.databind.JsonNode;
 import pl.com.itti.app.driver.model.ObservationType;
+
+import java.util.List;
 
 public class ObservationTypeDTO {
 
@@ -25,5 +28,12 @@ public class ObservationTypeDTO {
             this.name = observationType.getName();
             this.description = observationType.getDescription();
         }
+    }
+
+    public static class SchemaItem {
+        public long date;
+        public List<TrialUserDTO.MinimalItem> users;
+        public JsonNode schema;
+
     }
 }

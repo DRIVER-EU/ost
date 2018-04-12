@@ -22,4 +22,10 @@ public class ObservationTypeController {
     public PageDTO<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialSessionId") Long trialSessionId, Pageable pageable) {
         return DTO.from(observationTypeService.find(trialSessionId, pageable), ObservationTypeDTO.ListItem.class);
     }
+
+    @GetMapping("/form")
+    public ObservationTypeDTO.SchemaItem getSchemaForm(@RequestParam("observationTypeId") Long observationTypeId) {
+        return observationTypeService.generateSchema(observationTypeId);
+    }
+
 }

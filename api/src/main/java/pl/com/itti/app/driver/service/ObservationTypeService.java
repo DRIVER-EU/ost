@@ -3,6 +3,7 @@ package pl.com.itti.app.driver.service;
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,8 @@ import pl.com.itti.app.driver.repository.ObservationTypeRepository;
 import pl.com.itti.app.driver.repository.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.driver.util.schema.SchemaCreator;
+import pl.com.itti.app.driver.web.dto.ObservationTypeDTO;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -48,6 +51,16 @@ public class ObservationTypeService {
                         trialSession
                 ), pageable
         );
+    }
+
+    public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId) {
+        ObservationType observationType = Optional.ofNullable(observationTypeRepository.findOne(observationTypeId))
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
+        ObjectNode objectNode = SchemaCreator.createSchemaForm(observationType.getQuestions());
+        ObservationTypeDTO.SchemaItem schemaItem = new ObservationTypeDTO.SchemaItem();
+        schemaItem.date = 12312312L;
+        schemaItem.schema = objectNode;
+        return schemaItem;
     }
 
     private Specifications<ObservationType> getObservationTypeSpecifications(AuthUser authUser,
