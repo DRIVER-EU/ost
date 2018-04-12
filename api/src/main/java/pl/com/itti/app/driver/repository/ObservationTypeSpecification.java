@@ -12,7 +12,8 @@ public class ObservationTypeSpecification {
 
     public static Specification<ObservationType> trialSession(TrialSession trialSession) {
         Specification<ObservationType> specification = (root, query, cb) -> {
-            Join<ObservationType, Trial> trialJoin = RepositoryUtils.getOrCreateJoin(root, ObservationType_.trial, JoinType.LEFT);
+            Join<ObservationType, TrialStage> trialStageJoin = RepositoryUtils.getOrCreateJoin(root, ObservationType_.trialStage, JoinType.LEFT);
+            Join<TrialStage, Trial> trialJoin = trialStageJoin.join(TrialStage_.trial, JoinType.LEFT);
             return cb.isMember(trialSession, trialJoin.get(Trial_.trialSessions));
         };
 
