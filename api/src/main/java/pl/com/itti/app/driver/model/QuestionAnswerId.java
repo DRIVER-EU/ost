@@ -13,7 +13,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @Embeddable
-public class AnswerQuestionItemId implements Serializable {
+public class QuestionAnswerId implements Serializable {
+    private long questionId;
     private long answerId;
-    private long questionItemId;
 }
