@@ -16,10 +16,12 @@ import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
 import pl.com.itti.app.driver.repository.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 import pl.com.itti.app.driver.web.dto.ObservationTypeDTO;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -53,10 +55,17 @@ public class ObservationTypeService {
         );
     }
 
-    public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId) {
+    public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
         ObservationType observationType = Optional.ofNullable(observationTypeRepository.findOne(observationTypeId))
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
-        ObjectNode objectNode = SchemaCreator.createSchemaForm(observationType.getQuestions());
+
+        ObjectNode objectNode;
+        try {
+            objectNode = SchemaCreator.createSchemaForm(observationType.getQuestions());
+        } catch (IOException ioe) {
+            throw new InternalServerException("Error in jsonSchema", ioe);
+        }
+
         ObservationTypeDTO.SchemaItem schemaItem = new ObservationTypeDTO.SchemaItem();
         schemaItem.date = 12312312L;
         schemaItem.schema = objectNode;

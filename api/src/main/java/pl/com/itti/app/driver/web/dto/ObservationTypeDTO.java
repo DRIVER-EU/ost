@@ -30,10 +30,11 @@ public class ObservationTypeDTO {
         }
     }
 
-    public static class SchemaItem {
+    public static class SchemaItem extends ListItem {
         public long date;
         public List<TrialUserDTO.MinimalItem> users;
         public JsonNode schema;
+
 
     }
 }

@@ -24,8 +24,9 @@ public class ObservationTypeController {
     }
 
     @GetMapping("/form")
-    public ObservationTypeDTO.SchemaItem getSchemaForm(@RequestParam("observationTypeId") Long observationTypeId) {
-        return observationTypeService.generateSchema(observationTypeId);
+    public ObservationTypeDTO.SchemaItem getSchemaForm(@RequestParam("observationTypeId") Long observationTypeId,
+                                                       @RequestParam("trialSessionId") Long trialSessionId) {
+        return observationTypeService.generateSchema(observationTypeId, trialSessionId);
     }
 
 }
