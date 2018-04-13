@@ -9,11 +9,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
+import pl.com.itti.app.driver.dto.TrialUserDTO;
+import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.UserRoleSessionRepository;
-import pl.com.itti.app.driver.repository.UserRoleSessionSpecification;
+import pl.com.itti.app.driver.repository.specification.UserRoleSessionSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;

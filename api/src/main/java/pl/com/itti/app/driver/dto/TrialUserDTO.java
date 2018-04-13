@@ -10,12 +10,6 @@ public class TrialUserDTO {
         public String firstName;
         public String lastName;
 
-        public MinimalItem(TrialUser trialUser) {
-            this.id = trialUser.id;
-            this.firstName = trialUser.getAuthUser().getFirstName();
-            this.lastName = trialUser.getAuthUser().getLastName();
-        }
-
         @Override
         public void toDto(TrialUser trialUser) {
             this.id = trialUser.id;
