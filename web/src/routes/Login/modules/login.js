@@ -90,7 +90,7 @@ export const logOut = () => {
 export const checkLogin = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/participant/currently-authenticated`, getHeaders())
+      axios.get(`http://${origin}/api/trialsession/active`, getHeaders())
         .then((response) => {
           resolve()
         })
