@@ -96,4 +96,14 @@
   .no-sessions {
     text-align: center;
   }
+  .spinner-box {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    .spinner {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
 }

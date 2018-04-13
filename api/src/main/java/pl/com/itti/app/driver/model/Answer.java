@@ -2,10 +2,7 @@ package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -16,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -57,5 +55,8 @@ public class Answer extends PersistentObject implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
-    private List<AnswerQuestionItem> answerQuestionItems = new ArrayList<>();
+    private List<QuestionAnswer> questionAnswers = new ArrayList<>();
+
+    @Column(columnDefinition = "text", nullable = false)
+    private String jsonForm;
 }

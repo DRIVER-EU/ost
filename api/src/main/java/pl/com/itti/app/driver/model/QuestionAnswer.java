@@ -12,21 +12,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class AnswerQuestionItem {
+public class QuestionAnswer {
 
     @EmbeddedId
     @Builder.Default
-    private AnswerQuestionItemId id = new AnswerQuestionItemId();
+    private QuestionAnswerId id = new QuestionAnswerId();
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    @MapsId("questionId")
+    private Question question;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     @MapsId("answerId")
     private Answer answer;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    @MapsId("questionItemId")
-    private QuestionItem questionItem;
-
-    private String fieldValue;
 }
