@@ -38,6 +38,9 @@ public class TrialUserTests {
     @Autowired
     private UserRoleSessionRepository userRoleSessionRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
+
     @Test
     public void findOneById() {
         // when
@@ -96,6 +99,7 @@ public class TrialUserTests {
         // when
         trialSessionManagerRepository.deleteAll();
         userRoleSessionRepository.deleteAll();
+        eventRepository.delete(3L);
         trialUserRepository.delete(2L);
         Page<TrialUser> trialUserPage = trialUserRepository.findAll(new PageRequest(1,10));
 
