@@ -4,6 +4,7 @@ import Menu from '../../components/Menu'
 import './CoreLayout.scss'
 import '../../styles/core.scss'
 import { connect } from 'react-redux'
+import Auth from 'components/Auth'
 
 const styles = {
   toastStyle: {
@@ -51,6 +52,7 @@ class CoreLayout extends Component {
         <div />
         <div className='view-container'>
           <div style={styles.menubox}>
+            <Auth />
             <Menu role={this.state.role} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
