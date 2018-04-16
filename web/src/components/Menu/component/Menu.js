@@ -40,7 +40,7 @@ class MenuLeft extends Component {
                 primaryText='Trials'
                 style={{ color: '#00497E' }}
                 containerElement={<IndexLink to='/trials' activeClassName='route--active' />} />
-              <UserComponent />
+              <UserComponent activeClassName='route--active' />
             </List>
           }
   />

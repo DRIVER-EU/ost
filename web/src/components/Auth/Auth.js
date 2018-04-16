@@ -9,9 +9,7 @@ class Auth extends Component {
       publicPaths: [
         '',
         '/',
-        '/login',
-        '/trials',
-        '/admin-trials'
+        '/login'
       ]
     }
   }
@@ -21,23 +19,30 @@ class Auth extends Component {
   }
 
   isPublicLocation () {
+    let isPublic = false
     this.state.publicPaths.forEach(function (object) {
-      if (window.location.pathname.indexOf(object) !== -1) {
-        return true
+      if (
+      window.location.pathname === object) {
+        isPublic = true
       }
     })
-    return false
+    return isPublic
   }
 
   componentWillMount () {
-    this.props.checkLogin()
-    if (!this.props.isLoggedIn && this.isPublicLocation()) {
+    if (!this.props.isLoggedIn && !this.isPublicLocation()) {
       browserHistory.push('/login')
     }
+    browserHistory.listen(location => {
+      this.props.checkLogin()
+      if (!this.props.isLoggedIn && !this.isPublicLocation()) {
+        browserHistory.push('/login')
+      }
+    })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (!nextProps.isLoggedIn && this.isPublicLocation()) {
+    if (!nextProps.isLoggedIn && !this.isPublicLocation()) {
       browserHistory.push('/login')
     }
   }

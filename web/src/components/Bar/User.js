@@ -31,7 +31,7 @@ class UserComponent extends Component {
   render () {
     if (this.props.isLoggedIn) {
       return (
-        <DropDownMenu value={1} onChange={this.changeActionMenu}
+        <DropDownMenu value={1} onChange={this.changeActionMenu.bind(this)}
           iconStyle={{ top: '0px' }}
           underlineStyle={{ borderTop: 'none' }}
           labelStyle={{ lineHeight: '48px', color: '#00497E' }}>
