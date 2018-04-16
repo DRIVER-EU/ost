@@ -19,6 +19,7 @@ class Auth extends Component {
   }
 
   isPublicLocation () {
+    console.log(12)
     let isPublic = false
     this.state.publicPaths.forEach(function (object) {
       if (
@@ -30,15 +31,17 @@ class Auth extends Component {
   }
 
   componentWillMount () {
+    browserHistory.listen(location => {
+      if (location.pathname !== '/login') {
+        this.props.checkLogin()
+        if (!this.props.isLoggedIn && !this.isPublicLocation()) {
+          window.location.replace('/login')
+        }
+      }
+    })
     if (!this.props.isLoggedIn && !this.isPublicLocation()) {
       browserHistory.push('/login')
     }
-    browserHistory.listen(location => {
-      this.props.checkLogin()
-      if (!this.props.isLoggedIn && !this.isPublicLocation()) {
-        browserHistory.push('/login')
-      }
-    })
   }
 
   componentWillReceiveProps (nextProps) {
