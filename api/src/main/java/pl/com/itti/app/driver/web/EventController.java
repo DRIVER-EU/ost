@@ -1,7 +1,8 @@
 package pl.com.itti.app.driver.web;
 
+import co.perpixel.dto.DTO;
+import co.perpixel.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,8 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/search")
-    public Page<EventDTO.ListItem> findByTrialSessionId(@RequestParam(value = "trialsession_id") long trialSessionId,
-                                                        Pageable pageable) {
-        return eventService.findByTrialSessionId(trialSessionId, pageable);
+    public PageDTO<EventDTO.ListItem> findByTrialSessionId(@RequestParam(value = "trialsession_id") long trialSessionId,
+                                                           Pageable pageable) {
+        return DTO.from(eventService.findByTrialSessionId(trialSessionId, pageable), EventDTO.ListItem.class);
     }
 }

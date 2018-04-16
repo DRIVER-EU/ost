@@ -14,10 +14,6 @@ public class EventDTO {
     public static class MinimalItem implements EntityDTO<Event> {
         public long id;
 
-        public MinimalItem(Event event) {
-            this.id = event.getId();
-        }
-
         @Override
         public void toDto(Event event) {
             this.id = event.getId();
@@ -34,8 +30,9 @@ public class EventDTO {
         public long trialRoleId;
         public String trialRoleName;
 
-        public ListItem(Event event) {
-            super(event);
+        @Override
+        public void toDto(Event event) {
+            super.toDto(event);
             this.name = event.getName();
             this.description = event.getDescription();
             this.eventTime = event.getEventTime();

@@ -20,8 +20,7 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public Page<EventDTO.ListItem> findByTrialSessionId(long trialSessionId, Pageable pageable) {
-        Page<Event> eventList = eventRepository.findByTrialSessionId(trialSessionId, pageable);
-        return eventList.map(EventDTO.ListItem::new);
+    public Page<Event> findByTrialSessionId(long trialSessionId, Pageable pageable) {
+        return eventRepository.findByTrialSessionId(trialSessionId, pageable);
     }
 }
