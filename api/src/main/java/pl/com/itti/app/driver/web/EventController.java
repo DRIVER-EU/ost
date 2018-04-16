@@ -19,8 +19,8 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/search")
-    public PageDTO<EventDTO.ListItem> findByTrialSessionId(@RequestParam(value = "trialsession_id") long trialSessionId,
-                                                           Pageable pageable) {
+    public PageDTO<EventDTO.ListItem> findByTrialSessionId(
+            @RequestParam(value = "trialsession_id") long trialSessionId, Pageable pageable) {
         return DTO.from(eventService.findByTrialSessionId(trialSessionId, pageable), EventDTO.ListItem.class);
     }
 }

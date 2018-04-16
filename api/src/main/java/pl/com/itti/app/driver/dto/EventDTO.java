@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
-import org.springframework.expression.spel.ast.NullLiteral;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;

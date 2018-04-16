@@ -10,14 +10,10 @@ public class TrialSessionDTO {
         public long id;
         public SessionStatus status;
 
-        public MinimalItem(TrialSession trialSession) {
-            this.id = trialSession.getId();
-            this.status = trialSession.getStatus();
-        }
-
         @Override
         public void toDto(TrialSession trialSession) {
             this.id = trialSession.getId();
+            this.status = trialSession.getStatus();
         }
     }
 
@@ -25,8 +21,8 @@ public class TrialSessionDTO {
         public String trialName;
         public String trialDescription;
 
-        public ListItem(TrialSession trialSession) {
-            super(trialSession);
+        public void toDto(TrialSession trialSession) {
+            super.toDto(trialSession);
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
         }

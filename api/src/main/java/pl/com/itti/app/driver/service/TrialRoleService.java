@@ -1,6 +1,5 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.dto.PageDTO;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
+import pl.com.itti.app.driver.util.ForbiddenException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;
@@ -41,7 +41,7 @@ public class TrialRoleService {
         Set<Specification<TrialUser>> managerConditions = new HashSet<>();
         managerConditions.add(TrialUserSpecification.authUser(authUser, trialSessionId));
         Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
-                .orElseThrow(() -> new IllegalArgumentException("User is not TrialSessionManager of session: " + trialSessionId));
+                .orElseThrow(ForbiddenException::new);
 
         Set<Specification<TrialRole>> conditions = new HashSet<>();
         conditions.add(TrialRoleSpecification.trialRole(trialSessionId));

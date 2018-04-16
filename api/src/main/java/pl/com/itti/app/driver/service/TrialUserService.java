@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
+import pl.com.itti.app.driver.util.ForbiddenException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;
@@ -34,7 +35,7 @@ public class TrialUserService {
         Set<Specification<TrialUser>> managerConditions = new HashSet<>();
         managerConditions.add(TrialUserSpecification.authUser(authUser, trialSessionId));
         Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
-                .orElseThrow(() -> new IllegalArgumentException("User is not TrialSessionManager of session: " + trialSessionId));
+                .orElseThrow(ForbiddenException::new);
 
         Set<Specification<TrialUser>> conditions = new HashSet<>();
         conditions.add(TrialUserSpecification.trialUsers(trialSessionId));
