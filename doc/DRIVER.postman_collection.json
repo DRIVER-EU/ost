@@ -678,6 +678,105 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/user?trialsession_id=2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Mayer1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Auth-Token",
+						"value": "{{X-Auth-Token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+				},
+				"url": {
+					"raw": "http://{{IP-Address}}/api/user?trialsession_id=2",
+					"protocol": "http",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "trialsession_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/role?trialsession_id=2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Mayer1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{IP-Address}}/api/role?trialsession_id=2",
+					"protocol": "http",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"role"
+					],
+					"query": [
+						{
+							"key": "trialsession_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

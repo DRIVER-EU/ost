@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.com.itti.app.driver.dto.EventDTO;
-import pl.com.itti.app.driver.service.EventService;
+import pl.com.itti.app.driver.dto.TrialRoleDTO;
+import pl.com.itti.app.driver.service.TrialRoleService;
 
 @RestController
-@RequestMapping("/api/event")
-public class EventController {
+@RequestMapping("/api/role")
+public class TrialRoleController {
 
     @Autowired
-    private EventService eventService;
+    private TrialRoleService trialRoleService;
 
-    @GetMapping("/search")
-    public PageDTO<EventDTO.ListItem> findByTrialSessionId(
+    @GetMapping
+    private PageDTO<TrialRoleDTO.FullItem> findByTrialSessionId(
             @RequestParam(value = "trialsession_id") long trialSessionId, Pageable pageable) {
-        return DTO.from(eventService.findByTrialSessionId(trialSessionId, pageable), EventDTO.ListItem.class);
+        return DTO.from(trialRoleService.findByTrialSessionId(trialSessionId, pageable), TrialRoleDTO.FullItem.class);
     }
 }
