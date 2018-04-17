@@ -19,6 +19,7 @@ import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.web.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.web.dto.TrialUserDTO;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -70,12 +71,11 @@ public class ObservationTypeService {
 
         ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
 
-        schemaItem.users = DTO.from(
-                trialUserRepository.findAll(
-                        getTrialUserSpecifications(authUser, trialSession, observationType)
-                ),
-                TrialUserDTO.ListItem.class
-        );
+        schemaItem.users = observationType.isWithUsers() ?
+                DTO.from(
+                        trialUserRepository.findAll(getTrialUserSpecifications(authUser, trialSession, observationType)),
+                        TrialUserDTO.ListItem.class
+                ) : new ArrayList<>();
 
         return schemaItem;
     }

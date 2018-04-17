@@ -50,20 +50,20 @@ public final class SchemaCreator {
 
     private static ObjectNode createUiSchema(List<Question> questions) {
         ObjectNode schema = MAPPER.createObjectNode();
-
-        questions.forEach(question -> {
-            ObjectNode ui = MAPPER.createObjectNode();
-            ui.put(DISABLED, false); // TODO if something then it's true
-
-            if (question.getAnswerType().equals(AnswerType.RADIO_BUTTON)) {
-                ui.put(WIDGET, "radio");
-            } else if (question.getAnswerType().equals(AnswerType.SLIDER)) {
-                ui.put(WIDGET, "slider");
-            }
-
-            schema.putPOJO(QUESTION_ID + question.getId(), ui);
-        });
-
+        questions.forEach(question -> schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question)));
         return schema;
+    }
+
+    private static ObjectNode createUiSchema(Question question) {
+        ObjectNode ui = MAPPER.createObjectNode();
+        ui.put(DISABLED, false);
+
+        if (question.getAnswerType().equals(AnswerType.RADIO_BUTTON)) {
+            ui.put(WIDGET, "radio");
+        } else if (question.getAnswerType().equals(AnswerType.SLIDER)) {
+            ui.put(WIDGET, "slider");
+        }
+
+        return ui;
     }
 }
