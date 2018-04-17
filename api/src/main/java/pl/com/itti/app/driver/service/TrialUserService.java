@@ -32,13 +32,17 @@ public class TrialUserService {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        Set<Specification<TrialUser>> managerConditions = new HashSet<>();
-        managerConditions.add(TrialUserSpecification.authUser(authUser, trialSessionId));
-        Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
-                .orElseThrow(ForbiddenException::new);
+        checkIsTrailSessionManager(authUser, trialSessionId);
 
         Set<Specification<TrialUser>> conditions = new HashSet<>();
         conditions.add(TrialUserSpecification.trialUsers(trialSessionId));
         return trialUserRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
+    }
+
+    public void checkIsTrailSessionManager(AuthUser userToCheck, Long trialSessionId) {
+        Set<Specification<TrialUser>> managerConditions = new HashSet<>();
+        managerConditions.add(TrialUserSpecification.authUser(userToCheck, trialSessionId));
+        Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
+                .orElseThrow(() -> new ForbiddenException("Permitted only for TrialSessionManager"));
     }
 }

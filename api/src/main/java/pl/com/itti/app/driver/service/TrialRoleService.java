@@ -9,16 +9,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.model.TrialRole;
-import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
-import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
-import pl.com.itti.app.driver.util.ForbiddenException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -34,14 +30,14 @@ public class TrialRoleService {
     @Autowired
     private AuthUserRepository authUserRepository;
 
+    @Autowired
+    private TrialUserService trialUserService;
+
     public Page<TrialRole> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        Set<Specification<TrialUser>> managerConditions = new HashSet<>();
-        managerConditions.add(TrialUserSpecification.authUser(authUser, trialSessionId));
-        Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
-                .orElseThrow(ForbiddenException::new);
+        trialUserService.checkIsTrailSessionManager(authUser, trialSessionId);
 
         Set<Specification<TrialRole>> conditions = new HashSet<>();
         conditions.add(TrialRoleSpecification.trialRole(trialSessionId));
