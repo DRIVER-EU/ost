@@ -2,7 +2,7 @@
 // Constants
 // ------------------------------------
 export let origin = window.location.hostname
-if (origin === 'localhost' || origin !== 'dev.itti.com.pl') {
+if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = 'dev.itti.com.pl:8009'
 }
 import axios from 'axios'

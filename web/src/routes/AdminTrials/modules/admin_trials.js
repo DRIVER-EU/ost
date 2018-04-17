@@ -2,11 +2,9 @@
 // Constants
 // ------------------------------------
 export let origin = window.location.hostname
-// if (origin === 'localhost' || origin === '192.168.1.15:8080') {
-//   origin = '192.168.1.15:8080'
-// } else {
-origin = '192.168.1.15:8080'
-// }
+if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
+  origin = 'dev.itti.com.pl:8009'
+}
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
 
@@ -44,10 +42,10 @@ export const actions = {
   getObservation
 }
 
-export const getMessages = () => {
+export const getMessages = (sort = '') => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/anonymous/message`, getHeaders())
+      axios.get(`http://${origin}/api/event/search?trialsession_id=1&sort=${sort.type},${sort.order}`, getHeaders())
        .then((response) => {
          dispatch(getMessagesAction(response.data))
          resolve()

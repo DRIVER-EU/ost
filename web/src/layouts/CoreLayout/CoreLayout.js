@@ -4,6 +4,7 @@ import Menu from '../../components/Menu'
 import './CoreLayout.scss'
 import '../../styles/core.scss'
 import { connect } from 'react-redux'
+import Auth from 'components/Auth'
 
 const styles = {
   toastStyle: {
@@ -31,7 +32,8 @@ class CoreLayout extends Component {
   }
 
   static propTypes = {
-    children: PropTypes.element.isRequired
+    children: PropTypes.element.isRequired,
+    isLoggedIn: PropTypes.any
   }
 
   componentWillMount () {
@@ -51,6 +53,7 @@ class CoreLayout extends Component {
         <div />
         <div className='view-container'>
           <div style={styles.menubox}>
+            <Auth isLoggedIn={this.props.isLoggedIn} />
             <Menu role={this.state.role} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
@@ -62,9 +65,13 @@ class CoreLayout extends Component {
     )
   }
 }
+
 const mapDispatchToProps = {
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.login.isLoggedIn,
+  user: state.login.user
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout)

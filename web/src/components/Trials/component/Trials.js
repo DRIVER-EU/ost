@@ -4,12 +4,14 @@ import './Trials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
+import Spinner from 'react-spinkit'
 
 class Trials extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfTrials: []
+      listOfTrials: [],
+      isLoading: false
     }
   }
 
@@ -20,13 +22,14 @@ class Trials extends Component {
 
   componentWillMount () {
     this.props.getTrials()
+    this.setState({ isLoading: true })
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrials.content &&
       nextProps.listOfTrials.content !== this.state.listOfTrials &&
       nextProps.listOfTrials.content !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.content })
+      this.setState({ listOfTrials: nextProps.listOfTrials.content, isLoading: false })
     }
   }
 
@@ -49,15 +52,24 @@ class Trials extends Component {
         <div className='pages-box'>
           <div className='trials-container'>
             <div className='trials-header'>
-              <div className={'trial-select'}>Select trial</div>
+              <div className={'trial-select'}>Trial sessions</div>
             </div>
+            {this.state.isLoading && <div className='spinner-box'>
+              <div className={'spinner'}>
+                <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
+              </div>
+              </div>
+            }
+            {(!this.state.isLoading && this.state.listOfTrials.length === 0) &&
+            <div className={'no-sessions'}> No trial sessions available</div>}
             <Accordion>
               {this.state.listOfTrials.map((object) => {
                 return (
-                  <AccordionItem title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
-                    {object.trialName}
-                    <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
-                  </h3>} expanded={false} >
+                  <AccordionItem disabled={object.status !== 'ACTIVE'}
+                    title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
+                      {object.trialName}
+                      <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
+                    </h3>} expanded={false} >
                     <div>
                       <p>{object.trialDescription}</p>
                       <div style={{ display: 'table', margin: '0 auto' }}>

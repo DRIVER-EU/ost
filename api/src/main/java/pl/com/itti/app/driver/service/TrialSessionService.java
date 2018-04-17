@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
-import pl.com.itti.app.driver.repository.UserRoleSessionRepository;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
@@ -24,9 +23,6 @@ public class TrialSessionService {
 
     @Autowired
     private TrialSessionRepository trialSessionRepository;
-
-    @Autowired
-    private UserRoleSessionRepository userRoleSessionRepository;
 
     @Autowired
     private AuthUserRepository authUserRepository;
