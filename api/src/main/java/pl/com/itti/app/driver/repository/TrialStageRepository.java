@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import pl.com.itti.app.driver.model.TrialStage;
 
-public interface TrialStageRepository extends PagingAndSortingRepository<TrialStage, Long>, JpaSpecificationExecutor {
+public interface TrialStageRepository
+        extends PagingAndSortingRepository<TrialStage, Long>, JpaSpecificationExecutor<TrialStage> {
 }

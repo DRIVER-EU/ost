@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
-import org.springframework.expression.spel.ast.NullLiteral;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;
@@ -13,10 +12,6 @@ public class EventDTO {
 
     public static class MinimalItem implements EntityDTO<Event> {
         public long id;
-
-        public MinimalItem(Event event) {
-            this.id = event.getId();
-        }
 
         @Override
         public void toDto(Event event) {
@@ -34,8 +29,9 @@ public class EventDTO {
         public long trialRoleId;
         public String trialRoleName;
 
-        public ListItem(Event event) {
-            super(event);
+        @Override
+        public void toDto(Event event) {
+            super.toDto(event);
             this.name = event.getName();
             this.description = event.getDescription();
             this.eventTime = event.getEventTime();
