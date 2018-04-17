@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import { IndexLink } from 'react-router'
+import { IndexLink, browserHistory } from 'react-router'
 import { logIn, logOut } from '../../routes/Login/modules/login'
-import { ListItem } from 'material-ui/List'
+import { ListItem, DropDownMenu, MenuItem } from 'material-ui'
 import './User.scss'
 
 class UserComponent extends Component {
@@ -20,28 +20,25 @@ class UserComponent extends Component {
 
   }
 
+  changeActionMenu (event, key, value) {
+    if (value === 2) {
+      browserHistory.push('/')
+    } else if (value === 3) {
+      this.props.logOut()
+    }
+  }
+
   render () {
     if (this.props.isLoggedIn) {
       return (
-        <ListItem
-          className='user-name'
-          primaryText={`${this.props.user.login}`}
-          primaryTogglesNestedList
-          nestedListStyle={{ position: 'absolute', background: '#fff', borderBottom: '1px solid #fdb913' }}
-          nestedItems={[
-            <ListItem
-              primaryText='Profile'
-              className={'list-item'}
-              style={{ color: '#00497E', marginLeft: 0 }}
-              containerElement={<IndexLink to='/profile' activeClassName='route--active' />} />,
-            <ListItem
-              primaryText='Log out'
-              className={'list-item'}
-              style={{ color: '#00497E', marginLeft: 0 }}
-              onClick={() => { this.props.logOut() }}
-              containerElement={<IndexLink activeClassName='route--active' />} />
-          ]}
-        />
+        <DropDownMenu value={1} onChange={this.changeActionMenu.bind(this)}
+          iconStyle={{ top: '0px' }}
+          underlineStyle={{ borderTop: 'none' }}
+          labelStyle={{ lineHeight: '48px', color: '#00497E' }}>
+          <MenuItem value={1} primaryText={this.props.user.login} style={{ display: 'none' }} />
+          <MenuItem value={2} primaryText='Profile' />
+          <MenuItem value={3} primaryText='Log out' />
+        </DropDownMenu>
       )
     } else {
       return (
