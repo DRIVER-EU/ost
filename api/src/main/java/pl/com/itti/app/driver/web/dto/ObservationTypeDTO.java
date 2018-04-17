@@ -3,7 +3,10 @@ package pl.com.itti.app.driver.web.dto;
 import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import pl.com.itti.app.driver.model.ObservationType;
+import pl.com.itti.app.driver.util.InternalServerException;
+import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ObservationTypeDTO {
@@ -31,10 +34,18 @@ public class ObservationTypeDTO {
     }
 
     public static class SchemaItem extends ListItem {
-        public long date;
-        public List<TrialUserDTO.MinimalItem> users;
-        public JsonNode schema;
+        public List<TrialUserDTO.ListItem> users;
+        public JsonNode jsonSchema;
 
+        @Override
+        public void toDto(ObservationType observationType) {
+            super.toDto(observationType);
 
+            try {
+                jsonSchema = SchemaCreator.createSchemaForm(observationType.getQuestions());
+            } catch (IOException ioe) {
+                throw new InternalServerException("Error in jsonSchema", ioe);
+            }
+        }
     }
 }

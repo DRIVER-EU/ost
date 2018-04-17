@@ -13,4 +13,17 @@ public class TrialUserDTO {
             this.id = trialUser.getId();
         }
     }
+
+    public static class ListItem extends MinimalItem {
+        public String firstName;
+        public String lastName;
+
+        @Override
+        public void toDto(TrialUser trialUser) {
+            super.toDto(trialUser);
+
+            this.firstName = trialUser.getAuthUser().getFirstName();
+            this.lastName = trialUser.getAuthUser().getLastName();
+        }
+    }
 }
