@@ -12,6 +12,8 @@ public class TrialRoleSpecification {
         Specification<TrialRole> specification = (root, query, cb) -> {
             Join<TrialRole, UserRoleSession> userRoleSessionJoin = root.join(TrialRole_.userRoleSessions, JoinType.LEFT);
             Join<UserRoleSession, TrialSession> trialSessionJoin = userRoleSessionJoin.join(UserRoleSession_.trialSession, JoinType.LEFT);
+
+            query.distinct(true);
             return cb.equal(trialSessionJoin.get(TrialSession_.id), trialSessionId);
         };
 
