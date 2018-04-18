@@ -26,6 +26,7 @@ import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -64,22 +65,28 @@ public class ObservationTypeService {
     }
 
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
-        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
-        TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
-                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
 
         ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
 
-        schemaItem.users = observationType.isWithUsers() ?
-                DTO.from(
-                        trialUserRepository.findAll(getTrialUserSpecifications(authUser, trialSession, observationType)),
-                        TrialUserDTO.ListItem.class
-                ) : new ArrayList<>();
+        schemaItem.users = getSchemaItemUsers(observationType, trialSessionId);
 
         return schemaItem;
+    }
+
+    private List<TrialUserDTO.ListItem> getSchemaItemUsers(ObservationType observationType, long trialSessionId) {
+        List<TrialUserDTO.ListItem> trialUsers = new ArrayList<>();
+        if (observationType.isWithUsers()) {
+            AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
+                    .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+            TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
+
+            List<TrialUser> users = trialUserRepository.findAll(getTrialUserSpecifications(authUser, trialSession, observationType));
+            trialUsers = DTO.from(users, TrialUserDTO.ListItem.class);
+        }
+        return trialUsers;
     }
 
     private Specifications<ObservationType> getObservationTypeSpecifications(AuthUser authUser,
