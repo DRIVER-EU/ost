@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.service;
 
+import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,21 +52,24 @@ public class EventService {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        TrialSession trialSession = trialSessionRepository.findOne(formItem.trialSessionId);
+        TrialSession trialSession = trialSessionRepository.findById(formItem.trialSessionId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, formItem.trialSessionId));
+
         trialUserService.checkIsTrailSessionManager(authUser, formItem.trialSessionId);
 
         TrialUser trialUser = trialUserRepository.findOne(formItem.trialUserId);
         TrialRole trialRole = trialRoleRepository.findOne(formItem.trialRoleId);
 
-        Event event = new Event();
-        event.setTrialSession(trialSession);
-        event.setIdEvent(formItem.idEvent);
-        event.setName(formItem.name);
-        event.setDescription(formItem.description);
-        event.setLanguageVersion(formItem.languageVersion);
-        event.setEventTime(formItem.eventTime);
-        event.setTrialUser(trialUser);
-        event.setTrialRole(trialRole);
+        Event event = Event.builder()
+                .trialSession(trialSession)
+                .idEvent(formItem.idEvent)
+                .name(formItem.name)
+                .description(formItem.description)
+                .languageVersion(formItem.languageVersion)
+                .eventTime(formItem.eventTime)
+                .trialUser(trialUser)
+                .trialRole(trialRole)
+                .build();
 
         return eventRepository.save(event);
     }
