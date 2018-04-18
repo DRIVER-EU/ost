@@ -16,10 +16,12 @@ import pl.com.itti.app.driver.dto.TrialUserDTO;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialUser;
-import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
+import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.ArrayList;
