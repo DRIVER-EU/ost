@@ -16,17 +16,6 @@ import ReactTooltip from 'react-tooltip'
 import './AdminTrials.scss'
 import _ from 'lodash'
 
-const userList = [
-  { id: 0, name: 'All' },
-  { id: 1, name: 'Test User 1' },
-  { id: 2, name: 'Test User 2' }
-]
-
-const roleList = [
-  { id: 0, name: 'All' },
-  { id: 1, name: 'Team 1' }
-]
-
 const rangeList = [
   { id: 0, name: '15 minutes' },
   { id: 1, name: '30 minutes' },
@@ -91,17 +80,22 @@ class AdminTrials extends Component {
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
     getObservation: PropTypes.func,
-    observation: PropTypes.array
+    observation: PropTypes.array,
+    getUsers: PropTypes.func,
+    usersList: PropTypes.array,
+    getRoles: PropTypes.func,
+    rolesList: PropTypes.array,
+    params: PropTypes.any
   }
 
   componentWillMount () {
     this.props.getMessages(this.state.sort)
-    console.log(this.state.sort)
     this.props.getObservation()
+    this.props.getUsers(this.props.params.id)
+    this.props.getRoles(this.props.params.id)
 
     setInterval(() => {
-      console.log(this.state.sort)
-      this.props.getMessages(this.state.sort)
+      this.props.getMessages(this.props.params.id, this.state.sort)
       // this.props.getObservation()
     }, 3000)
   }
@@ -129,10 +123,9 @@ class AdminTrials extends Component {
        // this.getData()
       })
     }
-    if (nextProps.messages.content &&
-      !_.isEqual(nextProps.messages.content, this.state.messages)) {
-      let change = nextProps.messages.content
-      this.setState({ messages:  change })
+    if (nextProps.messages.data &&
+      !_.isEqual(nextProps.messages.data, this.state.messages)) {
+      this.setState({ messages: nextProps.messages.data })
     }
     if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
       this.setState({ messageTime: nextProps.isSendMessage.time }, () => {
@@ -507,12 +500,13 @@ class AdminTrials extends Component {
                             value={-1}
                             style={{ color: 'grey' }}
                             primaryText={' '} />
-                          {userList.map((index) => (
-                            <MenuItem
-                              key={index.id}
-                              value={index.id}
-                              style={{ color: 'grey' }}
-                              primaryText={index.name} />
+                          {this.props.usersList.total === 0 &&
+                            this.props.usersList.data.map((index) => (
+                              <MenuItem
+                                key={index.id}
+                                value={index.id}
+                                style={{ color: 'grey' }}
+                                primaryText={index.name} />
                 ))}
                         </DropDownMenu>
                       </div>
@@ -529,12 +523,13 @@ class AdminTrials extends Component {
                             value={-1}
                             style={{ color: 'grey' }}
                             primaryText={' '} />
-                          {roleList.map((index) => (
-                            <MenuItem
-                              key={index.id}
-                              value={index.id}
-                              style={{ color: 'grey' }}
-                              primaryText={index.name} />
+                          {this.props.rolesList.total === 0 &&
+                            this.props.rolesList.data.map((index) => (
+                              <MenuItem
+                                key={index.id}
+                                value={index.id}
+                                style={{ color: 'grey' }}
+                                primaryText={index.name} />
                 ))}
                         </DropDownMenu>
                       </div>
@@ -639,7 +634,7 @@ class AdminTrials extends Component {
                         {this.state.messages.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
-                              {row.eventTime}
+                              {moment(row.eventTime).format('DD/MM/YYYY hh:mm')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.trialUserFirstName + ' ' + row.trialUserLastName}

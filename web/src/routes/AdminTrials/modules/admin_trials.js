@@ -11,6 +11,8 @@ import { getHeaders, errorHandle } from '../../../store/addons'
 export const GET_MESSAGES = 'GET_MESSAGES'
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const GET_OBSERVATION = 'GET_OBSERVATION'
+export const GET_USERS = 'GET_USERS'
+export const GET_ROLES = 'GET_ROLES'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -36,16 +38,32 @@ export const getObservationAction = (data = null) => {
   }
 }
 
+export const getUsersAction = (data = null) => {
+  return {
+    type: GET_USERS,
+    data: data
+  }
+}
+
+export const getRolesAction = (data = null) => {
+  return {
+    type: GET_ROLES,
+    data: data
+  }
+}
+
 export const actions = {
   getMessages,
   sendMessage,
-  getObservation
+  getObservation,
+  getUsers,
+  getRoles
 }
 
-export const getMessages = (sort = '') => {
+export const getMessages = (id, sort = '') => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/event/search?trialsession_id=1&sort=${sort.type},${sort.order}`, getHeaders())
+      axios.get(`http://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`, getHeaders())
        .then((response) => {
          dispatch(getMessagesAction(response.data))
          resolve()
@@ -90,6 +108,38 @@ export const getObservation = () => {
   }
 }
 
+export const getUsers = (id) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/user?trialsession_id=${id}`, getHeaders())
+          .then((response) => {
+            dispatch(getUsersAction(response.data))
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            resolve()
+          })
+    })
+  }
+}
+
+export const getRoles = (id) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/role?trialsession_id=${id}`, getHeaders())
+          .then((response) => {
+            dispatch(getRolesAction(response.data))
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            resolve()
+          })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -111,6 +161,18 @@ const ACTION_HANDLERS = {
       ...state,
       observation: action.data
     }
+  },
+  [GET_USERS]: (state, action) => {
+    return {
+      ...state,
+      usersList: action.data
+    }
+  },
+  [GET_ROLES]: (state, action) => {
+    return {
+      ...state,
+      rolesList: action.data
+    }
   }
 }
 // ------------------------------------
@@ -119,7 +181,9 @@ const ACTION_HANDLERS = {
 const initialState = {
   messages: [],
   isSendMessage: {},
-  observation: []
+  observation: [],
+  usersList: [],
+  rolesList: []
 }
 
 export default function adminTrialsReducer (state = initialState, action) {
