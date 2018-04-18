@@ -7,52 +7,97 @@ export let origin = window.location.hostname
 // } else {
 origin = '192.168.1.15:8080'
 // }
-// import axios from 'axios'
-// import { getHeaders, errorHandle } from '../../../store/addons'
+import axios from 'axios'
+import { getHeaders, errorHandle } from '../../../store/addons'
 
-export const GET_VIEWSCHEMA = 'GET_VIEWSCHEMA'
+export const GET_SCHEMA = 'GET_SCHEMA'
+export const SEND_OBSERVATION = 'SEND_OBSERVATION'
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export const getViewSchemaAction = (data = null) => {
+export const getSchemaAction = (data = null) => {
   return {
-    type: GET_VIEWSCHEMA,
+    type: GET_SCHEMA,
+    data: data
+  }
+}
+
+export const sendObservationAction = (data = null) => {
+  return {
+    type: SEND_OBSERVATION,
     data: data
   }
 }
 
 export const actions = {
-  getViewSchema
+  getSchema,
+  sendObservation
 }
 
-export const getViewSchema = () => {
+export const getSchema = () => {
   return (dispatch) => {
-    dispatch(getViewSchemaAction({
-      schema: {
-        'type': 'object',
-        'properties': {
-          'info': {
-            'type': 'string',
-            'title': 'How accurate was the sharing of information?'
-          },
-          'slider': {
-            'title': 'How long id this information sharing take?',
-            'type': 'integer',
-            'min': 1,
-            'max': 10,
-            'value': 2,
-            'step': 1
-          }
-        }
-      },
-      uiSchema: {
-        'slider': {
-          'ui:widget': 'Slider',
-          'ui:disabled': true
+    console.log(2)
+    dispatch(getSchemaAction({
+      'id': 1,
+      'name': 'Situational awareness',
+      'description': 'Good situational awareness is observed if location ' +
+      'basedinformation is well handled and no mistakes are made between (pieces of) ' +
+      'information received. Poor situationalawareness is observed when location based is missed, ' +
+     ' mixed up, incomplete or incorretly handled.',
+      'users': [
+        {
+          'id': 2,
+          'firstName': 'Mayer',
+          'lastName': 'Zandecki'
         },
-        'info': {
-          'ui:disabled': true
+        {
+          'id': 3,
+          'firstName': 'John',
+          'lastName': 'Zandecki'
+        },
+        {
+          'id': 4,
+          'firstName': 'Doe',
+          'lastName': 'Zandecki'
+        }
+      ],
+      'jsonSchema': {
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'question_8': {
+              'title': 'Mark good or poor awareness',
+              'description': 'Decide if there were any mistakes made',
+              'type': 'string',
+              'enum': [
+                'good awareness',
+                'poor awareness'
+              ]
+            },
+            'question_10': {
+              'title': 'Because I observed...',
+              'description': 'Decide if there were any mistakes made',
+              'type': 'string'
+            },
+            'question_12': {
+              'title': 'Because I observed...',
+              'description': 'Decide if there were any mistakes made',
+              'type': 'boolean'
+            }
+          }
+        },
+        'uiSchema': {
+          'question_8': {
+            'ui:disabled': false,
+            'ui:widget': 'radio'
+          },
+          'question_10': {
+            'ui:disabled': false
+          },
+          'question_12': {
+            'ui:disabled': false
+          }
         }
       }
     }))
@@ -70,14 +115,36 @@ export const getViewSchema = () => {
   }
 }
 
+export const sendObservation = () => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
+          .then((response) => {
+            dispatch(sendObservationAction(response.data))
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            resolve()
+          })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_VIEWSCHEMA]: (state, action) => {
+  [GET_SCHEMA]: (state, action) => {
     return {
       ...state,
-      viewSchema: action.data
+      observationForm: action.data
+    }
+  },
+  [SEND_OBSERVATION]: (state, action) => {
+    return {
+      ...state,
+      observation: action.data
     }
   }
 }
@@ -85,10 +152,11 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  viewSchema: {}
+  observationForm: {},
+  observation: {}
 }
 
-export default function questionReducer (state = initialState, action) {
+export default function newobservationReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

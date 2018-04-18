@@ -10,7 +10,7 @@ class NewObservation extends Component {
 
   static propTypes = {
     getSchema: PropTypes.func,
-    questionSchema: PropTypes.any,
+    observationForm: PropTypes.any,
     sendObservation: PropTypes.func,
     observation: PropTypes.any,
     params: PropTypes.any
@@ -21,7 +21,7 @@ class NewObservation extends Component {
       <div className='background-home'>
         <NewObservationComponent
           getSchema={this.props.getSchema}
-          questionSchema={this.props.questionSchema}
+          observationForm={this.props.observationForm}
           sendObservation={this.props.sendObservation}
           observation={this.props.observation}
           mode={false}

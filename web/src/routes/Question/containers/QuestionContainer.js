@@ -1,13 +1,13 @@
 import { connect } from 'react-redux'
 import Question from '../components/Question'
-import { getViewSchema } from './../modules/question'
+import { getSchema } from './../modules/question'
 
 const mapDispatchToProps = {
-  getViewSchema
+  getSchema
 }
 
 const mapStateToProps = (state) => ({
-  viewSchema: state.question.viewSchema
+  observationForm: state.question.observationForm
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question)
