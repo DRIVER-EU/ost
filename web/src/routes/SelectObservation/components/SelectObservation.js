@@ -10,7 +10,8 @@ class SelectObservationComponent extends Component {
 
   static propTypes = {
     getObservations: PropTypes.func,
-    listOfObservations: PropTypes.any
+    listOfObservations: PropTypes.any,
+    params: PropTypes.any
   }
 
   render () {
@@ -18,7 +19,8 @@ class SelectObservationComponent extends Component {
       <div className='background-home'>
         <SelectObservation
           getObservations={this.props.getObservations}
-          listOfObservations={this.props.listOfObservations} />
+          listOfObservations={this.props.listOfObservations}
+          params={this.props.params} />
       </div>
     )
   }
