@@ -4,12 +4,14 @@ import './Trials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
+import Spinner from 'react-spinkit'
 
 class Trials extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfTrials: []
+      listOfTrials: [],
+      isLoading: false
     }
   }
 
@@ -20,13 +22,14 @@ class Trials extends Component {
 
   componentWillMount () {
     this.props.getTrials()
+    this.setState({ isLoading: true })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfTrials.content &&
-      nextProps.listOfTrials.content !== this.state.listOfTrials &&
-      nextProps.listOfTrials.content !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.content })
+    if (nextProps.listOfTrials.data &&
+      nextProps.listOfTrials.data !== this.state.listOfTrials &&
+      nextProps.listOfTrials.data !== this.props.listOfTrials) {
+      this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
     }
   }
 
@@ -51,7 +54,14 @@ class Trials extends Component {
             <div className='trials-header'>
               <div className={'trial-select'}>Trial sessions</div>
             </div>
-            {this.state.listOfTrials.length === 0 && <div className={'no-sessions'}> No trial sessions available</div>}
+            {this.state.isLoading && <div className='spinner-box'>
+              <div className={'spinner'}>
+                <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
+              </div>
+              </div>
+            }
+            {(!this.state.isLoading && this.state.listOfTrials.length === 0) &&
+            <div className={'no-sessions'}> No trial sessions available</div>}
             <Accordion>
               {this.state.listOfTrials.map((object) => {
                 return (

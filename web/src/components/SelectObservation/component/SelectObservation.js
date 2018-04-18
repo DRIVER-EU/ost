@@ -15,11 +15,12 @@ class SelectObservation extends Component {
 
   static propTypes = {
     getObservations: PropTypes.func,
-    listOfObservations: PropTypes.any
+    listOfObservations: PropTypes.any,
+    params: PropTypes.any
   }
 
   componentWillMount () {
-    this.props.getObservations()
+    this.props.getObservations(this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -44,8 +45,9 @@ class SelectObservation extends Component {
               <List style={{ width: '100%' }}>
                 { this.state.listOfObservations.map((object, key) => (
                   <ListItem
-                    style={key % 2 === 0 ? { backgroundColor: '#1f497e12' } : { backgroundColor: '#feb91221' }}
-                    primaryText={object.title}
+                    style={key % 2 === 0 ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
+                    : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
+                    primaryText={object.name}
                     secondaryText={object.description}
                     onClick={() => this.newObservation(object.id)}
                   />

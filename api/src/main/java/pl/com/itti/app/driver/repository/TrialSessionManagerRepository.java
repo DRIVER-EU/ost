@@ -5,5 +5,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import pl.com.itti.app.driver.model.TrialSessionManager;
 import pl.com.itti.app.driver.model.TrialSessionManagerId;
 
-public interface TrialSessionManagerRepository extends PagingAndSortingRepository<TrialSessionManager, TrialSessionManagerId>, JpaSpecificationExecutor {
+public interface TrialSessionManagerRepository
+        extends PagingAndSortingRepository<TrialSessionManager, TrialSessionManagerId>,
+        JpaSpecificationExecutor<TrialSessionManager> {
 }

@@ -63,20 +63,25 @@ class AdminTrials extends Component {
       userValue: -1,
       roleValue: -1,
       title: '',
+      titleErrorText: '',
       messageValue: '',
+      messageValueErrorText: '',
       whatValue: '',
       whoValue: '',
       observationValue: '',
       sortObservation: true,
       sourceValue: '',
       changeDataTable: [],
-      sort: { type: 'dateTime', order: 'asc' },
       observations: [],
       chartData: [],
       changeDataTableSorted: [],
       messages: [],
       messageTime: '',
-      value: 'a'
+      value: 'a',
+      sort: {
+        type: 'eventTime',
+        order: 'asc'
+      }
     }
   }
 
@@ -90,13 +95,15 @@ class AdminTrials extends Component {
   }
 
   componentWillMount () {
-    this.props.getMessages()
+    this.props.getMessages(this.state.sort)
+    console.log(this.state.sort)
     this.props.getObservation()
 
-    setInterval(function () {
-      this.props.getMessages()
-      this.props.getObservation()
-    }.bind(this), 3000)
+    setInterval(() => {
+      console.log(this.state.sort)
+      this.props.getMessages(this.state.sort)
+      // this.props.getObservation()
+    }, 3000)
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -118,14 +125,13 @@ class AdminTrials extends Component {
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
       this.setState({ changeDataTable: change }, () => {
-        this.sortFunction()
-        this.getData()
+       // this.sortFunction()
+       // this.getData()
       })
     }
-    if (nextProps.messages &&
-      nextProps.messages.length !== this.state.messages.length) {
-      let change = nextProps.messages
-      change = this.getMessagesSorted(change)
+    if (nextProps.messages.content &&
+      !_.isEqual(nextProps.messages.content, this.state.messages)) {
+      let change = nextProps.messages.content
       this.setState({ messages:  change })
     }
     if (nextProps.isSendMessage.time && this.state.messageTime !== nextProps.isSendMessage.time) {
@@ -147,19 +153,42 @@ class AdminTrials extends Component {
   handleChangeTextField (name, e) {
     let change = {}
     change[name] = e.target.value
+    if (name === 'title') {
+      if (e.target.value === '') {
+        change['titleErrorText'] = 'Please, enter your title'
+      } else {
+        change['titleErrorText'] = ''
+      }
+    } else if (name === 'messageValue') {
+      if (e.target.value === '') {
+        change['messageValueErrorText'] = 'Please, enter your message'
+      } else if (e.target.value.length > 30) {
+        change['messageValueErrorText'] = 'Your message is too long'
+      } else {
+        change['messageValueErrorText'] = ''
+      }
+    }
     this.setState(change)
   }
+  checkValid () {
+    let change = { ...this.state }
 
-  getMessagesSorted (messages) {
-    for (let i = 0; i < messages.length; i++) {
-      messages[i].dateTime = moment(messages[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+    if (change.title === '') {
+      change['titleErrorText'] = 'Please, enter your title'
+    } else {
+      change['titleErrorText'] = ''
     }
 
-    let order = _.orderBy(messages, ['dateTime'], ['desc'])
-    for (let i = 0; i < order.length; i++) {
-      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+    if (change.messageValue === '') {
+      change['messageValueErrorText'] = 'Please, enter your message'
+    } else if (change.messageValue.length > 30) {
+      change['messageValueErrorText'] = 'Your message is too long'
+    } else {
+      change['messageValueErrorText'] = ''
     }
-    return order
+    this.setState(change)
+
+    return (change.titleErrorText || change.messageValueErrorText) === ''
   }
 
   sortFunction () {
@@ -185,6 +214,19 @@ class AdminTrials extends Component {
       changeDataTableSorted: order,
       sort: sort
     })
+  }
+
+  handleChangeState (type, order) {
+    let change = {
+      ...this.state.sort
+    }
+    change['type'] = type
+    change['order'] = order
+    this.setState(
+      {
+        sort: change
+      }
+    )
   }
 
   getSelectedUser () {
@@ -216,7 +258,9 @@ class AdminTrials extends Component {
     }
     send.message = this.state.messageValue
     send.time = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
-    this.props.sendMessage(send)
+    if (this.checkValid()) {
+      this.props.sendMessage(send)
+    }
   }
 
   getData () {
@@ -255,8 +299,22 @@ class AdminTrials extends Component {
         }
       }
     }
-
     this.setState({ chartData: data })
+  }
+
+  handleSort (type) {
+    let change = { ...this.state.sort }
+    if (this.state.sort.type !== type) {
+      change.order = 'asc'
+      change.type = type
+    } else if (this.state.sort.type === type && this.state.sort.order === 'asc') {
+      change.order = 'desc'
+      change.type = type
+    } else {
+      change.order = 'asc'
+      change.type = type
+    }
+    this.setState({ sort: change }, () => { this.props.getMessages(this.state.sort) })
   }
 
   handleChange = (value) => {
@@ -486,6 +544,7 @@ class AdminTrials extends Component {
                           style={{ width: '250px' }}
                           value={this.state.title}
                           hintText='enter the title'
+                          errorText={this.state.titleErrorText}
                           onChange={this.handleChangeTextField.bind(this, 'title')}
                   />
                       </div>
@@ -495,6 +554,7 @@ class AdminTrials extends Component {
                           style={{ width: '300px' }}
                           value={this.state.messageValue}
                           hintText='enter the message'
+                          errorText={this.state.messageValueErrorText}
                           onChange={this.handleChangeTextField.bind(this, 'messageValue')}
                   />
                       </div>
@@ -510,42 +570,88 @@ class AdminTrials extends Component {
                     <Table
                       bodyStyle={{ overflowX: undefined, overflowY: undefined }}
                       fixedFooter={false} >
-                      <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                      <TableHeader
+                        displaySelectAll={false}
+                        adjustForCheckbox={false} >
                         <TableRow>
-                          <TableHeaderColumn>
-                      Time
-                    </TableHeaderColumn>
-                          <TableHeaderColumn>
-                      User
-                    </TableHeaderColumn>
-                          <TableHeaderColumn>
-                      Role
-                    </TableHeaderColumn>
-                          <TableHeaderColumn>
-                      Title
-                    </TableHeaderColumn>
-                          <TableHeaderColumn>
-                      Message
-                    </TableHeaderColumn>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'eventTime')}>
+                            <div className='sort-style'>
+                              <div className='sort-style-icon sort-cursor'>Time</div>
+                              {this.state.sort.type === 'eventTime' && <div className='sort-cursor'>
+                                {
+                                this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
+                      : <i className='material-icons'>keyboard_arrow_down</i>}
+                              </div>
+                              }
+                            </div>
+                          </TableHeaderColumn>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'trialUserFirstName')}>
+                            <div className='sort-style'>
+                              <div className='sort-style-icon sort-cursor'>User</div>
+                              {this.state.sort.type === 'trialUserFirstName' &&
+                              <div className='sort-cursor'>
+                                {
+                                this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
+                      : <i className='material-icons'>keyboard_arrow_down</i>}
+                              </div>
+                             }
+                            </div>
+                          </TableHeaderColumn>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'trialRoleName')}>
+                            <div className='sort-style'>
+                              <div className='sort-style-icon sort-cursor'>Role</div>
+                              {this.state.sort.type === 'trialRoleName' &&
+                              <div className='sort-cursor'>
+                                {
+                                this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
+                      : <i className='material-icons'>keyboard_arrow_down</i>}
+                              </div>
+                             }
+                            </div>
+                          </TableHeaderColumn>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'name')}>
+                            <div className='sort-style'>
+                              <div className='sort-style-icon sort-cursor'>Name</div>
+                              {this.state.sort.type === 'name' &&
+                              <div className='sort-cursor'>
+                                {
+                                this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
+                      : <i className='material-icons'>keyboard_arrow_down</i>}
+                              </div>
+                             }
+                            </div>
+                          </TableHeaderColumn>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'description')}>
+                            <div className='sort-style'>
+                              <div className='sort-style-icon sort-cursor'>Description</div>
+                              {this.state.sort.type === 'description' &&
+                              <div className='sort-cursor'>
+                                {
+                                this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
+                      : <i className='material-icons'>keyboard_arrow_down</i>}
+                              </div>
+                             }
+                            </div>
+                          </TableHeaderColumn>
                         </TableRow>
                       </TableHeader>
                       <TableBody displayRowCheckbox={false} showRowHover>
                         {this.state.messages.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
-                              {row.dateTime}
+                              {row.eventTime}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.selectUser}
+                              {row.trialUserFirstName + ' ' + row.trialUserLastName}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.role}
+                              {row.trialRoleName}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.title}
+                              {row.name}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.message}
+                              {row.description}
                             </TableRowColumn>
                           </TableRow>
                 ))}

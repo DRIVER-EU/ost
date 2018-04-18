@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.enums.SessionStatus;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
-import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
+import pl.com.itti.app.driver.model.TrialRole;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
+import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;
@@ -19,22 +19,28 @@ import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
-public class TrialSessionService {
+public class TrialRoleService {
 
     @Autowired
-    private TrialSessionRepository trialSessionRepository;
+    private TrialUserRepository trialUserRepository;
+
+    @Autowired
+    private TrialRoleRepository trialRoleRepository;
 
     @Autowired
     private AuthUserRepository authUserRepository;
 
-    public Page<TrialSession> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
+    @Autowired
+    private TrialUserService trialUserService;
+
+    public Page<TrialRole> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        Set<Specification<TrialSession>> conditions = new HashSet<>();
-        conditions.add(TrialSessionSpecification.status(sessionStatus));
-        conditions.add(TrialSessionSpecification.loggedUser(authUser));
+        trialUserService.checkIsTrailSessionManager(authUser, trialSessionId);
 
-        return trialSessionRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
+        Set<Specification<TrialRole>> conditions = new HashSet<>();
+        conditions.add(TrialRoleSpecification.trialRole(trialSessionId));
+        return trialRoleRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
     }
 }
