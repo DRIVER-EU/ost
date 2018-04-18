@@ -14,7 +14,12 @@ class AdminTrialsView extends Component {
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
     getObservation: PropTypes.func,
-    observation: PropTypes.array
+    observation: PropTypes.array,
+    getUsers: PropTypes.func,
+    usersList: PropTypes.array,
+    getRoles: PropTypes.func,
+    rolesList: PropTypes.array,
+    params: PropTypes.any
   }
 
   render () {
@@ -27,6 +32,11 @@ class AdminTrialsView extends Component {
           sendMessage={this.props.sendMessage}
           getObservation={this.props.getObservation}
           observation={this.props.observation}
+          getUsers={this.props.getUsers}
+          usersList={this.props.usersList}
+          getRoles={this.props.getRoles}
+          rolesList={this.props.rolesList}
+          params={this.props.params}
         />
       </div>
     )

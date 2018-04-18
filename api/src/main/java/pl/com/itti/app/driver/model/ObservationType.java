@@ -43,7 +43,12 @@ public class ObservationType extends PersistentObject implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private Boolean multiplicity;
+    @Builder.Default
+    private boolean multiplicity = true;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean withUsers = true;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
     @Builder.Default
