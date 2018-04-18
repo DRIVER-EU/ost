@@ -18,7 +18,8 @@ class ViewTrials extends Component {
 
   static propTypes = {
     getViewTrials: PropTypes.func,
-    viewTrials: PropTypes.array
+    viewTrials: PropTypes.array,
+    params: PropTypes.any
   }
 
   componentWillMount () {
@@ -34,7 +35,7 @@ class ViewTrials extends Component {
   }
 
   viewEvent (id) {
-    browserHistory.push(`/trials/1/question/${id}`)
+    browserHistory.push(`/trials/${this.props.params.id}/question/${id}`)
   }
 
   newObservation () {
