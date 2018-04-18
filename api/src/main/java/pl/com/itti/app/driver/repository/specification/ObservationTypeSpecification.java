@@ -1,4 +1,4 @@
-package pl.com.itti.app.driver.repository;
+package pl.com.itti.app.driver.repository.specification;
 
 import co.perpixel.security.model.AuthUser;
 import org.springframework.data.jpa.domain.Specification;

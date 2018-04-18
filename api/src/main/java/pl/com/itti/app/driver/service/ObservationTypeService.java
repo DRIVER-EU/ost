@@ -13,12 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
-import pl.com.itti.app.driver.repository.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -39,7 +38,7 @@ public class ObservationTypeService {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        TrialSession trialSession = Optional.ofNullable(trialSessionRepository.findOne(trialSessionId))
+        TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
         return observationTypeRepository.findAll(
