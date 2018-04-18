@@ -3,7 +3,6 @@ package pl.com.itti.app.driver.dto;
 import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.TrialRole;
-import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
@@ -28,6 +27,8 @@ public class EventDTO {
         public String description;
         public Languages languageVersion;
         public LocalDateTime eventTime;
+        public long trialUserId;
+        public long trialRoleId;
 
         @Override
         public void toDto(Event event) {
@@ -38,14 +39,18 @@ public class EventDTO {
             this.description = event.getDescription();
             this.languageVersion = event.getLanguageVersion();
             this.eventTime = event.getEventTime();
+
+            Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
+            this.trialUserId = trialUserOptional.map(TrialUser::getId).orElse(-1L);
+
+            Optional<TrialRole> trialRoleOptional = Optional.ofNullable(event.getTrialRole());
+            this.trialRoleId = trialRoleOptional.map(TrialRole::getId).orElse(-1L);
         }
     }
 
     public static class ListItem extends CreateFormItem {
-        public long trialUserId;
-        public String trialUserFirstName;
-        public String trialUserLastName;
-        public long trialRoleId;
+        public String firstName;
+        public String lastName;
         public String trialRoleName;
 
         @Override
@@ -53,12 +58,10 @@ public class EventDTO {
             super.toDto(event);
 
             Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
-            this.trialUserId = trialUserOptional.map(TrialUser::getId).orElse(-1L);
-            this.trialUserFirstName = trialUserOptional.map(t -> t.getAuthUser().getFirstName()).orElse(null);
-            this.trialUserLastName = trialUserOptional.map(t -> t.getAuthUser().getLastName()).orElse(null);
+            this.firstName = trialUserOptional.map(t -> t.getAuthUser().getFirstName()).orElse(null);
+            this.lastName = trialUserOptional.map(t -> t.getAuthUser().getLastName()).orElse(null);
 
             Optional<TrialRole> trialRoleOptional = Optional.ofNullable(event.getTrialRole());
-            this.trialRoleId = trialRoleOptional.map(TrialRole::getId).orElse(-1L);
             this.trialRoleName = trialRoleOptional.map(TrialRole::getName).orElse(null);
         }
     }

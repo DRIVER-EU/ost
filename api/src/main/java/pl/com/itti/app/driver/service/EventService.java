@@ -9,9 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.EventDTO;
 import pl.com.itti.app.driver.model.Event;
+import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.repository.EventRepository;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
 
 @Service
 @Transactional
@@ -25,6 +29,12 @@ public class EventService {
 
     @Autowired
     private TrialSessionRepository trialSessionRepository;
+
+    @Autowired
+    private TrialUserRepository trialUserRepository;
+
+    @Autowired
+    private TrialRoleRepository trialRoleRepository;
 
     @Autowired
     private TrialUserService trialUserService;
@@ -44,6 +54,9 @@ public class EventService {
         TrialSession trialSession = trialSessionRepository.findOne(formItem.trialSessionId);
         trialUserService.checkIsTrailSessionManager(authUser, formItem.trialSessionId);
 
+        TrialUser trialUser = trialUserRepository.findOne(formItem.trialUserId);
+        TrialRole trialRole = trialRoleRepository.findOne(formItem.trialRoleId);
+
         Event event = new Event();
         event.setTrialSession(trialSession);
         event.setIdEvent(formItem.idEvent);
@@ -51,6 +64,8 @@ public class EventService {
         event.setDescription(formItem.description);
         event.setLanguageVersion(formItem.languageVersion);
         event.setEventTime(formItem.eventTime);
+        event.setTrialUser(trialUser);
+        event.setTrialRole(trialRole);
 
         return eventRepository.save(event);
     }
