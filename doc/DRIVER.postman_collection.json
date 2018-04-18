@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "DRIVER",
-		"_postman_id": "58d4d678-698e-0152-0241-6bac16754c87",
+		"_postman_id": "c2825967-87c3-0df5-c13a-7afac6c4877e",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -522,11 +522,10 @@
 			]
 		},
 		{
-			"name": "/observation-types",
-			"description": "",
+			"name": "/observationtypes",
 			"item": [
 				{
-					"name": "/api/observation_types",
+					"name": "/api/observationtypes?trialsession_id=1",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -560,23 +559,22 @@
 							"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
 						},
 						"url": {
-							"raw": "{{IP-Address}}/api/observation_types?trialSessionId=1",
+							"raw": "{{IP-Address}}/api/observationtypes?trialsession_id=1",
 							"host": [
 								"{{IP-Address}}"
 							],
 							"path": [
 								"api",
-								"observation_types"
+								"observationtypes"
 							],
 							"query": [
 								{
-									"key": "trialSessionId",
+									"key": "trialsession_id",
 									"value": "1",
 									"equals": true
 								}
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				}
@@ -757,7 +755,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{IP-Address}}/api/role?trialsession_id=2",
 					"protocol": "http",

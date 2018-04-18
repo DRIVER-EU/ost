@@ -2,10 +2,7 @@ package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -16,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,6 +36,10 @@ public class Answer extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_user_id", nullable = false)
     private TrialUser trialUser;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "observation_type_id", nullable = false)
+    private ObservationType observationType;
+
     @Column(nullable = false)
     private LocalDateTime simulationTime;
 
@@ -47,6 +49,9 @@ public class Answer extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private String fieldValue;
 
+    @Column(columnDefinition = "text", nullable = false)
+    private String formData;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<Attachment> attachments = new ArrayList<>();
@@ -54,8 +59,4 @@ public class Answer extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<AnswerTrialRole> answerTrialRoles = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
-    @Builder.Default
-    private List<AnswerQuestionItem> answerQuestionItems = new ArrayList<>();
 }

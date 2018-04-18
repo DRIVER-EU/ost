@@ -2,20 +2,16 @@ package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,7 +40,6 @@ public class Question extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private AnswerType answerType;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "question")
-    @Builder.Default
-    private List<QuestionItem> questionItems = new ArrayList<>();
+    @Column(columnDefinition = "text", nullable = false)
+    private String jsonSchema;
 }
