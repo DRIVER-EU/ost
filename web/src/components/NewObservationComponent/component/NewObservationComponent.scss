@@ -49,4 +49,18 @@
         margin-right: auto;
         margin: 10px;
     }
+    label span {
+        vertical-align: top;
+        position: relative;
+    }
+    label>div:first-child{
+        display: inline-block !important;
+        width: auto !important;
+    }
+    .checkbox .field-description {
+        padding-bottom: 10px;
+    }
+    .checkbox label, .radio label {
+        padding-left: 0px;
+    }
 }

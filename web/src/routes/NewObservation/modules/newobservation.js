@@ -37,30 +37,67 @@ export const actions = {
 
 export const getSchema = () => {
   return (dispatch) => {
+    console.log(2)
     dispatch(getSchemaAction({
-      schema: {
-        'type': 'object',
-        'properties': {
-          'info': {
-            'type': 'string',
-            'title': 'How accurate was the sharing of information?'
-          },
-          'slider': {
-            'title': 'How long id this information sharing take?',
-            'type': 'integer',
-            'min': 1,
-            'max':10,
-            'value': 2,
-            'step': 1
-          }
-        }
-      },
-      uiSchema: {
-        'slider': {
-          'ui:widget': 'Slider'
+      'id': 1,
+      'name': 'Situational awareness',
+      'description': 'Good situational awareness is observed if location ' +
+      'basedinformation is well handled and no mistakes are made between (pieces of) ' +
+      'information received. Poor situationalawareness is observed when location based is missed, ' +
+     ' mixed up, incomplete or incorretly handled.',
+      'users': [
+        {
+          'id': 2,
+          'firstName': 'Mayer',
+          'lastName': 'Zandecki'
         },
-        'info': {
-
+        {
+          'id': 3,
+          'firstName': 'John',
+          'lastName': 'Zandecki'
+        },
+        {
+          'id': 4,
+          'firstName': 'Doe',
+          'lastName': 'Zandecki'
+        }
+      ],
+      'jsonSchema': {
+        'schema': {
+          'type': 'object',
+          'properties': {
+            'question_8': {
+              'title': 'Mark good or poor awareness',
+              'description': 'Decide if there were any mistakes made',
+              'type': 'string',
+              'enum': [
+                'good awareness',
+                'poor awareness'
+              ]
+            },
+            'question_10': {
+              'title': 'Because I observed...',
+              'description': 'Decide if there were any mistakes made',
+              'type': 'string'
+            },
+            'question_12': {
+              'title': 'Because I observed...',
+              'description': 'Decide if there were any mistakes made',
+              'type': 'boolean'
+            }
+          }
+        },
+        'uiSchema': {
+          'question_8': {
+            'ui:disabled': false,
+            'ui:widget': 'radio'
+          },
+          'question_10': {
+            'ui:disabled': false
+          },
+          'question_12': {
+            'ui:disabled': false
+          }
         }
       }
     }))
@@ -101,7 +138,7 @@ const ACTION_HANDLERS = {
   [GET_SCHEMA]: (state, action) => {
     return {
       ...state,
-      questionSchema: action.data
+      observationForm: action.data
     }
   },
   [SEND_OBSERVATION]: (state, action) => {
@@ -115,7 +152,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  questionSchema: {},
+  observationForm: {},
   observation: {}
 }
 
