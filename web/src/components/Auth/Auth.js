@@ -19,7 +19,6 @@ class Auth extends Component {
   }
 
   isPublicLocation () {
-    console.log(12)
     let isPublic = false
     this.state.publicPaths.forEach(function (object) {
       if (
