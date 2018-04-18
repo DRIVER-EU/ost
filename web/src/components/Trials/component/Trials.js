@@ -26,10 +26,10 @@ class Trials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfTrials.content &&
-      nextProps.listOfTrials.content !== this.state.listOfTrials &&
-      nextProps.listOfTrials.content !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.content, isLoading: false })
+    if (nextProps.listOfTrials.data &&
+      nextProps.listOfTrials.data !== this.state.listOfTrials &&
+      nextProps.listOfTrials.data !== this.props.listOfTrials) {
+      this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
     }
   }
 
