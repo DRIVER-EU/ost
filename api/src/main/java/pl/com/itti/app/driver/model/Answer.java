@@ -58,5 +58,5 @@ public class Answer extends PersistentObject implements Serializable {
     private List<QuestionAnswer> questionAnswers = new ArrayList<>();
 
     @Column(columnDefinition = "text", nullable = false)
-    private String jsonForm;
+    private String formData;
 }
