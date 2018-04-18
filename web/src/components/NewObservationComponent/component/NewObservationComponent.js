@@ -28,8 +28,8 @@ class NewObservationComponent extends Component {
   constructor (props) {
     super()
     this.state = {
-      title: 'Incident location shared',
-      desc: `Note down this observation if indcident source is shared`,
+      title: '',
+      desc: '',
       participants: [
         { id: 1, name: 'Participant 1' },
         { id: 2, name: 'Participant 2' }
@@ -52,16 +52,20 @@ class NewObservationComponent extends Component {
   }
 
   componentWillMount () {
-    this.props.getSchema()
+    this.props.getSchema(this.props.params.id_question, this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.questionSchema && this.props.questionSchema &&
-        this.state.questionSchema !== nextProps.questionSchema) {
+        this.state.questionSchema !== nextProps.questionSchema.jsonSchema) {
       let change = { ...this.state.questionSchema }
-      change['schema'] = nextProps.questionSchema.schema
-      change['uiSchema'] = nextProps.questionSchema.uiSchema
-      this.setState({ questionSchema: change })
+      change['schema'] = nextProps.questionSchema.jsonSchema.schema
+      change['uiSchema'] = nextProps.questionSchema.jsonSchema.uiSchema
+      this.setState({
+        questionSchema: change,
+        title: nextProps.questionSchema.name,
+        desc: nextProps.questionSchema.description
+      })
     }
     if (nextProps.mode) {
       this.setState({ listOfParticipants: [1] })
