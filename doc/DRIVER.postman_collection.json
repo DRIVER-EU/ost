@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "DRIVER",
-		"_postman_id": "c2825967-87c3-0df5-c13a-7afac6c4877e",
+		"_postman_id": "99026f95-dbb4-9c4d-72c5-299b5a40d0b7",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -522,10 +522,10 @@
 			]
 		},
 		{
-			"name": "/observationtypes",
+			"name": "/observation-types",
 			"item": [
 				{
-					"name": "/api/observationtypes?trialsession_id=1",
+					"name": "/api/observation_types",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -559,22 +559,83 @@
 							"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
 						},
 						"url": {
-							"raw": "{{IP-Address}}/api/observationtypes?trialsession_id=1",
+							"raw": "{{IP-Address}}/api/observation_types?trialSessionId=1",
 							"host": [
 								"{{IP-Address}}"
 							],
 							"path": [
 								"api",
-								"observationtypes"
+								"observation_types"
 							],
 							"query": [
+								{
+									"key": "trialSessionId",
+									"value": "1",
+									"equals": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/observationtypes/form",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Alice1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
+						},
+						"url": {
+							"raw": "{{IP-Address}}/api/observationtypes/form?observationtype_id=1&trialsession_id=1",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"observationtypes",
+								"form"
+							],
+							"query": [
+								{
+									"key": "observationtype_id",
+									"value": "1",
+									"equals": true
+								},
 								{
 									"key": "trialsession_id",
 									"value": "1",
 									"equals": true
 								}
 							]
-						}
+						},
+						"description": ""
 					},
 					"response": []
 				}

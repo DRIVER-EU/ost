@@ -2,10 +2,7 @@ package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import pl.com.itti.app.driver.model.enums.RoleType;
@@ -16,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,15 +40,26 @@ public class TrialRole extends PersistentObject implements Serializable {
     private RoleType roleType;
 
     @ManyToMany(
-            cascade={CascadeType.PERSIST, CascadeType.MERGE},
-            targetEntity=pl.com.itti.app.driver.model.TrialRole.class
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            targetEntity = TrialRole.class
     )
     @JoinTable(
-            name="trial_role_m2m",
-            joinColumns=@JoinColumn(name="trial_observer_id"),
-            inverseJoinColumns=@JoinColumn(name="trial_participant_id")
+            name = "trial_role_m2m",
+            joinColumns = @JoinColumn(name = "trial_observer_id"),
+            inverseJoinColumns = @JoinColumn(name = "trial_participant_id")
     )
     private List<TrialRole> trialRoles;
+
+    @ManyToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            targetEntity = TrialRole.class
+    )
+    @JoinTable(
+            name = "trial_role_m2m",
+            joinColumns = @JoinColumn(name = "trial_participant_id"),
+            inverseJoinColumns = @JoinColumn(name = "trial_observer_id")
+    )
+    private List<TrialRole> trialRolesParents;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trialRole")
     @Builder.Default
