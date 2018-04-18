@@ -11,17 +11,19 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.ObservationTypeDTO;
+import pl.com.itti.app.driver.dto.TrialUserDTO;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.repository.*;
+import pl.com.itti.app.driver.repository.ObservationTypeRepository;
+import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
-import pl.com.itti.app.driver.web.dto.ObservationTypeDTO;
-import pl.com.itti.app.driver.web.dto.TrialUserDTO;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -48,7 +50,7 @@ public class ObservationTypeService {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        TrialSession trialSession = Optional.ofNullable(trialSessionRepository.findOne(trialSessionId))
+        TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
         return observationTypeRepository.findAll(
@@ -62,11 +64,9 @@ public class ObservationTypeService {
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
-
-        TrialSession trialSession = Optional.ofNullable(trialSessionRepository.findOne(trialSessionId))
+        TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
-
-        ObservationType observationType = Optional.ofNullable(observationTypeRepository.findOne(observationTypeId))
+        ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
 
         ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);

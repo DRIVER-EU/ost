@@ -36,6 +36,10 @@ public class Answer extends PersistentObject implements Serializable {
     @JoinColumn(name = "trial_user_id", nullable = false)
     private TrialUser trialUser;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "observation_type_id", nullable = false)
+    private ObservationType observationType;
+
     @Column(nullable = false)
     private LocalDateTime simulationTime;
 
@@ -45,6 +49,9 @@ public class Answer extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private String fieldValue;
 
+    @Column(columnDefinition = "text", nullable = false)
+    private String formData;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<Attachment> attachments = new ArrayList<>();
@@ -52,11 +59,4 @@ public class Answer extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
     @Builder.Default
     private List<AnswerTrialRole> answerTrialRoles = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "answer")
-    @Builder.Default
-    private List<QuestionAnswer> questionAnswers = new ArrayList<>();
-
-    @Column(columnDefinition = "text", nullable = false)
-    private String jsonForm;
 }

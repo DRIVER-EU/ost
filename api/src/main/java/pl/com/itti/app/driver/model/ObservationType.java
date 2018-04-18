@@ -55,4 +55,8 @@ public class ObservationType extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
     @Builder.Default
     private List<ObservationTypeTrialRole> observationTypeTrialRoles = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
+    @Builder.Default
+    private List<Answer> answers = new ArrayList<>();
 }
