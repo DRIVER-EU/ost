@@ -4,6 +4,11 @@ DROP TABLE public.question_item;
 DELETE FROM public.question;
 
 ALTER TABLE public.answer ADD COLUMN form_data text NOT NULL;
+ALTER TABLE public.answer ADD COLUMN observation_type_id bigint NOT NULL;
+ALTER TABLE public.answer ADD CONSTRAINT fkwot1ofibkvp27yof2zb168eip FOREIGN KEY (observation_type_id)
+      REFERENCES public.observation_type (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
 ALTER TABLE public.question ADD COLUMN json_schema text NOT NULL;
 
 INSERT INTO public.question ("id", "observation_type_id", "description", "name", "answer_type", "json_schema")
