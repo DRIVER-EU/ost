@@ -6,7 +6,6 @@ import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,19 +24,15 @@ public class EventDTO {
     public static class FormItem extends MinimalItem {
 
         @NotNull
-        @Valid
-        public long trialSessionId;
+        public Long trialSessionId;
 
         @NotNull
-        @Valid
         public String name;
 
         @NotNull
-        @Valid
         public String description;
 
         @NotNull
-        @Valid
         public LocalDateTime eventTime;
 
         public Languages languageVersion;

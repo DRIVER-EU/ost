@@ -23,9 +23,8 @@ public class EventController {
         return DTO.from(eventService.findByTrialSessionId(trialSessionId, pageable), EventDTO.ListItem.class);
     }
 
-    @Validated
     @PostMapping
-    public EventDTO.FormItem create(@RequestBody EventDTO.FormItem formItem) {
+    public EventDTO.FormItem create(@RequestBody @Validated EventDTO.FormItem formItem) {
         return DTO.from(eventService.create(formItem), EventDTO.FormItem.class);
     }
 }

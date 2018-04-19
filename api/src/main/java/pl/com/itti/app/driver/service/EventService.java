@@ -17,6 +17,7 @@ import pl.com.itti.app.driver.repository.EventRepository;
 import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
+import pl.com.itti.app.driver.util.InvalidDataException;
 
 @Service
 @Transactional
@@ -56,6 +57,10 @@ public class EventService {
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, formItem.trialSessionId));
 
         trialUserService.checkIsTrailSessionManager(authUser, formItem.trialSessionId);
+
+        if (formItem.trialRoleId > 0 && formItem.trialUserId > 0) {
+            throw new InvalidDataException("Event can't be connected to TrialRole and TrialUser");
+        }
 
         TrialUser trialUser = trialUserRepository.findOne(formItem.trialUserId);
         TrialRole trialRole = trialRoleRepository.findOne(formItem.trialRoleId);
