@@ -36,7 +36,7 @@ export const getObservations = (trialSessionId) => {
     //   ]
     // }))
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/observation_types?trialSessionId=${trialSessionId}`, getHeaders())
+      axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
           .then((response) => {
             dispatch(getObservationsAction(response.data))
             resolve()

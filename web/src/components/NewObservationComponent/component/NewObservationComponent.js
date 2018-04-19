@@ -49,7 +49,8 @@ class NewObservationComponent extends Component {
   }
 
   componentWillMount () {
-    this.props.getSchema(this.props.params.id_question, this.props.params.id)
+    console.log(1)
+    this.props.getSchema(this.props.params.id_observation, this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
