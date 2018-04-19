@@ -22,14 +22,28 @@ class TrialManager extends Component {
 
   componentWillMount () {
     this.props.getTrials()
-    this.setState({ isLoading: true })
+    // this.setState({ isLoading: true })
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrials.data &&
       nextProps.listOfTrials.data !== this.state.listOfTrials &&
       nextProps.listOfTrials.data !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
+        /** * MOCK * **/
+      let data = {
+        total:2,
+        data:[
+          { id:2,
+            status:'ACTIVE',
+            trialDescription:'Old building with 120 inhabitants started to burn because of failure' +
+            'of electrical installations.' +
+            'The fire is spreading very fast. One of inhabitants called for an external help. ',
+            trialName:'Building Fire' }
+        ]
+      }
+      this.setState({ listOfTrials: data.data })
+      /** * MOCK * **/
+      // this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
     }
   }
 
