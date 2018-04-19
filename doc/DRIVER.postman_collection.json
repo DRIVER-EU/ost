@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "DRIVER",
-		"_postman_id": "58d4d678-698e-0152-0241-6bac16754c87",
+		"_postman_id": "99026f95-dbb4-9c4d-72c5-299b5a40d0b7",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -523,7 +523,6 @@
 		},
 		{
 			"name": "/observation-types",
-			"description": "",
 			"item": [
 				{
 					"name": "/api/observation_types",
@@ -571,6 +570,66 @@
 							"query": [
 								{
 									"key": "trialSessionId",
+									"value": "1",
+									"equals": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/observationtypes/form",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Alice1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
+						},
+						"url": {
+							"raw": "{{IP-Address}}/api/observationtypes/form?observationtype_id=1&trialsession_id=1",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"observationtypes",
+								"form"
+							],
+							"query": [
+								{
+									"key": "observationtype_id",
+									"value": "1",
+									"equals": true
+								},
+								{
+									"key": "trialsession_id",
 									"value": "1",
 									"equals": true
 								}
@@ -757,7 +816,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://{{IP-Address}}/api/role?trialsession_id=2",
 					"protocol": "http",

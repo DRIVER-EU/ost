@@ -34,10 +34,10 @@ public class QuestionTests {
     @Test
     public void findOneById() {
         // when
-        Question question = questionRepository.findOne(1L);
+        Question question = questionRepository.findOne(9L);
 
         // then
-        Assert.assertEquals(1L, question.getId().longValue());
+        Assert.assertEquals(9L, question.getId().longValue());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class QuestionTests {
         Page<Question> questionPage = questionRepository.findAll(new PageRequest(1,10));
 
         // then
-        Assert.assertEquals(7L, questionPage.getTotalElements());
+        Assert.assertEquals(9L, questionPage.getTotalElements());
     }
 
     @Test
@@ -57,6 +57,7 @@ public class QuestionTests {
                 .name("name")
                 .description("description")
                 .observationType(observationTypeRepository.findOne(1L))
+                .jsonSchema("schema")
                 .build();
 
         // when
@@ -64,7 +65,7 @@ public class QuestionTests {
         Page<Question> questionPage = questionRepository.findAll(new PageRequest(1,10));
 
         // then
-        Assert.assertEquals(8L, questionPage.getTotalElements());
+        Assert.assertEquals(10L, questionPage.getTotalElements());
         Assert.assertEquals(question.getAnswerType(), savedQuestion.getAnswerType());
         Assert.assertEquals(question.getName(), savedQuestion.getName());
         Assert.assertEquals(question.getDescription(), savedQuestion.getDescription());
@@ -74,7 +75,7 @@ public class QuestionTests {
     @Test
     public void update() {
         // given
-        Question question = questionRepository.findOne(1L);
+        Question question = questionRepository.findOne(9L);
         question.setAnswerType(AnswerType.CHECKBOX);
 
         // when
@@ -90,10 +91,10 @@ public class QuestionTests {
     @Test
     public void delete() {
         // when
-        questionRepository.delete(7L);
+        questionRepository.delete(9L);
         Page<Question> questionPage = questionRepository.findAll(new PageRequest(1,10));
 
         // then
-        Assert.assertEquals(6L, questionPage.getTotalElements());
+        Assert.assertEquals(8L, questionPage.getTotalElements());
     }
 }

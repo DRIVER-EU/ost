@@ -51,8 +51,7 @@ class NewObservationComponent extends Component {
   }
 
   componentWillMount () {
-    this.props.getSchema()
-    console.log(this.props)
+    this.props.getSchema(this.props.params.id_question, this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -63,6 +62,8 @@ class NewObservationComponent extends Component {
       change['schema'] = nextProps.observationForm.jsonSchema.schema
       change['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
       this.setState({ observationForm: change })
+
+      this.props.getSchema(this.props.params.id_question, this.props.params.id)
     }
     if (nextProps.mode) {
       this.setState({ listOfParticipants: [1] })
