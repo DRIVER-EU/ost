@@ -79,7 +79,7 @@ export const getMessages = (id, sort = '') => {
 export const sendMessage = (message) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`http://${origin}/api/anonymous/message`, message, getHeaders())
+      axios.post(`http://${origin}/api/event`, message, getHeaders())
          .then((response) => {
            dispatch(sendMessageAction(message))
            resolve()
