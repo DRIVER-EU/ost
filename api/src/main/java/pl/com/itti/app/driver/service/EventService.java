@@ -45,7 +45,7 @@ public class EventService {
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
         trialUserService.checkIsTrailSessionManager(authUser, trialSessionId);
-        return eventRepository.findByTrialSessionId(trialSessionId, pageable);
+        return eventRepository.findAllByTrialSessionId(trialSessionId, pageable);
     }
 
     public Event create(EventDTO.FormItem formItem) {

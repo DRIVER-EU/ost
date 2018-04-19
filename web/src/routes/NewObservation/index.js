@@ -1,7 +1,7 @@
 import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
-  path : ':id/new-observation/:id_newObservation',
+  path : ':id/new-observation/:id_observation',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const Page = require('./containers/NewObservationContainer').default
