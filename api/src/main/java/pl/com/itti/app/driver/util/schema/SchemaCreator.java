@@ -1,8 +1,7 @@
 package pl.com.itti.app.driver.util.schema;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.json.JSONObject;
 import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 
@@ -19,23 +18,23 @@ public final class SchemaCreator {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static ObjectNode createSchemaForm(List<Question> questions) throws IOException {
-        ObjectNode schemaForm = MAPPER.createObjectNode();
+    public static JSONObject createSchemaForm(List<Question> questions) throws IOException {
+        JSONObject schemaForm = MAPPER.createJSONObject();
 
-        ObjectNode schema = createSchema(questions);
+        JSONObject schema = createSchema(questions);
         schemaForm.putPOJO("schema", schema);
 
-        ObjectNode uiSchema = createUiSchema(questions);
+        JSONObject uiSchema = createUiSchema(questions);
         schemaForm.putPOJO("uiSchema", uiSchema);
 
         return schemaForm;
     }
 
-    private static ObjectNode createSchema(List<Question> questions) throws IOException {
-        ObjectNode schema = MAPPER.createObjectNode();
+    private static JSONObject createSchema(List<Question> questions) throws IOException {
+        JSONObject schema = MAPPER.createJSONObject();
         schema.put("type", "object");
 
-        ObjectNode properties = MAPPER.createObjectNode();
+        JSONObject properties = MAPPER.createJSONObject();
         for (Question question : questions) {
             properties.putPOJO(QUESTION_ID + question.getId(), createPropertyContent(question));
         }
@@ -44,18 +43,18 @@ public final class SchemaCreator {
         return schema;
     }
 
-    private static JsonNode createPropertyContent(Question question) throws IOException {
+    private static JSONObject createPropertyContent(Question question) throws IOException {
         return MAPPER.readTree(question.getJsonSchema());
     }
 
-    private static ObjectNode createUiSchema(List<Question> questions) {
-        ObjectNode schema = MAPPER.createObjectNode();
-        questions.forEach(question -> schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question)));
+    private static JSONObject createUiSchema(List<Question> questions) {
+        JSONObject schema = new JSONObject();
+        questions.forEach(question -> schema.put(QUESTION_ID + question.getId(), createUiSchema(question)));
         return schema;
     }
 
-    private static ObjectNode createUiSchema(Question question) {
-        ObjectNode ui = MAPPER.createObjectNode();
+    private static JSONObject createUiSchema(Question question) {
+        JSONObject ui = new JSONObject();
         ui.put(DISABLED, false);
 
         if (question.getAnswerType().equals(AnswerType.RADIO_BUTTON)) {

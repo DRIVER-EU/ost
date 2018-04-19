@@ -4,6 +4,10 @@ import co.perpixel.dto.DTO;
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
+import org.everit.json.schema.loader.SchemaLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.dto.TrialUserDTO;
+import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialUser;
@@ -24,6 +30,7 @@ import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecificat
 import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,11 +75,29 @@ public class ObservationTypeService {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
 
-        ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
+        ObservationTypeDTO.SchemaItem schemaItem = getSchema(observationType);
 
         schemaItem.users = getSchemaItemUsers(observationType, trialSessionId);
 
         return schemaItem;
+    }
+
+    public Answer createAnswer(long observationTypeId, AnswerDTO.Form form) {
+        ObservationType observationType = observationTypeRepository.findById(observationTypeId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
+        JsonNode schema = getSchema(observationType).jsonSchema.get("schema");
+        try {
+            URL url = Resources.getResource("fstab.json");
+            JsonNode jsonNode = new ObjectMapper().readTree(url);
+            SchemaLoader.
+        } catch (Exception e) {
+            System.out.println("CYCKI X D");
+        }
+        return new Answer();
+    }
+
+    private ObservationTypeDTO.SchemaItem getSchema(ObservationType observationType) {
+        return DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
     }
 
     private List<TrialUserDTO.ListItem> getSchemaItemUsers(ObservationType observationType, long trialSessionId) {

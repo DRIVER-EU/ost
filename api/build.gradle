@@ -13,6 +13,7 @@ buildscript {
         jacksonVersion = '2.8.6'
         httpclientVersion = '4.5.3'
         lombokVersion = '1.16.18'
+        jsonSchemaValidatorVersion = '1.5.1'
 
         apacheCommonsLoggingVersion = '1.2'
         apacheCommonsCodecVersion = '1.10'
@@ -149,6 +150,9 @@ dependencies {
 
     // Guava
     compile("com.google.guava:guava:${guavaVersion}")
+
+    // JSON schema validator
+    compile("org.everit.json:org.everit.json.schema:${jsonSchemaValidatorVersion}")
 
     // JSON
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")

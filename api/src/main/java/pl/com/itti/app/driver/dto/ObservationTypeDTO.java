@@ -1,7 +1,7 @@
 package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
-import com.fasterxml.jackson.databind.JsonNode;
+import org.json.JSONObject;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
@@ -36,7 +36,7 @@ public final class ObservationTypeDTO {
 
     public static class SchemaItem extends ListItem {
         public List<TrialUserDTO.ListItem> users;
-        public JsonNode jsonSchema;
+        public JSONObject jsonSchema;
 
         @Override
         public void toDto(ObservationType observationType) {
