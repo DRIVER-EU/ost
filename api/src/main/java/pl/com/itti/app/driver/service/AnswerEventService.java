@@ -4,7 +4,8 @@ import co.perpixel.dto.DTO;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.AnswerEventDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Event;
@@ -14,7 +15,8 @@ import pl.com.itti.app.driver.repository.EventRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
+@Transactional
 public class AnswerEventService {
 
     @Autowired
@@ -29,6 +31,7 @@ public class AnswerEventService {
     @Autowired
     private TrialUserService trialUserService;
 
+    @Transactional(readOnly = true)
     public List<AnswerEventDTO.Item> getAnswersAndEvents(long trialSessionId) {
         AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(RuntimeException::new);
@@ -42,7 +45,8 @@ public class AnswerEventService {
     }
 
     private List<AnswerEventDTO.Item> getAsAnswersEvents(List<Answer> answers, List<Event> events) {
-        List<AnswerEventDTO.Item> answerEventList = new ArrayList<>(mapAnswers(answers));
+        List<AnswerEventDTO.Item> answerEventList = new ArrayList<>();
+        answerEventList.addAll(mapAnswers(answers));
         answerEventList.addAll(mapEvents(events));
         return answerEventList;
     }
