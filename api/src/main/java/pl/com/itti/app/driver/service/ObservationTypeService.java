@@ -4,10 +4,9 @@ import co.perpixel.dto.DTO;
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
+import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +28,9 @@ import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
-import java.net.URL;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -85,13 +85,14 @@ public class ObservationTypeService {
     public Answer createAnswer(long observationTypeId, AnswerDTO.Form form) {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
-        JsonNode schema = getSchema(observationType).jsonSchema.get("schema");
+
         try {
-            URL url = Resources.getResource("fstab.json");
-            JsonNode jsonNode = new ObjectMapper().readTree(url);
-            SchemaLoader.
-        } catch (Exception e) {
-            System.out.println("CYCKI X D");
+            JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
+            Schema schema = SchemaLoader.load(jsonObject);
+            schema.validate(new JSONObject(form.data.toString()));
+            System.out.println();
+        } catch (IOException ioe) {
+            System.out.println("sdsd");
         }
         return new Answer();
     }
