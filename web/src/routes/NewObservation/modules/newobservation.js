@@ -36,7 +36,6 @@ export const actions = {
 }
 
 export const getSchema = (idObs, idSession) => {
-  console.log(idObs, idSession)
   return (dispatch) => {
     return new Promise((resolve) => {
       /* eslint-disable */

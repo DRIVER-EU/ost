@@ -28,8 +28,6 @@ class NewObservationComponent extends Component {
   constructor (props) {
     super()
     this.state = {
-      title: 'Incident location shared',
-      desc: `Note down this observation if indcident source is shared`,
       formData: {},
       observationForm: {
         name:'',
@@ -55,15 +53,12 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps, 1)
     if (nextProps.observationForm && this.props.observationForm &&
         this.state.observationForm !== nextProps.observationForm) {
       let change = { ...nextProps.observationForm }
       change['schema'] = nextProps.observationForm.jsonSchema.schema
       change['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
       this.setState({ observationForm: change })
-
-      this.props.getSchema(this.props.params.id_question, this.props.params.id)
     }
     if (nextProps.mode) {
       this.setState({ listOfParticipants: [1] })

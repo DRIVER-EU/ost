@@ -13,9 +13,6 @@ class QuestionView extends Component {
     observationForm: PropTypes.any,
     params: PropTypes.any
   }
-  componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
-  }
 
   render () {
     return (
