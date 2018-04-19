@@ -89,7 +89,7 @@ class AdminTrials extends Component {
   }
 
   componentWillMount () {
-    this.props.getMessages(this.state.sort)
+    this.props.getMessages(this.props.params.id, this.state.sort)
     this.props.getObservation()
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)

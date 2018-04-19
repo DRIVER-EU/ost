@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "DRIVER",
-		"_postman_id": "99026f95-dbb4-9c4d-72c5-299b5a40d0b7",
+		"_postman_id": "4f8b94f3-9675-0b2f-7f5a-1b20d18ec22f",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -522,10 +522,10 @@
 			]
 		},
 		{
-			"name": "/observation-types",
+			"name": "/observationtypes",
 			"item": [
 				{
-					"name": "/observationtypes",
+					"name": "/api/observationtypes",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -559,7 +559,7 @@
 							"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
 						},
 						"url": {
-							"raw": "{{IP-Address}}/api/observationtypes?trialSessionId=1",
+							"raw": "{{IP-Address}}/api/observationtypes?trialsession_id=1",
 							"host": [
 								"{{IP-Address}}"
 							],
@@ -569,7 +569,7 @@
 							],
 							"query": [
 								{
-									"key": "trialSessionId",
+									"key": "trialsession_id",
 									"value": "1",
 									"equals": true
 								}
@@ -579,7 +579,7 @@
 					"response": []
 				},
 				{
-					"name": "/observationtypes/form",
+					"name": "/api/observationtypes/form",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -634,50 +634,132 @@
 									"equals": true
 								}
 							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2e33cf3e-b0b7-49cb-a1c1-c8d0ee4fc7b9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7b790653-8898-47d5-943c-f2e2164d6579",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "/trialsessions",
+			"description": "",
+			"item": [
+				{
+					"name": "/trialsessions/active",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{X-Auth-Token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/trialsession/active",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"trialsession",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/trialsessions",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Mayer1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/trialsessions",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"trialsessions"
+							]
 						},
 						"description": ""
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "/trialsession/active",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "X-Auth-Token",
-						"value": "{{X-Auth-Token}}"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "",
-						"value": "",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
-				},
-				"url": {
-					"raw": "http://{{IP-Address}}/api/trialsession/active",
-					"protocol": "http",
-					"host": [
-						"{{IP-Address}}"
-					],
-					"path": [
-						"api",
-						"trialsession",
-						"active"
-					]
-				}
-			},
-			"response": []
 		},
 		{
 			"name": "/event/search?trialsession_id=1",
@@ -841,7 +923,7 @@
 			"response": []
 		},
 		{
-			"name": "/answers-events?trialsession_id=2",
+			"name": "/event",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -849,6 +931,49 @@
 						{
 							"key": "username",
 							"value": "Mayer1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"trialSessionId\": 2,\n\t\"idEvent\": 1,\n\t\"name\": \"Event\",\n\t\"description\": \"Event added\",\n\t\"languageVersion\": \"POLISH\",\n\t\"eventTime\": \"2018-04-12T09:20:25\",\n\t\"trialUserId\": 5\n}"
+				},
+				"url": {
+					"raw": "http://{{IP-Address}}/api/event",
+					"protocol": "http",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/answers-events",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Alice1",
 							"type": "string"
 						},
 						{
@@ -875,7 +1000,7 @@
 					"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
 				},
 				"url": {
-					"raw": "{{IP-Address}}/api/answers-events?trialsession_id=2",
+					"raw": "{{IP-Address}}/api/answers-events?trialsession_id=1",
 					"host": [
 						"{{IP-Address}}"
 					],
@@ -886,7 +1011,7 @@
 					"query": [
 						{
 							"key": "trialsession_id",
-							"value": "2",
+							"value": "1",
 							"equals": true
 						}
 					]
