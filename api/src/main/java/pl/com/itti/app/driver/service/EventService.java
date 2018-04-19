@@ -72,4 +72,29 @@ public class EventService {
 
         return eventRepository.save(event);
     }
+
+    public Event create(EventDTO.FormItem formItem) {
+        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
+                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+
+        TrialSession trialSession = trialSessionRepository.findById(formItem.trialSessionId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, formItem.trialSessionId));
+
+        trialUserService.checkIsTrailSessionManager(authUser, formItem.trialSessionId);
+
+        TrialUser trialUser = trialUserRepository.findOne(formItem.trialUserId);
+        TrialRole trialRole = trialRoleRepository.findOne(formItem.trialRoleId);
+
+        Event event = Event.builder()
+                .trialSession(trialSession)
+                .name(formItem.name)
+                .description(formItem.description)
+                .languageVersion(formItem.languageVersion)
+                .eventTime(formItem.eventTime)
+                .trialUser(trialUser)
+                .trialRole(trialRole)
+                .build();
+
+        return eventRepository.save(event);
+    }
 }
