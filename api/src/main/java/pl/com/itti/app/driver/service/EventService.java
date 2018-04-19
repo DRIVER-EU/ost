@@ -48,7 +48,7 @@ public class EventService {
         return eventRepository.findByTrialSessionId(trialSessionId, pageable);
     }
 
-    public Event create(EventDTO.CreateFormItem formItem) {
+    public Event create(EventDTO.FormItem formItem) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
@@ -62,7 +62,6 @@ public class EventService {
 
         Event event = Event.builder()
                 .trialSession(trialSession)
-                .idEvent(formItem.idEvent)
                 .name(formItem.name)
                 .description(formItem.description)
                 .languageVersion(formItem.languageVersion)

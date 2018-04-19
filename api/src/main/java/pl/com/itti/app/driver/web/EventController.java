@@ -5,10 +5,9 @@ import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.com.itti.app.driver.dto.EventDTO;
-import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.service.EventService;
 
 @RestController
@@ -24,8 +23,9 @@ public class EventController {
         return DTO.from(eventService.findByTrialSessionId(trialSessionId, pageable), EventDTO.ListItem.class);
     }
 
+    @Validated
     @PostMapping
-    public EventDTO.CreateFormItem create(@RequestBody EventDTO.CreateFormItem formItem) {
-        return DTO.from(eventService.create(formItem), EventDTO.CreateFormItem.class);
+    public EventDTO.FormItem create(@RequestBody EventDTO.FormItem formItem) {
+        return DTO.from(eventService.create(formItem), EventDTO.FormItem.class);
     }
 }

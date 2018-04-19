@@ -6,6 +6,8 @@ import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -20,13 +22,25 @@ public class EventDTO {
         }
     }
 
-    public static class CreateFormItem extends MinimalItem {
+    public static class FormItem extends MinimalItem {
+
+        @NotNull
+        @Valid
         public long trialSessionId;
-        public int idEvent;
+
+        @NotNull
+        @Valid
         public String name;
+
+        @NotNull
+        @Valid
         public String description;
-        public Languages languageVersion;
+
+        @NotNull
+        @Valid
         public LocalDateTime eventTime;
+
+        public Languages languageVersion;
         public long trialUserId;
         public long trialRoleId;
 
@@ -34,7 +48,6 @@ public class EventDTO {
         public void toDto(Event event) {
             super.toDto(event);
             this.trialSessionId = event.getTrialSession().getId();
-            this.idEvent = event.getIdEvent();
             this.name = event.getName();
             this.description = event.getDescription();
             this.languageVersion = event.getLanguageVersion();
@@ -48,7 +61,7 @@ public class EventDTO {
         }
     }
 
-    public static class ListItem extends CreateFormItem {
+    public static class ListItem extends FormItem {
         public String firstName;
         public String lastName;
         public String trialRoleName;

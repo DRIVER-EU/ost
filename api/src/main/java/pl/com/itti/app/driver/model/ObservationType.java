@@ -2,10 +2,7 @@ package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -15,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,7 +43,12 @@ public class ObservationType extends PersistentObject implements Serializable {
     private String name;
 
     @Column(nullable = false)
-    private Boolean multiplicity;
+    @Builder.Default
+    private boolean multiplicity = true;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean withUsers = true;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
     @Builder.Default
@@ -54,4 +57,8 @@ public class ObservationType extends PersistentObject implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
     @Builder.Default
     private List<ObservationTypeTrialRole> observationTypeTrialRoles = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
+    @Builder.Default
+    private List<Answer> answers = new ArrayList<>();
 }
