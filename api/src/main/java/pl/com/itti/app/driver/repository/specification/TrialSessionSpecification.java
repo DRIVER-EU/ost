@@ -25,4 +25,14 @@ public class TrialSessionSpecification {
 
         return authUser != null ? specification : null;
     }
+
+    public static Specification<TrialSession> trialSessionManager(AuthUser authUser) {
+        Specification<TrialSession> specification = (root, query, cb) -> {
+            Join<TrialSession, TrialSessionManager> trialSessionManagerJoin = root.join(TrialSession_.trialSessionManagers, JoinType.LEFT);
+            Join<TrialSessionManager, TrialUser> trialUserJoin = trialSessionManagerJoin.join(TrialSessionManager_.trialUser, JoinType.LEFT);
+            return cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser);
+        };
+
+        return authUser != null ? specification : null;
+    }
 }
