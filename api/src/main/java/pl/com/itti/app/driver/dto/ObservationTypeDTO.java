@@ -1,7 +1,8 @@
 package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
@@ -36,14 +37,14 @@ public final class ObservationTypeDTO {
 
     public static class SchemaItem extends ListItem {
         public List<TrialUserDTO.ListItem> users;
-        public JSONObject jsonSchema;
+        public JsonNode jsonSchema;
 
         @Override
         public void toDto(ObservationType observationType) {
             super.toDto(observationType);
 
             try {
-                jsonSchema = SchemaCreator.createSchemaForm(observationType.getQuestions());
+                jsonSchema = new ObjectMapper().readTree(SchemaCreator.createSchemaForm(observationType.getQuestions()).toString());
             } catch (IOException ioe) {
                 throw new InternalServerException("Error in jsonSchema", ioe);
             }

@@ -13,7 +13,9 @@ buildscript {
         jacksonVersion = '2.8.6'
         httpclientVersion = '4.5.3'
         lombokVersion = '1.16.18'
-        jsonSchemaValidatorVersion = '1.5.1'
+        everitVersion = '1.5.1'
+        jsonSchemaValidatorVersion = '2.0.4'
+        jsonVersion = '20180130'
 
         apacheCommonsLoggingVersion = '1.2'
         apacheCommonsCodecVersion = '1.10'
@@ -152,10 +154,12 @@ dependencies {
     compile("com.google.guava:guava:${guavaVersion}")
 
     // JSON schema validator
-    compile("org.everit.json:org.everit.json.schema:${jsonSchemaValidatorVersion}")
+    compile("org.everit.json:org.everit.json.schema:${everitVersion}")
+    compile("com.github.fge:json-schema-validator:${jsonSchemaValidatorVersion}")
 
     // JSON
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    compile("org.json:json:${jsonVersion}")
 
     // PerPixel
     compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
