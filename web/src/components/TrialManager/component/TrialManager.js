@@ -10,40 +10,26 @@ class TrialManager extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfTrials: [],
+      listOfTrialsManager: [],
       isLoading: false
     }
   }
 
   static propTypes = {
-    getTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    getTrialManager: PropTypes.func,
+    listOfTrialsManager: PropTypes.array
   }
 
   componentWillMount () {
-    this.props.getTrials()
-    // this.setState({ isLoading: true })
+    this.props.getTrialManager()
+    this.setState({ isLoading: true })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfTrials.data &&
-      nextProps.listOfTrials.data !== this.state.listOfTrials &&
-      nextProps.listOfTrials.data !== this.props.listOfTrials) {
-        /** * MOCK * **/
-      let data = {
-        total:2,
-        data:[
-          { id:2,
-            status:'ACTIVE',
-            trialDescription:'Old building with 120 inhabitants started to burn because of failure' +
-            'of electrical installations.' +
-            'The fire is spreading very fast. One of inhabitants called for an external help. ',
-            trialName:'Building Fire' }
-        ]
-      }
-      this.setState({ listOfTrials: data.data })
-      /** * MOCK * **/
-      // this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
+    if (nextProps.listOfTrialsManager.data &&
+      nextProps.listOfTrialsManager.data !== this.state.listOfTrialsManager &&
+      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager) {
+      this.setState({ listOfTrialsManager: nextProps.listOfTrialsManager.data, isLoading: false })
     }
   }
 
@@ -74,10 +60,10 @@ class TrialManager extends Component {
               </div>
               </div>
             }
-            {(!this.state.isLoading && this.state.listOfTrials.length === 0) &&
+            {(!this.state.isLoading && this.state.listOfTrialsManager.length === 0) &&
             <div className={'no-sessions'}> No trial sessions available</div>}
             <Accordion>
-              {this.state.listOfTrials.map((object) => {
+              {this.state.listOfTrialsManager.map((object) => {
                 return (
                   <AccordionItem disabled={object.status !== 'ACTIVE'}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
