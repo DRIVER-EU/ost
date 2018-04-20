@@ -155,7 +155,7 @@ class NewObservationComponent extends Component {
             {this.state.observationForm.roles.map((object) => (
               <Checkbox
                 disabled={this.props.mode}
-                label={object.firstName + ' ' + object.lastName}
+                label={object.name}
                 checked={this.handleChecked(object.id)}
                 onCheck={this.handleParticipants.bind(this, object.id)}
                 style={styles.checkbox} />
