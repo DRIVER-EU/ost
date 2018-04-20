@@ -598,10 +598,10 @@ class AdminTrials extends Component {
                               }
                             </div>
                           </TableHeaderColumn>
-                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'trialUserFirstName')}>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'trialRoleName')}>
                             <div className='sort-style'>
                               <div className='sort-style-icon sort-cursor'>User</div>
-                              {this.state.sort.type === 'trialUserFirstName' &&
+                              {this.state.sort.type === 'trialRoleName' &&
                               <div className='sort-cursor'>
                                 {
                                 this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
@@ -655,10 +655,14 @@ class AdminTrials extends Component {
                               {moment(row.eventTime).format('DD/MM/YYYY hh:mm')}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.trialUserFirstName + ' ' + row.trialUserLastName}
+                              {row.trialRoleName !== null && row.trialRoleName !== -1 && (row.trialRoleName + ' ' + row.trialUserLastName) }
+                              {row.trialRoleName === -1 && 'All' }
+                              {row.trialRoleName === null && 'N/A' }
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.trialRoleName}
+                              {row.trialRoleId !== null && row.trialRoleId !== -1 && row.trialRoleId}
+                              {row.trialRoleId === -1 && 'All'}
+                              {row.trialRoleId === null && 'N/A'}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.name}
