@@ -1,13 +1,13 @@
 import { connect } from 'react-redux'
 import TrialManager from '../components/TrialManager'
-import { getTrials } from './../../Trials/modules/trials'
+import { getTrialManager } from './../modules/trialmanager'
 
 const mapDispatchToProps = {
-  getTrials
+  getTrialManager
 }
 
 const mapStateToProps = (state) => ({
-  listOfTrials: state.trials.listOfTrials
+  listOfTrialsManager: state.trialManager.listOfTrialsManager
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrialManager)
