@@ -655,7 +655,8 @@ class AdminTrials extends Component {
                               {moment(row.eventTime).format('DD/MM/YYYY hh:mm')}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.trialRoleName !== null && row.trialRoleName !== -1 && (row.trialRoleName + ' ' + row.trialUserLastName) }
+                              {row.trialRoleName !== null && row.trialRoleName !== -1 &&
+                                (row.trialRoleName + ' ' + row.trialUserLastName) }
                               {row.trialRoleName === -1 && 'All' }
                               {row.trialRoleName === null && 'N/A' }
                             </TableRowColumn>
