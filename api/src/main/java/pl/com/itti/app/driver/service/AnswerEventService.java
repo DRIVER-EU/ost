@@ -36,7 +36,7 @@ public class AnswerEventService {
         AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(RuntimeException::new);
 
-        trialUserService.checkIsTrailSessionManager(currentUser, trialSessionId);
+        trialUserService.checkHasTrialSession(currentUser, trialSessionId);
 
         List<Answer> answers = answerRepository.findAllByTrialSessionId(trialSessionId);
         List<Event> events = eventRepository.findAllByTrialSessionId(trialSessionId);

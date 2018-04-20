@@ -32,17 +32,24 @@ public class TrialUserService {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        checkIsTrailSessionManager(authUser, trialSessionId);
+        checkIsTrialSessionManager(authUser, trialSessionId);
 
         Set<Specification<TrialUser>> conditions = new HashSet<>();
         conditions.add(TrialUserSpecification.trialUsers(trialSessionId));
         return trialUserRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
     }
 
-    public void checkIsTrailSessionManager(AuthUser userToCheck, Long trialSessionId) {
+    public void checkIsTrialSessionManager(AuthUser userToCheck, Long trialSessionId) {
         Set<Specification<TrialUser>> managerConditions = new HashSet<>();
-        managerConditions.add(TrialUserSpecification.authUser(userToCheck, trialSessionId));
+        managerConditions.add(TrialUserSpecification.trialSessionManager(userToCheck, trialSessionId));
         Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
                 .orElseThrow(() -> new ForbiddenException("Permitted only for TrialSessionManager"));
+    }
+
+    public void checkHasTrialSession(AuthUser userToCheck, Long trialSessionId) {
+        Set<Specification<TrialUser>> managerConditions = new HashSet<>();
+        managerConditions.add(TrialUserSpecification.trialSessionUser(userToCheck, trialSessionId));
+        Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
+                .orElseThrow(() -> new ForbiddenException("Permitted only for TrialSessionUser"));
     }
 }
