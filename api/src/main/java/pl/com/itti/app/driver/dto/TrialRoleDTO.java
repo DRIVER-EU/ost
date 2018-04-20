@@ -23,6 +23,7 @@ public final class TrialRoleDTO {
 
         @Override
         public void toDto(TrialRole trialRole) {
+            super.toDto(trialRole);
             this.roleType = trialRole.getRoleType().name();
         }
     }
