@@ -92,7 +92,7 @@ public class ObservationTypeService {
     private Specifications<ObservationType> getObservationTypeSpecifications(AuthUser authUser,
                                                                              TrialSession trialSession) {
         Set<Specification<ObservationType>> conditions = new HashSet<>();
-        conditions.add(ObservationTypeSpecification.user(authUser));
+        conditions.add(ObservationTypeSpecification.user(authUser, trialSession));
         conditions.add(ObservationTypeSpecification.trialSession(trialSession));
         return RepositoryUtils.concatenate(conditions);
     }
