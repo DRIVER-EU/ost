@@ -70,7 +70,7 @@ public class EventService {
                 .name(formItem.name)
                 .description(formItem.description)
                 .languageVersion(formItem.languageVersion)
-                .eventTime(formItem.eventTime)
+                .eventTime(formItem.eventTime.toLocalDateTime())
                 .trialUser(trialUser)
                 .trialRole(trialRole)
                 .build();

@@ -7,7 +7,8 @@ import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public class EventDTO {
@@ -33,7 +34,7 @@ public class EventDTO {
         public String description;
 
         @NotNull
-        public LocalDateTime eventTime;
+        public ZonedDateTime eventTime;
 
         public Languages languageVersion;
         public long trialUserId;
@@ -46,7 +47,7 @@ public class EventDTO {
             this.name = event.getName();
             this.description = event.getDescription();
             this.languageVersion = event.getLanguageVersion();
-            this.eventTime = event.getEventTime();
+            this.eventTime = event.getEventTime().atZone(ZoneId.systemDefault());
 
             Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
             this.trialUserId = trialUserOptional.map(TrialUser::getId).orElse(-1L);

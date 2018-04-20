@@ -4,7 +4,8 @@ import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Event;
 
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public final class AnswerEventDTO {
 
@@ -15,7 +16,7 @@ public final class AnswerEventDTO {
         public long id;
         public String name;
         public String description;
-        public LocalDateTime time;
+        public ZonedDateTime time;
         public String type;
     }
 
@@ -26,7 +27,7 @@ public final class AnswerEventDTO {
             this.id = answer.getId();
             this.name = answer.getObservationType().getName();
             this.description = answer.getObservationType().getDescription();
-            this.time = answer.getSentSimulationTime();
+            this.time = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
             this.type = ANSWER_TYPE;
         }
     }
@@ -38,7 +39,7 @@ public final class AnswerEventDTO {
             this.id = event.getId();
             this.name = event.getName();
             this.description = event.getDescription();
-            this.time = event.getEventTime();
+            this.time = event.getEventTime().atZone(ZoneId.systemDefault());
             this.type = EVENT_TYPE;
         }
     }
