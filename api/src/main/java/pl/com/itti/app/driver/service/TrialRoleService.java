@@ -37,7 +37,7 @@ public class TrialRoleService {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
-        trialUserService.checkIsTrailSessionManager(authUser, trialSessionId);
+        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
 
         Set<Specification<TrialRole>> conditions = new HashSet<>();
         conditions.add(TrialRoleSpecification.trialRole(trialSessionId));

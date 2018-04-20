@@ -35,7 +35,7 @@ public final class ObservationTypeDTO {
     }
 
     public static class SchemaItem extends ListItem {
-        public List<TrialUserDTO.ListItem> users;
+        public List<TrialRoleDTO.ListItem> roles;
         public JsonNode jsonSchema;
 
         @Override
