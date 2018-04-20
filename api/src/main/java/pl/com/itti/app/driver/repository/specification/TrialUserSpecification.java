@@ -47,29 +47,4 @@ public class TrialUserSpecification {
 
         return trialSessionId != null ? specification : null;
     }
-
-    public static Specification<TrialUser> findByObserver(AuthUser authUser,
-                                                          TrialSession trialSession,
-                                                          ObservationType observationType) {
-        if (authUser == null || trialSession == null || observationType == null) {
-            return null;
-        }
-
-        return (root, query, cb) -> {
-            Join<TrialUser, UserRoleSession> userRoleSessionJoin = RepositoryUtils.getOrCreateJoin(root, TrialUser_.userRoleSessions, JoinType.LEFT);
-            Join<UserRoleSession, TrialRole> trialRoleJoin = userRoleSessionJoin.join(UserRoleSession_.trialRole, JoinType.LEFT);
-            Join<TrialRole, TrialRole> roleJoin = trialRoleJoin.join(TrialRole_.trialRolesParents, JoinType.LEFT);
-
-            Join<TrialRole, ObservationTypeTrialRole> observationTypeTrialRoleJoin = roleJoin.join(TrialRole_.observationTypeTrialRoles, JoinType.LEFT);
-
-            Join<TrialRole, UserRoleSession> userRoleSessionJoinRole = roleJoin.join(TrialRole_.userRoleSessions, JoinType.LEFT);
-            Join<UserRoleSession, TrialUser> trialUserJoin = userRoleSessionJoinRole.join(UserRoleSession_.trialUser, JoinType.LEFT);
-
-            return cb.and(
-                    cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser),
-                    cb.equal(userRoleSessionJoinRole.get(UserRoleSession_.trialSession), trialSession),
-                    cb.equal(observationTypeTrialRoleJoin.get(ObservationTypeTrialRole_.observationType), observationType)
-            );
-        };
-    }
 }
