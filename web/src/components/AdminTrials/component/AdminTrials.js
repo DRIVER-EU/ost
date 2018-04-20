@@ -519,7 +519,7 @@ class AdminTrials extends Component {
                               key={index.id}
                               value={index.id}
                               style={{ color: 'grey' }}
-                              primaryText={index.name} />
+                              primaryText={index.firstName + ' ' + index.lastName} />
                 ))}
                         </DropDownMenu>
                       </div>
@@ -656,7 +656,7 @@ class AdminTrials extends Component {
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.trialUserId !== null &&
-                                (row.firstName + ' ' + (row.LastName ? row.LastName : '')) }
+                                (row.firstName + ' ' + (row.lastName ? row.lastName : '')) }
                               {row.trialUserId === null && row.trialRoleId === null && 'All' }
                               {row.trialUserId === null && row.trialRoleId !== null && 'N/A'}
                             </TableRowColumn>

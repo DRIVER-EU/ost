@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
-
+import moment from 'moment'
 class ViewTrials extends Component {
   constructor (props) {
     super(props)
@@ -61,7 +61,9 @@ class ViewTrials extends Component {
                     <h3 className={'react-sanfona-item-title cursor-pointer' +
                       ((object.type !== 'EVENT') ? ' observation' : ' message')}>
                       {object.name}
-                      <div className={'time'}>{object.time}</div>
+                      <div className={'time'}>
+                        {moment(object.time, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm:ss')}
+                      </div>
                     </h3>} expanded={false}>
                     <div>
                       <p>{object.description}</p>
