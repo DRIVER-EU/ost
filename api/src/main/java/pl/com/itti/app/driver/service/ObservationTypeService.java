@@ -12,16 +12,15 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
-import pl.com.itti.app.driver.dto.TrialUserDTO;
+import pl.com.itti.app.driver.dto.TrialRoleDTO;
 import pl.com.itti.app.driver.model.ObservationType;
+import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
 import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
-import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
-import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
+import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.ArrayList;
@@ -45,9 +44,6 @@ public class ObservationTypeService {
     @Autowired
     private TrialRoleRepository trialRoleRepository;
 
-    @Autowired
-    private TrialUserRepository trialUserRepository;
-
     @Transactional(readOnly = true)
     public Page<ObservationType> find(Long trialSessionId, Pageable pageable) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
@@ -70,38 +66,41 @@ public class ObservationTypeService {
 
         ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
 
-        schemaItem.users = getSchemaItemUsers(observationType, trialSessionId);
+        schemaItem.roles = getSchemaItemRoles(observationType, trialSessionId);
 
         return schemaItem;
     }
 
-    private List<TrialUserDTO.ListItem> getSchemaItemUsers(ObservationType observationType, long trialSessionId) {
-        List<TrialUserDTO.ListItem> trialUsers = new ArrayList<>();
+    private List<TrialRoleDTO.ListItem> getSchemaItemRoles(ObservationType observationType, long trialSessionId) {
+        List<TrialRoleDTO.ListItem> trialRoles = new ArrayList<>();
+
         if (observationType.isWithUsers()) {
             AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                     .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
             TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                     .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
-            List<TrialUser> users = trialUserRepository.findAll(getTrialUserSpecifications(authUser, trialSession, observationType));
-            trialUsers = DTO.from(users, TrialUserDTO.ListItem.class);
+            List<TrialRole> roles = trialRoleRepository.findAll(getTrialRoleSpecifications(authUser, trialSession, observationType));
+            trialRoles = DTO.from(roles, TrialRoleDTO.ListItem.class);
         }
-        return trialUsers;
+
+        return trialRoles;
     }
 
     private Specifications<ObservationType> getObservationTypeSpecifications(AuthUser authUser,
                                                                              TrialSession trialSession) {
         Set<Specification<ObservationType>> conditions = new HashSet<>();
-        conditions.add(ObservationTypeSpecification.user(authUser));
+        conditions.add(ObservationTypeSpecification.user(authUser, trialSession));
         conditions.add(ObservationTypeSpecification.trialSession(trialSession));
         return RepositoryUtils.concatenate(conditions);
     }
 
-    private Specifications<TrialUser> getTrialUserSpecifications(AuthUser authUser,
+    private Specifications<TrialRole> getTrialRoleSpecifications(AuthUser authUser,
                                                                  TrialSession trialSession,
                                                                  ObservationType observationType) {
-        Set<Specification<TrialUser>> conditions = new HashSet<>();
-        conditions.add(TrialUserSpecification.findByObserver(authUser, trialSession, observationType));
+        Set<Specification<TrialRole>> conditions = new HashSet<>();
+        conditions.add(TrialRoleSpecification.findByObserver(authUser, trialSession, observationType));
+        conditions.add(TrialRoleSpecification.trialSession(trialSession));
         return RepositoryUtils.concatenate(conditions);
     }
 }

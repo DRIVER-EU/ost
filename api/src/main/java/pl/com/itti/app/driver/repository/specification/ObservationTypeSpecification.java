@@ -20,13 +20,18 @@ public class ObservationTypeSpecification {
         return trialSession != null ? specification : null;
     }
 
-    public static Specification<ObservationType> user(AuthUser authUser) {
+    public static Specification<ObservationType> user(AuthUser authUser, TrialSession trialSession) {
         Specification<ObservationType> specification = (root, query, cb) -> {
             Join<ObservationType, ObservationTypeTrialRole> observationTypeTrialRoleJoin = RepositoryUtils.getOrCreateJoin(root, ObservationType_.observationTypeTrialRoles, JoinType.LEFT);
             Join<ObservationTypeTrialRole, TrialRole> trialRoleJoin = observationTypeTrialRoleJoin.join(ObservationTypeTrialRole_.trialRole, JoinType.LEFT);
             Join<TrialRole, UserRoleSession> userRoleSessionJoin = trialRoleJoin.join(TrialRole_.userRoleSessions, JoinType.LEFT);
+
             Join<UserRoleSession, TrialUser> trialUserJoin = userRoleSessionJoin.join(UserRoleSession_.trialUser, JoinType.LEFT);
-            return cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser);
+
+            return cb.and(
+                    cb.equal(userRoleSessionJoin.get(UserRoleSession_.trialSession), trialSession),
+                    cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser)
+            );
         };
 
         return authUser != null ? specification : null;

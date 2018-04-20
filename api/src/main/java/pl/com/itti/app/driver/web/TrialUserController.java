@@ -19,8 +19,8 @@ public class TrialUserController {
     private TrialUserService trialUserService;
 
     @GetMapping
-    private PageDTO<TrialUserDTO.MinimalItem> findByTrialSessionId(
+    private PageDTO<TrialUserDTO.ListItem> findByTrialSessionId(
             @RequestParam(value = "trialsession_id") long trialSessionId, Pageable pageable) {
-        return DTO.from(trialUserService.findByTrialSessionId(trialSessionId, pageable), TrialUserDTO.MinimalItem.class);
+        return DTO.from(trialUserService.findByTrialSessionId(trialSessionId, pageable), TrialUserDTO.ListItem.class);
     }
 }

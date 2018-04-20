@@ -35,7 +35,7 @@ public final class ObservationTypeDTO {
     }
 
     public static class SchemaItem extends ListItem {
-        public List<TrialUserDTO.ListItem> users;
+        public List<TrialRoleDTO.ListItem> roles;
         public JsonNode jsonSchema;
 
         @Override
@@ -43,7 +43,7 @@ public final class ObservationTypeDTO {
             super.toDto(observationType);
 
             try {
-                jsonSchema = SchemaCreator.createSchemaForm(observationType.getQuestions());
+                this.jsonSchema = SchemaCreator.createSchemaForm(observationType.getQuestions());
             } catch (IOException ioe) {
                 throw new InternalServerException("Error in jsonSchema", ioe);
             }
