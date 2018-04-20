@@ -24,7 +24,7 @@ public class EventController {
     }
 
     @PostMapping
-    public EventDTO.FormItem create(@RequestBody @Validated EventDTO.FormItem formItem) {
-        return DTO.from(eventService.create(formItem), EventDTO.FormItem.class);
+    public EventDTO.Item create(@RequestBody @Validated EventDTO.FormItem formItem) {
+        return DTO.from(eventService.create(formItem), EventDTO.Item.class);
     }
 }

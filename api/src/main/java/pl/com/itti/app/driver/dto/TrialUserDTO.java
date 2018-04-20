@@ -10,7 +10,6 @@ public class TrialUserDTO {
 
         @Override
         public void toDto(TrialUser trialUser) {
-            this.id = trialUser.id;
         }
     }
 
@@ -20,8 +19,7 @@ public class TrialUserDTO {
 
         @Override
         public void toDto(TrialUser trialUser) {
-            super.toDto(trialUser);
-
+            this.id = trialUser.id;
             this.firstName = trialUser.getAuthUser().getFirstName();
             this.lastName = trialUser.getAuthUser().getLastName();
         }

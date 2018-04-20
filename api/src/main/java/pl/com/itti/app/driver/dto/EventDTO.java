@@ -6,14 +6,17 @@ import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-public class EventDTO {
+public final class EventDTO {
 
     public static class MinimalItem implements EntityDTO<Event> {
+
         public long id;
 
         @Override
@@ -22,42 +25,29 @@ public class EventDTO {
         }
     }
 
-    public static class FormItem extends MinimalItem {
+    public static class Item extends MinimalItem {
 
-        @NotNull
-        public Long trialSessionId;
-
-        @NotNull
-        public String name;
-
-        @NotNull
-        public String description;
-
-        @NotNull
-        public ZonedDateTime eventTime;
-
-        public Languages languageVersion;
+        public long trialSessionId;
         public long trialUserId;
         public long trialRoleId;
+        public String name;
+        public String description;
+        public Languages languageVersion;
 
         @Override
         public void toDto(Event event) {
             super.toDto(event);
             this.trialSessionId = event.getTrialSession().getId();
+            this.trialUserId = event.getTrialUser() != null ? event.getTrialUser().getId() : -1L;
+            this.trialRoleId = event.getTrialRole() != null ? event.getTrialRole().getId() : -1L;
             this.name = event.getName();
             this.description = event.getDescription();
             this.languageVersion = event.getLanguageVersion();
-            this.eventTime = event.getEventTime().atZone(ZoneId.systemDefault());
-
-            Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
-            this.trialUserId = trialUserOptional.map(TrialUser::getId).orElse(-1L);
-
-            Optional<TrialRole> trialRoleOptional = Optional.ofNullable(event.getTrialRole());
-            this.trialRoleId = trialRoleOptional.map(TrialRole::getId).orElse(-1L);
         }
     }
 
-    public static class ListItem extends FormItem {
+    public static class ListItem extends Item {
+
         public String firstName;
         public String lastName;
         public String trialRoleName;
@@ -65,13 +55,34 @@ public class EventDTO {
         @Override
         public void toDto(Event event) {
             super.toDto(event);
+            this.trialRoleName = Optional.ofNullable(event.getTrialRole()).map(TrialRole::getName).orElse(null);
 
             Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
             this.firstName = trialUserOptional.map(t -> t.getAuthUser().getFirstName()).orElse(null);
             this.lastName = trialUserOptional.map(t -> t.getAuthUser().getLastName()).orElse(null);
-
-            Optional<TrialRole> trialRoleOptional = Optional.ofNullable(event.getTrialRole());
-            this.trialRoleName = trialRoleOptional.map(TrialRole::getName).orElse(null);
         }
+
+    }
+
+    public static class FormItem {
+
+        @NotNull
+        public Long trialSessionId;
+
+        @NotNull
+        @Min(1)
+        @Max(50)
+        public String name;
+
+        @NotNull
+        public String description;
+
+        public Languages languageVersion;
+        public long trialUserId;
+        public long trialRoleId;
+    }
+
+    private EventDTO() {
+        throw new AssertionError();
     }
 }

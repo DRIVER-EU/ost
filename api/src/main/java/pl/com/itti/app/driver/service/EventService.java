@@ -19,6 +19,8 @@ import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.util.InvalidDataException;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional
 public class EventService {
@@ -70,7 +72,7 @@ public class EventService {
                 .name(formItem.name)
                 .description(formItem.description)
                 .languageVersion(formItem.languageVersion)
-                .eventTime(formItem.eventTime.toLocalDateTime())
+                .eventTime(LocalDateTime.now())
                 .trialUser(trialUser)
                 .trialRole(trialRole)
                 .build();
