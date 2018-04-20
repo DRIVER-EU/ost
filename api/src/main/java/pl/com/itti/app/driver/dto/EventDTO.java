@@ -3,7 +3,6 @@ package pl.com.itti.app.driver.dto;
 import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import pl.com.itti.app.driver.model.Event;
-import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
@@ -26,8 +25,8 @@ public final class EventDTO {
     public static class Item extends MinimalItem {
 
         public long trialSessionId;
-        public long trialUserId;
-        public long trialRoleId;
+        public Long trialUserId;
+        public Long trialRoleId;
         public String name;
         public String description;
         public Languages languageVersion;
@@ -36,8 +35,8 @@ public final class EventDTO {
         public void toDto(Event event) {
             super.toDto(event);
             this.trialSessionId = event.getTrialSession().getId();
-            this.trialUserId = event.getTrialUser() != null ? event.getTrialUser().getId() : -1L;
-            this.trialRoleId = event.getTrialRole() != null ? event.getTrialRole().getId() : -1L;
+            this.trialUserId = event.getTrialUser() != null ? event.getTrialUser().getId() : null;
+            this.trialRoleId = event.getTrialRole() != null ? event.getTrialRole().getId() : null;
             this.name = event.getName();
             this.description = event.getDescription();
             this.languageVersion = event.getLanguageVersion();
@@ -53,7 +52,7 @@ public final class EventDTO {
         @Override
         public void toDto(Event event) {
             super.toDto(event);
-            this.trialRoleName = Optional.ofNullable(event.getTrialRole()).map(TrialRole::getName).orElse(null);
+            this.trialRoleName = event.getTrialRole() != null ? event.getTrialRole().getName() : null;
 
             Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
             this.firstName = trialUserOptional.map(t -> t.getAuthUser().getFirstName()).orElse(null);
