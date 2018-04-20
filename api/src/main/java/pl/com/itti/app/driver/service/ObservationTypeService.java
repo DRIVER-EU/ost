@@ -5,6 +5,7 @@ import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,18 +83,14 @@ public class ObservationTypeService {
         return schemaItem;
     }
 
-    public Answer createAnswer(long observationTypeId, AnswerDTO.Form form) {
+    public Answer createAnswer(long observationTypeId, AnswerDTO.Form form) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
 
-        try {
-            JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
-            Schema schema = SchemaLoader.load(jsonObject);
-            schema.validate(new JSONObject(form.data.toString()));
-            System.out.println();
-        } catch (IOException ioe) {
-            System.out.println("sdsd");
-        }
+        JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
+        Schema schema = SchemaLoader.load(jsonObject);
+        schema.validate(new JSONObject(form.data.toString()));
+
         return new Answer();
     }
 
