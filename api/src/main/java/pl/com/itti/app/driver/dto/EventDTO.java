@@ -59,7 +59,6 @@ public final class EventDTO {
             this.firstName = trialUserOptional.map(t -> t.getAuthUser().getFirstName()).orElse(null);
             this.lastName = trialUserOptional.map(t -> t.getAuthUser().getLastName()).orElse(null);
         }
-
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
