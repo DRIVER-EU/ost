@@ -22,7 +22,7 @@ class DateComponent extends Component {
 
   render () {
     return (
-      <div>
+      <div style={{ textAlign: 'right' }}>
         {this.state.time}
       </div>
     )

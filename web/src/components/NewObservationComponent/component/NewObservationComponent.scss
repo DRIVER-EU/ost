@@ -1,10 +1,15 @@
 .question-container {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 20px);
     padding: 20px;
     box-sizing: border-box;
-    background-color: #fff;
     overflow-y: auto;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #feb912;
+    margin-top: 10px;
+    background: white;
 
     .trials-header {
         font-size: 16pt;
@@ -15,15 +20,15 @@
     }
 
     .title-obs {
-        font-size: 16px;
+        font-size: 12pt;
         font-weight: 600;
         margin: 15px 0;
     }
 
     .desc-obs {
-        font-size: 14px;
-        font-weight: 500;
-        padding: 0 15px;
+        font-size: 11pt;
+        font-weight: 400;
+        padding: 0 0px;
         margin: 15px 0;
     }
 
@@ -49,6 +54,9 @@
         margin-right: auto;
         margin: 10px;
     }
+    label {
+        font-weight: 500;
+    }
     label span {
         vertical-align: top;
         position: relative;
@@ -62,5 +70,13 @@
     }
     .checkbox label, .radio label {
         padding-left: 0px;
+    }
+    .form-group  p.field-description{
+        margin-top: 5px;
+        margin-bottom: 10px;
+        font-size: 11pt;
+    }
+    .field-radio-group label {
+        font-weight: normal;
     }
 }

@@ -30,9 +30,9 @@ class Auth extends Component {
   }
 
   componentWillMount () {
+    this.props.checkLogin()
     browserHistory.listen(location => {
       if (location.pathname !== '/login') {
-        this.props.checkLogin()
         if (!this.props.isLoggedIn && !this.isPublicLocation()) {
           window.location.replace('/login')
         }
