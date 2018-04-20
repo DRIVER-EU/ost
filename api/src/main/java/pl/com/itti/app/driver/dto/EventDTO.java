@@ -1,16 +1,14 @@
 package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 public final class EventDTO {
@@ -64,14 +62,14 @@ public final class EventDTO {
 
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FormItem {
 
         @NotNull
         public Long trialSessionId;
 
         @NotNull
-        @Min(1)
-        @Max(50)
+        @Size(min = 1, max = 50)
         public String name;
 
         @NotNull
