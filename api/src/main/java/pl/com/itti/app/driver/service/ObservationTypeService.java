@@ -4,10 +4,6 @@ import co.perpixel.dto.DTO;
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,23 +11,18 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.dto.TrialUserDTO;
-import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
-import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.specification.TrialUserSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
-import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -49,9 +40,6 @@ public class ObservationTypeService {
 
     @Autowired
     private TrialSessionRepository trialSessionRepository;
-
-    @Autowired
-    private TrialRoleRepository trialRoleRepository;
 
     @Autowired
     private TrialUserRepository trialUserRepository;
@@ -72,6 +60,7 @@ public class ObservationTypeService {
         );
     }
 
+    @Transactional(readOnly = true)
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
@@ -81,17 +70,6 @@ public class ObservationTypeService {
         schemaItem.users = getSchemaItemUsers(observationType, trialSessionId);
 
         return schemaItem;
-    }
-
-    public Answer createAnswer(long observationTypeId, AnswerDTO.Form form) throws ValidationException, IOException {
-        ObservationType observationType = observationTypeRepository.findById(observationTypeId)
-                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
-
-        JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
-        Schema schema = SchemaLoader.load(jsonObject);
-        schema.validate(new JSONObject(form.data.toString()));
-
-        return new Answer();
     }
 
     private ObservationTypeDTO.SchemaItem getSchema(ObservationType observationType) {
