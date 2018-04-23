@@ -10,11 +10,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
-import pl.com.itti.app.driver.model.Answer;
-import pl.com.itti.app.driver.model.ObservationType;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialUser;
+import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.repository.AnswerRepository;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
@@ -24,6 +22,7 @@ import pl.com.itti.app.driver.util.schema.SchemaCreator;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -50,7 +49,7 @@ public class AnswerService {
 
         JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
         Schema schema = SchemaLoader.load(jsonObject);
-        schema.validate(new JSONObject(form.data.toString()));
+        schema.validate(new JSONObject(form.formData.toString()));
 
         AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
@@ -63,14 +62,22 @@ public class AnswerService {
                 .trialSession(trialSession)
                 .trialUser(currentTrialUser)
                 .observationType(observationType)
-                .simulationTime(LocalDateTime.now())
-                .sentSimulationTime(form.sentSimulationTime.toLocalDateTime())
-                .fieldValue("")
-                .formData(form.data.toString())
-                .attachments(new ArrayList<>())
+                .simulationTime(form.simulationTime)
+                .sentSimulationTime(LocalDateTime.now())
+                .fieldValue(form.fieldValue)
+                .formData(form.formData.toString())
+                .attachments(createAttachments(new MultipartFile[]{}))
                 .answerTrialRoles(new ArrayList<>())
                 .build();
 
         return answerRepository.save(answer);
+    }
+
+    private List<Attachment> createAttachments(MultipartFile[] files) {
+        List<Attachment> attachments = new ArrayList<>();
+        for (MultipartFile file : files) {
+
+        }
+        return attachments;
     }
 }

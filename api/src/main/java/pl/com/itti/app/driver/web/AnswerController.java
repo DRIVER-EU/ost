@@ -3,9 +3,10 @@ package pl.com.itti.app.driver.web;
 import co.perpixel.dto.DTO;
 import org.everit.json.schema.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.Answer;
@@ -21,9 +22,10 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
-    @PostMapping
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public AnswerDTO.Item answerQuestions(@RequestBody AnswerDTO.Form form) throws IOException {
         Answer answer;
+
         try {
             answer = answerService.createAnswer(form);
         } catch (ValidationException ve) {
@@ -33,6 +35,7 @@ public class AnswerController {
                 throw new SchemaValidationException(ve.getCausingExceptions().get(0));
             }
         }
+
         return DTO.from(answer, AnswerDTO.Item.class);
     }
 }

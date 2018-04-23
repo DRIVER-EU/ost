@@ -4,6 +4,7 @@ import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import pl.com.itti.app.driver.model.Answer;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 public class AnswerDTO {
@@ -17,11 +18,20 @@ public class AnswerDTO {
     }
 
     public static class Form {
-        public long observationTypeId;
-        public long trialSessionId;
-        public ZonedDateTime sentSimulationTime;
 
-        public JsonNode data;
+        @NotNull
+        public Long observationTypeId;
+
+        @NotNull
+        public Long trialSessionId;
+
+        public ZonedDateTime simulationTime;
+
+        @NotNull
+        public String fieldValue;
+
+        @NotNull
+        public JsonNode formData;
     }
 
     private AnswerDTO() {
