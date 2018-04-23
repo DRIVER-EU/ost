@@ -10,26 +10,26 @@ class TrialManager extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfTrials: [],
+      listOfTrialsManager: [],
       isLoading: false
     }
   }
 
   static propTypes = {
-    getTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    getTrialManager: PropTypes.func,
+    listOfTrialsManager: PropTypes.array
   }
 
   componentWillMount () {
-    this.props.getTrials()
+    this.props.getTrialManager()
     this.setState({ isLoading: true })
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.listOfTrials.data &&
-      nextProps.listOfTrials.data !== this.state.listOfTrials &&
-      nextProps.listOfTrials.data !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
+    if (nextProps.listOfTrialsManager.data &&
+      nextProps.listOfTrialsManager.data !== this.state.listOfTrialsManager &&
+      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager) {
+      this.setState({ listOfTrialsManager: nextProps.listOfTrialsManager.data, isLoading: false })
     }
   }
 
@@ -60,10 +60,10 @@ class TrialManager extends Component {
               </div>
               </div>
             }
-            {(!this.state.isLoading && this.state.listOfTrials.length === 0) &&
+            {(!this.state.isLoading && this.state.listOfTrialsManager.length === 0) &&
             <div className={'no-sessions'}> No trial sessions available</div>}
             <Accordion>
-              {this.state.listOfTrials.map((object) => {
+              {this.state.listOfTrialsManager.map((object) => {
                 return (
                   <AccordionItem disabled={object.status !== 'ACTIVE'}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>

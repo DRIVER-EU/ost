@@ -49,8 +49,8 @@ class AdminTrials extends Component {
     const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
       time: t,
-      userValue: -1,
-      roleValue: -1,
+      userValue: null,
+      roleValue: null,
       title: '',
       titleErrorText: '',
       messageValue: '',
@@ -70,7 +70,8 @@ class AdminTrials extends Component {
       sort: {
         type: 'eventTime',
         order: 'asc'
-      }
+      },
+      errorUserRole: true
     }
   }
 
@@ -89,7 +90,7 @@ class AdminTrials extends Component {
   }
 
   componentWillMount () {
-    this.props.getMessages(this.state.sort)
+    this.props.getMessages(this.props.params.id, this.state.sort)
     this.props.getObservation()
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
@@ -116,6 +117,12 @@ class AdminTrials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (nextProps.usersList && nextProps.usersList !== null && this.props.usersList) {
+      this.setState({ usersList: nextProps.usersList.data })
+    }
+    if (nextProps.rolesList && nextProps.rolesList !== null && this.props.rolesList) {
+      this.setState({ rolesList: nextProps.rolesList.data })
+    }
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
       this.setState({ changeDataTable: change }, () => {
@@ -140,6 +147,11 @@ class AdminTrials extends Component {
   handleChangeDropDown (stateName, event, index, value) {
     let change = {}
     change[stateName] = value
+    if (change.roleValue === null && change.userValue === null) {
+      change['errorUserRole'] = false
+    } else {
+      change['errorUserRole'] = true
+    }
     this.setState(change)
   }
 
@@ -163,25 +175,38 @@ class AdminTrials extends Component {
     }
     this.setState(change)
   }
+
   checkValid () {
+    let valid = true
     let change = { ...this.state }
 
     if (change.title === '') {
       change['titleErrorText'] = 'Please, enter your title'
+      valid = false
     } else {
       change['titleErrorText'] = ''
     }
 
     if (change.messageValue === '') {
       change['messageValueErrorText'] = 'Please, enter your message'
+      valid = false
     } else if (change.messageValue.length > 30) {
       change['messageValueErrorText'] = 'Your message is too long'
+      valid = false
     } else {
       change['messageValueErrorText'] = ''
     }
+
+    if (change.roleValue === null && change.userValue === null) {
+      valid = false
+      change['errorUserRole'] = false
+    } else {
+      valid = true
+      change['errorUserRole'] = true
+    }
     this.setState(change)
 
-    return (change.titleErrorText || change.messageValueErrorText) === ''
+    return valid
   }
 
   sortFunction () {
@@ -222,35 +247,18 @@ class AdminTrials extends Component {
     )
   }
 
-  getSelectedUser () {
-    if (this.state.userValue === 0) {
-      return 'All'
-    } else if (this.state.userValue === 1) {
-      return 'Test User 1'
-    } else if (this.state.userValue === 2) {
-      return 'Test User 2'
-    }
-  }
-
-  getSelectedRole () {
-    if (this.state.roleValue === 0) {
-      return 'All'
-    } else if (this.state.roleValue === 1) {
-      return 'Team 1'
-    }
-  }
-
   sendMessage () {
     let send = {}
-    if (this.state.userValue !== -1) {
-      send.selectUser = this.getSelectedUser()
-      send.role = null
+    send.trialSessionId = parseInt(this.props.params.id)
+    if (this.state.userValue !== null) {
+      send.trialUserId = this.state.userValue
     } else {
-      send.selectUser = null
-      send.role = this.getSelectedRole()
+      send.trialRoleId = this.state.roleValue
     }
-    send.message = this.state.messageValue
-    send.time = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+    send.name = this.state.title
+    send.languageVersion = 'POLISH'
+    send.description = this.state.messageValue
+    send.eventTime = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss')
     if (this.checkValid()) {
       this.props.sendMessage(send)
     }
@@ -259,7 +267,7 @@ class AdminTrials extends Component {
   getData () {
     let observations = [ ...this.state.changeDataTable ]
     for (let i = 0; i < observations.length; i++) {
-      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYYThh:mm').unix()
     }
 
     let order = _.orderBy(observations, ['dateTime'], ['asc'])
@@ -492,21 +500,26 @@ class AdminTrials extends Component {
                         <DropDownMenu
                           style={{ width: '220px' }}
                           value={this.state.userValue}
-                          underlineStyle={{ marginLeft: '0' }}
+                          underlineStyle={!this.state.errorUserRole
+                            ? { 'border-top': '1px solid red', marginLeft: '0' }
+                            : { 'border-top': '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
-                          disabled={this.state.roleValue !== -1}
+                          disabled={this.state.roleValue !== null}
                           onChange={this.handleChangeDropDown.bind(this, 'userValue')}>
+                          <MenuItem
+                            value={null}
+                            style={{ color: 'grey' }}
+                            primaryText={' '} />
                           <MenuItem
                             value={-1}
                             style={{ color: 'grey' }}
-                            primaryText={' '} />
-                          {this.props.usersList.total === 0 &&
-                            this.props.usersList.data.map((index) => (
-                              <MenuItem
-                                key={index.id}
-                                value={index.id}
-                                style={{ color: 'grey' }}
-                                primaryText={index.name} />
+                            primaryText={'All'} />
+                          {this.state.usersList !== undefined && this.state.usersList.map((index) => (
+                            <MenuItem
+                              key={index.id}
+                              value={index.id}
+                              style={{ color: 'grey' }}
+                              primaryText={index.firstName + ' ' + index.lastName} />
                 ))}
                         </DropDownMenu>
                       </div>
@@ -515,21 +528,26 @@ class AdminTrials extends Component {
                         <DropDownMenu
                           style={{ width: '220px' }}
                           value={this.state.roleValue}
-                          underlineStyle={{ marginLeft: '0' }}
+                          underlineStyle={!this.state.errorUserRole
+                            ? { 'border-top': '1px solid red', marginLeft: '0' }
+                            : { 'border-top': '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
-                          disabled={this.state.userValue !== -1}
+                          disabled={this.state.userValue !== null}
                           onChange={this.handleChangeDropDown.bind(this, 'roleValue')}>
+                          <MenuItem
+                            value={null}
+                            style={{ color: 'grey' }}
+                            primaryText={' '} />
                           <MenuItem
                             value={-1}
                             style={{ color: 'grey' }}
-                            primaryText={' '} />
-                          {this.props.rolesList.total === 0 &&
-                            this.props.rolesList.data.map((index) => (
-                              <MenuItem
-                                key={index.id}
-                                value={index.id}
-                                style={{ color: 'grey' }}
-                                primaryText={index.name} />
+                            primaryText={'All'} />
+                          {this.state.rolesList !== undefined && this.state.rolesList.map((index) => (
+                            <MenuItem
+                              key={index.id}
+                              value={index.id}
+                              style={{ color: 'grey' }}
+                              primaryText={index.name} />
                 ))}
                         </DropDownMenu>
                       </div>
@@ -580,10 +598,10 @@ class AdminTrials extends Component {
                               }
                             </div>
                           </TableHeaderColumn>
-                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'trialUserFirstName')}>
+                          <TableHeaderColumn onTouchTap={this.handleSort.bind(this, 'trialRoleName')}>
                             <div className='sort-style'>
                               <div className='sort-style-icon sort-cursor'>User</div>
-                              {this.state.sort.type === 'trialUserFirstName' &&
+                              {this.state.sort.type === 'trialRoleName' &&
                               <div className='sort-cursor'>
                                 {
                                 this.state.sort.order === 'asc' ? <i className='material-icons'>keyboard_arrow_up</i>
@@ -637,10 +655,15 @@ class AdminTrials extends Component {
                               {moment(row.eventTime).format('DD/MM/YYYY hh:mm')}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.trialUserFirstName + ' ' + row.trialUserLastName}
+                              {row.trialUserId !== null &&
+                                (row.firstName + ' ' + (row.lastName ? row.lastName : '')) }
+                              {row.trialUserId === null && row.trialRoleId === null && 'All' }
+                              {row.trialUserId === null && row.trialRoleId !== null && 'N/A'}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.trialRoleName}
+                              {row.trialRoleId !== null && row.trialRoleName}
+                              {row.trialUserId === null && row.trialRoleId === null && 'All'}
+                              {row.trialUserId !== null && row.trialRoleId === null && 'N/A'}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.name}

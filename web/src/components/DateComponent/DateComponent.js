@@ -5,7 +5,7 @@ class DateComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
+      time: moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }
   }
 
@@ -13,7 +13,7 @@ class DateComponent extends Component {
 
   componentDidMount () {
     this.interval = setInterval(() => this.setState({
-      time: moment(new Date().getTime()).format('DD/MM/YYYY h:mm:ss')
+      time: moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }), 1000)
   }
   componentWillUnmount () {
@@ -22,7 +22,7 @@ class DateComponent extends Component {
 
   render () {
     return (
-      <div>
+      <div className='data-time' style={{ textAlign: 'right' }}>
         {this.state.time}
       </div>
     )

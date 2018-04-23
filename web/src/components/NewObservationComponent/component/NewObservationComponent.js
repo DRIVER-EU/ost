@@ -28,15 +28,13 @@ class NewObservationComponent extends Component {
   constructor (props) {
     super()
     this.state = {
-      title: 'Incident location shared',
-      desc: `Note down this observation if indcident source is shared`,
       formData: {},
       observationForm: {
         name:'',
         description: '',
         schema: {},
         uiSchema: {},
-        users: []
+        roles: []
       },
       listOfParticipants: [],
       dateTime: null
@@ -51,12 +49,11 @@ class NewObservationComponent extends Component {
   }
 
   componentWillMount () {
-    this.props.getSchema()
-    console.log(this.props)
+    console.log(1)
+    this.props.getSchema(this.props.params.id_observation, this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps, 1)
     if (nextProps.observationForm && this.props.observationForm &&
         this.state.observationForm !== nextProps.observationForm) {
       let change = { ...nextProps.observationForm }
@@ -93,15 +90,16 @@ class NewObservationComponent extends Component {
     } else {
       change.splice(chosenIndex, 1)
     }
+    console.log(change)
     this.setState({ listOfParticipants: change })
   }
 
   handleAllParticipants () {
     let change = [ ...this.state.listOfParticipants ]
-    if (this.state.participants.length > this.state.listOfParticipants.length) {
+    if (this.state.observationForm.roles.length > this.state.listOfParticipants.length) {
       change.splice(0, this.state.listOfParticipants.length)
-      for (let i = 0; i < this.state.participants.length; i++) {
-        change.push({ id: this.state.participants[i].id })
+      for (let i = 0; i < this.state.observationForm.roles.length; i++) {
+        change.push({ id: this.state.observationForm.roles[i].id })
       }
     } else {
       change.splice(0, this.state.listOfParticipants.length)
@@ -138,9 +136,12 @@ class NewObservationComponent extends Component {
         <div className='pages-box'>
           <div className='question-container'>
             <div className='trials-header'>
-              <div>Observation</div>
+              <DateComponent />
+              {this.props.mode
+              ? <div style={{ textAlign:'center', 'border-bottom': '1px solid #feb912' }}>Observation</div>
+              : <div style={{ textAlign:'center', 'border-bottom': '1px solid #feb912' }}>New observation</div>
+            }
             </div>
-            <DateComponent />
             <p className='title-obs'>{this.state.observationForm.name}</p>
             <p className='desc-obs'>{this.state.observationForm.description}</p>
             <p className='point-obs'>When:</p>
@@ -151,20 +152,22 @@ class NewObservationComponent extends Component {
               TimePicker={TimePickerDialog}
               format='YYYY/MM/DD H:mm' />
             <p className='point-obs'>Who:</p>
-            {this.state.observationForm.users.map((object) => (
+            {this.state.observationForm.roles.map((object) => (
               <Checkbox
                 disabled={this.props.mode}
-                label={object.firstName + ' ' + object.lastName}
+                label={object.name}
                 checked={this.handleChecked(object.id)}
                 onCheck={this.handleParticipants.bind(this, object.id)}
                 style={styles.checkbox} />
               ))}
+            {this.state.observationForm.roles.length > 2 &&
             <Checkbox
               disabled={this.props.mode}
               label='All'
-              checked={this.state.listOfParticipants.length === this.state.observationForm.users.length}
+              checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
               onCheck={this.handleAllParticipants.bind(this)}
               style={styles.checkbox} />
+            }
             <p className='point-obs'>What:</p>
             <Form
               noValidate

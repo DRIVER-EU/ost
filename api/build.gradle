@@ -159,6 +159,7 @@ dependencies {
 
     // JSON
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}")
     compile("org.json:json:${jsonVersion}")
 
     // PerPixel

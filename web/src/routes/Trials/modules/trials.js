@@ -27,7 +27,7 @@ export const actions = {
 export const getTrials = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsession/active`, getHeaders())
+      axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
          dispatch(getTrialsAction(response.data))
          resolve()

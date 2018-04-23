@@ -7,7 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
-
+import moment from 'moment'
 class ViewTrials extends Component {
   constructor (props) {
     super(props)
@@ -23,14 +23,14 @@ class ViewTrials extends Component {
   }
 
   componentWillMount () {
-    this.props.getViewTrials()
+    this.props.getViewTrials(this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.viewTrials.data &&
-      nextProps.viewTrials.data !== this.state.viewTrials &&
-      nextProps.viewTrials.data !== this.props.viewTrials) {
-      this.setState({ viewTrials: nextProps.viewTrials.data })
+    if (nextProps.viewTrials &&
+      nextProps.viewTrials !== this.state.viewTrials &&
+      nextProps.viewTrials !== this.props.viewTrials) {
+      this.setState({ viewTrials: nextProps.viewTrials })
     }
   }
 
@@ -59,13 +59,15 @@ class ViewTrials extends Component {
                 return (
                   <AccordionItem title={
                     <h3 className={'react-sanfona-item-title cursor-pointer' +
-                      ((object.type !== 'message') ? ' observation' : ' message')}>
-                      {object.title}
-                      <div className={'time'}>{object.date}</div>
+                      ((object.type !== 'EVENT') ? ' observation' : ' message')}>
+                      {object.name}
+                      <div className={'time'}>
+                        {moment(object.time, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm:ss')}
+                      </div>
                     </h3>} expanded={false}>
                     <div>
                       <p>{object.description}</p>
-                      { object.type !== 'message' &&
+                      { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
                           buttonStyle={{ width: '200px' }}
