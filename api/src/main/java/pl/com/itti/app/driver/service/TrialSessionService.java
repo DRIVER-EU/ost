@@ -9,9 +9,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialStageRepository;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
@@ -27,6 +29,12 @@ public class TrialSessionService {
 
     @Autowired
     private AuthUserRepository authUserRepository;
+
+    @Autowired
+    private TrialStageRepository trialStageRepository;
+
+    @Autowired
+    private TrialUserService trialUserService;
 
     public Page<TrialSession> findAllByManager(Pageable pageable) {
         AuthUser authUser = getCurrentUser();
@@ -44,6 +52,16 @@ public class TrialSessionService {
                 getTrialSessionStatusSpecifications(authUser, sessionStatus),
                 pageable
         );
+    }
+
+    public TrialSession updateLastTrialStage(long trialSessionId, long lastTrialStageId) {
+        AuthUser authUser = getCurrentUser();
+        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+
+        TrialSession trialSession = trialSessionRepository.findOne(trialSessionId);
+        trialSession.setLastTrialStage(trialStageRepository.findOne(lastTrialStageId));
+        return trialSessionRepository.save(trialSession);
+
     }
 
     private AuthUser getCurrentUser() {
