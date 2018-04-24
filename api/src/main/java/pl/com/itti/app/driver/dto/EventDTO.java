@@ -7,6 +7,8 @@ import pl.com.itti.app.driver.model.enums.Languages;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public final class EventDTO {
@@ -29,6 +31,7 @@ public final class EventDTO {
         public String name;
         public String description;
         public Languages languageVersion;
+        public ZonedDateTime eventTime;
 
         @Override
         public void toDto(Event event) {
@@ -39,6 +42,7 @@ public final class EventDTO {
             this.name = event.getName();
             this.description = event.getDescription();
             this.languageVersion = event.getLanguageVersion();
+            this.eventTime = event.getEventTime().atZone(ZoneId.systemDefault());
         }
     }
 
