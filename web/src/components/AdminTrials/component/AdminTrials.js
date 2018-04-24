@@ -11,6 +11,7 @@ import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
+import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
 import './AdminTrials.scss'
@@ -63,7 +64,13 @@ class AdminTrials extends Component {
       changeDataTable: [],
       observations: [],
       chartData: [],
-      changeDataTableSorted: [],
+      changeDataTableSorted: [
+        { id: 1,
+          dateTime: '12/12/2018 12:23',
+          selectUser: 'Adam',
+          role: 'ratownik',
+          observationType: 'message' }
+      ],
       messages: [],
       messageTime: '',
       value: 'a',
@@ -71,7 +78,9 @@ class AdminTrials extends Component {
         type: 'eventTime',
         order: 'asc'
       },
-      errorUserRole: true
+      errorUserRole: true,
+      showModal: false,
+      selectedObj: ''
     }
   }
 
@@ -324,6 +333,15 @@ class AdminTrials extends Component {
     })
   }
 
+  handleShowModal () {
+    this.setState({ showModal: !this.state.showModal })
+  }
+
+  handleSelectedObject (obj) {
+    this.setState({ selectedObj: obj })
+    this.handleShowModal()
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -408,14 +426,8 @@ class AdminTrials extends Component {
                           <TableHeaderColumn >
                       Observation Type
                     </TableHeaderColumn>
-                          <TableHeaderColumn >
-                      Who
-                    </TableHeaderColumn>
-                          <TableHeaderColumn >
-                      What
-                    </TableHeaderColumn>
                           <TableHeaderColumn>
-                      Attachment
+                      Show Details
                     </TableHeaderColumn>
                         </TableRow>
                       </TableHeader>
@@ -434,16 +446,12 @@ class AdminTrials extends Component {
                             <TableRowColumn >
                               {row.observationType}
                             </TableRowColumn>
-                            <TableRowColumn >
-                              {row.who}
-                            </TableRowColumn>
-                            <TableRowColumn >
-                              {row.what}
-                            </TableRowColumn>
                             <TableRowColumn>
-                              <p data-tip={row.attachment}>
-                                <i className='material-icons'>announcement</i>
-                              </p>
+                              <i className='cursor-pointer material-icons'
+                                style={{ 'vertical-align': 'middle' }}
+                                onClick={() => this.handleSelectedObject(row)}>
+                                open_in_new
+                              </i>
                               <ReactTooltip />
                             </TableRowColumn>
                           </TableRow>
@@ -679,6 +687,12 @@ class AdminTrials extends Component {
                 </div>
               </Tab>
             </Tabs>
+            <SummaryOfObservationModal
+              show={this.state.showModal}
+              object={this.state.selectedObj}
+              handleShowModal={this.handleShowModal.bind(this)}
+              params={this.props.params.id}
+               />
           </div>
         </div>
       </div>
