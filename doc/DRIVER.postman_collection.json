@@ -743,7 +743,7 @@
 					"response": []
 				},
 				{
-					"name": "/trialsessions/2?lasttrialstage_id=2",
+					"name": "/trialsessions/2",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -788,10 +788,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+							"raw": "{\n\t\"id\":\"3\"\n}"
 						},
 						"url": {
-							"raw": "http://{{IP-Address}}/api/trialsessions/2?lasttrialstage_id=2",
+							"raw": "http://{{IP-Address}}/api/trialsessions/2",
 							"protocol": "http",
 							"host": [
 								"{{IP-Address}}"
@@ -800,12 +800,6 @@
 								"api",
 								"trialsessions",
 								"2"
-							],
-							"query": [
-								{
-									"key": "lasttrialstage_id",
-									"value": "2"
-								}
 							]
 						}
 					},
