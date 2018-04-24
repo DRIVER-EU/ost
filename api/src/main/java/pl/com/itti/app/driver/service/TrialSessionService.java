@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
@@ -21,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class TrialSessionService {
 
     @Autowired
@@ -36,6 +35,7 @@ public class TrialSessionService {
     @Autowired
     private TrialUserService trialUserService;
 
+    @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
         AuthUser authUser = getCurrentUser();
 
@@ -45,6 +45,7 @@ public class TrialSessionService {
         );
     }
 
+    @Transactional(readOnly = true)
     public Page<TrialSession> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
         AuthUser authUser = getCurrentUser();
 
@@ -61,7 +62,6 @@ public class TrialSessionService {
         TrialSession trialSession = trialSessionRepository.findOne(trialSessionId);
         trialSession.setLastTrialStage(trialStageRepository.findOne(lastTrialStageId));
         return trialSessionRepository.save(trialSession);
-
     }
 
     private AuthUser getCurrentUser() {

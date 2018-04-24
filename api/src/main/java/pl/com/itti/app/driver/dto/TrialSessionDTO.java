@@ -4,12 +4,12 @@ import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public class TrialSessionDTO {
 
     public static class MinimalItem implements EntityDTO<TrialSession> {
+
         public long id;
         public SessionStatus status;
 
@@ -21,6 +21,7 @@ public class TrialSessionDTO {
     }
 
     public static class ListItem extends MinimalItem {
+
         public String trialName;
         public String trialDescription;
 
@@ -37,7 +38,6 @@ public class TrialSessionDTO {
         public Long lastTrialStageId;
         public LocalDateTime startTime;
         public LocalDateTime pausedTime;
-        public SessionStatus status;
 
         @Override
         public void toDto(TrialSession trialSession) {
@@ -47,7 +47,5 @@ public class TrialSessionDTO {
             this.startTime = trialSession.getStartTime();
             this.pausedTime = trialSession.getPausedTime();
         }
-
-
     }
 }
