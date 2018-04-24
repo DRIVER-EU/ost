@@ -64,13 +64,7 @@ class AdminTrials extends Component {
       changeDataTable: [],
       observations: [],
       chartData: [],
-      changeDataTableSorted: [
-        { id: 1,
-          dateTime: '12/12/2018 12:23',
-          selectUser: 'Adam',
-          role: 'ratownik',
-          observationType: 'message' }
-      ],
+      changeDataTableSorted: [],
       messages: [],
       messageTime: '',
       value: 'a',

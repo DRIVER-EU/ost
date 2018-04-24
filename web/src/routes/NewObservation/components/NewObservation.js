@@ -24,7 +24,7 @@ class NewObservation extends Component {
           observationForm={this.props.observationForm}
           sendObservation={this.props.sendObservation}
           observation={this.props.observation}
-          mode={false}
+          mode={'new'}
           params={this.props.params} />
       </div>
     )

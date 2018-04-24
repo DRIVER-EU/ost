@@ -20,7 +20,7 @@ class QuestionView extends Component {
         <NewObservationComponent
           getSchema={this.props.getSchema}
           observationForm={this.props.observationForm}
-          mode
+          mode={'view'}
           params={this.props.params} />
       </div>
     )

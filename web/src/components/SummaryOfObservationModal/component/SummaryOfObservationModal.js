@@ -50,12 +50,12 @@ class AdminTrials extends Component {
         onRequestClose={() => this.props.handleShowModal()}
         autoScrollBodyContent
         bodyClassName={'content-schema'}
-        bodyStyle={{ 'padding': '52px 0 0' }}
+        bodyStyle={{ 'padding': '36px 0 0' }}
         >
         <NewObservationComponent
           getSchema={this.props.getSchema}
           observationForm={this.props.observationForm}
-          mode
+          mode={'viewAdmin'}
           params={this.state.newParams} />
       </Dialog>
     )
