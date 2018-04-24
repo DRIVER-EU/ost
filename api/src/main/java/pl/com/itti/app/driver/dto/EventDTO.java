@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
@@ -60,7 +59,6 @@ public final class EventDTO {
         }
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FormItem {
 
         @NotNull
@@ -74,8 +72,8 @@ public final class EventDTO {
         public String description;
 
         public Languages languageVersion;
-        public long trialUserId;
-        public long trialRoleId;
+        public Long trialUserId;
+        public Long trialRoleId;
     }
 
     private EventDTO() {
