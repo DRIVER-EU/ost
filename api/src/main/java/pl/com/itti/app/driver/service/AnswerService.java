@@ -13,10 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.*;
-import pl.com.itti.app.driver.repository.AnswerRepository;
-import pl.com.itti.app.driver.repository.ObservationTypeRepository;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
-import pl.com.itti.app.driver.repository.TrialUserRepository;
+import pl.com.itti.app.driver.model.enums.AttachmentType;
+import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.IOException;
@@ -32,6 +30,12 @@ public class AnswerService {
     private AnswerRepository answerRepository;
 
     @Autowired
+    private AnswerTrialRoleRepository answerTrialRoleRepository;
+
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
+    @Autowired
     private AuthUserRepository authUserRepository;
 
     @Autowired
@@ -41,9 +45,12 @@ public class AnswerService {
     private TrialSessionRepository trialSessionRepository;
 
     @Autowired
+    private TrialRoleRepository trialRoleRepository;
+
+    @Autowired
     private TrialUserRepository trialUserRepository;
 
-    public Answer createAnswer(AnswerDTO.Form form) throws ValidationException, IOException {
+    public Answer createAnswer(AnswerDTO.Form form,/*, MultipartFile[] files*/MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.observationTypeId));
 
@@ -54,30 +61,54 @@ public class AnswerService {
         AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
         TrialUser currentTrialUser = trialUserRepository.findByAuthUser(currentUser);
-
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.trialSessionId));
 
-        Answer answer = Answer.builder()
-                .trialSession(trialSession)
-                .trialUser(currentTrialUser)
-                .observationType(observationType)
-                .simulationTime(form.simulationTime)
-                .sentSimulationTime(LocalDateTime.now())
-                .fieldValue(form.fieldValue)
-                .formData(form.formData.toString())
-                .attachments(createAttachments(new MultipartFile[]{}))
-                .answerTrialRoles(new ArrayList<>())
-                .build();
+        Answer answer = answerRepository.save(
+                Answer.builder()
+                        .trialSession(trialSession)
+                        .trialUser(currentTrialUser)
+                        .observationType(observationType)
+                        .simulationTime(form.simulationTime)
+                        .sentSimulationTime(LocalDateTime.now())
+                        .fieldValue(form.fieldValue)
+                        .formData(form.formData.toString())
+                        .build()
+        );
 
-        return answerRepository.save(answer);
+        getTrialRoles(form.trialRoleIds, answer);
+//        createAttachments(files, answer);
+
+        return answer;
     }
 
-    private List<Attachment> createAttachments(MultipartFile[] files) {
+    private List<Attachment> createAttachments(MultipartFile[] files, Answer answer) {
         List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile file : files) {
-
+            Attachment attachment = Attachment.builder()
+                    .answer(answer)
+                    .type(AttachmentType.DESCRIPTION)
+                    .uri("")
+                    .build();
+            attachments.add(attachment);
         }
-        return attachments;
+        return attachmentRepository.save(attachments);
+    }
+
+    private List<AnswerTrialRole> getTrialRoles(List<Long> trialRoleIds, Answer answer) {
+        List<AnswerTrialRole> answerTrialRoles = new ArrayList<>();
+
+        trialRoleIds.forEach(trialRoleId -> {
+            AnswerTrialRoleId answerTrialRoleId = new AnswerTrialRoleId();
+            answerTrialRoleId.setAnswerId(answer.getId());
+            answerTrialRoleId.setTrialRoleId(trialRoleId);
+
+            TrialRole trialRole = trialRoleRepository.findById(trialRoleId)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialRole.class, trialRoleId));
+
+            answerTrialRoles.add(new AnswerTrialRole(answerTrialRoleId, answer, trialRole));
+        });
+
+        return answerTrialRoleRepository.save(answerTrialRoles);
     }
 }
