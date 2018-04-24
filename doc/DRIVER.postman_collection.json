@@ -1,16 +1,17 @@
 {
 	"info": {
+		"_postman_id": "baaf78e9-eba9-4336-aa3d-21350b28b00f",
 		"name": "DRIVER",
-		"_postman_id": "77330b2f-c494-f061-adeb-1e3df6b7ff47",
-		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "auth",
+			"description": null,
 			"item": [
 				{
 					"name": "/roles",
+					"description": null,
 					"item": [
 						{
 							"name": "/roles",
@@ -61,6 +62,7 @@
 				},
 				{
 					"name": "/users",
+					"description": null,
 					"item": [
 						{
 							"name": "/users",
@@ -387,6 +389,7 @@
 				},
 				{
 					"name": "/users/positions",
+					"description": null,
 					"item": [
 						{
 							"name": "/users/positions",
@@ -523,6 +526,7 @@
 		},
 		{
 			"name": "/observationtypes",
+			"description": null,
 			"item": [
 				{
 					"name": "/api/observationtypes",
@@ -570,8 +574,7 @@
 							"query": [
 								{
 									"key": "trialsession_id",
-									"value": "1",
-									"equals": true
+									"value": "1"
 								}
 							]
 						}
@@ -625,13 +628,11 @@
 							"query": [
 								{
 									"key": "observationtype_id",
-									"value": "1",
-									"equals": true
+									"value": "1"
 								},
 								{
 									"key": "trialsession_id",
-									"value": "1",
-									"equals": true
+									"value": "1"
 								}
 							]
 						}
@@ -664,7 +665,7 @@
 		},
 		{
 			"name": "/trialsessions",
-			"description": "",
+			"description": null,
 			"item": [
 				{
 					"name": "/trialsessions",
@@ -699,8 +700,7 @@
 								"api",
 								"trialsessions"
 							]
-						},
-						"description": ""
+						}
 					},
 					"response": []
 				},
@@ -737,6 +737,75 @@
 								"api",
 								"trialsessions",
 								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/trialsessions/2?lasttrialstage_id=2",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Mayer1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{X-Auth-Token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/trialsessions/2?lasttrialstage_id=2",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"trialsessions",
+								"2"
+							],
+							"query": [
+								{
+									"key": "lasttrialstage_id",
+									"value": "2"
+								}
 							]
 						}
 					},
@@ -994,12 +1063,63 @@
 					"query": [
 						{
 							"key": "trialsession_id",
-							"value": "1",
-							"equals": true
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/stages?trialsession_id=2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Mayer1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
 						}
 					]
 				},
-				"description": ""
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
+				},
+				"url": {
+					"raw": "{{IP-Address}}/api/stages?trialsession_id=2",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"stages"
+					],
+					"query": [
+						{
+							"key": "trialsession_id",
+							"value": "2"
+						}
+					]
+				}
 			},
 			"response": []
 		}
