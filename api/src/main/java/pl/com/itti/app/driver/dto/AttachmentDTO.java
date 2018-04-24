@@ -20,6 +20,13 @@ public final class AttachmentDTO {
         }
     }
 
+    public static class Coordinates {
+
+        public double longitude;
+        public double latitude;
+        public double altitude;
+    }
+
     private AttachmentDTO() {
         throw new AssertionError();
     }

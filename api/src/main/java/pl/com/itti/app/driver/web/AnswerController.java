@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.everit.json.schema.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.Answer;
@@ -49,7 +52,9 @@ public class AnswerController {
                                           @RequestParam("fieldValue") String fieldValue,
                                           @RequestParam("formData") String formData,
                                           @RequestParam("trialRoleIds") List<Long> trialRoleIds,
-                                          @RequestPart(value = "attachments", required = false) MultipartFile[] files) throws IOException {
+                                          @RequestParam(value = "texts", required = false) List<String> texts,
+                                          @RequestParam(value = "coordinates", required = false) List<AnswerDTO.Coordinates> coordinates,
+                                          @RequestParam(value = "attachments", required = false) MultipartFile[] files) throws IOException {
         AnswerDTO.Form form = new AnswerDTO.Form();
         form.observationTypeId = observationTypeId;
         form.trialSessionId = trialSessionId;
@@ -57,6 +62,8 @@ public class AnswerController {
         form.fieldValue = fieldValue;
         form.formData = new ObjectMapper().readTree(formData);
         form.trialRoleIds = trialRoleIds;
+        form.texts = texts;
+        form.coordinates = coordinates;
 
         Answer answer;
 

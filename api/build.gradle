@@ -16,6 +16,8 @@ buildscript {
         everitVersion = '1.5.1'
         jsonSchemaValidatorVersion = '2.0.4'
         jsonVersion = '20180130'
+        commonsCodecVersion = '1.11'
+        commonsIoVersion = '2.6'
 
         apacheCommonsLoggingVersion = '1.2'
         apacheCommonsCodecVersion = '1.10'
@@ -161,6 +163,10 @@ dependencies {
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}")
     compile("org.json:json:${jsonVersion}")
+
+    // Apache HTTP & Commons
+    compile("commons-codec:commons-codec:${commonsCodecVersion}")
+    compile("commons-io:commons-io:${commonsIoVersion}")
 
     // PerPixel
     compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")

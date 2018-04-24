@@ -70,6 +70,10 @@ public final class AnswerDTO {
         public JsonNode formData;
 
         public List<Long> trialRoleIds;
+
+        public List<AttachmentDTO.Coordinates> coordinates;
+
+        public List<String> descriptions;
     }
 
     private AnswerDTO() {
