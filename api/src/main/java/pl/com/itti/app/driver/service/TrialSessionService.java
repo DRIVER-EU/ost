@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.service;
 
+import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialStageRepository;
@@ -60,7 +62,10 @@ public class TrialSessionService {
         trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
 
         TrialSession trialSession = trialSessionRepository.findOne(trialSessionId);
-        trialSession.setLastTrialStage(trialStageRepository.findOne(lastTrialStageId));
+        TrialStage trialStage = trialStageRepository.findById(lastTrialStageId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, lastTrialStageId));
+
+        trialSession.setLastTrialStage(trialStage);
         return trialSessionRepository.save(trialSession);
     }
 

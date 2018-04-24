@@ -6,8 +6,10 @@ import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
+import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 
@@ -30,7 +32,7 @@ public class TrialSessionController {
 
     @PutMapping
     private TrialSessionDTO.FullItem updateLastTrialStage(@PathVariable(value = "id") Long trialSessionId,
-                                                          @RequestParam(value = "lasttrialstage_id") Long lastTrialStageId) {
-        return DTO.from(trialSessionService.updateLastTrialStage(trialSessionId, lastTrialStageId), TrialSessionDTO.FullItem.class);
+                                                          @RequestBody @Validated TrialStageDTO.MinimalItem minimalItem) {
+        return DTO.from(trialSessionService.updateLastTrialStage(trialSessionId, minimalItem.id), TrialSessionDTO.FullItem.class);
     }
 }
