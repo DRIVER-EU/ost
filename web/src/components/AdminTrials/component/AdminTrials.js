@@ -8,6 +8,7 @@ import { Card } from 'material-ui/Card'
 import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
+import SelectField from 'material-ui/SelectField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
@@ -24,6 +25,15 @@ const rangeList = [
   { id: 3, name: '1 day' },
   { id: 4, name: '7 days' },
   { id: 5, name: '1 month' }
+]
+
+const trialStagesList = [
+  { id: 0, name: 'Trial Stages 1' },
+  { id: 1, name: 'Trial Stages 2' },
+  { id: 2, name: 'Trial Stages 3' },
+  { id: 3, name: 'Trial Stages 4' },
+  { id: 4, name: 'Trial Stages 5' },
+  { id: 5, name: 'Trial Stages 6' }
 ]
 
 const styles = {
@@ -74,21 +84,22 @@ class AdminTrials extends Component {
       },
       errorUserRole: true,
       showModal: false,
-      selectedObj: ''
+      selectedObj: {},
+      trialStage: ''
     }
   }
 
   static propTypes = {
     getMessages: PropTypes.func,
-    messages: PropTypes.array,
+    messages: PropTypes.object,
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
     getObservation: PropTypes.func,
     observation: PropTypes.array,
     getUsers: PropTypes.func,
-    usersList: PropTypes.array,
+    usersList: PropTypes.object,
     getRoles: PropTypes.func,
-    rolesList: PropTypes.array,
+    rolesList: PropTypes.object,
     params: PropTypes.any
   }
 
@@ -341,6 +352,26 @@ class AdminTrials extends Component {
       <div className='main-container'>
         <div className='pages-box'>
           <div className='admin-trials-container'>
+            <div style={{ float: 'right', marginBottom: '20px' }}>
+              <SelectField
+                value={this.state.trialStage}
+                floatingLabelText='Choose Trial Stage'
+                onChange={this.handleChangeDropDown.bind(this, 'trialStage')}
+            >
+                {trialStagesList !== undefined && trialStagesList.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.id}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
+                ))}
+              </SelectField>
+              <RaisedButton
+                style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
+                label='View'
+                primary
+                labelStyle={{ color: '#FDB913' }} />
+            </div>
             <Tabs
               value={this.state.value}
               onChange={this.handleChange}>
@@ -503,8 +534,8 @@ class AdminTrials extends Component {
                           style={{ width: '220px' }}
                           value={this.state.userValue}
                           underlineStyle={!this.state.errorUserRole
-                            ? { 'border-top': '1px solid red', marginLeft: '0' }
-                            : { 'border-top': '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
+                            ? { borderTop: '1px solid red', marginLeft: '0' }
+                            : { borderTop: '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
                           disabled={this.state.roleValue !== null}
                           onChange={this.handleChangeDropDown.bind(this, 'userValue')}>
@@ -531,8 +562,8 @@ class AdminTrials extends Component {
                           style={{ width: '220px' }}
                           value={this.state.roleValue}
                           underlineStyle={!this.state.errorUserRole
-                            ? { 'border-top': '1px solid red', marginLeft: '0' }
-                            : { 'border-top': '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
+                            ? { borderTop: '1px solid red', marginLeft: '0' }
+                            : { borderTop: '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
                           disabled={this.state.userValue !== null}
                           onChange={this.handleChangeDropDown.bind(this, 'roleValue')}>

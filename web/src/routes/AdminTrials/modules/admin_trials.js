@@ -181,11 +181,11 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  messages: [],
+  messages: {},
   isSendMessage: {},
   observation: [],
-  usersList: [],
-  rolesList: []
+  usersList: {},
+  rolesList: {}
 }
 
 export default function adminTrialsReducer (state = initialState, action) {

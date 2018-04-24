@@ -10,15 +10,15 @@ class AdminTrialsView extends Component {
 
   static propTypes = {
     getMessages: PropTypes.func,
-    messages: PropTypes.any,
+    messages: PropTypes.object,
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
     getObservation: PropTypes.func,
     observation: PropTypes.array,
     getUsers: PropTypes.func,
-    usersList: PropTypes.array,
+    usersList: PropTypes.object,
     getRoles: PropTypes.func,
-    rolesList: PropTypes.array,
+    rolesList: PropTypes.object,
     params: PropTypes.any
   }
 
