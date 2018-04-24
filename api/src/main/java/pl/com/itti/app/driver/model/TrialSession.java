@@ -38,7 +38,7 @@ public class TrialSession extends PersistentObject implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "last_trial_stage_id")
-    private Trial lastTrialStage;
+    private TrialStage lastTrialStage;
 
     @Column(nullable = false)
     private LocalDateTime startTime;
