@@ -46,7 +46,9 @@ public final class SchemaCreator {
         ObjectNode properties = MAPPER.createObjectNode();
         for (Question question : questions) {
             properties.putPOJO(QUESTION_ID + question.getId(), createPropertyContent(question));
-            properties.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_SCHEMA);
+            if (question.isCommented()) {
+                properties.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_SCHEMA);
+            }
         }
         schema.putPOJO("properties", properties);
 
@@ -61,7 +63,9 @@ public final class SchemaCreator {
         ObjectNode schema = MAPPER.createObjectNode();
         questions.forEach(question -> {
             schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question));
-            schema.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_UI_SCHEMA);
+            if (question.isCommented()) {
+                schema.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_UI_SCHEMA);
+            }
         });
         return schema;
     }
