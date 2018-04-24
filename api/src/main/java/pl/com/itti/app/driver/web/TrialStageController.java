@@ -12,7 +12,7 @@ import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.service.TrialStageService;
 
 @RestController
-@RequestMapping("api/stage")
+@RequestMapping("api/stages")
 public class TrialStageController {
 
     @Autowired

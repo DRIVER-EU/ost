@@ -26,5 +26,4 @@ public final class TrialStageDTO {
     private TrialStageDTO() {
         throw new AssertionError();
     }
-
 }

@@ -35,10 +35,12 @@ public class TrialStageService {
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
         trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+        return trialStageRepository.findAll(getTrialStageSessionSpecifications(trialSessionId), pageable);
+    }
 
+    private Specification<TrialStage> getTrialStageSessionSpecifications(Long trialSessionId) {
         Set<Specification<TrialStage>> conditions = new HashSet<>();
         conditions.add(TrialStageSpecification.trialStage(trialSessionId));
-
-        return trialStageRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
+        return RepositoryUtils.concatenate(conditions);
     }
 }
