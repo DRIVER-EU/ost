@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 public class CustomTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy'T'hh:mm:ss xxx");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'hh:mm:ssxxx");
 
     @Override
     public ZonedDateTime deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
