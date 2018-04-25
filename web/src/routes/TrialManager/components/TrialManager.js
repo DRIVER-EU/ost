@@ -10,7 +10,7 @@ class TrialManagerView extends Component {
 
   static propTypes = {
     getTrialManager: PropTypes.func,
-    listOfTrialsManager: PropTypes.array
+    listOfTrialsManager: PropTypes.object
   }
 
   render () {

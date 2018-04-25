@@ -57,7 +57,7 @@ class ViewTrials extends Component {
             <Accordion>
               {this.state.viewTrials.map((object) => {
                 return (
-                  <AccordionItem title={
+                  <AccordionItem key={object.id} title={
                     <h3 className={'react-sanfona-item-title cursor-pointer' +
                       ((object.type !== 'EVENT') ? ' observation' : ' message')}>
                       {object.name}
