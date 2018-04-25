@@ -42,4 +42,8 @@ public class Question extends PersistentObject implements Serializable {
 
     @Column(columnDefinition = "text", nullable = false)
     private String jsonSchema;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean commented = true;
 }
