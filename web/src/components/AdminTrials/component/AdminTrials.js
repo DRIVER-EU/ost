@@ -352,7 +352,7 @@ class AdminTrials extends Component {
       <div className='main-container'>
         <div className='pages-box'>
           <div className='admin-trials-container'>
-            <div style={{ float: 'right', marginBottom: '20px' }}>
+            <div style={{ marginBottom: '20px' }}>
               <SelectField
                 value={this.state.trialStage}
                 floatingLabelText='Choose Trial Stage'
