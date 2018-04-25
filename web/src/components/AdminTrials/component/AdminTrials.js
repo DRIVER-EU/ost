@@ -352,6 +352,9 @@ class AdminTrials extends Component {
       <div className='main-container'>
         <div className='pages-box'>
           <div className='admin-trials-container'>
+            <div className='trials-set-header'>
+              <div>Set stage</div>
+            </div>
             <div style={{ marginBottom: '20px' }}>
               <SelectField
                 value={this.state.trialStage}
@@ -368,7 +371,7 @@ class AdminTrials extends Component {
               </SelectField>
               <RaisedButton
                 style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
-                label='View'
+                label='Set'
                 primary
                 labelStyle={{ color: '#FDB913' }} />
             </div>
