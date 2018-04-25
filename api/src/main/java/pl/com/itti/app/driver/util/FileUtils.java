@@ -70,4 +70,8 @@ public final class FileUtils {
     private FileUtils() {
         throw new AssertionError();
     }
+
+    public static String getFileExtension(MultipartFile file) {
+        return "." + file.getOriginalFilename().split("\\.")[1];
+    }
 }

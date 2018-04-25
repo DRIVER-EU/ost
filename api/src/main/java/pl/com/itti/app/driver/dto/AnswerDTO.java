@@ -2,6 +2,7 @@ package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.EntityDTO;
+import co.perpixel.dto.FormDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.com.itti.app.driver.model.Answer;
@@ -52,7 +53,7 @@ public final class AnswerDTO {
         }
     }
 
-    public static class Form {
+    public static class Form implements FormDTO {
 
         @NotNull
         public Long observationTypeId;

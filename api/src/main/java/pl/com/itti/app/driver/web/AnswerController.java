@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.service.AnswerService;
+import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.SchemaValidationException;
 
 import java.io.IOException;
@@ -20,12 +21,17 @@ import java.io.IOException;
 @RequestMapping("/api/answers")
 public class AnswerController {
 
+    private static final String AUDIO = "audio";
+
+    private static final String IMAGE = "image";
+
     @Autowired
     private AnswerService answerService;
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public AnswerDTO.Item answerQuestions(@RequestPart(value = "data") AnswerDTO.Form form,
                                           @RequestPart(value = "attachments", required = false) MultipartFile[] files) throws IOException {
+        assertThatFilesAreValid(files);
         Answer answer;
 
         try {
@@ -41,7 +47,17 @@ public class AnswerController {
         return DTO.from(answer, AnswerDTO.Item.class);
     }
 
-//    // TODO endpoint used for testing backend
+    private void assertThatFilesAreValid(MultipartFile[] files) {
+        if (files.length > 0) {
+            for (MultipartFile file : files) {
+                if (!file.getContentType().startsWith(AUDIO) && !file.getContentType().startsWith(IMAGE)) {
+                    throw new InvalidDataException("Invalid type of attachment: " + file.getContentType());
+                }
+            }
+        }
+    }
+
+    // TODO endpoint used for testing backend
 //    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 //    public AnswerDTO.Item answerQuestions(@RequestParam("observationTypeId") Long observationTypeId,
 //                                          @RequestParam("trialSessionId") Long trialSessionId,

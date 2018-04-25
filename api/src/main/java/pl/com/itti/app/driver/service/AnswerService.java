@@ -32,9 +32,6 @@ public class AnswerService {
     private AnswerTrialRoleRepository answerTrialRoleRepository;
 
     @Autowired
-    private AttachmentRepository attachmentRepository;
-
-    @Autowired
     private AuthUserRepository authUserRepository;
 
     @Autowired
@@ -54,7 +51,7 @@ public class AnswerService {
 
     public Answer createAnswer(AnswerDTO.Form form, MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
-                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.observationTypeId));
+                .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, form.observationTypeId));
 
         JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
         Schema schema = SchemaLoader.load(jsonObject);
@@ -85,19 +82,13 @@ public class AnswerService {
     }
 
     private List<Attachment> assignAttachments(AnswerDTO.Form form, MultipartFile[] files, Answer answer) throws IOException {
-        List<Attachment> attachments = new ArrayList<>();
-
-        attachments.addAll(attachmentService.createDescriptionAttachments(form.descriptions, answer));
-        attachments.addAll(attachmentService.createLocationAttachments(form.coordinates, answer));
-        attachments.addAll(attachmentService.createFileAttachments(files, answer));
-
-        return attachmentRepository.save(attachments);
+        return attachmentService.createAttachments(form.descriptions, form.coordinates, files, answer);
     }
 
     private List<AnswerTrialRole> assignTrialRoles(List<Long> trialRoleIds, Answer answer) {
         List<AnswerTrialRole> answerTrialRoles = new ArrayList<>();
 
-        trialRoleIds.forEach(trialRoleId -> {
+        for (Long trialRoleId : trialRoleIds) {
             AnswerTrialRoleId answerTrialRoleId = new AnswerTrialRoleId();
             answerTrialRoleId.setAnswerId(answer.getId());
             answerTrialRoleId.setTrialRoleId(trialRoleId);
@@ -106,7 +97,7 @@ public class AnswerService {
                     .orElseThrow(() -> new EntityNotFoundException(TrialRole.class, trialRoleId));
 
             answerTrialRoles.add(new AnswerTrialRole(answerTrialRoleId, answer, trialRole));
-        });
+        }
 
         return answerTrialRoleRepository.save(answerTrialRoles);
     }

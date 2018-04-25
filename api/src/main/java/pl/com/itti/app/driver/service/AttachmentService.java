@@ -8,9 +8,9 @@ import pl.com.itti.app.driver.dto.AttachmentDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Attachment;
 import pl.com.itti.app.driver.model.enums.AttachmentType;
+import pl.com.itti.app.driver.repository.AttachmentRepository;
 import pl.com.itti.app.driver.util.FileProperties;
 import pl.com.itti.app.driver.util.FileUtils;
-import pl.com.itti.app.driver.util.InvalidDataException;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,67 +22,92 @@ import java.util.stream.Collectors;
 @Transactional
 public class AttachmentService {
 
+    private static final String AUDIO = "audio";
+
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
     @Autowired
     private FileProperties fileProperties;
 
-    public List<Attachment> createDescriptionAttachments(List<String> descriptions, Answer answer) {
+    public List<Attachment> createAttachments(List<String> descriptions,
+                                              List<AttachmentDTO.Coordinates> coordinates,
+                                              MultipartFile[] files,
+                                              Answer answer) throws IOException {
+        List<Attachment> attachments = new ArrayList<>();
+
+        attachments.addAll(createDescriptionAttachments(descriptions, answer));
+        attachments.addAll(createLocationAttachments(coordinates, answer));
+        attachments.addAll(createFileAttachments(files, answer));
+
+        return attachmentRepository.save(attachments);
+    }
+
+    private List<Attachment> createDescriptionAttachments(List<String> descriptions, Answer answer) {
         return descriptions.stream()
-                .map(s -> Attachment.builder()
-                        .answer(answer)
-                        .description(s)
-                        .type(AttachmentType.DESCRIPTION)
-                        .build()
-                )
+                .map(s -> convertDescriptionToAttachment(s, answer))
                 .collect(Collectors.toList());
     }
 
-    public List<Attachment> createLocationAttachments(List<AttachmentDTO.Coordinates> coordinates, Answer answer) {
+    private List<Attachment> createLocationAttachments(List<AttachmentDTO.Coordinates> coordinates, Answer answer) {
         return coordinates.stream()
-                .map(coord -> Attachment.builder()
-                        .answer(answer)
-                        .longitude(coord.longitude)
-                        .latitude(coord.latitude)
-                        .altitude(coord.altitude)
-                        .type(AttachmentType.LOCATION)
-                        .build()
-                )
+                .map(coord -> convertCoordinatesToAttachment(coord, answer))
                 .collect(Collectors.toList());
     }
 
-    public List<Attachment> createFileAttachments(MultipartFile[] files, Answer answer) throws IOException {
+    private List<Attachment> createFileAttachments(MultipartFile[] files, Answer answer) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
 
         for (MultipartFile file : files) {
             String dir;
             AttachmentType type;
 
-            if (file.getContentType().startsWith("audio")) {
+            if (file.getContentType().startsWith(AUDIO)) {
                 dir = fileProperties.getSoundDir();
                 type = AttachmentType.VOICE;
-            } else if (file.getContentType().startsWith("image")) {
+            } else {
                 dir = fileProperties.getImageDir();
                 type = AttachmentType.PICTURE;
-            } else {
-                throw new InvalidDataException("Bad type of attachment");
             }
 
             String fullName = saveFile(file, dir);
-            attachments.add(
-                    Attachment.builder()
-                            .answer(answer)
-                            .description(file.getOriginalFilename())
-                            .uri(fullName)
-                            .type(type)
-                            .build()
-            );
+            attachments.add(convertFileToAttachment(file, fullName, type, answer));
         }
 
         return attachments;
     }
 
+
+    private Attachment convertDescriptionToAttachment(String description, Answer answer) {
+        return Attachment.builder()
+                .answer(answer)
+                .description(description)
+                .type(AttachmentType.DESCRIPTION)
+                .build();
+    }
+
+    private Attachment convertCoordinatesToAttachment(AttachmentDTO.Coordinates coordinates, Answer answer) {
+        return Attachment.builder()
+                .answer(answer)
+                .longitude(coordinates.longitude)
+                .latitude(coordinates.latitude)
+                .altitude(coordinates.altitude)
+                .type(AttachmentType.LOCATION)
+                .build();
+    }
+
+    private Attachment convertFileToAttachment(MultipartFile file, String fullName, AttachmentType type, Answer answer) {
+        return Attachment.builder()
+                .answer(answer)
+                .description(file.getOriginalFilename())
+                .uri(fullName)
+                .type(type)
+                .build();
+    }
+
     private String saveFile(MultipartFile file, String dir) throws IOException {
         String randomFileName = FileUtils.generateRandomFileName(new File(dir));
-        String extension = "." + file.getOriginalFilename().split("\\.")[1];
+        String extension = FileUtils.getFileExtension(file);
         String fullName = randomFileName + extension;
 
         FileUtils.save(new File(dir), file, fullName);
