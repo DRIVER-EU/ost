@@ -27,15 +27,6 @@ const rangeList = [
   { id: 5, name: '1 month' }
 ]
 
-const trialStagesList = [
-  { id: 0, name: 'Trial Stages 1' },
-  { id: 1, name: 'Trial Stages 2' },
-  { id: 2, name: 'Trial Stages 3' },
-  { id: 3, name: 'Trial Stages 4' },
-  { id: 4, name: 'Trial Stages 5' },
-  { id: 5, name: 'Trial Stages 6' }
-]
-
 const styles = {
   searchPanelContainer: {
     width: '100%',
@@ -85,7 +76,10 @@ class AdminTrials extends Component {
       errorUserRole: true,
       showModal: false,
       selectedObj: {},
-      trialStage: ''
+      trialStage: '',
+      usersList: [],
+      rolesList: [],
+      stagesList: []
     }
   }
 
@@ -100,6 +94,9 @@ class AdminTrials extends Component {
     usersList: PropTypes.object,
     getRoles: PropTypes.func,
     rolesList: PropTypes.object,
+    getStages: PropTypes.func,
+    stagesList: PropTypes.object,
+    setStage: PropTypes.func,
     params: PropTypes.any
   }
 
@@ -108,6 +105,7 @@ class AdminTrials extends Component {
     this.props.getObservation()
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
+    this.props.getStages(this.props.params.id)
 
     setInterval(() => {
       this.props.getMessages(this.props.params.id, this.state.sort)
@@ -136,6 +134,9 @@ class AdminTrials extends Component {
     }
     if (nextProps.rolesList && nextProps.rolesList !== null && this.props.rolesList) {
       this.setState({ rolesList: nextProps.rolesList.data })
+    }
+    if (nextProps.stagesList && nextProps.stagesList !== null && this.props.stagesList) {
+      this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
@@ -347,13 +348,19 @@ class AdminTrials extends Component {
     this.handleShowModal()
   }
 
+  handleChangeStage () {
+    if (this.state.trialStage !== '') {
+      this.props.setStage(this.props.params.id, { id: this.state.trialStage })
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
         <div className='pages-box'>
           <div className='admin-trials-container'>
             <div className='trials-set-header'>
-              <div>Set stage</div>
+              <div>Session settings</div>
             </div>
             <div style={{ marginBottom: '20px' }}>
               <SelectField
@@ -361,7 +368,7 @@ class AdminTrials extends Component {
                 floatingLabelText='Choose Trial Stage'
                 onChange={this.handleChangeDropDown.bind(this, 'trialStage')}
             >
-                {trialStagesList !== undefined && trialStagesList.map((index) => (
+                {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
                   <MenuItem
                     key={index.id}
                     value={index.id}
@@ -371,8 +378,9 @@ class AdminTrials extends Component {
               </SelectField>
               <RaisedButton
                 style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
-                label='Set'
+                label='Set stage'
                 primary
+                onClick={this.handleChangeStage.bind(this)}
                 labelStyle={{ color: '#FDB913' }} />
             </div>
             <Tabs
