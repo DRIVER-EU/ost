@@ -18,6 +18,7 @@ import pl.com.itti.app.driver.util.SchemaValidationException;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,7 +55,9 @@ public class AnswerController {
                                           @RequestParam("formData") String formData,
                                           @RequestParam("trialRoleIds") List<Long> trialRoleIds,
                                           @RequestParam(value = "texts", required = false) List<String> texts,
-                                          @RequestParam(value = "coordinates", required = false) List<AttachmentDTO.Coordinates> coordinates,
+                                          @RequestParam(value = "longitude", required = false) List<Float> longitude,
+                                          @RequestParam(value = "latitude", required = false) List<Float> latitude,
+                                          @RequestParam(value = "altitude", required = false) List<Float> altitude,
                                           @RequestParam(value = "attachments", required = false) MultipartFile[] files) throws IOException {
         AnswerDTO.Form form = new AnswerDTO.Form();
         form.observationTypeId = observationTypeId;
@@ -64,6 +67,14 @@ public class AnswerController {
         form.formData = new ObjectMapper().readTree(formData);
         form.trialRoleIds = trialRoleIds;
         form.descriptions = texts;
+        List<AttachmentDTO.Coordinates> coordinates = new ArrayList<>();
+        for (int i = 0; i < longitude.size(); i++) {
+            AttachmentDTO.Coordinates coord = new AttachmentDTO.Coordinates();
+            coord.longitude = longitude.get(i);
+            coord.latitude = latitude.get(i);
+            coord.altitude = altitude.get(i);
+            coordinates.add(coord);
+        }
         form.coordinates = coordinates;
 
         Answer answer;

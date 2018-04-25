@@ -67,7 +67,7 @@ public final class SchemaCreator {
         if (question.getAnswerType().equals(AnswerType.RADIO_BUTTON)) {
             ui.put(WIDGET, "radio");
         } else if (question.getAnswerType().equals(AnswerType.SLIDER)) {
-            ui.put(WIDGET, "range");
+            ui.put(WIDGET, "slider");
         }
 
         return ui;

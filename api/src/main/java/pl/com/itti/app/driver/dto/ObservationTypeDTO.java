@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.dto;
 
 import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;

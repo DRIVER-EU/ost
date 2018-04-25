@@ -78,7 +78,7 @@ public class AnswerService {
                         .build()
         );
 
-        assignTrialRoles(form.trialRoleIds, answer);
+        answer.setAnswerTrialRoles(assignTrialRoles(form.trialRoleIds, answer));
         answer.setAttachments(assignAttachments(form, files, answer));
 
         return answerRepository.save(answer);
@@ -88,7 +88,7 @@ public class AnswerService {
         List<Attachment> attachments = new ArrayList<>();
 
         attachments.addAll(attachmentService.createDescriptionAttachments(form.descriptions, answer));
-//        attachments.addAll(attachmentService.createLocationAttachments(form.coordinates, answer));
+        attachments.addAll(attachmentService.createLocationAttachments(form.coordinates, answer));
         attachments.addAll(attachmentService.createFileAttachments(files, answer));
 
         return attachmentRepository.save(attachments);

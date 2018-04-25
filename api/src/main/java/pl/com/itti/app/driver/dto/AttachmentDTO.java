@@ -16,7 +16,6 @@ public final class AttachmentDTO {
         public Float altitude;
         public AttachmentType type;
 
-
         @Override
         public void toDto(Attachment attachment) {
             this.id = attachment.getId();
