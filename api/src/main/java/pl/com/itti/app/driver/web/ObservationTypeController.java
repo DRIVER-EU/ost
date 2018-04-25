@@ -1,6 +1,6 @@
 package pl.com.itti.app.driver.web;
 
-import co.perpixel.annotation.web.FindOneGetMapping;
+import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class ObservationTypeController {
     @Autowired
     private ObservationTypeService observationTypeService;
 
-    @FindOneGetMapping
+    @FindAllGetMapping
     public PageDTO<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialsession_id") Long trialSessionId, Pageable pageable) {
         return DTO.from(observationTypeService.find(trialSessionId, pageable), ObservationTypeDTO.ListItem.class);
     }
