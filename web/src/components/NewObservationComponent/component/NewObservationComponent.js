@@ -136,8 +136,8 @@ class NewObservationComponent extends Component {
             <div className='trials-header'>
               <DateComponent />
               {this.props.mode !== 'new'
-              ? <div style={{ textAlign:'center', 'border-bottom': '1px solid #feb912' }}>Observation</div>
-              : <div style={{ textAlign:'center', 'border-bottom': '1px solid #feb912' }}>New observation</div>
+              ? <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>Observation</div>
+              : <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>New observation</div>
             }
             </div>
             <p className='title-obs'>{this.state.observationForm.name}</p>

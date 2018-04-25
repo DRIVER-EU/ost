@@ -10,7 +10,7 @@ class TrialsView extends Component {
 
   static propTypes = {
     getTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    listOfTrials: PropTypes.object
   }
 
   render () {

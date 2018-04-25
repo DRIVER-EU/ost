@@ -17,7 +17,7 @@ class Trials extends Component {
 
   static propTypes = {
     getTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    listOfTrials: PropTypes.object
   }
 
   componentWillMount () {
@@ -65,7 +65,7 @@ class Trials extends Component {
             <Accordion>
               {this.state.listOfTrials.map((object) => {
                 return (
-                  <AccordionItem disabled={object.status !== 'ACTIVE'}
+                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
                       {object.trialName}
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>

@@ -265,10 +265,19 @@ class AdminTrials extends Component {
   sendMessage () {
     let send = {}
     send.trialSessionId = parseInt(this.props.params.id)
-    if (this.state.userValue !== null) {
+    if (this.state.userValue === -1) {
+      send.trialUserId = null
+    }
+    if (this.state.roleValue === -1) {
+      send.trialRoleId = null
+    }
+    if (this.state.userValue !== null && this.state.userValue !== -1) {
       send.trialUserId = this.state.userValue
-    } else {
+      send.trialRoleId = ''
+    }
+    if (this.state.roleValue !== null && this.state.roleValue !== -1) {
       send.trialRoleId = this.state.roleValue
+      send.trialUserId = ''
     }
     send.name = this.state.title
     send.languageVersion = 'POLISH'

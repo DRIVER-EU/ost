@@ -57,7 +57,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  listOfTrialsManager: []
+  listOfTrialsManager: {}
 }
 
 export default function trialManagerReducer (state = initialState, action) {
