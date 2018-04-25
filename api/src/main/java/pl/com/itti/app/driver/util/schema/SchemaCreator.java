@@ -45,7 +45,6 @@ public final class SchemaCreator {
             properties.putPOJO(QUESTION_ID + question.getId(), createPropertyContent(question));
         }
         schema.putPOJO("properties", properties);
-        schema.putPOJO("required", MAPPER.createArrayNode());
 
         return schema;
     }
