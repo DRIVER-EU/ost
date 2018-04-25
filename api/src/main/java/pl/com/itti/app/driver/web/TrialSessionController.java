@@ -1,14 +1,15 @@
 package pl.com.itti.app.driver.web;
 
 import co.perpixel.annotation.web.FindAllGetMapping;
+import co.perpixel.annotation.web.PutMapping;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
+import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 
@@ -27,5 +28,11 @@ public class TrialSessionController {
     @GetMapping("/active")
     private PageDTO<TrialSessionDTO.ListItem> findActive(Pageable pageable) {
         return DTO.from(trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable), TrialSessionDTO.ListItem.class);
+    }
+
+    @PutMapping
+    private TrialSessionDTO.FullItem updateLastTrialStage(@PathVariable(value = "id") Long trialSessionId,
+                                                          @RequestBody @Validated TrialStageDTO.MinimalItem minimalItem) {
+        return DTO.from(trialSessionService.updateLastTrialStage(trialSessionId, minimalItem.id), TrialSessionDTO.FullItem.class);
     }
 }

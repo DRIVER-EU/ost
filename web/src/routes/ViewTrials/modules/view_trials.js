@@ -4,6 +4,8 @@
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = 'dev.itti.com.pl:8009'
+} else {
+  origin = window.location.host
 }
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'

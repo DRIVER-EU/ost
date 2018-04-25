@@ -151,22 +151,25 @@ class NewObservationComponent extends Component {
               DatePicker={DatePickerDialog}
               TimePicker={TimePickerDialog}
               format='YYYY/MM/DD H:mm' />
-            <p className='point-obs'>Who:</p>
-            {this.state.observationForm.roles.map((object) => (
+            {this.state.observationForm.roles.length !== 0 && <div>
+              <p className='point-obs'>Who:</p>
+              {this.state.observationForm.roles.map((object) => (
+                <Checkbox
+                  disabled={this.props.mode}
+                  label={object.name}
+                  checked={this.handleChecked(object.id)}
+                  onCheck={this.handleParticipants.bind(this, object.id)}
+                  style={styles.checkbox} />
+              ))}
+              {this.state.observationForm.roles.length > 2 &&
               <Checkbox
                 disabled={this.props.mode}
-                label={object.name}
-                checked={this.handleChecked(object.id)}
-                onCheck={this.handleParticipants.bind(this, object.id)}
+                label='All'
+                checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
+                onCheck={this.handleAllParticipants.bind(this)}
                 style={styles.checkbox} />
-              ))}
-            {this.state.observationForm.roles.length > 2 &&
-            <Checkbox
-              disabled={this.props.mode}
-              label='All'
-              checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
-              onCheck={this.handleAllParticipants.bind(this)}
-              style={styles.checkbox} />
+            }
+            </div>
             }
             <p className='point-obs'>What:</p>
             <Form
