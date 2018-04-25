@@ -62,7 +62,7 @@ public class ObservationTypeService {
 
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
-                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
+                .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, observationTypeId));
 
         ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
 

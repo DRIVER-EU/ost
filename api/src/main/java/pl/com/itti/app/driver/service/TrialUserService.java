@@ -29,8 +29,7 @@ public class TrialUserService {
     private AuthUserRepository authUserRepository;
 
     public Page<TrialUser> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
-        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        AuthUser authUser = getCurrentUser();
 
         checkIsTrialSessionManager(authUser, trialSessionId);
 
@@ -51,5 +50,10 @@ public class TrialUserService {
         managerConditions.add(TrialUserSpecification.trialSessionUser(userToCheck, trialSessionId));
         Optional.ofNullable(trialUserRepository.findOne(RepositoryUtils.concatenate(managerConditions)))
                 .orElseThrow(() -> new ForbiddenException("Permitted only for TrialSessionUser"));
+    }
+
+    public AuthUser getCurrentUser() {
+        return authUserRepository.findOneCurrentlyAuthenticated()
+                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
     }
 }

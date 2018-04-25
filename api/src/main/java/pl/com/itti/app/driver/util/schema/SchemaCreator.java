@@ -19,13 +19,13 @@ public final class SchemaCreator {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static ObjectNode createSchemaForm(List<Question> questions) throws IOException {
+    public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
         ObjectNode schemaForm = MAPPER.createObjectNode();
 
         ObjectNode schema = createSchema(questions);
         schemaForm.putPOJO("schema", schema);
 
-        ObjectNode uiSchema = createUiSchema(questions);
+        ObjectNode uiSchema = createUiSchema(questions, disabled);
         schemaForm.putPOJO("uiSchema", uiSchema);
 
         return schemaForm;
@@ -48,15 +48,16 @@ public final class SchemaCreator {
         return MAPPER.readTree(question.getJsonSchema());
     }
 
-    private static ObjectNode createUiSchema(List<Question> questions) {
+    private static ObjectNode createUiSchema(List<Question> questions, boolean disabled) {
         ObjectNode schema = MAPPER.createObjectNode();
-        questions.forEach(question -> schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question)));
+        questions.forEach(question -> schema.putPOJO(QUESTION_ID + question.getId(),
+                createUiSchema(question, disabled)));
         return schema;
     }
 
-    private static ObjectNode createUiSchema(Question question) {
+    private static ObjectNode createUiSchema(Question question, boolean disabled) {
         ObjectNode ui = MAPPER.createObjectNode();
-        ui.put(DISABLED, false);
+        ui.put(DISABLED, disabled);
 
         if (question.getAnswerType().equals(AnswerType.RADIO_BUTTON)) {
             ui.put(WIDGET, "radio");

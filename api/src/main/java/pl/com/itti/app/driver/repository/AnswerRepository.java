@@ -5,7 +5,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import pl.com.itti.app.driver.model.Answer;
 
+import java.util.Optional;
+
 @Repository
 public interface AnswerRepository
         extends PagingAndSortingRepository<Answer, Long>, JpaSpecificationExecutor<Answer> {
+    Optional<Answer> findById(Long answerId);
 }

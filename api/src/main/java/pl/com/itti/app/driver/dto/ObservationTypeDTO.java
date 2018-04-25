@@ -21,7 +21,7 @@ public final class ObservationTypeDTO {
         }
     }
 
-    public static class ListItem extends ObservationTypeDTO.MinimalItem {
+    public static class ListItem extends MinimalItem {
 
         public String name;
         public String description;
@@ -43,7 +43,7 @@ public final class ObservationTypeDTO {
             super.toDto(observationType);
 
             try {
-                this.jsonSchema = SchemaCreator.createSchemaForm(observationType.getQuestions());
+                this.jsonSchema = SchemaCreator.createSchemaForm(observationType.getQuestions(), false);
             } catch (IOException ioe) {
                 throw new InternalServerException("Error in jsonSchema", ioe);
             }
