@@ -19,6 +19,7 @@ import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
 import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
@@ -65,11 +66,15 @@ public class ObservationTypeService {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
 
-        ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
+        ObservationTypeDTO.SchemaItem schemaItem = getSchema(observationType);
 
         schemaItem.roles = getSchemaItemRoles(observationType, trialSessionId);
 
         return schemaItem;
+    }
+
+    private ObservationTypeDTO.SchemaItem getSchema(ObservationType observationType) {
+        return DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
     }
 
     private List<TrialRoleDTO.ListItem> getSchemaItemRoles(ObservationType observationType, long trialSessionId) {

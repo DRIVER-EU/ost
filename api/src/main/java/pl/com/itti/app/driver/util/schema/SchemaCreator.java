@@ -3,6 +3,7 @@ package pl.com.itti.app.driver.util.schema;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.json.JSONObject;
 import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 
@@ -37,6 +38,10 @@ public final class SchemaCreator {
         schemaForm.putPOJO("uiSchema", uiSchema);
 
         return schemaForm;
+    }
+
+    public static JSONObject getSchemaAsJSONObject(List<Question> questions) throws IOException {
+        return new JSONObject(createSchema(questions).toString());
     }
 
     private static ObjectNode createSchema(List<Question> questions) throws IOException {

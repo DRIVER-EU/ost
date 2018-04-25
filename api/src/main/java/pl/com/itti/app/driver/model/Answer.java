@@ -9,6 +9,7 @@ import org.hibernate.annotations.Parameter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Answer extends PersistentObject implements Serializable {
     private ObservationType observationType;
 
     @Column(nullable = false)
-    private LocalDateTime simulationTime;
+    private ZonedDateTime simulationTime;
 
     @Column(nullable = false)
     private LocalDateTime sentSimulationTime;
