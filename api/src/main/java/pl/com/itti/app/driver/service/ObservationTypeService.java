@@ -60,6 +60,7 @@ public class ObservationTypeService {
         );
     }
 
+    @Transactional(readOnly = true)
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeId));
