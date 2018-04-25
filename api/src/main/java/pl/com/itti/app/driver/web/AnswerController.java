@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
+import pl.com.itti.app.driver.dto.AttachmentDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.service.AnswerService;
 import pl.com.itti.app.driver.util.SchemaValidationException;
@@ -48,21 +49,21 @@ public class AnswerController {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public AnswerDTO.Item answerQuestions(@RequestParam("observationTypeId") Long observationTypeId,
                                           @RequestParam("trialSessionId") Long trialSessionId,
-                                          @RequestParam("simulationTime") ZonedDateTime simulationTime,
+                                          @RequestParam("simulationTime") String simulationTime,
                                           @RequestParam("fieldValue") String fieldValue,
                                           @RequestParam("formData") String formData,
                                           @RequestParam("trialRoleIds") List<Long> trialRoleIds,
                                           @RequestParam(value = "texts", required = false) List<String> texts,
-                                          @RequestParam(value = "coordinates", required = false) List<AnswerDTO.Coordinates> coordinates,
+                                          @RequestParam(value = "coordinates", required = false) List<AttachmentDTO.Coordinates> coordinates,
                                           @RequestParam(value = "attachments", required = false) MultipartFile[] files) throws IOException {
         AnswerDTO.Form form = new AnswerDTO.Form();
         form.observationTypeId = observationTypeId;
         form.trialSessionId = trialSessionId;
-        form.simulationTime = simulationTime;
+        form.simulationTime = ZonedDateTime.parse(simulationTime);
         form.fieldValue = fieldValue;
         form.formData = new ObjectMapper().readTree(formData);
         form.trialRoleIds = trialRoleIds;
-        form.texts = texts;
+        form.descriptions = texts;
         form.coordinates = coordinates;
 
         Answer answer;

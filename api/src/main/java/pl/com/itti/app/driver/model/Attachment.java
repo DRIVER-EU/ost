@@ -32,10 +32,17 @@ public class Attachment extends PersistentObject implements Serializable {
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer;
 
-    @Column(nullable = false)
     private String uri;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AttachmentType type;
+
+    private String description;
+
+    private Float longitude;
+
+    private Float latitude;
+
+    private Float altitude;
 }

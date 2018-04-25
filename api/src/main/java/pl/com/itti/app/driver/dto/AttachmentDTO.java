@@ -10,11 +10,20 @@ public final class AttachmentDTO {
 
         public long id;
         public String uri;
+        public String description;
+        public Float longitude;
+        public Float latitude;
+        public Float altitude;
         public AttachmentType type;
+
 
         @Override
         public void toDto(Attachment attachment) {
             this.id = attachment.getId();
+            this.description = attachment.getDescription();
+            this.longitude = attachment.getLongitude();
+            this.latitude = attachment.getLatitude();
+            this.altitude = attachment.getAltitude();
             this.uri = attachment.getUri();
             this.type = attachment.getType();
         }
@@ -22,9 +31,9 @@ public final class AttachmentDTO {
 
     public static class Coordinates {
 
-        public double longitude;
-        public double latitude;
-        public double altitude;
+        public float longitude;
+        public float latitude;
+        public float altitude;
     }
 
     private AttachmentDTO() {

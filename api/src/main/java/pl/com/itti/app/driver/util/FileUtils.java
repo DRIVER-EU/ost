@@ -32,7 +32,8 @@ public final class FileUtils {
     }
 
     /**
-     * Saves the uploaded file on the server.
+     * Saves the uploaded file on the server in specific directory.
+     * Creates the directory first.
      *
      * @param dir      target directory on the server
      * @param file     uploaded file
@@ -42,6 +43,9 @@ public final class FileUtils {
      */
     public static File save(File dir, MultipartFile file, String fileName)
             throws IOException {
+        if (!dir.exists() && !dir.mkdirs()) {
+            throw new IOException("Failed to create directory");
+        }
         File copy = new File(dir, fileName);
         BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(copy));
         FileCopyUtils.copy(file.getInputStream(), outputStream);
