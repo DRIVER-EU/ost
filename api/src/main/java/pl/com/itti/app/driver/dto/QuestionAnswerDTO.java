@@ -13,11 +13,11 @@ public final class QuestionAnswerDTO {
 
     public static class MinimalItem implements EntityDTO<Answer> {
 
-        public long id;
+        public long answerId;
 
         @Override
         public void toDto(Answer answer) {
-            this.id = answer.getId();
+            this.answerId = answer.getId();
         }
     }
 
