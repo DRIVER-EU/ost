@@ -8,6 +8,7 @@ import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 public final class SchemaCreator {
@@ -29,6 +30,7 @@ public final class SchemaCreator {
             .put(DISABLED, false);
 
     public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
+        questions.sort(Comparator.comparing(Question::getId));
         ObjectNode schemaForm = MAPPER.createObjectNode();
 
         ObjectNode schema = createSchema(questions);
