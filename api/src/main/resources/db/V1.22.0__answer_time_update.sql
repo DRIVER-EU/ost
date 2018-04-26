@@ -1,0 +1,1 @@
+ALTER TABLE public.answer ALTER COLUMN simulation_time SET DATA TYPE timestamp with time zone;

@@ -4,32 +4,6 @@
 
 buildscript {
     ext {
-        // Spring
-        springBootVersion = '1.5.1.RELEASE'
-
-        // Libraries
-        guavaVersion = '21.0'
-        jsonpathVersion = '2.2.0'
-        jacksonVersion = '2.8.6'
-        httpclientVersion = '4.5.3'
-        lombokVersion = '1.16.18'
-
-        apacheCommonsLoggingVersion = '1.2'
-        apacheCommonsCodecVersion = '1.10'
-        apacheCollectionsVersion = '4.1'
-
-        // Analysis
-        sonarqubeVersion = '2.3'
-
-        // PerPixel
-        perpixelGroupName = 'co.perpixel'
-        perpixelSpringAnnotationVersion = '1.0.0-SNAPSHOT'
-        perpixelSpringDtoVersion = '1.0.0-SNAPSHOT'
-        perpixelSpringExceptionVersion = '1.0.0-SNAPSHOT'
-        perpixelSpringPersistenceVersion = '1.0.0-SNAPSHOT'
-        perpixelSpringSecurityVersion = '1.0.0-SNAPSHOT'
-        perpixelSpringUtilsVersion = '1.0.0-SNAPSHOT'
-
         // Directories
         buildGeneratedDir = "${project.buildDir}/generated/"
     }
@@ -150,9 +124,18 @@ dependencies {
     // Guava
     compile("com.google.guava:guava:${guavaVersion}")
 
+    // JSON schema validator
+    compile("org.everit.json:org.everit.json.schema:${everitVersion}")
+    compile("com.github.fge:json-schema-validator:${jsonSchemaValidatorVersion}")
+
     // JSON
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}")
+    compile("org.json:json:${jsonVersion}")
+
+    // Apache HTTP & Commons
+    compile("commons-codec:commons-codec:${commonsCodecVersion}")
+    compile("commons-io:commons-io:${commonsIoVersion}")
 
     // PerPixel
     compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")

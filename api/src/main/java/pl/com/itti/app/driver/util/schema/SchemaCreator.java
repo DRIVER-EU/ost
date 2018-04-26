@@ -3,6 +3,7 @@ package pl.com.itti.app.driver.util.schema;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.json.JSONObject;
 import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 
@@ -19,6 +20,14 @@ public final class SchemaCreator {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private static final ObjectNode COMMENT_SCHEMA = MAPPER.createObjectNode()
+            .put("title", "Comment")
+            .put("description", "What you think about this question?")
+            .put("type", "string");
+
+    private static final ObjectNode COMMENT_UI_SCHEMA = MAPPER.createObjectNode()
+            .put(DISABLED, false);
+
     public static ObjectNode createSchemaForm(List<Question> questions) throws IOException {
         ObjectNode schemaForm = MAPPER.createObjectNode();
 
@@ -31,6 +40,10 @@ public final class SchemaCreator {
         return schemaForm;
     }
 
+    public static JSONObject getSchemaAsJSONObject(List<Question> questions) throws IOException {
+        return new JSONObject(createSchema(questions).toString());
+    }
+
     private static ObjectNode createSchema(List<Question> questions) throws IOException {
         ObjectNode schema = MAPPER.createObjectNode();
         schema.put("type", "object");
@@ -38,6 +51,9 @@ public final class SchemaCreator {
         ObjectNode properties = MAPPER.createObjectNode();
         for (Question question : questions) {
             properties.putPOJO(QUESTION_ID + question.getId(), createPropertyContent(question));
+            if (question.isCommented()) {
+                properties.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_SCHEMA);
+            }
         }
         schema.putPOJO("properties", properties);
 
@@ -50,7 +66,12 @@ public final class SchemaCreator {
 
     private static ObjectNode createUiSchema(List<Question> questions) {
         ObjectNode schema = MAPPER.createObjectNode();
-        questions.forEach(question -> schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question)));
+        questions.forEach(question -> {
+            schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question));
+            if (question.isCommented()) {
+                schema.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_UI_SCHEMA);
+            }
+        });
         return schema;
     }
 
