@@ -9,7 +9,7 @@ import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.IOException;
 
-public final class AnswerDTO {
+public final class QuestionAnswerDTO {
 
     public static class MinimalItem implements EntityDTO<Answer> {
 
@@ -39,7 +39,7 @@ public final class AnswerDTO {
         }
     }
 
-    private AnswerDTO() {
+    private QuestionAnswerDTO() {
         throw new AssertionError();
     }
 }

@@ -9,7 +9,7 @@ import pl.com.itti.app.driver.repository.AnswerRepository;
 
 @Service
 @Transactional
-public class AnswerService {
+public class QuestionAnswerService {
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -18,7 +18,7 @@ public class AnswerService {
     private TrialUserService trialUserService;
 
     @Transactional(readOnly = true)
-    public Answer getAnswerById(long answerId) {
+    public Answer getByAnswerId(long answerId) {
         return answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException(Answer.class, answerId));
     }
