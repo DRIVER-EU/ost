@@ -17,7 +17,7 @@ class TrialManager extends Component {
 
   static propTypes = {
     getTrialManager: PropTypes.func,
-    listOfTrialsManager: PropTypes.array
+    listOfTrialsManager: PropTypes.object
   }
 
   componentWillMount () {
@@ -65,7 +65,7 @@ class TrialManager extends Component {
             <Accordion>
               {this.state.listOfTrialsManager.map((object) => {
                 return (
-                  <AccordionItem disabled={object.status !== 'ACTIVE'}
+                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
                       {object.trialName}
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>

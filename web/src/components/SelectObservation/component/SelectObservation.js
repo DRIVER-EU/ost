@@ -31,7 +31,7 @@ class SelectObservation extends Component {
   }
 
   newObservation (id) {
-    browserHistory.push(`/trials/1/new-observation/${id}`)
+    browserHistory.push(`/trials/${this.props.params.id}/new-observation/${id}`)
   }
 
   render () {
@@ -45,6 +45,7 @@ class SelectObservation extends Component {
               <List style={{ width: '100%' }}>
                 { this.state.listOfObservations.map((object, key) => (
                   <ListItem
+                    key={object.id}
                     style={key % 2 === 0 ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                     : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
                     primaryText={object.name}

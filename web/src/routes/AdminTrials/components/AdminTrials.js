@@ -10,15 +10,19 @@ class AdminTrialsView extends Component {
 
   static propTypes = {
     getMessages: PropTypes.func,
-    messages: PropTypes.any,
+    messages: PropTypes.object,
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
     getObservation: PropTypes.func,
     observation: PropTypes.array,
     getUsers: PropTypes.func,
-    usersList: PropTypes.array,
+    usersList: PropTypes.object,
     getRoles: PropTypes.func,
-    rolesList: PropTypes.array,
+    rolesList: PropTypes.object,
+    getStages: PropTypes.func,
+    stagesList: PropTypes.object,
+    setStage: PropTypes.func,
+    stageActive: PropTypes.object,
     params: PropTypes.any
   }
 
@@ -36,6 +40,10 @@ class AdminTrialsView extends Component {
           usersList={this.props.usersList}
           getRoles={this.props.getRoles}
           rolesList={this.props.rolesList}
+          getStages={this.props.getStages}
+          stagesList={this.props.stagesList}
+          setStage={this.props.setStage}
+          stageActive={this.props.stageActive}
           params={this.props.params}
         />
       </div>

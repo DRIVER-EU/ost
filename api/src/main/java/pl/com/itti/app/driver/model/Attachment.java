@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import pl.com.itti.app.driver.model.enums.AnswerType;
+import pl.com.itti.app.driver.model.enums.AttachmentType;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,10 +32,17 @@ public class Attachment extends PersistentObject implements Serializable {
     @JoinColumn(name = "answer_id", nullable = false)
     private Answer answer;
 
-    @Column(nullable = false)
     private String uri;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AnswerType type;
+    private AttachmentType type;
+
+    private String description;
+
+    private Float longitude;
+
+    private Float latitude;
+
+    private Float altitude;
 }

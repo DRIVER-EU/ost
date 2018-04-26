@@ -8,9 +8,11 @@ import { Card } from 'material-ui/Card'
 import DropDownMenu from 'material-ui/DropDownMenu'
 import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
+import SelectField from 'material-ui/SelectField'
 import RaisedButton from 'material-ui/RaisedButton'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
+import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
 import './AdminTrials.scss'
@@ -71,21 +73,30 @@ class AdminTrials extends Component {
         type: 'eventTime',
         order: 'asc'
       },
-      errorUserRole: true
+      errorUserRole: true,
+      showModal: false,
+      selectedObj: {},
+      trialStage: '',
+      usersList: [],
+      rolesList: [],
+      stagesList: []
     }
   }
 
   static propTypes = {
     getMessages: PropTypes.func,
-    messages: PropTypes.array,
+    messages: PropTypes.object,
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
     getObservation: PropTypes.func,
     observation: PropTypes.array,
     getUsers: PropTypes.func,
-    usersList: PropTypes.array,
+    usersList: PropTypes.object,
     getRoles: PropTypes.func,
-    rolesList: PropTypes.array,
+    rolesList: PropTypes.object,
+    getStages: PropTypes.func,
+    stagesList: PropTypes.object,
+    setStage: PropTypes.func,
     params: PropTypes.any
   }
 
@@ -94,6 +105,7 @@ class AdminTrials extends Component {
     this.props.getObservation()
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
+    this.props.getStages(this.props.params.id)
 
     setInterval(() => {
       this.props.getMessages(this.props.params.id, this.state.sort)
@@ -122,6 +134,9 @@ class AdminTrials extends Component {
     }
     if (nextProps.rolesList && nextProps.rolesList !== null && this.props.rolesList) {
       this.setState({ rolesList: nextProps.rolesList.data })
+    }
+    if (nextProps.stagesList && nextProps.stagesList !== null && this.props.stagesList) {
+      this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
@@ -250,15 +265,24 @@ class AdminTrials extends Component {
   sendMessage () {
     let send = {}
     send.trialSessionId = parseInt(this.props.params.id)
-    if (this.state.userValue !== null) {
+    if (this.state.userValue === -1) {
+      send.trialUserId = null
+    }
+    if (this.state.roleValue === -1) {
+      send.trialRoleId = null
+    }
+    if (this.state.userValue !== null && this.state.userValue !== -1) {
       send.trialUserId = this.state.userValue
-    } else {
+      send.trialRoleId = ''
+    }
+    if (this.state.roleValue !== null && this.state.roleValue !== -1) {
       send.trialRoleId = this.state.roleValue
+      send.trialUserId = ''
     }
     send.name = this.state.title
     send.languageVersion = 'POLISH'
     send.description = this.state.messageValue
-    send.eventTime = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss')
+    // send.eventTime = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss')
     if (this.checkValid()) {
       this.props.sendMessage(send)
     }
@@ -324,11 +348,50 @@ class AdminTrials extends Component {
     })
   }
 
+  handleShowModal () {
+    this.setState({ showModal: !this.state.showModal })
+  }
+
+  handleSelectedObject (obj) {
+    this.setState({ selectedObj: obj })
+    this.handleShowModal()
+  }
+
+  handleChangeStage () {
+    if (this.state.trialStage !== '') {
+      this.props.setStage(this.props.params.id, { id: this.state.trialStage })
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
         <div className='pages-box'>
           <div className='admin-trials-container'>
+            <div className='trials-set-header'>
+              <div>Session settings</div>
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+              <SelectField
+                value={this.state.trialStage}
+                floatingLabelText='Choose Trial Stage'
+                onChange={this.handleChangeDropDown.bind(this, 'trialStage')}
+            >
+                {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.id}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
+                ))}
+              </SelectField>
+              <RaisedButton
+                style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
+                label='Set stage'
+                primary
+                onClick={this.handleChangeStage.bind(this)}
+                labelStyle={{ color: '#FDB913' }} />
+            </div>
             <Tabs
               value={this.state.value}
               onChange={this.handleChange}>
@@ -408,14 +471,8 @@ class AdminTrials extends Component {
                           <TableHeaderColumn >
                       Observation Type
                     </TableHeaderColumn>
-                          <TableHeaderColumn >
-                      Who
-                    </TableHeaderColumn>
-                          <TableHeaderColumn >
-                      What
-                    </TableHeaderColumn>
                           <TableHeaderColumn>
-                      Attachment
+                      Show Details
                     </TableHeaderColumn>
                         </TableRow>
                       </TableHeader>
@@ -434,16 +491,12 @@ class AdminTrials extends Component {
                             <TableRowColumn >
                               {row.observationType}
                             </TableRowColumn>
-                            <TableRowColumn >
-                              {row.who}
-                            </TableRowColumn>
-                            <TableRowColumn >
-                              {row.what}
-                            </TableRowColumn>
                             <TableRowColumn>
-                              <p data-tip={row.attachment}>
-                                <i className='material-icons'>announcement</i>
-                              </p>
+                              <i className='cursor-pointer material-icons'
+                                style={{ 'vertical-align': 'middle' }}
+                                onClick={() => this.handleSelectedObject(row)}>
+                                open_in_new
+                              </i>
                               <ReactTooltip />
                             </TableRowColumn>
                           </TableRow>
@@ -501,8 +554,8 @@ class AdminTrials extends Component {
                           style={{ width: '220px' }}
                           value={this.state.userValue}
                           underlineStyle={!this.state.errorUserRole
-                            ? { 'border-top': '1px solid red', marginLeft: '0' }
-                            : { 'border-top': '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
+                            ? { borderTop: '1px solid red', marginLeft: '0' }
+                            : { borderTop: '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
                           disabled={this.state.roleValue !== null}
                           onChange={this.handleChangeDropDown.bind(this, 'userValue')}>
@@ -529,8 +582,8 @@ class AdminTrials extends Component {
                           style={{ width: '220px' }}
                           value={this.state.roleValue}
                           underlineStyle={!this.state.errorUserRole
-                            ? { 'border-top': '1px solid red', marginLeft: '0' }
-                            : { 'border-top': '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
+                            ? { borderTop: '1px solid red', marginLeft: '0' }
+                            : { borderTop: '1px solid rgb(224, 224, 224)', marginLeft: '0' }}
                           labelStyle={{ color: '#282829', paddingLeft: '0' }}
                           disabled={this.state.userValue !== null}
                           onChange={this.handleChangeDropDown.bind(this, 'roleValue')}>
@@ -679,6 +732,12 @@ class AdminTrials extends Component {
                 </div>
               </Tab>
             </Tabs>
+            <SummaryOfObservationModal
+              show={this.state.showModal}
+              object={this.state.selectedObj}
+              handleShowModal={this.handleShowModal.bind(this)}
+              params={this.props.params.id}
+               />
           </div>
         </div>
       </div>

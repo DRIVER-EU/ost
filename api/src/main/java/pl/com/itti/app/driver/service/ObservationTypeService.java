@@ -60,15 +60,20 @@ public class ObservationTypeService {
         );
     }
 
+    @Transactional(readOnly = true)
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {
         ObservationType observationType = observationTypeRepository.findById(observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, observationTypeId));
 
-        ObservationTypeDTO.SchemaItem schemaItem = DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
+        ObservationTypeDTO.SchemaItem schemaItem = getSchema(observationType);
 
         schemaItem.roles = getSchemaItemRoles(observationType, trialSessionId);
 
         return schemaItem;
+    }
+
+    private ObservationTypeDTO.SchemaItem getSchema(ObservationType observationType) {
+        return DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
     }
 
     private List<TrialRoleDTO.ListItem> getSchemaItemRoles(ObservationType observationType, long trialSessionId) {
