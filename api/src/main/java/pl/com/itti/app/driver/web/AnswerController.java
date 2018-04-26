@@ -47,9 +47,9 @@ public class AnswerController {
     }
 
     @FindAllGetMapping
-    public List<AnswerDTO.Item> findAll(@RequestParam("trialsession_id") long trialSessionId,
-                                        @RequestParam("search") String text) {
-        return DTO.from(answerService.findAll(trialSessionId, text), AnswerDTO.Item.class);
+    public List<AnswerDTO.ListItem> findAll(@RequestParam("trialsession_id") long trialSessionId,
+                                            @RequestParam("search") String text) {
+        return DTO.from(answerService.findAll(trialSessionId, text), AnswerDTO.ListItem.class);
     }
 
     private void assertThatFilesAreValid(MultipartFile[] files) {

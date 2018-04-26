@@ -133,15 +133,7 @@ public class AnswerService {
         try (Analyzer analyzer = new StandardAnalyzer(); Directory directory = new RAMDirectory()) {
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
             IndexWriter writer = new IndexWriter(directory, config);
-            for (Answer answer : answers) {
-                Document doc = new Document();
-                doc.add(new Field(ID, String.valueOf(answer.getId()), TextField.TYPE_STORED));
-
-                JsonNode node = new ObjectMapper().readTree(answer.getFormData());
-                node.elements()
-                        .forEachRemaining(jsonNode -> doc.add(new Field(TEXT, jsonNode.asText(), TextField.TYPE_STORED)));
-                writer.addDocument(doc);
-            }
+            addDocumentsToWriter(answers, writer);
             writer.close();
 
             DirectoryReader reader = DirectoryReader.open(directory);
@@ -164,7 +156,15 @@ public class AnswerService {
     }
 
     private void addDocumentsToWriter(List<Answer> answers, IndexWriter writer) throws IOException {
+        for (Answer answer : answers) {
+            Document doc = new Document();
+            doc.add(new Field(ID, String.valueOf(answer.getId()), TextField.TYPE_STORED));
 
+            JsonNode node = new ObjectMapper().readTree(answer.getFormData());
+            node.elements()
+                    .forEachRemaining(jsonNode -> doc.add(new Field(TEXT, jsonNode.asText(), TextField.TYPE_STORED)));
+            writer.addDocument(doc);
+        }
     }
 
     private Specifications<Answer> getAnswerSpecifications(Long trialSessionId) {
