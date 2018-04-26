@@ -17,7 +17,7 @@ public class QuestionAnswerController {
     private QuestionAnswerService questionAnswerService;
 
     @GetMapping
-    public QuestionAnswerDTO.SchemaItem findByAnswerId(@RequestParam(value = "answer_id") long answerId) {
-        return DTO.from(questionAnswerService.getByAnswerId(answerId), QuestionAnswerDTO.SchemaItem.class);
+    public QuestionAnswerDTO.FullItem findByAnswerId(@RequestParam(value = "answer_id") long answerId) {
+        return DTO.from(questionAnswerService.getByAnswerId(answerId), QuestionAnswerDTO.FullItem.class);
     }
 }

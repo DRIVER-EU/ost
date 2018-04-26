@@ -21,7 +21,7 @@ public final class QuestionAnswerDTO {
         }
     }
 
-    public static class SchemaItem extends MinimalItem {
+    public static class FullItem extends MinimalItem {
 
         public JsonNode questionSchema;
         public JsonNode formData;
