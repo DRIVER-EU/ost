@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.service;
 
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +28,6 @@ public class TrialSessionService {
     private TrialSessionRepository trialSessionRepository;
 
     @Autowired
-    private AuthUserRepository authUserRepository;
-
-    @Autowired
     private TrialStageRepository trialStageRepository;
 
     @Autowired
@@ -39,7 +35,7 @@ public class TrialSessionService {
 
     @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
-        AuthUser authUser = getCurrentUser();
+        AuthUser authUser = trialUserService.getCurrentUser();
 
         return trialSessionRepository.findAll(
                 getTrialSessionManagerSpecifications(authUser),
@@ -49,7 +45,7 @@ public class TrialSessionService {
 
     @Transactional(readOnly = true)
     public Page<TrialSession> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
-        AuthUser authUser = getCurrentUser();
+        AuthUser authUser = trialUserService.getCurrentUser();
 
         return trialSessionRepository.findAll(
                 getTrialSessionStatusSpecifications(authUser, sessionStatus),
@@ -58,7 +54,7 @@ public class TrialSessionService {
     }
 
     public TrialSession updateLastTrialStage(long trialSessionId, long lastTrialStageId) {
-        AuthUser authUser = getCurrentUser();
+        AuthUser authUser = trialUserService.getCurrentUser();
         trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
 
         TrialSession trialSession = trialSessionRepository.findOne(trialSessionId);
@@ -67,11 +63,6 @@ public class TrialSessionService {
 
         trialSession.setLastTrialStage(trialStage);
         return trialSessionRepository.save(trialSession);
-    }
-
-    private AuthUser getCurrentUser() {
-        return authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {

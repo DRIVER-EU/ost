@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.service;
 
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +28,6 @@ public class EventService {
     private EventRepository eventRepository;
 
     @Autowired
-    private AuthUserRepository authUserRepository;
-
-    @Autowired
     private TrialSessionRepository trialSessionRepository;
 
     @Autowired
@@ -44,28 +40,25 @@ public class EventService {
     private TrialUserService trialUserService;
 
     public Page<Event> findByTrialSessionId(long trialSessionId, Pageable pageable) {
-        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        AuthUser authUser = trialUserService.getCurrentUser();
 
         trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
         return eventRepository.findAllByTrialSessionId(trialSessionId, pageable);
     }
 
     public Event create(EventDTO.FormItem formItem) {
-        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        AuthUser authUser = trialUserService.getCurrentUser();
+        trialUserService.checkIsTrialSessionManager(authUser, formItem.trialSessionId);
 
         TrialSession trialSession = trialSessionRepository.findById(formItem.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, formItem.trialSessionId));
 
-        trialUserService.checkIsTrialSessionManager(authUser, formItem.trialSessionId);
-
-        if (formItem.trialRoleId > 0 && formItem.trialUserId > 0) {
+        if (formItem.trialRoleId != null && formItem.trialUserId != null) {
             throw new InvalidDataException("Event can't be connected to TrialRole and TrialUser");
         }
 
-        TrialUser trialUser = trialUserRepository.findOne(formItem.trialUserId);
-        TrialRole trialRole = trialRoleRepository.findOne(formItem.trialRoleId);
+        TrialUser trialUser = findUser(formItem.trialUserId);
+        TrialRole trialRole = findRole(formItem.trialRoleId);
 
         Event event = Event.builder()
                 .trialSession(trialSession)
@@ -78,5 +71,21 @@ public class EventService {
                 .build();
 
         return eventRepository.save(event);
+    }
+
+    private TrialUser findUser(Long id) {
+        if (id != null) {
+            return trialUserRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, id));
+        }
+        return null;
+    }
+
+    private TrialRole findRole(Long id) {
+        if (id != null) {
+            return trialRoleRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialRole.class, id));
+        }
+        return null;
     }
 }

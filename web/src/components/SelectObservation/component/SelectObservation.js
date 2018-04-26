@@ -31,7 +31,7 @@ class SelectObservation extends Component {
   }
 
   newObservation (id) {
-    browserHistory.push(`/trials/1/new-observation/${id}`)
+    browserHistory.push(`/trials/${this.props.params.id}/new-observation/${id}`)
   }
 
   render () {

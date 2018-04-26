@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "baaf78e9-eba9-4336-aa3d-21350b28b00f",
+		"_postman_id": "e93f743f-b257-4b8f-a8c3-e0eecb1cf36f",
 		"name": "DRIVER",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1110,6 +1110,59 @@
 					"query": [
 						{
 							"key": "trialsession_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/questions-answers?answer_id=2",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "Alice1",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "string"
+						},
+						{
+							"key": "saveHelperData",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "showPassword",
+							"value": false,
+							"type": "boolean"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}"
+				},
+				"url": {
+					"raw": "{{IP-Address}}/api/questions-answers?answer_id=2",
+					"host": [
+						"{{IP-Address}}"
+					],
+					"path": [
+						"api",
+						"questions-answers"
+					],
+					"query": [
+						{
+							"key": "answer_id",
 							"value": "2"
 						}
 					]

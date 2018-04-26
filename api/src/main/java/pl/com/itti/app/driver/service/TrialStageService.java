@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.service;
 
 import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +23,11 @@ public class TrialStageService {
     private TrialStageRepository trialStageRepository;
 
     @Autowired
-    private AuthUserRepository authUserRepository;
-
-    @Autowired
     private TrialUserService trialUserService;
 
     @Transactional(readOnly = true)
     public Page<TrialStage> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
-        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
-
+        AuthUser authUser = trialUserService.getCurrentUser();
         trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
         return trialStageRepository.findAll(getTrialStageSessionSpecifications(trialSessionId), pageable);
     }

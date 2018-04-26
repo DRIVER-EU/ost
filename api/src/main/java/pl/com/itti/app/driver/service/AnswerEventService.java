@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.service;
 
 import co.perpixel.dto.DTO;
 import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -27,9 +26,6 @@ import java.util.Set;
 public class AnswerEventService {
 
     @Autowired
-    private AuthUserRepository authUserRepository;
-
-    @Autowired
     private AnswerRepository answerRepository;
 
     @Autowired
@@ -40,9 +36,7 @@ public class AnswerEventService {
 
     @Transactional(readOnly = true)
     public List<AnswerEventDTO.Item> getAnswersAndEvents(long trialSessionId) {
-        AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
-
+        AuthUser currentUser = trialUserService.getCurrentUser();
         List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(currentUser, trialSessionId));
         List<Event> events = eventRepository.findAll(getEventSpecifications(currentUser, trialSessionId));
 
