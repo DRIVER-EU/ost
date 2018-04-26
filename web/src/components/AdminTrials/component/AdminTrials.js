@@ -282,7 +282,7 @@ class AdminTrials extends Component {
     send.name = this.state.title
     send.languageVersion = 'POLISH'
     send.description = this.state.messageValue
-    send.eventTime = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss')
+    // send.eventTime = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss')
     if (this.checkValid()) {
       this.props.sendMessage(send)
     }
