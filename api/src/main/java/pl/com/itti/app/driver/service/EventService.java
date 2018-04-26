@@ -60,12 +60,12 @@ public class EventService {
 
         trialUserService.checkIsTrialSessionManager(authUser, formItem.trialSessionId);
 
-        if (formItem.trialRoleId > 0 && formItem.trialUserId > 0) {
+        if (formItem.trialRoleId != null && formItem.trialUserId != null) {
             throw new InvalidDataException("Event can't be connected to TrialRole and TrialUser");
         }
 
-        TrialUser trialUser = trialUserRepository.findOne(formItem.trialUserId);
-        TrialRole trialRole = trialRoleRepository.findOne(formItem.trialRoleId);
+        TrialUser trialUser = findUser(formItem.trialUserId);
+        TrialRole trialRole = findRole(formItem.trialRoleId);
 
         Event event = Event.builder()
                 .trialSession(trialSession)
@@ -78,5 +78,21 @@ public class EventService {
                 .build();
 
         return eventRepository.save(event);
+    }
+
+    private TrialUser findUser(Long id) {
+        if (id != null) {
+            return trialUserRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, id));
+        }
+        return null;
+    }
+
+    private TrialRole findRole(Long id) {
+        if (id != null) {
+            return trialRoleRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialRole.class, id));
+        }
+        return null;
     }
 }
