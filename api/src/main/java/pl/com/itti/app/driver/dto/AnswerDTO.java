@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.AnswerTrialRole;
+import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.util.InternalServerException;
 
 import javax.validation.constraints.NotNull;
@@ -18,14 +19,25 @@ import java.util.stream.Collectors;
 
 public final class AnswerDTO {
 
-    public static class Item implements EntityDTO<Answer> {
+    public static class MinimalItem implements EntityDTO<Answer> {
 
         public long id;
+        public ZonedDateTime sentSimulationTime;
+
+        @Override
+        public void toDto(Answer answer) {
+            this.id = answer.getId();
+            this.sentSimulationTime = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
+
+        }
+    }
+
+    public static class Item extends MinimalItem {
+
         public long trialSessionId;
         public long trialUserId;
         public long observationTypeId;
         public ZonedDateTime simulationTime;
-        public ZonedDateTime sentSimulationTime;
         public String fieldValue;
         public JsonNode formData;
         public List<AttachmentDTO.Item> attachments;
@@ -33,12 +45,11 @@ public final class AnswerDTO {
 
         @Override
         public void toDto(Answer answer) {
-            this.id = answer.getId();
+            super.toDto(answer);
             this.trialSessionId = answer.getTrialSession().getId();
             this.trialUserId = answer.getTrialUser().getId();
             this.observationTypeId = answer.getObservationType().getId();
             this.simulationTime = answer.getSimulationTime();
-            this.sentSimulationTime = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
             this.fieldValue = answer.getFieldValue();
             try {
                 this.formData = new ObjectMapper().readTree(answer.getFormData());
@@ -50,6 +61,22 @@ public final class AnswerDTO {
                     answer.getAnswerTrialRoles().stream().map(AnswerTrialRole::getTrialRole).collect(Collectors.toList()),
                     TrialRoleDTO.ListItem.class
             );
+        }
+    }
+
+    public static class ListItem extends MinimalItem {
+
+        public TrialUserDTO.ListItem user;
+        public TrialRoleDTO.ListItem userRole;
+
+        @Override
+        public void toDto(Answer answer) {
+            super.toDto(answer);
+            this.user = DTO.from(answer.getTrialUser(), TrialUserDTO.ListItem.class);
+
+            answer.getTrialUser().getUserRoleSessions().stream().map(UserRoleSession::getTrialRole)
+            this.observationTypeRole = DTO.from(answer.getObservationType().getObservationTypeTrialRoles())
+            this.userRole = DTO.from(answer.getTrialUser().)
         }
     }
 

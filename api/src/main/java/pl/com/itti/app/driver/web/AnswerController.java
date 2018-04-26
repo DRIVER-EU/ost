@@ -1,13 +1,12 @@
 package pl.com.itti.app.driver.web;
 
+import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.dto.DTO;
+import co.perpixel.dto.PageDTO;
 import org.everit.json.schema.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.Answer;
@@ -45,6 +44,11 @@ public class AnswerController {
         }
 
         return DTO.from(answer, AnswerDTO.Item.class);
+    }
+
+    @FindAllGetMapping
+    public PageDTO<AnswerDTO.Item> findAll(@RequestParam("trialsession_id") long trialSessionId) {
+        return DTO.from(answerService.findAll(trialSessionId), AnswerDTO.Item.class);
     }
 
     private void assertThatFilesAreValid(MultipartFile[] files) {
