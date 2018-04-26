@@ -3,13 +3,29 @@ package pl.com.itti.app.driver.service;
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
@@ -19,6 +35,7 @@ import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
+import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
@@ -28,10 +45,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class AnswerService {
+
+    private static final String ID = "id";
+
+    private static final String TEXT = "text";
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -92,13 +114,57 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public Page<Answer> findAll(long trialSessionId, Pageable pageable) {
+    public List<Answer> findAll(long trialSessionId, String text) {
         AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
         trialUserService.checkIsTrialSessionManager(currentUser, trialSessionId);
 
-        return answerRepository.findAll(getAnswerSpecifications(trialSessionId), pageable);
+        List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
+        List<Long> ids = findAnswerIdsByPattern(answers, text);
+
+        return answers.stream()
+                .filter(answer -> ids.contains(answer.getId()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> findAnswerIdsByPattern(List<Answer> answers, String text) {
+        List<Long> ids = new ArrayList<>();
+        try (Analyzer analyzer = new StandardAnalyzer(); Directory directory = new RAMDirectory()) {
+            IndexWriterConfig config = new IndexWriterConfig(analyzer);
+            IndexWriter writer = new IndexWriter(directory, config);
+            for (Answer answer : answers) {
+                Document doc = new Document();
+                doc.add(new Field(ID, String.valueOf(answer.getId()), TextField.TYPE_STORED));
+
+                JsonNode node = new ObjectMapper().readTree(answer.getFormData());
+                node.elements()
+                        .forEachRemaining(jsonNode -> doc.add(new Field(TEXT, jsonNode.asText(), TextField.TYPE_STORED)));
+                writer.addDocument(doc);
+            }
+            writer.close();
+
+            DirectoryReader reader = DirectoryReader.open(directory);
+            IndexSearcher searcher = new IndexSearcher(reader);
+
+            QueryParser parser = new QueryParser(TEXT, analyzer);
+            Query query = parser.parse(text);
+            ScoreDoc[] hits = searcher.search(query, 1000, Sort.INDEXORDER).scoreDocs;
+            for (ScoreDoc hit : hits) {
+                Document hitDoc = searcher.doc(hit.doc);
+                ids.add(Long.parseLong(hitDoc.get(ID)));
+            }
+            reader.close();
+        } catch (IOException ioe) {
+            throw new InternalServerException("IOError while searching", ioe);
+        } catch (ParseException pe) {
+            throw new InternalServerException("Parse error while searching", pe);
+        }
+        return ids;
+    }
+
+    private void addDocumentsToWriter(List<Answer> answers, IndexWriter writer) throws IOException {
+
     }
 
     private Specifications<Answer> getAnswerSpecifications(Long trialSessionId) {

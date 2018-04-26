@@ -137,6 +137,10 @@ dependencies {
     compile("commons-codec:commons-codec:${commonsCodecVersion}")
     compile("commons-io:commons-io:${commonsIoVersion}")
 
+    // Lucene
+    compile("org.apache.lucene:lucene-core:${luceneVersion}")
+    compile("org.apache.lucene:lucene-queryparser:${luceneVersion}")
+
     // PerPixel
     compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
     compile("${perpixelGroupName}:perpixel-spring-dto:${perpixelSpringDtoVersion}")

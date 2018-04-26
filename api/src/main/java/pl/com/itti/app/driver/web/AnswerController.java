@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.web;
 
 import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
 import org.everit.json.schema.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +14,7 @@ import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.SchemaValidationException;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/answers")
@@ -47,8 +47,9 @@ public class AnswerController {
     }
 
     @FindAllGetMapping
-    public PageDTO<AnswerDTO.Item> findAll(@RequestParam("trialsession_id") long trialSessionId) {
-        return DTO.from(answerService.findAll(trialSessionId), AnswerDTO.Item.class);
+    public List<AnswerDTO.Item> findAll(@RequestParam("trialsession_id") long trialSessionId,
+                                        @RequestParam("search") String text) {
+        return DTO.from(answerService.findAll(trialSessionId, text), AnswerDTO.Item.class);
     }
 
     private void assertThatFilesAreValid(MultipartFile[] files) {

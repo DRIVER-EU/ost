@@ -5,9 +5,7 @@ import co.perpixel.dto.EntityDTO;
 import co.perpixel.dto.FormDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.com.itti.app.driver.model.Answer;
-import pl.com.itti.app.driver.model.AnswerTrialRole;
-import pl.com.itti.app.driver.model.UserRoleSession;
+import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.util.InternalServerException;
 
 import javax.validation.constraints.NotNull;
@@ -15,6 +13,7 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class AnswerDTO {
@@ -28,7 +27,6 @@ public final class AnswerDTO {
         public void toDto(Answer answer) {
             this.id = answer.getId();
             this.sentSimulationTime = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
-
         }
     }
 
@@ -67,16 +65,21 @@ public final class AnswerDTO {
     public static class ListItem extends MinimalItem {
 
         public TrialUserDTO.ListItem user;
-        public TrialRoleDTO.ListItem userRole;
+        public String roleName;
 
         @Override
         public void toDto(Answer answer) {
             super.toDto(answer);
             this.user = DTO.from(answer.getTrialUser(), TrialUserDTO.ListItem.class);
 
-            answer.getTrialUser().getUserRoleSessions().stream().map(UserRoleSession::getTrialRole)
-            this.observationTypeRole = DTO.from(answer.getObservationType().getObservationTypeTrialRoles())
-            this.userRole = DTO.from(answer.getTrialUser().)
+            List<TrialRole> trialRoles = answer.getObservationType().getObservationTypeTrialRoles().stream()
+                    .map(ObservationTypeTrialRole::getTrialRole)
+                    .collect(Collectors.toList());
+            Optional<TrialRole> trialRole = answer.getTrialUser().getUserRoleSessions().stream()
+                    .map(UserRoleSession::getTrialRole)
+                    .filter(trialRoles::contains)
+                    .findFirst();
+            trialRole.ifPresent(trialRole1 -> this.roleName = DTO.from(trialRole1, TrialRoleDTO.ListItem.class).name);
         }
     }
 
