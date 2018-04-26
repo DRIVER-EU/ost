@@ -90,8 +90,7 @@ public class AnswerService {
         Schema schema = SchemaLoader.load(jsonObject);
         schema.validate(new JSONObject(form.formData.toString()));
 
-        AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        AuthUser currentUser = trialUserService.getCurrentUser();
         TrialUser currentTrialUser = trialUserRepository.findByAuthUser(currentUser);
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.trialSessionId));
@@ -115,8 +114,7 @@ public class AnswerService {
     }
 
     public List<Answer> findAll(long trialSessionId, String text) {
-        AuthUser currentUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        AuthUser currentUser = trialUserService.getCurrentUser();
 
         trialUserService.checkIsTrialSessionManager(currentUser, trialSessionId);
 
