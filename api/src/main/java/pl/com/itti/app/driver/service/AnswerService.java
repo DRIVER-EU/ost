@@ -119,11 +119,13 @@ public class AnswerService {
         trialUserService.checkIsTrialSessionManager(currentUser, trialSessionId);
 
         List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
-        List<Long> ids = findAnswerIdsByPattern(answers, text);
-
-        return answers.stream()
-                .filter(answer -> ids.contains(answer.getId()))
-                .collect(Collectors.toList());
+        if (text != null && !text.equals("")) {
+            List<Long> ids = findAnswerIdsByPattern(answers, text);
+            answers = answers.stream()
+                    .filter(answer -> ids.contains(answer.getId()))
+                    .collect(Collectors.toList());
+        }
+        return answers;
     }
 
     private List<Long> findAnswerIdsByPattern(List<Answer> answers, String text) {
