@@ -1,6 +1,7 @@
 package pl.com.itti.app.driver.model;
 
 import co.perpixel.db.model.PersistentObject;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,6 +41,11 @@ public class Trial extends PersistentObject implements Serializable {
 
     @Column(nullable = false)
     private boolean isDefined;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIdentityReference(alwaysAsId = true)
+    @JoinColumn(name = "init_id")
+    private ObservationType initId;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "trial")
     @Builder.Default
