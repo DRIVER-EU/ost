@@ -57,9 +57,6 @@ class AdminTrials extends Component {
       titleErrorText: '',
       messageValue: '',
       messageValueErrorText: '',
-      whatValue: '',
-      whoValue: '',
-      observationValue: '',
       sortObservation: true,
       sourceValue: '',
       changeDataTable: [],
@@ -80,7 +77,8 @@ class AdminTrials extends Component {
       usersList: [],
       rolesList: [],
       stagesList: [],
-      interval: ''
+      interval: '',
+      searchText: ''
     }
   }
 
@@ -89,6 +87,7 @@ class AdminTrials extends Component {
     messages: PropTypes.object,
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
+    getObservation: PropTypes.func,
     observation: PropTypes.array,
     getUsers: PropTypes.func,
     usersList: PropTypes.object,
@@ -111,6 +110,7 @@ class AdminTrials extends Component {
 
     let interval = setInterval(() => {
       this.props.getMessages(this.props.params.id, this.state.sort)
+      this.props.getObservation(this.props.params.id, this.state.searchText)
     }, 3000)
     this.setState({ interval: interval })
   }
@@ -143,8 +143,8 @@ class AdminTrials extends Component {
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
       let change = nextProps.observation
       this.setState({ changeDataTable: change }, () => {
-       // this.sortFunction()
-       // this.getData()
+        this.sortFunction()
+        this.getData()
       })
     }
     if (nextProps.messages.data &&
@@ -231,16 +231,16 @@ class AdminTrials extends Component {
     let sort = { ...this.state.sort }
     let orderBy = ''
     for (let i = 0; i < observations.length; i++) {
-      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYY hh:mm').unix()
+      observations[i].sentSimulationTime = moment(observations[i].sentSimulationTime, 'DD/MM/YYYY hh:mm').unix()
     }
     if (this.state.sort.order === 'asc') {
       orderBy = 'desc'
     } else {
       orderBy = 'asc'
     }
-    let order = _.orderBy(observations, ['dateTime'], [orderBy])
+    let order = _.orderBy(observations, ['sentSimulationTime'], [orderBy])
     for (let i = 0; i < order.length; i++) {
-      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
+      order[i].sentSimulationTime = moment.unix(order[i].sentSimulationTime).format('DD/MM/YYYY hh:mm')
     }
 
     sort['order'] = orderBy
@@ -365,6 +365,10 @@ class AdminTrials extends Component {
     }
   }
 
+  search () {
+    this.props.getObservation(this.props.params.id, this.state.searchText)
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -408,42 +412,19 @@ class AdminTrials extends Component {
                   </div>
                   <Card style={{ padding: '20px', margin: '20px 30px' }}>
                     <div style={styles.searchPanelContainer}>
-                      <div style={{ marginRight: '20px' }}>
-                        <div className='dropdown-title'>Source</div>
-                        <TextField
-                          style={{ width: '250px' }}
-                          value={this.state.sourceValue}
-                          hintText='enter the message'
-                          onChange={this.handleChangeTextField.bind(this, 'sourceValue')} />
-                      </div>
-                      <div style={{ marginRight: '20px' }}>
-                        <div className='dropdown-title'>Observation type</div>
-                        <TextField
-                          style={{ width: '250px' }}
-                          value={this.state.observationValue}
-                          hintText='enter the message'
-                          onChange={this.handleChangeTextField.bind(this, 'observationValue')} />
-                      </div>
-                      <div style={{ marginRight: '20px' }}>
-                        <div className='dropdown-title'>Who</div>
-                        <TextField
-                          style={{ width: '250px' }}
-                          value={this.state.whoValue}
-                          hintText='enter the message'
-                          onChange={this.handleChangeTextField.bind(this, 'whoValue')} />
-                      </div>
                       <div>
-                        <div className='dropdown-title'>What</div>
+                        <div className='dropdown-title'>Search</div>
                         <TextField
                           style={{ width: '250px' }}
-                          value={this.state.whatValue}
-                          hintText='enter the message'
-                          onChange={this.handleChangeTextField.bind(this, 'whatValue')} />
+                          value={this.state.searchText}
+                          hintText='enter the search text'
+                          onChange={this.handleChangeTextField.bind(this, 'searchText')} />
                       </div>
                       <RaisedButton
                         style={{ marginLeft: '20px', marginRight: '20px' }}
                         label='Search'
                         primary
+                        onClick={this.search.bind(this)}
                         labelStyle={{ color: '#FDB913' }} />
                     </div>
                   </Card>
@@ -481,17 +462,17 @@ class AdminTrials extends Component {
                       <TableBody displayRowCheckbox={false} showRowHover>
                         {this.state.changeDataTableSorted.map((row, index) => (
                           <TableRow key={index} selectable={false}>
-                            <TableRowColumn >
-                              {row.dateTime}
-                            </TableRowColumn>
-                            <TableRowColumn >
-                              {row.selectUser}
+                            <TableRowColumn>
+                              {moment(row.sentSimulationTime, 'DD/MM/YYYY hh:mm Z').format('DD/MM/YYYY hh:mm Z')}
                             </TableRowColumn>
                             <TableRowColumn>
-                              {row.role}
+                              {`${row.user.firstName} ${row.user.lastName}`}
                             </TableRowColumn>
-                            <TableRowColumn >
-                              {row.observationType}
+                            <TableRowColumn>
+                              {row.roleName}
+                            </TableRowColumn>
+                            <TableRowColumn>
+                              Observation
                             </TableRowColumn>
                             <TableRowColumn>
                               <i className='cursor-pointer material-icons'
@@ -707,7 +688,7 @@ class AdminTrials extends Component {
                         {this.state.messages.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
-                              {moment(row.eventTime).format('DD/MM/YYYY hh:mm')}
+                              {moment(row.eventTime, 'YYYY-MM-DDTHH:mm').format('DD/MM/YYYY hh:mm')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.trialUserId !== null &&
