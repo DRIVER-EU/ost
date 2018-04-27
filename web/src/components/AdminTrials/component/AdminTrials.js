@@ -79,7 +79,8 @@ class AdminTrials extends Component {
       trialStage: '',
       usersList: [],
       rolesList: [],
-      stagesList: []
+      stagesList: [],
+      interval: ''
     }
   }
 
@@ -88,7 +89,6 @@ class AdminTrials extends Component {
     messages: PropTypes.object,
     isSendMessage: PropTypes.any,
     sendMessage: PropTypes.func,
-    getObservation: PropTypes.func,
     observation: PropTypes.array,
     getUsers: PropTypes.func,
     usersList: PropTypes.object,
@@ -99,18 +99,20 @@ class AdminTrials extends Component {
     setStage: PropTypes.func,
     params: PropTypes.any
   }
+  componentWillUnmount () {
+    clearInterval(this.state.interval)
+  }
 
   componentWillMount () {
     this.props.getMessages(this.props.params.id, this.state.sort)
-    this.props.getObservation()
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
     this.props.getStages(this.props.params.id)
 
-    setInterval(() => {
+    let interval = setInterval(() => {
       this.props.getMessages(this.props.params.id, this.state.sort)
-      // this.props.getObservation()
     }, 3000)
+    this.setState({ interval: interval })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
