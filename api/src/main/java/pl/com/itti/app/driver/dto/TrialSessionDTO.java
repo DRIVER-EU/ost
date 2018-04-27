@@ -24,11 +24,13 @@ public class TrialSessionDTO {
 
         public String trialName;
         public String trialDescription;
+        public Long initId;
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
+            this.initId = trialSession.getTrial().getInitId() != null ? trialSession.getTrial().getInitId().getId() : null;
         }
     }
 
