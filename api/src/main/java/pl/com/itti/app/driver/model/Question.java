@@ -46,4 +46,7 @@ public class Question extends PersistentObject implements Serializable {
     @Column(nullable = false)
     @Builder.Default
     private boolean commented = true;
+
+    @Column(nullable = false)
+    private int position;
 }

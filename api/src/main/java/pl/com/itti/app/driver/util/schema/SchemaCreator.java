@@ -30,7 +30,7 @@ public final class SchemaCreator {
             .put(DISABLED, false);
 
     public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
-        questions.sort(Comparator.comparing(Question::getId));
+        questions.sort(Comparator.comparing(Question::getPosition));
         ObjectNode schemaForm = MAPPER.createObjectNode();
 
         ObjectNode schema = createSchema(questions);
