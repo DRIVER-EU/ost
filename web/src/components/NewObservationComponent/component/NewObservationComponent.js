@@ -142,7 +142,7 @@ class NewObservationComponent extends Component {
           <div className='question-container'>
             <div className='trials-header'>
               <DateComponent />
-              {this.props.mode !== 'new'
+              {(this.props.mode !== 'new' && this.props.mode !== 'newmodal')
               ? <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>Observation</div>
               : <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>New observation</div>
             }
@@ -151,7 +151,7 @@ class NewObservationComponent extends Component {
             <p className='desc-obs'>{this.state.observationForm.description}</p>
             <p className='point-obs'>When:</p>
             <DateTimePicker
-              disabled={this.props.mode !== 'new'}
+              disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
               onChange={this.setDate}
               DatePicker={DatePickerDialog}
               TimePicker={TimePickerDialog}
@@ -160,7 +160,7 @@ class NewObservationComponent extends Component {
               <p className='point-obs'>Who:</p>
               {this.state.observationForm.roles.map((object) => (
                 <Checkbox
-                  disabled={this.props.mode !== 'new'}
+                  disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
                   label={object.name}
                   checked={this.handleChecked(object.id)}
                   onCheck={this.handleParticipants.bind(this, object.id)}
@@ -168,7 +168,7 @@ class NewObservationComponent extends Component {
               ))}
               {this.state.observationForm.roles.length > 2 &&
               <Checkbox
-                disabled={this.props.mode !== 'new'}
+                disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
                 label='All'
                 checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
                 onCheck={this.handleAllParticipants.bind(this)}
@@ -185,7 +185,7 @@ class NewObservationComponent extends Component {
               widgets={widgets}
               onChange={(value) => this.changeObservation(value)} >
               <div className={'buttons-center'}>
-                {this.props.mode !== 'viewAdmin' &&
+                {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'newmodal') &&
                 <div className={'buttons-observation'}>
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
@@ -197,7 +197,7 @@ class NewObservationComponent extends Component {
                   />
                 </div>
                 }
-                {this.props.mode === 'new' &&
+                {(this.props.mode === 'new' || this.props.mode === 'newmodal') &&
                 <div className={'submit buttons-observation'}>
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}

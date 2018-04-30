@@ -98,6 +98,7 @@ class AdminTrials extends Component {
     setStage: PropTypes.func,
     params: PropTypes.any
   }
+
   componentWillUnmount () {
     clearInterval(this.state.interval)
   }
@@ -141,11 +142,7 @@ class AdminTrials extends Component {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
-      let change = nextProps.observation
-      this.setState({ changeDataTable: change }, () => {
-        this.sortFunction()
-        this.getData()
-      })
+      this.setState({ changeDataTable: nextProps.observation })
     }
     if (nextProps.messages.data &&
       !_.isEqual(nextProps.messages.data, this.state.messages)) {
@@ -226,31 +223,6 @@ class AdminTrials extends Component {
     return valid
   }
 
-  sortFunction () {
-    let observations = [ ...this.state.changeDataTable ]
-    let sort = { ...this.state.sort }
-    let orderBy = ''
-    for (let i = 0; i < observations.length; i++) {
-      observations[i].sentSimulationTime = moment(observations[i].sentSimulationTime, 'DD/MM/YYYY hh:mm').unix()
-    }
-    if (this.state.sort.order === 'asc') {
-      orderBy = 'desc'
-    } else {
-      orderBy = 'asc'
-    }
-    let order = _.orderBy(observations, ['sentSimulationTime'], [orderBy])
-    for (let i = 0; i < order.length; i++) {
-      order[i].sentSimulationTime = moment.unix(order[i].sentSimulationTime).format('DD/MM/YYYY hh:mm')
-    }
-
-    sort['order'] = orderBy
-    this.setState({
-      sortObservation: !this.state.sortObservation,
-      changeDataTableSorted: order,
-      sort: sort
-    })
-  }
-
   handleChangeState (type, order) {
     let change = {
       ...this.state.sort
@@ -288,45 +260,6 @@ class AdminTrials extends Component {
     if (this.checkValid()) {
       this.props.sendMessage(send)
     }
-  }
-
-  getData () {
-    let observations = [ ...this.state.changeDataTable ]
-    for (let i = 0; i < observations.length; i++) {
-      observations[i].dateTime = moment(observations[i].dateTime, 'DD/MM/YYYYThh:mm').unix()
-    }
-
-    let order = _.orderBy(observations, ['dateTime'], ['asc'])
-    for (let i = 0; i < order.length; i++) {
-      order[i].dateTime = moment.unix(order[i].dateTime).format('DD/MM/YYYY hh:mm')
-    }
-
-    let data = []
-    if (order.length) {
-      let range = moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
-
-      data.push({
-        name: order[0]['what'],
-        answers: 1,
-        date: moment(order[0].dateTime, 'DD/MM/YYYY hh:mm').format('DD/MM/YYYY hh:mm')
-      })
-      for (let i = 1; i < order.length; i++) {
-        if (order[i].dateTime === 'Invalid date') {
-          order[i].dateTime = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
-        }
-        if (moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 < range) {
-          data[data.length - 1].answers++
-        } else {
-          range = moment(order[i].dateTime, 'DD/MM/YYYY hh:mm').unix() * 1000 + 60 * 5 * 1000
-          data.push({
-            name: order[i]['what'],
-            answers: 1,
-            date: order[i].dateTime
-          })
-        }
-      }
-    }
-    this.setState({ chartData: data })
   }
 
   handleSort (type) {
@@ -412,16 +345,16 @@ class AdminTrials extends Component {
                   </div>
                   <Card style={{ padding: '20px', margin: '20px 30px' }}>
                     <div style={styles.searchPanelContainer}>
-                      <div>
+                      <div style={{ width: 'calc(100% - 108px)' }}>
                         <div className='dropdown-title'>Search</div>
                         <TextField
-                          style={{ width: '250px' }}
                           value={this.state.searchText}
                           hintText='enter the search text'
+                          fullWidth
                           onChange={this.handleChangeTextField.bind(this, 'searchText')} />
                       </div>
                       <RaisedButton
-                        style={{ marginLeft: '20px', marginRight: '20px' }}
+                        style={{ marginLeft: '20px' }}
                         label='Search'
                         primary
                         onClick={this.search.bind(this)}
@@ -436,13 +369,9 @@ class AdminTrials extends Component {
                         displaySelectAll={false}
                         adjustForCheckbox={false} >
                         <TableRow>
-                          <TableHeaderColumn onTouchTap={() => this.sortFunction()}>
+                          <TableHeaderColumn>
                             <div className='sort-style'>
                               <div className='sort-style-icon sort-cursor'>Time</div>
-                              <div className='sort-cursor'>
-                                {this.state.sortObservation ? <i className='material-icons'>keyboard_arrow_up</i>
-                      : <i className='material-icons'>keyboard_arrow_down</i>}
-                              </div>
                             </div>
                           </TableHeaderColumn>
                           <TableHeaderColumn >
@@ -460,10 +389,10 @@ class AdminTrials extends Component {
                         </TableRow>
                       </TableHeader>
                       <TableBody displayRowCheckbox={false} showRowHover>
-                        {this.state.changeDataTableSorted.map((row, index) => (
+                        {this.state.changeDataTable.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
-                              {moment(row.sentSimulationTime, 'DD/MM/YYYY hh:mm Z').format('DD/MM/YYYY hh:mm Z')}
+                              {moment(row.sentSimulationTime, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {`${row.user.firstName} ${row.user.lastName}`}
@@ -476,7 +405,7 @@ class AdminTrials extends Component {
                             </TableRowColumn>
                             <TableRowColumn>
                               <i className='cursor-pointer material-icons'
-                                style={{ 'vertical-align': 'middle' }}
+                                style={{ verticalAlign: 'middle' }}
                                 onClick={() => this.handleSelectedObject(row)}>
                                 open_in_new
                               </i>
@@ -716,11 +645,11 @@ class AdminTrials extends Component {
               </Tab>
             </Tabs>
             <SummaryOfObservationModal
+              mode={'adminmodal'}
               show={this.state.showModal}
               object={this.state.selectedObj}
               handleShowModal={this.handleShowModal.bind(this)}
-              params={this.props.params.id}
-               />
+              params={this.props.params.id} />
           </div>
         </div>
       </div>
