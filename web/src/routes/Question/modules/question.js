@@ -35,14 +35,18 @@ export const actions = {
   sendObservation
 }
 
-export const getSchema = (idObs, idSession) => {
+export const getSchemaView = (idObs) => {
   return (dispatch) => {
     return new Promise((resolve) => {
       /* eslint-disable */
-      axios.get(`http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`, getHeaders())
+      axios.get(`http://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
       /* eslint-enable */
           .then((response) => {
-            dispatch(getSchemaAction(response.data))
+            let change = {
+              jsonSchema: { ...response.data.questionSchema, formData: response.data.formData }
+
+            }
+            dispatch(getSchemaAction(change))
             resolve()
           })
           .catch((error) => {
