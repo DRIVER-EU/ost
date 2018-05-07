@@ -8,11 +8,16 @@ import { browserHistory } from 'react-router'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
+import _ from 'lodash'
+import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
+
 class ViewTrials extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      viewTrials: []
+      viewTrials: [],
+      selectedObj: {},
+      showModal: false
     }
   }
 
@@ -30,7 +35,13 @@ class ViewTrials extends Component {
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
-      this.setState({ viewTrials: nextProps.viewTrials })
+      let change = [...nextProps.viewTrials]
+      change[0]['thisFiled'] = false
+      for (let i = 1; i < nextProps.viewTrials.length; i++) {
+        change[i]['thisFiled'] = true
+      }
+      this.setState({ viewTrials: change },
+        () => this.handleFindObservation())
     }
   }
 
@@ -40,6 +51,21 @@ class ViewTrials extends Component {
 
   newObservation () {
     browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+  }
+
+  handleFindObservation () {
+    let list = [...this.state.viewTrials]
+    let index = _.findIndex(list, ['thisFiled', false])
+    if (index !== -1) {
+      this.setState({
+        selectedObj: list[index],
+        showModal: true
+      })
+    }
+  }
+
+  handleShowModal () {
+    this.setState({ showModal: !this.state.showModal })
   }
 
   render () {
@@ -86,6 +112,12 @@ class ViewTrials extends Component {
               <ContentAdd />
             </FloatingActionButton>
           </div>
+          <SummaryOfObservationModal
+            mode={'usermodal'}
+            show={this.state.showModal}
+            object={this.state.selectedObj}
+            handleShowModal={this.handleShowModal.bind(this)}
+            params={this.state.selectedObj.id} />
         </div>
       </div>
     )

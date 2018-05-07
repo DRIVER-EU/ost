@@ -19,6 +19,7 @@ class AdminTrials extends Component {
     handleShowModal: PropTypes.func,
     getSchema: PropTypes.func,
     observationForm: PropTypes.any,
+    mode: PropTypes.string,
     params: PropTypes.any
   }
 
@@ -52,11 +53,18 @@ class AdminTrials extends Component {
         bodyClassName={'content-schema'}
         bodyStyle={{ 'padding': '36px 0 0' }}
         >
-        <NewObservationComponent
+        {this.props.mode === 'usermodal'
+        ? <NewObservationComponent
+          getSchema={this.props.getSchema}
+          observationForm={this.props.observationForm}
+          mode={'newmodal'}
+          params={this.state.newParams} />
+        : <NewObservationComponent
           getSchema={this.props.getSchema}
           observationForm={this.props.observationForm}
           mode={'viewAdmin'}
           params={this.state.newParams} />
+        }
       </Dialog>
     )
   }
