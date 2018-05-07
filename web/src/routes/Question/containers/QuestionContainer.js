@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import Question from '../components/Question'
-import { getSchema } from './../modules/question'
+import { getSchemaView } from './../modules/question'
 
 const mapDispatchToProps = {
-  getSchema
+  getSchemaView
 }
 
 const mapStateToProps = (state) => ({
