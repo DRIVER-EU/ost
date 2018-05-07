@@ -9,6 +9,7 @@ import DateTimePicker from 'material-ui-datetimepicker'
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from './Slider'
+import radio from './Radio'
 import Form from 'react-jsonschema-form-mui'
 import { browserHistory } from 'react-router'
 
@@ -21,6 +22,9 @@ const styles = {
 const widgets = {
   Slider: (props) => {
     return Slider(props)
+  },
+  radio: (props) => {
+    return radio(props)
   }
 }
 
@@ -28,13 +32,13 @@ class NewObservationComponent extends Component {
   constructor (props) {
     super()
     this.state = {
-      formData: {},
       observationForm: {
         name:'',
         description: '',
         schema: {},
         uiSchema: {},
-        roles: []
+        roles: [],
+        formData: {}
       },
       listOfParticipants: [],
       dateTime: null
@@ -55,9 +59,12 @@ class NewObservationComponent extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.observationForm && this.props.observationForm &&
         this.state.observationForm !== nextProps.observationForm) {
-      let change = { ...nextProps.observationForm }
+      let change = { ...this.state.observationForm }
       change['schema'] = nextProps.observationForm.jsonSchema.schema
       change['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
+    //  change['uiSchema']['question_8'] = { 'ui:disabled': true, 'ui:widget': 'Radio', defaultSelected: '-2' }
+      change['formData'] = nextProps.observationForm.jsonSchema.formData
+     // change['formData']['question_8'] = '-2'
       this.setState({ observationForm: change })
     }
     if (nextProps.mode) {
@@ -135,7 +142,7 @@ class NewObservationComponent extends Component {
           <div className='question-container'>
             <div className='trials-header'>
               <DateComponent />
-              {this.props.mode !== 'new'
+              {(this.props.mode !== 'new' && this.props.mode !== 'newmodal')
               ? <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>Observation</div>
               : <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>New observation</div>
             }
@@ -144,7 +151,7 @@ class NewObservationComponent extends Component {
             <p className='desc-obs'>{this.state.observationForm.description}</p>
             <p className='point-obs'>When:</p>
             <DateTimePicker
-              disabled={this.props.mode !== 'new'}
+              disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
               onChange={this.setDate}
               DatePicker={DatePickerDialog}
               TimePicker={TimePickerDialog}
@@ -153,7 +160,7 @@ class NewObservationComponent extends Component {
               <p className='point-obs'>Who:</p>
               {this.state.observationForm.roles.map((object) => (
                 <Checkbox
-                  disabled={this.props.mode !== 'new'}
+                  disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
                   label={object.name}
                   checked={this.handleChecked(object.id)}
                   onCheck={this.handleParticipants.bind(this, object.id)}
@@ -161,7 +168,7 @@ class NewObservationComponent extends Component {
               ))}
               {this.state.observationForm.roles.length > 2 &&
               <Checkbox
-                disabled={this.props.mode !== 'new'}
+                disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
                 label='All'
                 checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
                 onCheck={this.handleAllParticipants.bind(this)}
@@ -174,11 +181,11 @@ class NewObservationComponent extends Component {
               noValidate
               schema={this.state.observationForm.schema}
               uiSchema={this.state.observationForm.uiSchema}
-              formData={this.state.formData}
+              formData={this.state.observationForm.formData}
               widgets={widgets}
               onChange={(value) => this.changeObservation(value)} >
               <div className={'buttons-center'}>
-                {this.props.mode !== 'viewAdmin' &&
+                {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'newmodal') &&
                 <div className={'buttons-observation'}>
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
@@ -190,7 +197,7 @@ class NewObservationComponent extends Component {
                   />
                 </div>
                 }
-                {this.props.mode === 'new' &&
+                {(this.props.mode === 'new' || this.props.mode === 'newmodal') &&
                 <div className={'submit buttons-observation'}>
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}

@@ -117,10 +117,10 @@ export const sendMessage = (message) => {
   }
 }
 
-export const getObservation = () => {
+export const getObservation = (id, search) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/anonymous/observation`, getHeaders())
+      axios.get(`http://${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
           .then((response) => {
             dispatch(getObservationAction(response.data))
             resolve()

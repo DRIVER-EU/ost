@@ -1,17 +1,16 @@
 {
 	"info": {
-		"_postman_id": "e93f743f-b257-4b8f-a8c3-e0eecb1cf36f",
 		"name": "DRIVER",
+		"_postman_id": "d13614f8-1127-5b0e-6ad1-9a69401dc7c8",
+		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "auth",
-			"description": null,
 			"item": [
 				{
 					"name": "/roles",
-					"description": null,
 					"item": [
 						{
 							"name": "/roles",
@@ -62,7 +61,6 @@
 				},
 				{
 					"name": "/users",
-					"description": null,
 					"item": [
 						{
 							"name": "/users",
@@ -389,7 +387,6 @@
 				},
 				{
 					"name": "/users/positions",
-					"description": null,
 					"item": [
 						{
 							"name": "/users/positions",
@@ -526,7 +523,6 @@
 		},
 		{
 			"name": "/observationtypes",
-			"description": null,
 			"item": [
 				{
 					"name": "/api/observationtypes",
@@ -665,7 +661,6 @@
 		},
 		{
 			"name": "/trialsessions",
-			"description": null,
 			"item": [
 				{
 					"name": "/trialsessions",
@@ -808,63 +803,283 @@
 			]
 		},
 		{
-			"name": "/event/search?trialsession_id=1",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "Alice1",
-							"type": "string"
+			"name": "/answers",
+			"description": "",
+			"item": [
+				{
+					"name": "/answers",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Mayer1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "admin",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "X-Auth-Token",
-						"value": "{{X-Auth-Token}}"
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "observationTypeId",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "trialSessionId",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "simulationTime",
+									"value": "2018-04-23T07:50:39+00:00",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "fieldValue",
+									"value": "sadasd",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "formData",
+									"value": "{\n\t\t\"question_8\": \"poor awareness\",\n\t\t\"question_11\": \"sadasd\",\n\t\t\"question_12\": false\n}",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "trialRoleIds",
+									"value": "1",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "texts",
+									"value": "heheheh sasdasd",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "coordinates",
+									"value": "{\n\t\t\"longitude\": 32.2,\n\t\t\"latitude\": 23.2,\n\t\t\"altitude\": 666.0\n}",
+									"description": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "attachments",
+									"value": "",
+									"description": "",
+									"type": "file"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/answers",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"answers"
+							]
+						},
+						"description": ""
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "",
-						"value": "",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "http://{{IP-Address}}/api/event/search?trialsession_id=1",
-					"protocol": "http",
-					"host": [
-						"{{IP-Address}}"
-					],
-					"path": [
-						"api",
-						"event",
-						"search"
-					],
-					"query": [
-						{
-							"key": "trialsession_id",
-							"value": "1"
-						}
-					]
+				{
+					"name": "/answers",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Mayer1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{X-Auth-Token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/answers?trialsession_id=2&search=communication",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"answers"
+							],
+							"query": [
+								{
+									"key": "trialsession_id",
+									"value": "2",
+									"equals": true
+								},
+								{
+									"key": "search",
+									"value": "communication",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "/event",
+			"description": "",
+			"item": [
+				{
+					"name": "/event/search?trialsession_id=1",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Alice1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{X-Auth-Token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}"
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/event/search?trialsession_id=1",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"event",
+								"search"
+							],
+							"query": [
+								{
+									"key": "trialsession_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/event",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "Mayer1",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"trialSessionId\": 2,\n\t\"idEvent\": 1,\n\t\"name\": \"Event\",\n\t\"description\": \"Event added\",\n\t\"languageVersion\": \"POLISH\",\n\t\"eventTime\": \"2018-04-12T09:20:25\",\n\t\"trialUserId\": 5\n}"
+						},
+						"url": {
+							"raw": "http://{{IP-Address}}/api/event",
+							"protocol": "http",
+							"host": [
+								"{{IP-Address}}"
+							],
+							"path": [
+								"api",
+								"event"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "/user?trialsession_id=2",
@@ -963,49 +1178,6 @@
 							"key": "trialsession_id",
 							"value": "2"
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/event",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "Mayer1",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "admin",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"trialSessionId\": 2,\n\t\"idEvent\": 1,\n\t\"name\": \"Event\",\n\t\"description\": \"Event added\",\n\t\"languageVersion\": \"POLISH\",\n\t\"eventTime\": \"2018-04-12T09:20:25\",\n\t\"trialUserId\": 5\n}"
-				},
-				"url": {
-					"raw": "http://{{IP-Address}}/api/event",
-					"protocol": "http",
-					"host": [
-						"{{IP-Address}}"
-					],
-					"path": [
-						"api",
-						"event"
 					]
 				}
 			},

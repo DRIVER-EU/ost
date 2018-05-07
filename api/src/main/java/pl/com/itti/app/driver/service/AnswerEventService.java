@@ -16,10 +16,7 @@ import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
 import pl.com.itti.app.driver.repository.specification.EventSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -40,7 +37,9 @@ public class AnswerEventService {
         List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(currentUser, trialSessionId));
         List<Event> events = eventRepository.findAll(getEventSpecifications(currentUser, trialSessionId));
 
-        return getAsAnswersEvents(answers, events);
+        List<AnswerEventDTO.Item> items = getAsAnswersEvents(answers, events);
+        items.sort(Comparator.comparing(item -> item.time));
+        return items;
     }
 
     private Specifications<Answer> getAnswerSpecifications(AuthUser authUser, Long trialSessionId) {
