@@ -12,6 +12,8 @@ import Slider from './Slider'
 import radio from './Radio'
 import Form from 'react-jsonschema-form-mui'
 import { browserHistory } from 'react-router'
+import DropzoneComponent from 'react-dropzone-component'
+import './Upload.scss'
 
 const styles = {
   checkbox: {
@@ -40,31 +42,47 @@ class NewObservationComponent extends Component {
         roles: [],
         formData: {}
       },
+      images: [],
       listOfParticipants: [],
       dateTime: null
     }
-  }
-
-  static propTypes = {
-    getSchema: PropTypes.func,
-    observationForm: PropTypes.any,
-    mode: PropTypes.string,
-    params: PropTypes.any
-  }
-
-  componentWillMount () {
-    this.props.getSchema(this.props.params.id_observation, this.props.params.id)
+    this.djsConfig = {
+      addRemoveLinks: true,
+      acceptedFiles: 'image/jpeg,image/png,image/gif,image/bmp',
+      autoProcessQueue: false,
+      thumbnailWidth: 300,
+      thumbnailHeight: 300,
+      thumbnailMethod: 'contain',
+      uploadMultiple: true,
+      parallelUploads: 1,
+      maxFiles: 10
+    }
+    this.componentConfig = {
+      iconFiletypes: ['.jpg', '.png', '.gif'],
+      showFiletypeIcon: false,
+      postUrl: 'no-url',
+      removeFile: this.removeFile
+    }
+    this.eventHandlers = {
+      init: this.initCallback.bind(this),
+      addedfile: (file) => this.setFile(file),
+      maxfilesexceeded: function (file) {
+        this.removeAllFiles()
+        this.addFile(file)
+      }
+    }
+    this.myDropzone = {}
+    this.setFile = this.setFile.bind(this)
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.observationForm && this.props.observationForm &&
-        this.state.observationForm !== nextProps.observationForm) {
+      this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state.observationForm }
       change['schema'] = nextProps.observationForm.jsonSchema.schema
       change['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
-    //  change['uiSchema']['question_8'] = { 'ui:disabled': true, 'ui:widget': 'Radio', defaultSelected: '-2' }
       change['formData'] = nextProps.observationForm.jsonSchema.formData
-     // change['formData']['question_8'] = '-2'
+
       this.setState({ observationForm: change })
     }
     if (nextProps.mode) {
@@ -72,18 +90,64 @@ class NewObservationComponent extends Component {
     }
   }
 
+  initCallback (dropzone) {
+    this.myDropzone = dropzone
+  }
+
+  setFile (image) {
+    let change = [ ...this.state.images ]
+    change.push(image)
+    console.log(image)
+    this.setState({ images: change })
+  }
+
+  removeFile () {
+    if (this.myDropzone) {
+      this.myDropzone.removeFile()
+    }
+  }
+
+  static propTypes = {
+    getSchema: PropTypes.func,
+    observationForm: PropTypes.any,
+    mode: PropTypes.string,
+    params: PropTypes.any,
+    sendObservation: PropTypes.func
+  }
+
+  componentWillMount () {
+    this.props.getSchema(this.props.params.id_observation, this.props.params.id)
+  }
+
   submitObservation () {
-    let send = { ...this.state.formData }
+    let send = {}
     let tab = []
     send['dateTime'] = this.state.dateTime
     for (let i = 0; i < this.state.listOfParticipants.length; i++) {
       tab.push(this.state.listOfParticipants[i].id)
     }
     send['listOfParticipants'] = tab
+    send['observationTypeId'] = this.props.params.id_observation
+    send['trialSessionId'] = this.props.params.id
+    send['simulationTime'] = '2018-04-23T07:50:39+00:00'
+    send['fieldValue'] = 'test'
+    send['formData'] = this.state.observationForm.formData
+    send['trialRoleIds'] = tab
+    send['coordinates'] = {
+      'longitude': 32.2,
+      'latitude': 23.2,
+      'altitude': 0.0
+    }
+    send['attachments'] = this.state.images
+
+    console.log(send)
+    this.props.sendObservation(send)
   }
 
   changeObservation (object) {
-    this.setState({ formData: object.formData })
+    let change = { ...this.state.observationForm }
+    change.formData = object.formData
+    this.setState({ observationForm: change })
   }
 
   setDate = (dateTime) => this.setState({ dateTime })
@@ -184,6 +248,13 @@ class NewObservationComponent extends Component {
               formData={this.state.observationForm.formData}
               widgets={widgets}
               onChange={(value) => this.changeObservation(value)} >
+              { (this.props.mode === 'new' || this.props.mode === 'newmodal') && <div>
+                <p className='point-obs'>Attachments:</p>
+                <DropzoneComponent
+                  config={this.componentConfig}
+                  djsConfig={this.djsConfig}
+                  eventHandlers={this.eventHandlers} />
+              </div>}
               <div className={'buttons-center'}>
                 {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'newmodal') &&
                 <div className={'buttons-observation'}>

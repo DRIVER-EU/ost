@@ -1,0 +1,23 @@
+@import '../../../../node_modules/react-dropzone-component/styles/filepicker.css';
+@import '../../../../node_modules/dropzone/dist/min/dropzone.min.css';
+
+.dropzone .dz-preview.dz-image-preview {
+    background: transparent;
+}
+
+div.filepicker {
+    background-color: transparent;
+    border: 1px dashed #0f68a4;
+}
+
+.dropzone .dz-preview .dz-progress {
+    background: transparent;
+}
+
+.dropzone .dz-preview .dz-image {
+    width: 100%;
+    height: 100%;
+}
+.dropzone .dz-preview .dz-details {
+    position: relative;
+}
