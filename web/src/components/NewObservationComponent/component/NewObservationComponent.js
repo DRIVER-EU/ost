@@ -12,6 +12,8 @@ import Slider from './Slider'
 import radio from './Radio'
 import Form from 'react-jsonschema-form-mui'
 import { browserHistory } from 'react-router'
+import Spinner from 'react-spinkit'
+import FontIcon from 'material-ui/FontIcon'
 
 const styles = {
   checkbox: {
@@ -41,7 +43,8 @@ class NewObservationComponent extends Component {
         formData: {}
       },
       listOfParticipants: [],
-      dateTime: null
+      dateTime: null,
+      isLoading: false
     }
   }
 
@@ -54,6 +57,7 @@ class NewObservationComponent extends Component {
 
   componentWillMount () {
     this.props.getSchema(this.props.params.id_observation, this.props.params.id)
+    this.setState({ isLoading: true })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -68,7 +72,7 @@ class NewObservationComponent extends Component {
       this.setState({ observationForm: change })
     }
     if (nextProps.mode) {
-      this.setState({ listOfParticipants: [1] })
+      this.setState({ listOfParticipants: [1], isLoading: false })
     }
   }
 
@@ -135,80 +139,106 @@ class NewObservationComponent extends Component {
     browserHistory.push(`/trials/${this.props.params.id}`)
   }
 
+  handleChangeTitle () {
+    if (this.props.mode !== 'new') {
+      return <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>
+        {this.props.observationForm.name}</div>
+    } else if (this.props.mode === 'new') {
+      return <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>New observation</div>
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
-        <div className='pages-box'>
+        <div className='pages-box' style={{ height: '100%' }}>
           <div className='question-container'>
-            <div className='trials-header'>
-              <DateComponent />
-              {(this.props.mode !== 'new' && this.props.mode !== 'newmodal')
-              ? <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>Observation</div>
-              : <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>New observation</div>
-            }
-            </div>
-            <p className='title-obs'>{this.state.observationForm.name}</p>
-            <p className='desc-obs'>{this.state.observationForm.description}</p>
-            <p className='point-obs'>When:</p>
-            <DateTimePicker
-              disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
-              onChange={this.setDate}
-              DatePicker={DatePickerDialog}
-              TimePicker={TimePickerDialog}
-              format='YYYY/MM/DD H:mm' />
-            {this.state.observationForm.roles.length !== 0 && <div>
-              <p className='point-obs'>Who:</p>
-              {this.state.observationForm.roles.map((object) => (
-                <Checkbox
-                  disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
-                  label={object.name}
-                  checked={this.handleChecked(object.id)}
-                  onCheck={this.handleParticipants.bind(this, object.id)}
-                  style={styles.checkbox} />
-              ))}
-              {this.state.observationForm.roles.length > 2 &&
-              <Checkbox
-                disabled={this.props.mode !== 'new' && this.props.mode !== 'newmodal'}
-                label='All'
-                checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
-                onCheck={this.handleAllParticipants.bind(this)}
-                style={styles.checkbox} />
-            }
-            </div>
-            }
-            <p className='point-obs'>What:</p>
-            <Form
-              noValidate
-              schema={this.state.observationForm.schema}
-              uiSchema={this.state.observationForm.uiSchema}
-              formData={this.state.observationForm.formData}
-              widgets={widgets}
-              onChange={(value) => this.changeObservation(value)} >
-              <div className={'buttons-center'}>
-                {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'newmodal') &&
-                <div className={'buttons-observation'}>
-                  <RaisedButton
-                    buttonStyle={{ width: '200px' }}
-                    backgroundColor='#244C7B'
-                    labelColor='#FCB636'
-                    label='Back'
-                    secondary
-                    onClick={this.back.bind(this)}
-                  />
-                </div>
-                }
-                {(this.props.mode === 'new' || this.props.mode === 'newmodal') &&
-                <div className={'submit buttons-observation'}>
-                  <RaisedButton
-                    buttonStyle={{ width: '200px' }}
-                    backgroundColor='#244C7B'
-                    labelColor='#FCB636'
-                    label='Submit'
-                    onClick={this.submitObservation.bind(this)} />
-                </div>
-                }
+            {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
+            <div className={'buttons-obs'} style={{ textAlign: 'right' }}>
+              <RaisedButton
+                buttonStyle={{ width: '240px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='Back to list of events'
+                secondary
+                icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
+                  <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
+                onClick={this.back.bind(this)} />
+            </div>}
+            {this.state.isLoading && <div className='spinner-box'>
+              <div className={'spinner'}>
+                <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
               </div>
-            </Form>
+            </div>}
+            {(!this.state.isLoading && this.state.listOfParticipants.length !== 0) &&
+            <div>
+              <div className='trials-header'>
+                <DateComponent />
+                {this.handleChangeTitle()}
+              </div>
+              <p className='title-obs'>{this.state.observationForm.name}</p>
+              <p className='desc-obs'>{this.state.observationForm.description}</p>
+              <p className='point-obs'>When:</p>
+              <DateTimePicker
+                disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
+                onChange={this.setDate}
+                DatePicker={DatePickerDialog}
+                TimePicker={TimePickerDialog}
+                format='YYYY/MM/DD H:mm' />
+              {this.state.observationForm.roles.length !== 0 && <div>
+                <p className='point-obs'>Who:</p>
+                {this.state.observationForm.roles.map((object) => (
+                  <Checkbox
+                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
+                    label={object.name}
+                    checked={this.handleChecked(object.id)}
+                    onCheck={this.handleParticipants.bind(this, object.id)}
+                    style={styles.checkbox} />
+              ))}
+                {this.state.observationForm.roles.length > 2 &&
+                <Checkbox
+                  disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
+                  label='All'
+                  checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
+                  onCheck={this.handleAllParticipants.bind(this)}
+                  style={styles.checkbox} />
+            }
+              </div>
+            }
+              <p className='point-obs'>What:</p>
+              <Form
+                noValidate
+                schema={this.state.observationForm.schema}
+                uiSchema={this.state.observationForm.uiSchema}
+                formData={this.state.observationForm.formData}
+                widgets={widgets}
+                onChange={(value) => this.changeObservation(value)} >
+                <div className={'buttons-center'}>
+                  {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
+                  <div className={'buttons-observation'}>
+                    <RaisedButton
+                      buttonStyle={{ width: '200px' }}
+                      backgroundColor='#244C7B'
+                      labelColor='#FCB636'
+                      label='Back'
+                      secondary
+                      onClick={this.back.bind(this)}
+                  />
+                  </div>
+                }
+                  {(this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
+                  <div className={'submit buttons-observation'}>
+                    <RaisedButton
+                      buttonStyle={{ width: '200px' }}
+                      backgroundColor='#244C7B'
+                      labelColor='#FCB636'
+                      label='Submit'
+                      onClick={this.submitObservation.bind(this)} />
+                  </div>
+                }
+                </div>
+              </Form>
+            </div>}
           </div>
         </div>
       </div>
