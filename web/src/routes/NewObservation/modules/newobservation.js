@@ -56,7 +56,7 @@ export const getSchema = (idObs, idSession) => {
 export const sendObservation = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
+      axios.post(`http://${origin}/api/answers`, getHeaders())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             resolve()

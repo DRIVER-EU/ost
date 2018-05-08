@@ -314,8 +314,7 @@ class AdminTrials extends Component {
               <SelectField
                 value={this.state.trialStage}
                 floatingLabelText='Choose Trial Stage'
-                onChange={this.handleChangeDropDown.bind(this, 'trialStage')}
-            >
+                onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
                 {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
                   <MenuItem
                     key={index.id}
