@@ -215,15 +215,6 @@ class NewObservationComponent extends Component {
     browserHistory.push(`/trials/${this.props.params.id}`)
   }
 
-  handleChangeTitle () {
-    if (this.props.mode !== 'new') {
-      return <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>
-        {this.props.observationForm.name}</div>
-    } else if (this.props.mode === 'new') {
-      return <div style={{ textAlign:'center', borderBottom: '1px solid #feb912' }}>New observation</div>
-    }
-  }
-
   render () {
     return (
       <div className='main-container'>
@@ -250,7 +241,7 @@ class NewObservationComponent extends Component {
             <div>
               <div className='trials-header'>
                 <DateComponent />
-                {this.handleChangeTitle()}
+                {this.props.observationForm.name}
               </div>
               <p className='title-obs'>{this.state.observationForm.name}</p>
               <p className='desc-obs'>{this.state.observationForm.description}</p>
