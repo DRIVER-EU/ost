@@ -65,7 +65,7 @@ export const sendObservation = (formData) => {
       }
       let json = JSON.stringify(tempData)
       let blob = new Blob([json], { type: 'application/json' })
-
+      console.log(json)
       data.append('attachments', formData.attachments)
       data.append('data', blob)
       axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())

@@ -282,6 +282,7 @@ class NewObservationComponent extends Component {
                 onChange={(value) => this.changeObservation(value)} >
                 { (this.props.mode === 'new' || this.props.mode === 'newmodal') && <div>
                   <p className='point-obs'>Attachments:</p>
+                  <p>Files:</p>
                   <DropzoneComponent
                     config={this.componentConfig}
                     djsConfig={this.djsConfig}
