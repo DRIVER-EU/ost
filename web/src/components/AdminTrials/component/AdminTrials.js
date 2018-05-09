@@ -19,12 +19,11 @@ import './AdminTrials.scss'
 import _ from 'lodash'
 
 const rangeList = [
-  { id: 0, name: '15 minutes' },
-  { id: 1, name: '30 minutes' },
-  { id: 2, name: '1 hour' },
-  { id: 3, name: '1 day' },
-  { id: 4, name: '7 days' },
-  { id: 5, name: '1 month' }
+  { id: 0, name: '5 minutes', value: 5 * 60 * 1000 },
+  { id: 1, name: '10 minutes', value: 10 * 60 * 1000 },
+  { id: 2, name: '15 minutes', value: 15 * 60 * 1000 },
+  { id: 3, name: '30 minutes', value: 30 * 60 * 1000 },
+  { id: 4, name: '60 minutes', value: 60 * 60 * 1000 }
 ]
 
 const styles = {
@@ -78,7 +77,8 @@ class AdminTrials extends Component {
       rolesList: [],
       stagesList: [],
       interval: '',
-      searchText: ''
+      searchText: '',
+      timeRange: ''
     }
   }
 
@@ -156,6 +156,33 @@ class AdminTrials extends Component {
     if (this.props.messages && this.props.observation && this.props.isSendMessage) {
       // eslint
     }
+  }
+
+  handleChangeChart (list) {
+    console.log('asdasdasd')
+    list.push({ id: 7, sentSimulationTime: '2018-04-24T10:50:39+00:00', user: {}, roleName: 'dupa' })
+    let sortedList = _.orderBy(list, ['sentSimulationTime'], ['asc'])
+    let dateMax = new Date(_.maxBy(list, 'sentSimulationTime').sentSimulationTime).getTime() / 1000
+    let dateMin = new Date(_.minBy(list, 'sentSimulationTime').sentSimulationTime).getTime() / 1000
+    // let index = _.findIndex(rangeList, { name: this.state.timeRange })
+    let data = []
+    data[0] = { date: dateMin, count: 0 }
+    let i = 0
+    while (true) {
+      data[i + 1] = { date: dateMin + 5 * 60 * 1000, count: 0 }
+      if (data[i + 1].date > dateMax) {
+        break
+      }
+    }
+    console.log('czy dziala ???', data)
+    for (let y = 0; y < data.length; y++) {
+      for (let j = 0; j < sortedList.length; j++) {
+        if (data[y].date <= new Date(sortedList[j].sentSimulationTime).getTime() / 1000 < dateMax) {
+          data[y].count++
+        }
+      }
+    }
+    console.log('czy dziala', data)
   }
 
   handleChangeDropDown (stateName, event, index, value) {
@@ -388,6 +415,7 @@ class AdminTrials extends Component {
                         </TableRow>
                       </TableHeader>
                       <TableBody displayRowCheckbox={false} showRowHover>
+                        {this.handleChangeChart(this.state.changeDataTable)}
                         {this.state.changeDataTable.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>

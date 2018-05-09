@@ -241,7 +241,9 @@ class NewObservationComponent extends Component {
             <div>
               <div className='trials-header'>
                 <DateComponent />
-                {this.props.observationForm.name}
+                <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
+                  {this.props.observationForm.name}
+                </div>
               </div>
               <p className='title-obs'>{this.state.observationForm.name}</p>
               <p className='desc-obs'>{this.state.observationForm.description}</p>
