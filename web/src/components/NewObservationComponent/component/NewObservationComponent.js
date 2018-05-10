@@ -98,6 +98,7 @@ class NewObservationComponent extends Component {
       change['observationForm']['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
       change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
       change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
+      change['observationForm']['description'] = nextProps.observationForm.description
 
       this.setState({ change })
     }
