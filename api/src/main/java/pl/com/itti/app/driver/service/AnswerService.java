@@ -106,8 +106,9 @@ public class AnswerService {
                         .formData(form.formData.toString())
                         .build()
         );
-
-        answer.setAnswerTrialRoles(assignTrialRoles(form.trialRoleIds, answer));
+        if (form.trialRoleIds != null) {
+            answer.setAnswerTrialRoles(assignTrialRoles(form.trialRoleIds, answer));
+        }
         answer.setAttachments(assignAttachments(form, files, answer));
 
         return answerRepository.save(answer);

@@ -44,6 +44,10 @@ public class AttachmentService {
     }
 
     private List<Attachment> createDescriptionAttachments(List<String> descriptions, Answer answer) {
+        if (descriptions == null) {
+            return null;
+        }
+
         return descriptions.stream()
                 .map(s -> convertDescriptionToAttachment(s, answer))
                 .collect(Collectors.toList());
@@ -73,7 +77,6 @@ public class AttachmentService {
             String fullName = saveFile(file, dir);
             attachments.add(convertFileToAttachment(file, fullName, type, answer));
         }
-
         return attachments;
     }
 
