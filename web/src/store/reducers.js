@@ -4,6 +4,7 @@ import { reducer as toastReducer } from 'react-redux-toastr'
 import locationReducer from './location'
 import loginReducer from '../routes/Login/modules/login'
 import newObservationReducer from '../routes/NewObservation/modules/newobservation'
+import Question from '../routes/Question/modules/question'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -12,6 +13,7 @@ export const makeRootReducer = (asyncReducers) => {
     menu: menuReducer,
     toastr: toastReducer,
     newobservation: newObservationReducer,
+    question: Question,
     ...asyncReducers
   })
 }

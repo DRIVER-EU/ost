@@ -44,20 +44,18 @@ class AdminTrials extends Component {
     ]
     return (
       <Dialog
-        title='Scrollable Dialog'
         actions={actions}
         modal={false}
         open={this.props.show}
         onRequestClose={() => this.props.handleShowModal()}
-        autoScrollBodyContent
         bodyClassName={'content-schema'}
-        bodyStyle={{ 'padding': '36px 0 0' }}
+        bodyStyle={{ padding: 0 }}
         >
         {this.props.mode === 'usermodal'
         ? <NewObservationComponent
           getSchema={this.props.getSchema}
           observationForm={this.props.observationForm}
-          mode={'newmodal'}
+          mode={'profileQuestion'}
           params={this.state.newParams} />
         : <NewObservationComponent
           getSchema={this.props.getSchema}
