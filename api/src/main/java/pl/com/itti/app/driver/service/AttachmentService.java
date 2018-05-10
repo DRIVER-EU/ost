@@ -44,9 +44,12 @@ public class AttachmentService {
     }
 
     private List<Attachment> createDescriptionAttachments(List<String> descriptions, Answer answer) {
-        return descriptions.stream()
-                .map(s -> convertDescriptionToAttachment(s, answer))
-                .collect(Collectors.toList());
+        if (descriptions != null) {
+            return descriptions.stream()
+                    .map(s -> convertDescriptionToAttachment(s, answer))
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
     private List<Attachment> createLocationAttachments(List<AttachmentDTO.Coordinates> coordinates, Answer answer) {
@@ -73,7 +76,6 @@ public class AttachmentService {
             String fullName = saveFile(file, dir);
             attachments.add(convertFileToAttachment(file, fullName, type, answer));
         }
-
         return attachments;
     }
 
