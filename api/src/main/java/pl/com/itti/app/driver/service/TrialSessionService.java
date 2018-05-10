@@ -1,5 +1,7 @@
 package pl.com.itti.app.driver.service;
 
+import co.perpixel.dto.DTO;
+import co.perpixel.dto.PageDTO;
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
@@ -33,6 +36,12 @@ public class TrialSessionService {
     @Autowired
     private TrialUserService trialUserService;
 
+    @Autowired
+    private ObservationTypeService observationTypeService;
+
+    @Autowired
+    private AnswerService answerService;
+
     @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
@@ -44,13 +53,16 @@ public class TrialSessionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TrialSession> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
+    public PageDTO<TrialSessionDTO.ActiveListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
 
-        return trialSessionRepository.findAll(
+        Page<TrialSession> trialSessions = trialSessionRepository.findAll(
                 getTrialSessionStatusSpecifications(authUser, sessionStatus),
-                pageable
-        );
+                pageable);
+
+        PageDTO<TrialSessionDTO.ActiveListItem> pageDTO = DTO.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
+        pageDTO.getData().forEach(d -> d.initHasAnswer = setInitAnswer(d, authUser));
+        return pageDTO;
     }
 
     public TrialSession updateLastTrialStage(long trialSessionId, long lastTrialStageId) {
@@ -76,5 +88,9 @@ public class TrialSessionService {
         Set<Specification<TrialSession>> conditions = new HashSet<>();
         conditions.add(TrialSessionSpecification.trialSessionManager(authUser));
         return RepositoryUtils.concatenate(conditions);
+    }
+
+    private Boolean setInitAnswer(TrialSessionDTO.ActiveListItem activeListItem, AuthUser authUser) {
+        return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 }

@@ -26,8 +26,8 @@ public class TrialSessionController {
     }
 
     @GetMapping("/active")
-    private PageDTO<TrialSessionDTO.ListItem> findActive(Pageable pageable) {
-        return DTO.from(trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable), TrialSessionDTO.ListItem.class);
+    private PageDTO<TrialSessionDTO.ActiveListItem> findActive(Pageable pageable) {
+        return trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable);
     }
 
     @PutMapping

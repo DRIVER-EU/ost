@@ -194,5 +194,11 @@ public class AnswerService {
         return answerTrialRoleRepository.save(answerTrialRoles);
     }
 
-
+    public Boolean hasAnswer(Long observationTypeId, AuthUser authUser) {
+        Set<Specification<Answer>> conditions = new HashSet<>();
+        conditions.add(AnswerSpecification.isAnswerForObservationType(observationTypeId));
+        conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
+        List<Answer> observationTypes = answerRepository.findAll(RepositoryUtils.concatenate(conditions));
+        return !observationTypes.isEmpty();
+    }
 }
