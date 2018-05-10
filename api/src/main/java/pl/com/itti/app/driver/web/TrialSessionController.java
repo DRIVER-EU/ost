@@ -20,6 +20,11 @@ public class TrialSessionController {
     @Autowired
     private TrialSessionService trialSessionService;
 
+    @GetMapping("/{trialsession_id:\\d+}")
+    public TrialSessionDTO.ListItem findOneForTrialSessionManager(@PathVariable(value = "trialsession_id") long answerId) {
+        return DTO.from(trialSessionService.findOneByManager(answerId), TrialSessionDTO.ListItem.class);
+    }
+
     @FindAllGetMapping
     public PageDTO<TrialSessionDTO.ListItem> findAllForTrialSessionManager(Pageable pageable) {
         return DTO.from(trialSessionService.findAllByManager(pageable), TrialSessionDTO.ListItem.class);

@@ -34,6 +34,15 @@ public class TrialSessionService {
     private TrialUserService trialUserService;
 
     @Transactional(readOnly = true)
+    public TrialSession findOneByManager(long trialSessionId) {
+        AuthUser authUser = trialUserService.getCurrentUser();
+        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+
+        return trialSessionRepository.findById(trialSessionId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
+    }
+
+    @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
 
