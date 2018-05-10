@@ -44,7 +44,6 @@ export const getSchemaView = (idObs) => {
           .then((response) => {
             let change = {
               jsonSchema: { ...response.data.questionSchema, formData: response.data.formData }
-
             }
             dispatch(getSchemaAction(change))
             resolve()

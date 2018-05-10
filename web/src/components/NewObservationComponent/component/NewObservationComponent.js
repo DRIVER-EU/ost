@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import DateComponent from '../../DateComponent/DateComponent'
 import './NewObservationComponent.scss'
-import RaisedButton from 'material-ui/RaisedButton'
-import Checkbox from 'material-ui/Checkbox'
+import { Checkbox, RaisedButton, TextField } from 'material-ui'
 import _ from 'lodash'
 import DateTimePicker from 'material-ui-datetimepicker'
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
@@ -16,7 +15,6 @@ import Spinner from 'react-spinkit'
 import FontIcon from 'material-ui/FontIcon'
 import DropzoneComponent from 'react-dropzone-component'
 import './Upload.scss'
-import moment from 'moment'
 
 const styles = {
   checkbox: {
@@ -48,7 +46,8 @@ class NewObservationComponent extends Component {
       images: [],
       listOfParticipants: [],
       dateTime: null,
-      isLoading: false
+      isLoading: false,
+      attachmentDescription: ''
     }
   }
 
@@ -94,15 +93,19 @@ class NewObservationComponent extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
-      let change = { ...this.state.observationForm }
-      change['schema'] = nextProps.observationForm.jsonSchema.schema
-      change['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
-      change['formData'] = nextProps.observationForm.jsonSchema.formData
+      let change = { ...this.state }
+      change['observationForm']['schema'] = nextProps.observationForm.jsonSchema.schema
+      change['observationForm']['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
+      change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
+      change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
 
-      this.setState({ observationForm: change })
+      this.setState({ change })
     }
     if (nextProps.mode) {
-      this.setState({ listOfParticipants: [1], isLoading: false })
+      let change = { ...this.state }
+      change['listOfParticipants'] = []
+      change['isLoading'] = false
+      this.setState(change)
     }
   }
 
@@ -113,7 +116,6 @@ class NewObservationComponent extends Component {
   setFile (image) {
     let change = [ ...this.state.images ]
     change.push(image)
-    console.log(image)
     this.setState({ images: change })
   }
 
@@ -135,28 +137,26 @@ class NewObservationComponent extends Component {
     let send = {}
     let tab = []
     if (this.state.dateTime !== null) {
-      send['dateTime'] = this.state.dateTime
+ //     send['dateTime'] = this.state.dateTime
     } else {
-      send['dateTime'] = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A')
+ //     send['dateTime'] = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A')
     }
     for (let i = 0; i < this.state.listOfParticipants.length; i++) {
       tab.push(this.state.listOfParticipants[i].id)
     }
-    send['listOfParticipants'] = tab
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
     send['simulationTime'] = '2018-04-23T07:50:39+00:00'
     send['fieldValue'] = 'test'
     send['formData'] = this.state.observationForm.formData
-    send['trialRoleIds'] = tab
-    send['coordinates'] = {
-      'longitude': 32.2,
-      'latitude': 23.2,
-      'altitude': 0.0
-    }
+    send['trialRoleIds'] = []
+    send['descriptions'] = [this.state.attachmentDescription[1]]
+    send['coordinates'] = [
+      { 'longitude': 32.2,
+        'latitude': 23.2,
+        'altitude': 0.0 }
+    ]
     send['attachments'] = this.state.images
-
-    console.log(send)
     this.props.sendObservation(send)
   }
 
@@ -199,11 +199,11 @@ class NewObservationComponent extends Component {
     if (this.props.mode) {
       let tab = []
       change.map((id) => (
-        tab.push({ id: id })
+        tab.push({ 'id': id.id })
       ))
-      chosenIndex = _.findIndex(tab, { id: id })
+      chosenIndex = _.findIndex(tab, { 'id': id })
     } else {
-      chosenIndex = _.findIndex(change, { id: id })
+      chosenIndex = _.findIndex(change, { 'id': id })
     }
     if (chosenIndex !== -1) {
       check = true
@@ -213,6 +213,10 @@ class NewObservationComponent extends Component {
 
   back () {
     browserHistory.push(`/trials/${this.props.params.id}`)
+  }
+
+  handleDescription (value) {
+    this.setState({ attachmentDescription: value })
   }
 
   render () {
@@ -237,7 +241,7 @@ class NewObservationComponent extends Component {
                 <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
               </div>
             </div>}
-            {(!this.state.isLoading && this.state.listOfParticipants.length !== 0) &&
+            {(!this.state.isLoading) &&
             <div>
               <div className='trials-header'>
                 <DateComponent />
@@ -262,7 +266,7 @@ class NewObservationComponent extends Component {
                     onCheck={this.handleParticipants.bind(this, object.id)}
                     style={styles.checkbox} />
               ))}
-                {this.state.observationForm.roles.length > 2 &&
+                {this.state.observationForm.roles.length > 0 &&
                 <Checkbox
                   disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                   label='All'
@@ -274,7 +278,7 @@ class NewObservationComponent extends Component {
             }
               <p className='point-obs'>What:</p>
               <Form
-                noValidate
+
                 schema={this.state.observationForm.schema}
                 uiSchema={this.state.observationForm.uiSchema}
                 formData={this.state.observationForm.formData}
@@ -282,6 +286,9 @@ class NewObservationComponent extends Component {
                 onChange={(value) => this.changeObservation(value)} >
                 { (this.props.mode === 'new' || this.props.mode === 'newmodal') && <div>
                   <p className='point-obs'>Attachments:</p>
+                  <p>Description:</p>
+                  <TextField value={this.state.attachmentDescription}
+                    onChange={(event, value) => { this.handleDescription(value) }} />
                   <p>Files:</p>
                   <DropzoneComponent
                     config={this.componentConfig}

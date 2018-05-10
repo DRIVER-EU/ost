@@ -60,15 +60,19 @@ export const sendObservation = (formData) => {
       let tempData = {}
       for (let key in formData) {
         if (key !== 'attachments') {
-          tempData[key] = data[key]
+          tempData[key] = formData[key]
         }
       }
       let json = JSON.stringify(tempData)
       let blob = new Blob([json], { type: 'application/json' })
-      console.log(json)
-      data.append('attachments', formData.attachments)
+      for (var i = 0; i < formData.attachments.length; i++) {
+        // add each file to the form data and iteratively name them
+        data.append('attachments', formData.attachments[i])
+      }
+
+     // data.append('attachments', formData.attachments)
       data.append('data', blob)
-      axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
+      axios.post(`http://dev.itti.com.pl:8009/api/answers`, data, getHeadersReferences())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             resolve()

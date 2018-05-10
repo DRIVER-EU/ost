@@ -1,13 +1,13 @@
 import { connect } from 'react-redux'
 import SummaryOfObservationModal from './component/SummaryOfObservationModal'
-import { getSchema } from './../../routes/NewObservation/modules/newobservation'
+import { getSchemaView } from './../../routes/Question/modules/question'
 
 const mapDispatchToProps = {
-  getSchema
+  getSchema: getSchemaView
 }
 
 const mapStateToProps = (state) => ({
-  observationForm: state.newobservation.observationForm
+  observationForm: state.question.observationForm
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SummaryOfObservationModal)
