@@ -17,21 +17,26 @@ class ViewTrials extends Component {
     this.state = {
       viewTrials: [],
       selectedObj: {},
-      showModal: false
+      showModal: false,
+      trialSession: { name: '' }
     }
   }
 
   static propTypes = {
     getViewTrials: PropTypes.func,
     viewTrials: PropTypes.array,
-    params: PropTypes.any
+    params: PropTypes.any,
+    trialSession: PropTypes.any,
+    getTrialSession: PropTypes.func
   }
 
   componentWillMount () {
     this.props.getViewTrials(this.props.params.id)
+    this.props.getTrialSession(this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
+    console.log(1)
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
@@ -42,6 +47,10 @@ class ViewTrials extends Component {
       }
       this.setState({ viewTrials: change },
         () => this.handleFindObservation())
+    }
+
+    if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
+      this.setState({ trialSession: nextProps.trialSession })
     }
   }
 
@@ -74,7 +83,7 @@ class ViewTrials extends Component {
         <div className='pages-box'>
           <div className='view-trials-container'>
             <div className='trial-title'>
-              <div>Trial:  New object spotted</div>
+              <div>Trial: {this.state.trialSession.trialName}</div>
             </div>
             <div className='trials-header'>
               <div>List of events</div>
