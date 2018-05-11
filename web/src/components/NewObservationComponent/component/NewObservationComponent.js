@@ -25,6 +25,9 @@ const toastrOptions = {
 const styles = {
   checkbox: {
     marginBottom: 5
+  },
+  color: {
+    color: 'red'
   }
 }
 
@@ -54,7 +57,7 @@ class NewObservationComponent extends Component {
       dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
       isLoading: false,
       attachmentDescription: '',
-      valid: false
+      validParticipants: true
     }
   }
 
@@ -160,9 +163,21 @@ class NewObservationComponent extends Component {
         'altitude': 0.0 }
     ]
     send['attachments'] = this.state.images
-    if (this.state.valid) {
+    if (this.validateParticipants()) {
+      toastr.success('Observation form', 'Observation was send!', toastrOptions)
       this.props.sendObservation(send)
+      browserHistory.push(`/trials/${this.props.params.id}`)
     }
+  }
+
+  validateParticipants () {
+    let valid = true
+    if (this.state.listOfParticipants.length === 0) {
+      toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+      valid = false
+    }
+    this.setState({ validParticipants: valid })
+    return valid
   }
 
   changeObservation (object) {
@@ -181,7 +196,10 @@ class NewObservationComponent extends Component {
     } else {
       change.splice(chosenIndex, 1)
     }
-    this.setState({ listOfParticipants: change })
+    this.setState({
+      listOfParticipants: change,
+      validParticipants: true
+    })
   }
 
   handleAllParticipants () {
@@ -194,7 +212,10 @@ class NewObservationComponent extends Component {
     } else {
       change.splice(0, this.state.listOfParticipants.length)
     }
-    this.setState({ listOfParticipants: change })
+    this.setState({
+      listOfParticipants: change,
+      validParticipants: true
+    })
   }
 
   handleChecked (id) {
@@ -224,19 +245,13 @@ class NewObservationComponent extends Component {
     this.setState({ attachmentDescription: value })
   }
 
-  handleError (error) {
-    if (error.length !== null && error.length !== 0) {
-      toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
-      this.setState({ valid: false })
-    } else {
-      toastr.success('Observation form', 'Observation was send!', toastrOptions)
-    }
+  handleError () {
+    toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
   }
 
   handleOnSubmit (object) {
     if (object.length !== null && object.length !== 0) {
-      toastr.success('Observation form', 'Observation was send!', toastrOptions)
-      this.setState({ valid: true })
+      this.submitObservation()
     }
   }
 
@@ -288,7 +303,8 @@ class NewObservationComponent extends Component {
                     label={object.name}
                     checked={this.handleChecked(object.id)}
                     onCheck={this.handleParticipants.bind(this, object.id)}
-                    style={styles.checkbox} />
+                    style={styles.checkbox}
+                    labelStyle={!this.state.validParticipants && styles.color} />
               ))}
                 {this.state.observationForm.roles.length > 0 &&
                 <Checkbox
@@ -296,7 +312,8 @@ class NewObservationComponent extends Component {
                   label='All'
                   checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
                   onCheck={this.handleAllParticipants.bind(this)}
-                  style={styles.checkbox} />
+                  style={styles.checkbox}
+                  labelStyle={!this.state.validParticipants && styles.color} />
             }
               </div>
             }
@@ -307,7 +324,7 @@ class NewObservationComponent extends Component {
                 formData={this.state.observationForm.formData}
                 widgets={widgets}
                 liveValidate
-                onError={(error) => this.handleError(error)}
+                onError={() => this.handleError()}
                 onSubmit={(value) => this.handleOnSubmit(value)}
                 onChange={(value) => this.changeObservation(value)}>
                 { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') && <div>
@@ -341,8 +358,7 @@ class NewObservationComponent extends Component {
                       backgroundColor='#244C7B'
                       labelColor='#FCB636'
                       label='Submit'
-                      type='submit'
-                      onClick={this.submitObservation.bind(this)} />
+                      type='submit' />
                   </div>
                 }
                 </div>
