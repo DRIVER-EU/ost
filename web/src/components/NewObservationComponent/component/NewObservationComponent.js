@@ -152,7 +152,7 @@ class NewObservationComponent extends Component {
     send['fieldValue'] = 'test'
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = []
-    send['descriptions'] = [this.state.attachmentDescription[1]]
+    send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
       { 'longitude': 32.2,
         'latitude': 23.2,
