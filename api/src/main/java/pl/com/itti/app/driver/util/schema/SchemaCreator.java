@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.json.JSONObject;
+import pl.com.itti.app.driver.model.Attachment;
 import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
+import pl.com.itti.app.driver.model.enums.AttachmentType;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -18,6 +20,12 @@ public final class SchemaCreator {
     private static final String DISABLED = "ui:disabled";
 
     private static final String WIDGET = "ui:widget";
+
+    private static final String FILE = "File";
+
+    private static final String DESCRIPTION = "Description";
+
+    private static final String COORDINATES = "Cooridnates";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -89,5 +97,33 @@ public final class SchemaCreator {
         }
 
         return ui;
+    }
+
+
+    public static ObjectNode createAttachmentSchemaForm(List<Attachment> attachments) throws IOException {
+        ObjectNode schema = MAPPER.createObjectNode();
+        ObjectNode attachmentsObjectNode = MAPPER.createObjectNode();
+
+        ObjectNode filesObjectNode = MAPPER.createObjectNode();
+        ObjectNode descriptionsObjectNode = MAPPER.createObjectNode();
+        ObjectNode coordinatesObjectNode = MAPPER.createObjectNode();
+        for (Attachment attachment : attachments) {
+            if (attachment.getType().equals(AttachmentType.LOCATION)) {
+                coordinatesObjectNode.putPOJO("Attachment_" + attachment.getId().toString() , MAPPER.readTree("[" + attachment.getLatitude().toString() + ", " + attachment.getLongitude().toString() + ", " + attachment.getAltitude().toString() + "]"));
+            }
+            if (attachment.getType().equals(AttachmentType.DESCRIPTION)) {
+                descriptionsObjectNode.putPOJO("Attachment_" + attachment.getId().toString(), MAPPER.readTree(attachment.getDescription()));
+            }
+            if (attachment.getType().equals(AttachmentType.PICTURE)) {
+                filesObjectNode.putPOJO("Attachment_" + attachment.getId().toString(), MAPPER.readTree('"' + attachment.getUri() + '"'));
+            }
+        }
+
+        attachmentsObjectNode.putPOJO(COORDINATES, coordinatesObjectNode);
+        attachmentsObjectNode.putPOJO(DESCRIPTION, descriptionsObjectNode);
+        attachmentsObjectNode.putPOJO(FILE, filesObjectNode);
+        schema.putPOJO("Attachments: ", attachmentsObjectNode);
+
+        return schema;
     }
 }

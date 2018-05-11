@@ -25,6 +25,7 @@ public final class QuestionAnswerDTO {
 
         public JsonNode questionSchema;
         public JsonNode formData;
+        public JsonNode attachments;
 
         @Override
         public void toDto(Answer answer) {
@@ -33,6 +34,7 @@ public final class QuestionAnswerDTO {
             try {
                 this.questionSchema = SchemaCreator.createSchemaForm(answer.getObservationType().getQuestions(), true);
                 this.formData = new ObjectMapper().readTree(answer.getFormData());
+                this.attachments = SchemaCreator.createAttachmentSchemaForm(answer.getAttachments());
             } catch (IOException ioe) {
                 throw new InternalServerException("Error in jsonSchema", ioe);
             }
