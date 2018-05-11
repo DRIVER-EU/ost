@@ -16,6 +16,11 @@ import FontIcon from 'material-ui/FontIcon'
 import DropzoneComponent from 'react-dropzone-component'
 import './Upload.scss'
 import moment from 'moment'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 const styles = {
   checkbox: {
@@ -48,7 +53,8 @@ class NewObservationComponent extends Component {
       listOfParticipants: [],
       dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
       isLoading: false,
-      attachmentDescription: ''
+      attachmentDescription: '',
+      valid: false
     }
   }
 
@@ -138,11 +144,6 @@ class NewObservationComponent extends Component {
   submitObservation () {
     let send = {}
     let tab = []
-    if (this.state.dateTime !== null) {
- //     send['dateTime'] = this.state.dateTime
-    } else {
- //     send['dateTime'] = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A')
-    }
     for (let i = 0; i < this.state.listOfParticipants.length; i++) {
       tab.push(this.state.listOfParticipants[i].id)
     }
@@ -159,7 +160,9 @@ class NewObservationComponent extends Component {
         'altitude': 0.0 }
     ]
     send['attachments'] = this.state.images
-    this.props.sendObservation(send)
+    if (this.state.valid) {
+      this.props.sendObservation(send)
+    }
   }
 
   changeObservation (object) {
@@ -219,6 +222,22 @@ class NewObservationComponent extends Component {
 
   handleDescription (value) {
     this.setState({ attachmentDescription: value })
+  }
+
+  handleError (error) {
+    if (error.length !== null && error.length !== 0) {
+      toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+      this.setState({ valid: false })
+    } else {
+      toastr.success('Observation form', 'Observation was send!', toastrOptions)
+    }
+  }
+
+  handleOnSubmit (object) {
+    if (object.length !== null && object.length !== 0) {
+      toastr.success('Observation form', 'Observation was send!', toastrOptions)
+      this.setState({ valid: true })
+    }
   }
 
   render () {
@@ -283,12 +302,14 @@ class NewObservationComponent extends Component {
             }
               <p className='point-obs'>What:</p>
               <Form
-
                 schema={this.state.observationForm.schema}
                 uiSchema={this.state.observationForm.uiSchema}
                 formData={this.state.observationForm.formData}
                 widgets={widgets}
-                onChange={(value) => this.changeObservation(value)} >
+                liveValidate
+                onError={(error) => this.handleError(error)}
+                onSubmit={(value) => this.handleOnSubmit(value)}
+                onChange={(value) => this.changeObservation(value)}>
                 { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') && <div>
                   <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
@@ -320,6 +341,7 @@ class NewObservationComponent extends Component {
                       backgroundColor='#244C7B'
                       labelColor='#FCB636'
                       label='Submit'
+                      type='submit'
                       onClick={this.submitObservation.bind(this)} />
                   </div>
                 }
