@@ -26,7 +26,7 @@ const styles = {
   checkbox: {
     marginBottom: 5
   },
-  color: {
+  label: {
     color: 'red'
   }
 }
@@ -156,7 +156,7 @@ class NewObservationComponent extends Component {
     send['fieldValue'] = 'test'
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = []
-    send['descriptions'] = [this.state.attachmentDescription[1]]
+    send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
       { 'longitude': 32.2,
         'latitude': 23.2,
@@ -304,7 +304,7 @@ class NewObservationComponent extends Component {
                     checked={this.handleChecked(object.id)}
                     onCheck={this.handleParticipants.bind(this, object.id)}
                     style={styles.checkbox}
-                    labelStyle={!this.state.validParticipants && styles.color} />
+                    labelStyle={!this.state.validParticipants && styles.label} />
               ))}
                 {this.state.observationForm.roles.length > 0 &&
                 <Checkbox
@@ -313,7 +313,7 @@ class NewObservationComponent extends Component {
                   checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
                   onCheck={this.handleAllParticipants.bind(this)}
                   style={styles.checkbox}
-                  labelStyle={!this.state.validParticipants && styles.color} />
+                  labelStyle={!this.state.validParticipants && styles.label} />
             }
               </div>
             }
@@ -324,6 +324,7 @@ class NewObservationComponent extends Component {
                 formData={this.state.observationForm.formData}
                 widgets={widgets}
                 liveValidate
+                showErrorList={false}
                 onError={() => this.handleError()}
                 onSubmit={(value) => this.handleOnSubmit(value)}
                 onChange={(value) => this.changeObservation(value)}>
