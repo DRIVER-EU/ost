@@ -13,7 +13,9 @@ class ViewTrial extends Component {
     getTrialSession: PropTypes.func,
     viewTrials: PropTypes.array,
     params: PropTypes.any,
-    trialSession: PropTypes.any
+    trialSession: PropTypes.any,
+    getTrials: PropTypes.func,
+    listOfTrials: PropTypes.object
   }
 
   render () {
@@ -24,6 +26,8 @@ class ViewTrial extends Component {
           viewTrials={this.props.viewTrials}
           getTrialSession={this.props.getTrialSession}
           trialSession={this.props.trialSession}
+          getTrials={this.props.getTrials}
+          listOfTrials={this.props.listOfTrials}
           params={this.props.params}
         />
       </div>
