@@ -99,17 +99,16 @@ public final class SchemaCreator {
         return ui;
     }
 
-
     public static ObjectNode createAttachmentSchemaForm(List<Attachment> attachments) throws IOException {
         ObjectNode schema = MAPPER.createObjectNode();
         ObjectNode attachmentsObjectNode = MAPPER.createObjectNode();
-
         ObjectNode filesObjectNode = MAPPER.createObjectNode();
         ObjectNode descriptionsObjectNode = MAPPER.createObjectNode();
         ObjectNode coordinatesObjectNode = MAPPER.createObjectNode();
+
         for (Attachment attachment : attachments) {
             if (attachment.getType().equals(AttachmentType.LOCATION)) {
-                coordinatesObjectNode.putPOJO("Attachment_" + attachment.getId().toString() , MAPPER.readTree("[" + attachment.getLatitude().toString() + ", " + attachment.getLongitude().toString() + ", " + attachment.getAltitude().toString() + "]"));
+                coordinatesObjectNode.putPOJO("Attachment_" + attachment.getId().toString(), MAPPER.readTree("[" + attachment.getLatitude().toString() + ", " + attachment.getLongitude().toString() + ", " + attachment.getAltitude().toString() + "]"));
             }
             if (attachment.getType().equals(AttachmentType.DESCRIPTION)) {
                 descriptionsObjectNode.putPOJO("Attachment_" + attachment.getId().toString(), MAPPER.readTree(attachment.getDescription()));
