@@ -86,6 +86,4 @@ public class TrialSessionService {
         conditions.add(TrialSessionSpecification.trialSessionManager(authUser));
         return RepositoryUtils.concatenate(conditions);
     }
-
-    public
 }

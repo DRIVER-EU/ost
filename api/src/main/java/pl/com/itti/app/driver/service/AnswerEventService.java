@@ -47,11 +47,10 @@ public class AnswerEventService {
     }
 
     private Specifications<Answer> getAnswerSpecifications(AuthUser authUser, Long trialSessionId) {
-        //trialSessionRepository.
         Set<Specification<Answer>> conditions = new HashSet<>();
         conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
         conditions.add(AnswerSpecification.inTrialSession(trialSessionId));
-        //conditions.add(AnswerSpecification.inTrialStage(trialStageId));
+        conditions.add(AnswerSpecification.inLastTrialStage(trialSessionId));
         return RepositoryUtils.concatenate(conditions);
     }
 
