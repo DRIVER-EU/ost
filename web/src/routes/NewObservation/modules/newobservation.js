@@ -8,7 +8,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, getHeadersReferences, errorHandle } from '../../../store/addons'
 
 export const GET_SCHEMA = 'GET_SCHEMA'
 export const SEND_OBSERVATION = 'SEND_OBSERVATION'
@@ -53,10 +53,26 @@ export const getSchema = (idObs, idSession) => {
   }
 }
 
-export const sendObservation = () => {
+export const sendObservation = (formData) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
+      const data = new FormData()
+      let tempData = {}
+      for (let key in formData) {
+        if (key !== 'attachments') {
+          tempData[key] = formData[key]
+        }
+      }
+      let json = JSON.stringify(tempData)
+      let blob = new Blob([json], { type: 'application/json' })
+      for (var i = 0; i < formData.attachments.length; i++) {
+        // add each file to the form data and iteratively name them
+        data.append('attachments', formData.attachments[i])
+      }
+
+     // data.append('attachments', formData.attachments)
+      data.append('data', blob)
+      axios.post(`http://dev.itti.com.pl:8009/api/answers`, data, getHeadersReferences())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             resolve()

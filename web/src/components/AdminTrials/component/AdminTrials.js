@@ -10,7 +10,7 @@ import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import RaisedButton from 'material-ui/RaisedButton'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LabelList } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
@@ -19,12 +19,11 @@ import './AdminTrials.scss'
 import _ from 'lodash'
 
 const rangeList = [
-  { id: 0, name: '15 minutes' },
-  { id: 1, name: '30 minutes' },
-  { id: 2, name: '1 hour' },
-  { id: 3, name: '1 day' },
-  { id: 4, name: '7 days' },
-  { id: 5, name: '1 month' }
+  { id: 0, name: '5 minutes', value: 5 * 60 * 1000 },
+  { id: 1, name: '10 minutes', value: 10 * 60 * 1000 },
+  { id: 2, name: '15 minutes', value: 15 * 60 * 1000 },
+  { id: 3, name: '30 minutes', value: 30 * 60 * 1000 },
+  { id: 4, name: '60 minutes', value: 60 * 60 * 1000 }
 ]
 
 const styles = {
@@ -78,7 +77,8 @@ class AdminTrials extends Component {
       rolesList: [],
       stagesList: [],
       interval: '',
-      searchText: ''
+      searchText: '',
+      timeRange: ''
     }
   }
 
@@ -108,6 +108,7 @@ class AdminTrials extends Component {
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
     this.props.getStages(this.props.params.id)
+    this.handleChangeRange(null, 0)
 
     let interval = setInterval(() => {
       this.props.getMessages(this.props.params.id, this.state.sort)
@@ -141,8 +142,10 @@ class AdminTrials extends Component {
     if (nextProps.stagesList && nextProps.stagesList !== null && this.props.stagesList) {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
-    if (nextProps.observation && nextProps.observation.length !== this.state.changeDataTable.length) {
-      this.setState({ changeDataTable: nextProps.observation })
+    if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
+      this.setState({ changeDataTable: nextProps.observation }, () => {
+        this.handleChangeChart(this.state.changeDataTable)
+      })
     }
     if (nextProps.messages.data &&
       !_.isEqual(nextProps.messages.data, this.state.messages)) {
@@ -156,6 +159,47 @@ class AdminTrials extends Component {
     if (this.props.messages && this.props.observation && this.props.isSendMessage) {
       // eslint
     }
+  }
+
+  handleChangeChart (list) {
+    if (list.length !== 0) {
+      let sortedList = _.orderBy(list, ['sentSimulationTime'], ['asc'])
+      let dateMax = (new Date(_.maxBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime())
+      let dateMin = new Date(_.minBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime()
+      let data = []
+      let chartData = []
+      data[0] = { date: dateMin, count: 0 }
+      let i = 0
+      while (true) {
+        if (data[i].date + rangeList[this.state.timeRange].value > dateMax) {
+          break
+        }
+        data[i + 1] = { date: data[i].date + rangeList[this.state.timeRange].value, count: 0 }
+        i++
+      }
+      for (let y = 0; y < data.length; y++) {
+        for (let j = 0; j < sortedList.length; j++) {
+          if (data[y + 1] !== undefined &&
+            data[y].date <= (new Date(sortedList[j].sentSimulationTime).getTime()) &&
+            (new Date(sortedList[j].sentSimulationTime).getTime()) <= data[y + 1].date) {
+            data[y].count++
+          } else if (data[y + 1] === undefined &&
+            data[y].date <= (new Date(sortedList[j].sentSimulationTime).getTime())) {
+            data[y].count++
+          }
+        }
+      }
+      data.map((obj) => (
+        chartData.push({ date: moment(obj.date).format('DD/MM/YYYY HH:mm'), count: obj.count })
+      ))
+      this.setState({ chartData: chartData })
+    }
+  }
+
+  handleChangeRange (event, value) {
+    let change = {}
+    change['timeRange'] = value
+    this.setState(change, () => this.handleChangeChart(this.state.changeDataTable))
   }
 
   handleChangeDropDown (stateName, event, index, value) {
@@ -314,8 +358,7 @@ class AdminTrials extends Component {
               <SelectField
                 value={this.state.trialStage}
                 floatingLabelText='Choose Trial Stage'
-                onChange={this.handleChangeDropDown.bind(this, 'trialStage')}
-            >
+                onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
                 {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
                   <MenuItem
                     key={index.id}
@@ -389,6 +432,7 @@ class AdminTrials extends Component {
                         </TableRow>
                       </TableHeader>
                       <TableBody displayRowCheckbox={false} showRowHover>
+
                         {this.state.changeDataTable.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
@@ -424,7 +468,7 @@ class AdminTrials extends Component {
                         value={this.state.timeRange}
                         underlineStyle={{ marginLeft: '0' }}
                         labelStyle={{ color: '#282829', paddingLeft: '0' }}
-                        onChange={this.handleChangeDropDown.bind(this, 'timeRange')}>
+                        onChange={this.handleChangeRange.bind(this)}>
                         {rangeList.map((index) => (
                           <MenuItem
                             key={index.id}
@@ -437,13 +481,11 @@ class AdminTrials extends Component {
                     <ResponsiveContainer width='100%' height={400}>
                       <BarChart data={this.state.chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
-                        <XAxis dataKey='name' hide='true' />
+                        <XAxis dataKey='date' hide='true' />
                         <YAxis />
                         <CartesianGrid strokeDasharray='3 3' />
                         <Tooltip />
-                        <Bar dataKey='answers' fill='#00497E' background={{ fill: '#eee' }} >
-                          <LabelList dataKey='date' position='bottom' offset='10' />
-                        </Bar>
+                        <Bar dataKey='count' fill='#00497E' background={{ fill: '#eee' }} />
                       </BarChart>
                     </ResponsiveContainer>
                   </Card>}

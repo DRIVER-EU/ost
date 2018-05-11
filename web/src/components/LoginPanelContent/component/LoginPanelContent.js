@@ -62,14 +62,20 @@ class LoginPanelContent extends Component {
   }
 
   componentWillMount () {
-    if (this.props.isLoggedIn) {
-      browserHistory.push('/')
+    let role = localStorage.getItem('driverrole')
+    if (this.props.isLoggedIn && role === 'ROLE_ADMIN') {
+      browserHistory.push('/trial-manager')
+    } else if (this.props.isLoggedIn && role === 'ROLE_USER') {
+      browserHistory.push('/trials')
     }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.isLoggedIn) {
-      browserHistory.push('/')
+    let role = localStorage.getItem('driverrole')
+    if (nextProps.isLoggedIn && role === 'ROLE_ADMIN') {
+      browserHistory.push('/trial-manager')
+    } else if (nextProps.isLoggedIn && role === 'ROLE_USER') {
+      browserHistory.push('/trials')
     }
   }
 

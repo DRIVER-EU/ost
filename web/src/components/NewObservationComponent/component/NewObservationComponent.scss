@@ -11,6 +11,10 @@
     margin-top: 10px;
     background: white;
 
+    .buttons-obs {
+        margin: 10px 0 10px 0;
+    }
+
     .trials-header {
         font-size: 16pt;
         .data-time {
@@ -36,7 +40,7 @@
     }
 
     .point-obs {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
     }
 
@@ -81,5 +85,15 @@
     }
     .field-radio-group label {
         font-weight: normal;
+    }
+    .spinner-box {
+        height: 100%;
+        width: 150px;
+        display: flex;
+        align-items: center;
+        justify-items: center;
+        .spinner {
+            margin: 0 auto;
+        }
     }
 }

@@ -1,6 +1,9 @@
 .content-schema {
     .question-container {
         border: none;
+        margin-top: 0;
+        overflow-y: auto;
+        max-height: 812px;
     }
     .pages-box {
         border: none;
