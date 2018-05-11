@@ -12,6 +12,7 @@ import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.repository.AnswerRepository;
 import pl.com.itti.app.driver.repository.EventRepository;
+import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
 import pl.com.itti.app.driver.repository.specification.EventSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
@@ -29,6 +30,9 @@ public class AnswerEventService {
     private EventRepository eventRepository;
 
     @Autowired
+    private TrialSessionRepository trialSessionRepository;
+
+    @Autowired
     private TrialUserService trialUserService;
 
     @Transactional(readOnly = true)
@@ -43,9 +47,11 @@ public class AnswerEventService {
     }
 
     private Specifications<Answer> getAnswerSpecifications(AuthUser authUser, Long trialSessionId) {
+        //trialSessionRepository.
         Set<Specification<Answer>> conditions = new HashSet<>();
         conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
         conditions.add(AnswerSpecification.inTrialSession(trialSessionId));
+        //conditions.add(AnswerSpecification.inTrialStage(trialStageId));
         return RepositoryUtils.concatenate(conditions);
     }
 

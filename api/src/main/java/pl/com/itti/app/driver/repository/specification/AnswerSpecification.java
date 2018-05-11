@@ -33,4 +33,16 @@ public class AnswerSpecification {
             return cb.equal(trialSessionJoin.get(TrialSession_.id), trialSessionId);
         };
     }
+
+    public static Specification<Answer> inTrialStage(TrialStage trialStage) {
+        if (trialStage == null) {
+            return null;
+        }
+
+        return (root, query, cb) -> {
+            Join<Answer, TrialSession> trialSessionJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.trialSession, JoinType.LEFT);
+
+            return cb.equal(trialSessionJoin.get(TrialSession_.id), trialSessionId);
+        };
+    }
 }
