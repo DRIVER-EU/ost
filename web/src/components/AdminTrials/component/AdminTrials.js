@@ -225,8 +225,6 @@ class AdminTrials extends Component {
     } else if (name === 'messageValue') {
       if (e.target.value === '') {
         change['messageValueErrorText'] = 'Please, enter your message'
-      } else if (e.target.value.length > 30) {
-        change['messageValueErrorText'] = 'Your message is too long'
       } else {
         change['messageValueErrorText'] = ''
       }
@@ -572,6 +570,7 @@ class AdminTrials extends Component {
                         <div className='dropdown-title'>Message</div>
                         <TextField
                           style={{ width: '300px' }}
+                          multiLine
                           value={this.state.messageValue}
                           hintText='enter the message'
                           errorText={this.state.messageValueErrorText}
