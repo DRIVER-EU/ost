@@ -1,10 +1,14 @@
 package pl.com.itti.app.driver.dto;
 
+import co.perpixel.db.model.PersistentObject;
 import co.perpixel.dto.EntityDTO;
+import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class TrialSessionDTO {
 
@@ -39,7 +43,9 @@ public class TrialSessionDTO {
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
-            this.initId = trialSession.getTrial().getInitId() != null ? trialSession.getTrial().getInitId().getId() : null;
+
+            Optional<ObservationType> optionalInit = Optional.ofNullable(trialSession.getTrial().getInitId());
+            this.initId = optionalInit.map(PersistentObject::getId).orElse(null);
         }
     }
 
@@ -54,7 +60,9 @@ public class TrialSessionDTO {
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
             this.trialId = trialSession.getTrial().getId();
-            this.lastTrialStageId = trialSession.getLastTrialStage() != null ? trialSession.getLastTrialStage().getId() : null;
+
+            Optional<TrialStage> optionalStage = Optional.ofNullable(trialSession.getLastTrialStage());
+            this.lastTrialStageId = optionalStage.map(PersistentObject::getId).orElse(null);
             this.startTime = trialSession.getStartTime();
             this.pausedTime = trialSession.getPausedTime();
         }
