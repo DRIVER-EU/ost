@@ -15,6 +15,7 @@ import Spinner from 'react-spinkit'
 import FontIcon from 'material-ui/FontIcon'
 import DropzoneComponent from 'react-dropzone-component'
 import './Upload.scss'
+import moment from 'moment'
 
 const styles = {
   checkbox: {
@@ -45,7 +46,7 @@ class NewObservationComponent extends Component {
       },
       images: [],
       listOfParticipants: [],
-      dateTime: null,
+      dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
       isLoading: false,
       attachmentDescription: ''
     }
@@ -167,7 +168,7 @@ class NewObservationComponent extends Component {
     this.setState({ observationForm: change })
   }
 
-  setDate = (dateTime) => this.setState({ dateTime })
+  setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('YYYY-MM-DDThh:mm:ss A') })
 
   handleParticipants (id) {
     let change = [ ...this.state.listOfParticipants ]
@@ -258,6 +259,7 @@ class NewObservationComponent extends Component {
                 onChange={this.setDate}
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
+                value={this.state.dateTime}
                 format='YYYY/MM/DD H:mm' />
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
@@ -287,7 +289,7 @@ class NewObservationComponent extends Component {
                 formData={this.state.observationForm.formData}
                 widgets={widgets}
                 onChange={(value) => this.changeObservation(value)} >
-                { (this.props.mode === 'new' || this.props.mode === 'newmodal') && <div>
+                { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') && <div>
                   <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
                   <TextField value={this.state.attachmentDescription}
