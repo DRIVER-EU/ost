@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import AdminTrials from '../components/AdminTrials'
 import { getMessages, sendMessage, getObservation,
   getUsers, getRoles, getStages, setStage } from './../modules/admin_trials'
+import { getSchemaView } from './../../Question/modules/question'
 
 const mapDispatchToProps = {
   getMessages,
@@ -10,7 +11,8 @@ const mapDispatchToProps = {
   getUsers,
   getRoles,
   getStages,
-  setStage
+  setStage,
+  getSchemaView
 }
 
 const mapStateToProps = (state) => ({
@@ -20,7 +22,8 @@ const mapStateToProps = (state) => ({
   usersList: state.adminTrials.usersList,
   rolesList: state.adminTrials.rolesList,
   stagesList: state.adminTrials.stagesList,
-  stageActive: state.adminTrials.stageActive
+  stageActive: state.adminTrials.stageActive,
+  observationForm: state.question.observationForm
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminTrials)

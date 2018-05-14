@@ -23,7 +23,9 @@ class AdminTrialsView extends Component {
     stagesList: PropTypes.object,
     setStage: PropTypes.func,
     stageActive: PropTypes.object,
-    params: PropTypes.any
+    params: PropTypes.any,
+    observationForm: PropTypes.any,
+    getSchemaView: PropTypes.func
   }
 
   render () {
@@ -45,6 +47,8 @@ class AdminTrialsView extends Component {
           setStage={this.props.setStage}
           stageActive={this.props.stageActive}
           params={this.props.params}
+          observationForm={this.props.observationForm}
+          getSchemaView={this.props.getSchemaView}
         />
       </div>
     )

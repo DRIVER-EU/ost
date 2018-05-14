@@ -10,8 +10,12 @@ class ViewTrial extends Component {
 
   static propTypes = {
     getViewTrials: PropTypes.func,
+    getTrialSession: PropTypes.func,
     viewTrials: PropTypes.array,
-    params: PropTypes.any
+    params: PropTypes.any,
+    trialSession: PropTypes.any,
+    getTrials: PropTypes.func,
+    listOfTrials: PropTypes.object
   }
 
   render () {
@@ -20,6 +24,10 @@ class ViewTrial extends Component {
         <ViewTrials
           getViewTrials={this.props.getViewTrials}
           viewTrials={this.props.viewTrials}
+          getTrialSession={this.props.getTrialSession}
+          trialSession={this.props.trialSession}
+          getTrials={this.props.getTrials}
+          listOfTrials={this.props.listOfTrials}
           params={this.props.params}
         />
       </div>

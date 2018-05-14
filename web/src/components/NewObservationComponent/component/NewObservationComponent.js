@@ -15,10 +15,19 @@ import Spinner from 'react-spinkit'
 import FontIcon from 'material-ui/FontIcon'
 import DropzoneComponent from 'react-dropzone-component'
 import './Upload.scss'
+import moment from 'moment'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 const styles = {
   checkbox: {
     marginBottom: 5
+  },
+  label: {
+    color: 'red'
   }
 }
 
@@ -45,9 +54,10 @@ class NewObservationComponent extends Component {
       },
       images: [],
       listOfParticipants: [],
-      dateTime: null,
+      dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
       isLoading: false,
-      attachmentDescription: ''
+      attachmentDescription: '',
+      validParticipants: true
     }
   }
 
@@ -99,7 +109,6 @@ class NewObservationComponent extends Component {
       change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
       change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
       change['observationForm']['description'] = nextProps.observationForm.description
-
       this.setState({ change })
     }
     if (nextProps.mode) {
@@ -137,11 +146,6 @@ class NewObservationComponent extends Component {
   submitObservation () {
     let send = {}
     let tab = []
-    if (this.state.dateTime !== null) {
- //     send['dateTime'] = this.state.dateTime
-    } else {
- //     send['dateTime'] = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A')
-    }
     for (let i = 0; i < this.state.listOfParticipants.length; i++) {
       tab.push(this.state.listOfParticipants[i].id)
     }
@@ -151,14 +155,28 @@ class NewObservationComponent extends Component {
     send['fieldValue'] = 'test'
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = []
-    send['descriptions'] = [this.state.attachmentDescription[1]]
+    send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
       { 'longitude': 32.2,
         'latitude': 23.2,
         'altitude': 0.0 }
     ]
     send['attachments'] = this.state.images
-    this.props.sendObservation(send)
+    if (this.validateParticipants()) {
+      toastr.success('Observation form', 'Observation was send!', toastrOptions)
+      this.props.sendObservation(send)
+      browserHistory.push(`/trials/${this.props.params.id}`)
+    }
+  }
+
+  validateParticipants () {
+    let valid = true
+    if (this.state.observationForm.roles.length > 0 && this.state.listOfParticipants.length === 0) {
+      toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+      valid = false
+    }
+    this.setState({ validParticipants: valid })
+    return valid
   }
 
   changeObservation (object) {
@@ -167,7 +185,7 @@ class NewObservationComponent extends Component {
     this.setState({ observationForm: change })
   }
 
-  setDate = (dateTime) => this.setState({ dateTime })
+  setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('YYYY-MM-DDThh:mm:ss A') })
 
   handleParticipants (id) {
     let change = [ ...this.state.listOfParticipants ]
@@ -177,7 +195,10 @@ class NewObservationComponent extends Component {
     } else {
       change.splice(chosenIndex, 1)
     }
-    this.setState({ listOfParticipants: change })
+    this.setState({
+      listOfParticipants: change,
+      validParticipants: true
+    })
   }
 
   handleAllParticipants () {
@@ -190,7 +211,10 @@ class NewObservationComponent extends Component {
     } else {
       change.splice(0, this.state.listOfParticipants.length)
     }
-    this.setState({ listOfParticipants: change })
+    this.setState({
+      listOfParticipants: change,
+      validParticipants: true
+    })
   }
 
   handleChecked (id) {
@@ -218,6 +242,16 @@ class NewObservationComponent extends Component {
 
   handleDescription (value) {
     this.setState({ attachmentDescription: value })
+  }
+
+  handleError () {
+    toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+  }
+
+  handleOnSubmit (object) {
+    if (object.length !== null && object.length !== 0) {
+      this.submitObservation()
+    }
   }
 
   render () {
@@ -258,6 +292,7 @@ class NewObservationComponent extends Component {
                 onChange={this.setDate}
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
+                value={this.state.dateTime}
                 format='YYYY/MM/DD H:mm' />
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
@@ -267,7 +302,8 @@ class NewObservationComponent extends Component {
                     label={object.name}
                     checked={this.handleChecked(object.id)}
                     onCheck={this.handleParticipants.bind(this, object.id)}
-                    style={styles.checkbox} />
+                    style={styles.checkbox}
+                    labelStyle={!this.state.validParticipants && styles.label} />
               ))}
                 {this.state.observationForm.roles.length > 0 &&
                 <Checkbox
@@ -275,19 +311,23 @@ class NewObservationComponent extends Component {
                   label='All'
                   checked={this.state.listOfParticipants.length === this.state.observationForm.roles.length}
                   onCheck={this.handleAllParticipants.bind(this)}
-                  style={styles.checkbox} />
+                  style={styles.checkbox}
+                  labelStyle={!this.state.validParticipants && styles.label} />
             }
               </div>
             }
               <p className='point-obs'>What:</p>
               <Form
-
                 schema={this.state.observationForm.schema}
                 uiSchema={this.state.observationForm.uiSchema}
                 formData={this.state.observationForm.formData}
                 widgets={widgets}
-                onChange={(value) => this.changeObservation(value)} >
-                { (this.props.mode === 'new' || this.props.mode === 'newmodal') && <div>
+                liveValidate
+                showErrorList={false}
+                onError={() => this.handleError()}
+                onSubmit={(value) => this.handleOnSubmit(value)}
+                onChange={(value) => this.changeObservation(value)}>
+                { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') && <div>
                   <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
                   <TextField value={this.state.attachmentDescription}
@@ -318,7 +358,7 @@ class NewObservationComponent extends Component {
                       backgroundColor='#244C7B'
                       labelColor='#FCB636'
                       label='Submit'
-                      onClick={this.submitObservation.bind(this)} />
+                      type='submit' />
                   </div>
                 }
                 </div>

@@ -49,6 +49,7 @@ class AdminTrials extends Component {
     super(props)
     const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
     this.state = {
+      observationForm: {},
       time: t,
       userValue: null,
       roleValue: null,
@@ -96,7 +97,9 @@ class AdminTrials extends Component {
     getStages: PropTypes.func,
     stagesList: PropTypes.object,
     setStage: PropTypes.func,
-    params: PropTypes.any
+    params: PropTypes.any,
+    observationForm: PropTypes.any,
+    getSchemaView: PropTypes.func
   }
 
   componentWillUnmount () {
@@ -105,6 +108,7 @@ class AdminTrials extends Component {
 
   componentWillMount () {
     this.props.getMessages(this.props.params.id, this.state.sort)
+    this.props.getObservation(this.props.params.id, this.state.searchText)
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
     this.props.getStages(this.props.params.id)
@@ -146,6 +150,9 @@ class AdminTrials extends Component {
       this.setState({ changeDataTable: nextProps.observation }, () => {
         this.handleChangeChart(this.state.changeDataTable)
       })
+    }
+    if (nextProps.observationForm && !_.isEqual(nextProps.observationForm, this.state.observationForm)) {
+      this.setState({ observationForm: nextProps.observationForm })
     }
     if (nextProps.messages.data &&
       !_.isEqual(nextProps.messages.data, this.state.messages)) {
@@ -225,8 +232,6 @@ class AdminTrials extends Component {
     } else if (name === 'messageValue') {
       if (e.target.value === '') {
         change['messageValueErrorText'] = 'Please, enter your message'
-      } else if (e.target.value.length > 30) {
-        change['messageValueErrorText'] = 'Your message is too long'
       } else {
         change['messageValueErrorText'] = ''
       }
@@ -333,6 +338,7 @@ class AdminTrials extends Component {
 
   handleSelectedObject (obj) {
     this.setState({ selectedObj: obj })
+    this.props.getSchemaView(obj.id, this.props.params.id)
     this.handleShowModal()
   }
 
@@ -572,6 +578,7 @@ class AdminTrials extends Component {
                         <div className='dropdown-title'>Message</div>
                         <TextField
                           style={{ width: '300px' }}
+                          multiLine
                           value={this.state.messageValue}
                           hintText='enter the message'
                           errorText={this.state.messageValueErrorText}
@@ -691,6 +698,7 @@ class AdminTrials extends Component {
               show={this.state.showModal}
               object={this.state.selectedObj}
               handleShowModal={this.handleShowModal.bind(this)}
+              observationForm={this.props.observationForm}
               params={this.props.params.id} />
           </div>
         </div>

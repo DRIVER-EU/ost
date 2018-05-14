@@ -47,7 +47,7 @@ public class Answer extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private LocalDateTime sentSimulationTime;
 
-    @Column(nullable = false)
+    @Column
     private String fieldValue;
 
     @Column(columnDefinition = "text", nullable = false)
