@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.service;
 
+import co.perpixel.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,11 +12,13 @@ import pl.com.itti.app.driver.model.enums.AttachmentType;
 import pl.com.itti.app.driver.repository.AttachmentRepository;
 import pl.com.itti.app.driver.util.FileProperties;
 import pl.com.itti.app.driver.util.FileUtils;
+import pl.com.itti.app.driver.util.InternalServerException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +33,21 @@ public class AttachmentService {
     @Autowired
     private FileProperties fileProperties;
 
+    public Attachment findOneById(long attachmentId) {
+        return attachmentRepository.findById(attachmentId)
+                .orElseThrow(() -> new EntityNotFoundException(Attachment.class, attachmentId));
+    }
+
+    public Attachment findFileById(long attachmentId) {
+        Attachment attachment = findOneById(attachmentId);
+
+        if (!isFileAttachment(attachment)) {
+            throw new InternalServerException("Requested attachment is not a file: " + attachment.getType());
+        }
+
+        return attachment;
+    }
+
     public List<Attachment> createAttachments(List<String> descriptions,
                                               List<AttachmentDTO.Coordinates> coordinates,
                                               MultipartFile[] files,
@@ -41,6 +59,17 @@ public class AttachmentService {
         attachments.addAll(createFileAttachments(files, answer));
 
         return attachmentRepository.save(attachments);
+    }
+
+    public String getResourceDirOfAttachment(Attachment attachment) {
+        switch (attachment.getType()) {
+            case PICTURE:
+                return fileProperties.getImageDir();
+            case VOICE:
+                return fileProperties.getSoundDir();
+            default:
+                throw new InternalServerException("Unable to find resource directory for attachment: " + attachment.getType());
+        }
     }
 
     private List<Attachment> createDescriptionAttachments(List<String> descriptions, Answer answer) {
@@ -115,5 +144,10 @@ public class AttachmentService {
 
         FileUtils.save(new File(dir), file, fullName);
         return fullName;
+    }
+
+    private boolean isFileAttachment(Attachment attachment) {
+        AttachmentType type = attachment.getType();
+        return Objects.equals(AttachmentType.PICTURE, type) || Objects.equals(AttachmentType.VOICE, type);
     }
 }
