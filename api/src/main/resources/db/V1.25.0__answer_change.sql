@@ -1,0 +1,1 @@
+ALTER TABLE public.answer ALTER COLUMN field_value DROP NOT NULL

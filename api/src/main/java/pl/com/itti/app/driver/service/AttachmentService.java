@@ -36,18 +36,20 @@ public class AttachmentService {
                                               Answer answer) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
 
-        attachments.addAll(createDescriptionAttachments(descriptions, answer));
-        attachments.addAll(createLocationAttachments(coordinates, answer));
+        if (descriptions != null) {
+            attachments.addAll(createDescriptionAttachments(descriptions, answer));
+        }
+
+        if (coordinates != null) {
+            attachments.addAll(createLocationAttachments(coordinates, answer));
+        }
+
         attachments.addAll(createFileAttachments(files, answer));
 
         return attachmentRepository.save(attachments);
     }
 
     private List<Attachment> createDescriptionAttachments(List<String> descriptions, Answer answer) {
-        if (descriptions == null) {
-            return null;
-        }
-
         return descriptions.stream()
                 .map(s -> convertDescriptionToAttachment(s, answer))
                 .collect(Collectors.toList());

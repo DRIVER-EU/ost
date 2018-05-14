@@ -94,7 +94,6 @@ public final class AnswerDTO {
         @NotNull
         public ZonedDateTime simulationTime;
 
-        @NotNull
         public String fieldValue;
 
         @NotNull
