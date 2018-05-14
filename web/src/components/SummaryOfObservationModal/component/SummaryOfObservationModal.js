@@ -4,7 +4,6 @@ import './SummaryOfObservationModal.scss'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import NewObservationComponent from '../../../components/NewObservationComponent'
-
 class AdminTrials extends Component {
   constructor (props) {
     super(props)
@@ -17,10 +16,11 @@ class AdminTrials extends Component {
     show: PropTypes.bool,
     object: PropTypes.object,
     handleShowModal: PropTypes.func,
-    getSchema: PropTypes.func,
     observationForm: PropTypes.any,
     mode: PropTypes.string,
-    params: PropTypes.any
+    params: PropTypes.any,
+    getSchema: PropTypes.func,
+    getSchemaView: PropTypes.func
   }
 
   componentWillReceiveProps (nextProps) {
@@ -49,7 +49,8 @@ class AdminTrials extends Component {
         open={this.props.show}
         onRequestClose={() => this.props.handleShowModal()}
         bodyClassName={'content-schema'}
-        bodyStyle={{ padding: 0 }}
+        bodyStyle={{ padding: 0, maxHeight: '100%' }}
+        contentStyle={{ maxHeight: '100%' }}
         >
         {this.props.mode === 'usermodal'
         ? <NewObservationComponent
@@ -58,7 +59,7 @@ class AdminTrials extends Component {
           mode={'profileQuestion'}
           params={this.state.newParams} />
         : <NewObservationComponent
-          getSchema={this.props.getSchema}
+          getSchema={this.props.getSchemaView}
           observationForm={this.props.observationForm}
           mode={'viewAdmin'}
           params={this.state.newParams} />

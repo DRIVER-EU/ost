@@ -171,7 +171,7 @@ class NewObservationComponent extends Component {
 
   validateParticipants () {
     let valid = true
-    if (this.state.listOfParticipants.length === 0) {
+    if (this.state.observationForm.roles.length > 0 && this.state.listOfParticipants.length === 0) {
       toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
       valid = false
     }
