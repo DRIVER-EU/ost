@@ -12,7 +12,6 @@ import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.repository.AnswerRepository;
 import pl.com.itti.app.driver.repository.EventRepository;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
 import pl.com.itti.app.driver.repository.specification.EventSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
@@ -28,9 +27,6 @@ public class AnswerEventService {
 
     @Autowired
     private EventRepository eventRepository;
-
-    @Autowired
-    private TrialSessionRepository trialSessionRepository;
 
     @Autowired
     private TrialUserService trialUserService;
