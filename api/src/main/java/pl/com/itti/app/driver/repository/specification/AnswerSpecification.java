@@ -35,6 +35,18 @@ public class AnswerSpecification {
         };
     }
 
+    public static Specification<Answer> isAnswerForObservationType(Long observationTypeId) {
+        if (observationTypeId == null) {
+            return null;
+        }
+
+        return (root, query, cb) -> {
+            Join<Answer, ObservationType> observationTypeJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.observationType, JoinType.LEFT);
+
+            return cb.equal(observationTypeJoin.get(ObservationType_.id), observationTypeId);
+        };
+    }
+
     public static Specification<Answer> inLastTrialStage(Long trialSessionId) {
         if (trialSessionId == null) {
             return null;
