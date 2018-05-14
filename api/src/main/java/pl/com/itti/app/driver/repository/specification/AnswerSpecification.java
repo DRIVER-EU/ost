@@ -45,7 +45,7 @@ public class AnswerSpecification {
             Path<TrialStage> lastTrialStage = trialSessionJoin.get(TrialSession_.lastTrialStage);
 
             Join<Answer, ObservationType> observationTypeJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.observationType, JoinType.LEFT);
-            Path<TrialStage> actualTrialStage = trialSessionJoin.get(ObservationType_.trialStage);
+            Path<TrialStage> actualTrialStage = observationTypeJoin.get(ObservationType_.trialStage);
 
             return cb.equal(lastTrialStage, actualTrialStage);
         };
