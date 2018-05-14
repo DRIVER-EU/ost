@@ -12,6 +12,7 @@ import { getHeaders, errorHandle } from '../../../store/addons'
 
 export const GET_VIEW_TRIALS = 'GET_VIEW_TRIALS'
 export const GET_TRIAL_SESSION = 'GET_TRIAL_SESSION'
+export const GET_TRIALS = 'GET_TRIALS'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -30,8 +31,16 @@ export const getTrialSessionAction = (data = null) => {
   }
 }
 
+export const getTrialsAction = (data = null) => {
+  return {
+    type: GET_TRIALS,
+    data: data
+  }
+}
+
 export const actions = {
-  getViewTrials
+  getViewTrials,
+  getTrials
 }
 
 export const getViewTrials = (trialsessionId) => {
@@ -65,6 +74,22 @@ export const getTrialSession = (trialsessionId) => {
     })
   }
 }
+
+export const getTrials = () => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
+       .then((response) => {
+         dispatch(getTrialsAction(response.data))
+         resolve()
+       })
+       .catch((error) => {
+         errorHandle(error)
+         resolve()
+       })
+    })
+  }
+}
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -80,6 +105,12 @@ const ACTION_HANDLERS = {
       ...state,
       trialSession: action.data
     }
+  },
+  [GET_TRIALS]: (state, action) => {
+    return {
+      ...state,
+      listOfTrials: action.data
+    }
   }
 }
 // ------------------------------------
@@ -87,7 +118,8 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   viewTrials: [],
-  trialSession: {}
+  trialSession: {},
+  listOfTrials: {}
 }
 
 export default function viewTrialsReducer (state = initialState, action) {

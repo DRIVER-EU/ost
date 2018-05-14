@@ -3,6 +3,11 @@ export const getHeaders = () => {
   let globalHeaders = { headers: { 'x-auth-token': token } }
   return globalHeaders
 }
+export const getHeadersASCI = () => {
+  let token = localStorage.getItem('drivertoken')
+  let globalHeaders = { headers: { 'x-auth-token': token }, responseType: 'arraybuffer' }
+  return globalHeaders
+}
 export const getHeadersReferences = () => {
   let token = localStorage.getItem('drivertoken')
   let globalHeaders = { headers: { 'x-auth-token': token, 'content-Type': 'multipart/form-data; ' } }

@@ -18,7 +18,8 @@ class ViewTrials extends Component {
       viewTrials: [],
       selectedObj: {},
       showModal: false,
-      trialSession: { name: '' }
+      trialSession: { name: '' },
+      listOfTrials: []
     }
   }
 
@@ -27,28 +28,32 @@ class ViewTrials extends Component {
     viewTrials: PropTypes.array,
     params: PropTypes.any,
     trialSession: PropTypes.any,
-    getTrialSession: PropTypes.func
+    getTrialSession: PropTypes.func,
+    getTrials: PropTypes.func,
+    listOfTrials: PropTypes.object,
+    observationForm: PropTypes.any
   }
 
   componentWillMount () {
+    this.props.getTrials()
     this.props.getViewTrials(this.props.params.id)
     this.props.getTrialSession(this.props.params.id)
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(1)
+    if (nextProps.listOfTrials.data &&
+      nextProps.listOfTrials.data !== this.state.listOfTrials &&
+      nextProps.listOfTrials.data !== this.props.listOfTrials) {
+      this.setState(
+        { listOfTrials: nextProps.listOfTrials.data },
+        () => this.handleFindObservation()
+      )
+    }
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
-      let change = [...nextProps.viewTrials]
-      change[0]['thisFiled'] = false
-      for (let i = 1; i < nextProps.viewTrials.length; i++) {
-        change[i]['thisFiled'] = true
-      }
-      this.setState({ viewTrials: change },
-        () => this.handleFindObservation())
+      this.setState({ viewTrials: nextProps.viewTrials })
     }
-
     if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
       this.setState({ trialSession: nextProps.trialSession })
     }
@@ -63,13 +68,13 @@ class ViewTrials extends Component {
   }
 
   handleFindObservation () {
-    let list = [...this.state.viewTrials]
-    let index = _.findIndex(list, ['thisFiled', false])
+    let list = [...this.state.listOfTrials]
+    let index = _.findIndex(list, { 'id': parseInt(this.props.params.id) })
     if (index !== -1) {
-      this.setState({
-        selectedObj: list[index],
-        showModal: true
-      })
+      let change = { ...this.state }
+      change['selectedObj'] = { id: list[index].initId }
+      change['showModal'] = true
+      this.setState(change)
     }
   }
 
@@ -126,7 +131,8 @@ class ViewTrials extends Component {
             show={this.state.showModal}
             object={this.state.selectedObj}
             handleShowModal={this.handleShowModal.bind(this)}
-            params={this.state.selectedObj.id} />
+            params={this.state.selectedObj.id}
+            observationForm={this.props.observationForm} />
         </div>
       </div>
     )
