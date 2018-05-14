@@ -46,6 +46,7 @@ public class AnswerEventService {
         Set<Specification<Answer>> conditions = new HashSet<>();
         conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
         conditions.add(AnswerSpecification.inTrialSession(trialSessionId));
+        conditions.add(AnswerSpecification.inLastTrialStage(trialSessionId));
         return RepositoryUtils.concatenate(conditions);
     }
 
