@@ -42,7 +42,7 @@ public class AttachmentService {
         Attachment attachment = findOneById(attachmentId);
 
         if (!isFileAttachment(attachment)) {
-            throw new InternalServerException("Requested attachment is not a file: " + attachment.getType());
+            throw new InternalServerException("Requested attachment type is not a file: " + attachment.getType());
         }
 
         return attachment;
