@@ -21,7 +21,8 @@ class SummaryOfObservationModal extends Component {
     params: PropTypes.any,
     getSchema: PropTypes.func,
     getSchemaView: PropTypes.func,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    sendObservation: PropTypes.func
   }
 
   componentWillReceiveProps (nextProps) {
@@ -58,7 +59,9 @@ class SummaryOfObservationModal extends Component {
           getSchema={this.props.getSchema}
           observationForm={this.props.observationForm}
           mode={'profileQuestion'}
-          params={this.state.newParams} />
+          params={this.state.newParams}
+          sendObservation={this.props.sendObservation}
+          closeModal={this.props.handleShowModal} />
         : <NewObservationComponent
           getSchema={this.props.getSchemaView}
           observationForm={this.props.observationForm}

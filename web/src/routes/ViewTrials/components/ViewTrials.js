@@ -16,7 +16,8 @@ class ViewTrial extends Component {
     trialSession: PropTypes.any,
     getTrials: PropTypes.func,
     listOfTrials: PropTypes.object,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    sendObservation: PropTypes.func
   }
 
   render () {
@@ -31,6 +32,7 @@ class ViewTrial extends Component {
           listOfTrials={this.props.listOfTrials}
           params={this.props.params}
           downloadFile={this.props.downloadFile}
+          sendObservation={this.props.sendObservation}
         />
       </div>
     )
