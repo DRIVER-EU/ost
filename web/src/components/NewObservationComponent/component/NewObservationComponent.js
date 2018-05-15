@@ -73,7 +73,8 @@ class NewObservationComponent extends Component {
     observationForm: PropTypes.any,
     mode: PropTypes.string,
     params: PropTypes.any,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    closeModal: PropTypes.func
   }
 
   downloadFile (id, name) {
@@ -200,6 +201,9 @@ class NewObservationComponent extends Component {
     if (this.validateParticipants() && this.validateCoords()) {
       toastr.success('Observation form', 'Observation was send!', toastrOptions)
       this.props.sendObservation(send)
+      if (this.props.mode === 'profileQuestion') {
+        this.props.closeModal()
+      }
       browserHistory.push(`/trials/${this.props.params.id}`)
     }
   }
