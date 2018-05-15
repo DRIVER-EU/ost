@@ -99,7 +99,8 @@ class AdminTrials extends Component {
     setStage: PropTypes.func,
     params: PropTypes.any,
     observationForm: PropTypes.any,
-    getSchemaView: PropTypes.func
+    getSchemaView: PropTypes.func,
+    downloadFile: PropTypes.func
   }
 
   componentWillUnmount () {
@@ -699,7 +700,8 @@ class AdminTrials extends Component {
               object={this.state.selectedObj}
               handleShowModal={this.handleShowModal.bind(this)}
               observationForm={this.props.observationForm}
-              params={this.props.params.id} />
+              params={this.props.params.id}
+              downloadFile={this.props.downloadFile} />
           </div>
         </div>
       </div>

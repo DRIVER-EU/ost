@@ -13,7 +13,8 @@ class NewObservation extends Component {
     observationForm: PropTypes.any,
     sendObservation: PropTypes.func,
     observation: PropTypes.any,
-    params: PropTypes.any
+    params: PropTypes.any,
+    downloadFile: PropTypes.func
   }
 
   render () {
@@ -25,7 +26,8 @@ class NewObservation extends Component {
           sendObservation={this.props.sendObservation}
           observation={this.props.observation}
           mode={'new'}
-          params={this.props.params} />
+          params={this.props.params}
+          downloadFile={this.props.downloadFile} />
       </div>
     )
   }

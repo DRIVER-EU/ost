@@ -11,7 +11,8 @@ class QuestionView extends Component {
   static propTypes = {
     getSchemaView: PropTypes.func,
     observationForm: PropTypes.any,
-    params: PropTypes.any
+    params: PropTypes.any,
+    downloadFile: PropTypes.func
   }
 
   render () {
@@ -21,7 +22,8 @@ class QuestionView extends Component {
           getSchema={this.props.getSchemaView}
           observationForm={this.props.observationForm}
           mode={'view'}
-          params={this.props.params} />
+          params={this.props.params}
+          downloadFile={this.props.downloadFile} />
       </div>
     )
   }

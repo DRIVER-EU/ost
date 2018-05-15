@@ -11,6 +11,9 @@
     margin-top: 10px;
     background: white;
 
+    .coords-title {
+        padding-top: 20px;
+    }
     .buttons-obs {
         margin: 10px 0 10px 0;
     }
@@ -96,5 +99,8 @@
         .spinner {
             margin: 0 auto;
         }
+    }
+    .pointer {
+        cursor: pointer;
     }
 }

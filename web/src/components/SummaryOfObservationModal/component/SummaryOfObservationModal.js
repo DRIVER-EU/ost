@@ -4,7 +4,7 @@ import './SummaryOfObservationModal.scss'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import NewObservationComponent from '../../../components/NewObservationComponent'
-class AdminTrials extends Component {
+class SummaryOfObservationModal extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -20,7 +20,8 @@ class AdminTrials extends Component {
     mode: PropTypes.string,
     params: PropTypes.any,
     getSchema: PropTypes.func,
-    getSchemaView: PropTypes.func
+    getSchemaView: PropTypes.func,
+    downloadFile: PropTypes.func
   }
 
   componentWillReceiveProps (nextProps) {
@@ -62,11 +63,12 @@ class AdminTrials extends Component {
           getSchema={this.props.getSchemaView}
           observationForm={this.props.observationForm}
           mode={'viewAdmin'}
-          params={this.state.newParams} />
+          params={this.state.newParams}
+          downloadFile={this.props.downloadFile} />
         }
       </Dialog>
     )
   }
 }
 
-export default AdminTrials
+export default SummaryOfObservationModal

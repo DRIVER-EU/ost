@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import NewObservation from '../components/NewObservation'
-import { getSchema, sendObservation } from './../modules/newobservation'
+import { getSchema, sendObservation, downloadFile } from './../modules/newobservation'
 
 const mapDispatchToProps = {
   getSchema,
-  sendObservation
+  sendObservation,
+  downloadFile
 }
 
 const mapStateToProps = (state) => ({

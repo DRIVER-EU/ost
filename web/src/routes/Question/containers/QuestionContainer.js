@@ -1,9 +1,11 @@
 import { connect } from 'react-redux'
 import Question from '../components/Question'
 import { getSchemaView } from './../modules/question'
+import { downloadFile } from '../../NewObservation/modules/newobservation'
 
 const mapDispatchToProps = {
-  getSchemaView
+  getSchemaView,
+  downloadFile
 }
 
 const mapStateToProps = (state) => ({
