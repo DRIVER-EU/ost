@@ -25,7 +25,8 @@ class AdminTrialsView extends Component {
     stageActive: PropTypes.object,
     params: PropTypes.any,
     observationForm: PropTypes.any,
-    getSchemaView: PropTypes.func
+    getSchemaView: PropTypes.func,
+    downloadFile: PropTypes.func
   }
 
   render () {
@@ -49,6 +50,7 @@ class AdminTrialsView extends Component {
           params={this.props.params}
           observationForm={this.props.observationForm}
           getSchemaView={this.props.getSchemaView}
+          downloadFile={this.props.downloadFile}
         />
       </div>
     )

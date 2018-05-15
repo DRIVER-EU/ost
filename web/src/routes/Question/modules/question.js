@@ -43,7 +43,8 @@ export const getSchemaView = (idObs) => {
       /* eslint-enable */
           .then((response) => {
             let change = {
-              jsonSchema: { ...response.data.questionSchema, formData: response.data.formData }
+              jsonSchema: { ...response.data.questionSchema, formData: response.data.formData },
+              attachments: response.data.attachments
             }
             dispatch(getSchemaAction(change))
             resolve()

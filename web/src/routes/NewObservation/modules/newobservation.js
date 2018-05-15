@@ -8,10 +8,12 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, getHeadersReferences, errorHandle } from '../../../store/addons'
+import { getHeaders, getHeadersASCI, getHeadersReferences, errorHandle } from '../../../store/addons'
+import fileDownload from 'react-file-download'
 
 export const GET_SCHEMA = 'GET_SCHEMA'
 export const SEND_OBSERVATION = 'SEND_OBSERVATION'
+export const DOWNLOAD_FILE = 'DOWNLOAD_FILE'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -30,9 +32,17 @@ export const sendObservationAction = (data = null) => {
   }
 }
 
+export const downloadFileAction = (data = null) => {
+  return {
+    type: DOWNLOAD_FILE,
+    data: data
+  }
+}
+
 export const actions = {
   getSchema,
-  sendObservation
+  sendObservation,
+  downloadFile
 }
 
 export const getSchema = (idObs, idSession) => {
@@ -72,7 +82,7 @@ export const sendObservation = (formData) => {
 
      // data.append('attachments', formData.attachments)
       data.append('data', blob)
-      axios.post(`http://dev.itti.com.pl:8009/api/answers`, data, getHeadersReferences())
+      axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             resolve()
@@ -85,6 +95,21 @@ export const sendObservation = (formData) => {
   }
 }
 
+export const downloadFile = (id, name) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/attachments/${id}`, getHeadersASCI())
+     .then((response) => {
+       fileDownload(response.data, name)
+       resolve()
+     })
+     .catch((error) => {
+       errorHandle(error)
+       resolve()
+     })
+    })
+  }
+}
 // ------------------------------------
 // Action Handlers
 // ------------------------------------

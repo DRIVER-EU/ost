@@ -31,7 +31,8 @@ class ViewTrials extends Component {
     getTrialSession: PropTypes.func,
     getTrials: PropTypes.func,
     listOfTrials: PropTypes.object,
-    observationForm: PropTypes.any
+    observationForm: PropTypes.any,
+    downloadFile: PropTypes.func
   }
 
   componentWillMount () {
@@ -132,7 +133,8 @@ class ViewTrials extends Component {
             object={this.state.selectedObj}
             handleShowModal={this.handleShowModal.bind(this)}
             params={this.state.selectedObj.id}
-            observationForm={this.props.observationForm} />
+            observationForm={this.props.observationForm}
+            downloadFile={this.props.downloadFile} />
         </div>
       </div>
     )

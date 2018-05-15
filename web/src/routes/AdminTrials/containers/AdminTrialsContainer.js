@@ -3,6 +3,7 @@ import AdminTrials from '../components/AdminTrials'
 import { getMessages, sendMessage, getObservation,
   getUsers, getRoles, getStages, setStage } from './../modules/admin_trials'
 import { getSchemaView } from './../../Question/modules/question'
+import { downloadFile } from './../../NewObservation/modules/newobservation'
 
 const mapDispatchToProps = {
   getMessages,
@@ -12,7 +13,8 @@ const mapDispatchToProps = {
   getRoles,
   getStages,
   setStage,
-  getSchemaView
+  getSchemaView,
+  downloadFile
 }
 
 const mapStateToProps = (state) => ({

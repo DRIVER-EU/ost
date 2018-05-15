@@ -52,12 +52,19 @@ class NewObservationComponent extends Component {
         roles: [],
         formData: {}
       },
+      coords1ErrorText: '',
+      coords2ErrorText: '',
+      coords3ErrorText: '',
+      attachmentCoordinatesLong: '',
+      attachmentCoordinatesAlt: '',
+      attachmentCoordinatesLat: '',
       images: [],
       listOfParticipants: [],
       dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
       isLoading: false,
       attachmentDescription: '',
-      validParticipants: true
+      validParticipants: true,
+      files: []
     }
   }
 
@@ -65,7 +72,12 @@ class NewObservationComponent extends Component {
     getSchema: PropTypes.func,
     observationForm: PropTypes.any,
     mode: PropTypes.string,
-    params: PropTypes.any
+    params: PropTypes.any,
+    downloadFile: PropTypes.func
+  }
+
+  downloadFile (id, name) {
+    this.props.downloadFile(id, name)
   }
 
   componentWillMount () {
@@ -108,14 +120,37 @@ class NewObservationComponent extends Component {
       change['observationForm']['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
       change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
       change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
+      change['observationForm']['attachments'] = nextProps.observationForm.attachments
       change['observationForm']['description'] = nextProps.observationForm.description
-      this.setState({ change })
-    }
-    if (nextProps.mode) {
-      let change = { ...this.state }
-      change['listOfParticipants'] = []
+      console.log(1)
+      if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.coordinates &&
+        nextProps.observationForm.attachments.coordinates[0]) {
+          /* eslint-disable */
+        let coords = eval(nextProps.observationForm.attachments.coordinates[0].data)
+        /* eslint-enable */
+        if (coords.length > 0) {
+          change['attachmentCoordinatesLong'] = coords[0].toString()
+        }
+        if (coords.length >= 2) {
+          change['attachmentCoordinatesLat'] = coords[1].toString()
+        }
+        if (coords.length === 3) {
+          change['attachmentCoordinatesAlt'] = coords[2].toString()
+        }
+      }
+      if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.descriptions) {
+        change['attachmentDescription'] = nextProps.observationForm.attachments.descriptions[0].data
+      }
+      if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.files) {
+        change['files'] = nextProps.observationForm.attachments.files
+      }
       change['isLoading'] = false
       this.setState(change)
+    }
+    if (nextProps.mode) {
+     // let change = { ...this.state }
+     // change['listOfParticipants'] = []
+    //  this.setState(change)
     }
   }
 
@@ -162,11 +197,40 @@ class NewObservationComponent extends Component {
         'altitude': 0.0 }
     ]
     send['attachments'] = this.state.images
-    if (this.validateParticipants()) {
+    if (this.validateParticipants() && this.validateCoords()) {
       toastr.success('Observation form', 'Observation was send!', toastrOptions)
       this.props.sendObservation(send)
       browserHistory.push(`/trials/${this.props.params.id}`)
     }
+  }
+
+  validateCoords () {
+    if (isNaN(this.state.attachmentCoordinatesLong)) {
+      this.setState({ coords1ErrorText: 'Error: incorrect value' })
+    } else {
+      this.setState({ coords1ErrorText: '' })
+    }
+    if (isNaN(this.state.attachmentCoordinatesAlt)) {
+      this.setState({ coords2ErrorText: 'Error: incorrect value' })
+    } else {
+      this.setState({ coords2ErrorText: '' })
+    }
+    if (isNaN(this.state.attachmentCoordinatesLat)) {
+      this.setState({ coords3ErrorText: 'Error: incorrect value' })
+    } else {
+      this.setState({ coords3ErrorText: '' })
+    }
+
+    let valid = true
+    if (isNaN(this.state.attachmentCoordinatesLong) ||
+      isNaN(this.state.attachmentCoordinatesAlt) ||
+      isNaN(this.state.attachmentCoordinatesLat)) {
+      toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+      valid = false
+    } else {
+      this.setState({ coordsErrorText: '' })
+    }
+    return valid
   }
 
   validateParticipants () {
@@ -254,6 +318,18 @@ class NewObservationComponent extends Component {
     }
   }
 
+  handleCoordinatesLong (value) {
+    this.setState({ attachmentCoordinatesLong: value })
+  }
+
+  handleCoordinatesLatitude (value) {
+    this.setState({ attachmentCoordinatesLat: value })
+  }
+
+  handleCoordinatesAlt (value) {
+    this.setState({ attachmentCoordinatesAlt: value })
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -327,17 +403,53 @@ class NewObservationComponent extends Component {
                 onError={() => this.handleError()}
                 onSubmit={(value) => this.handleOnSubmit(value)}
                 onChange={(value) => this.changeObservation(value)}>
-                { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') && <div>
+                <div>
                   <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
                   <TextField value={this.state.attachmentDescription}
-                    onChange={(event, value) => { this.handleDescription(value) }} />
-                  <p>Files:</p>
-                  <DropzoneComponent
-                    config={this.componentConfig}
-                    djsConfig={this.djsConfig}
-                    eventHandlers={this.eventHandlers} />
-                </div>}
+                    onChange={(event, value) => { this.handleDescription(value) }}
+                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
+                    />
+                  <p className={'coords-title'}>Coordinates:</p>
+                  <TextField value={this.state.attachmentCoordinatesLong}
+                    style={{ marginRight:'20px', width: '150px' }}
+                    onChange={(event, value) => { this.handleCoordinatesLong(value) }}
+                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
+                    floatingLabelText='Longitude'
+                    errorText={this.state.coords1ErrorText} />
+                  <TextField value={this.state.attachmentCoordinatesLat}
+                    style={{ marginRight:'20px', width: '150px' }}
+                    onChange={(event, value) => { this.handleCoordinatesLatitude(value) }}
+                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
+                    floatingLabelText='Latitude'
+                    errorText={this.state.coords3ErrorText} />
+                  <TextField value={this.state.attachmentCoordinatesAlt}
+                    style={{ marginRight:'20px', width: '150px' }}
+                    onChange={(event, value) => { this.handleCoordinatesAlt(value) }}
+                    floatingLabelText='Altitude'
+                    errorText={this.state.coords2ErrorText}
+                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'} />
+                  { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
+                  <div>
+                    <p>Files:</p>
+                    <DropzoneComponent
+                      config={this.componentConfig}
+                      djsConfig={this.djsConfig}
+                      eventHandlers={this.eventHandlers} />
+                  </div>
+                  }
+                  { (this.props.mode !== 'new' && this.props.mode !== 'profileQuestion') &&
+                  this.state.files.length > 0 &&
+                    <div><p>Files:</p>
+                      {this.state.files.map(object => {
+                        return (<div className={'pointer'} onClick={() => { this.downloadFile(object.id, object.data) }}
+                      ><FontIcon className='material-icons' style={{ marginRight: '5px', top: '7px' }}>
+                        <i className='material-icons'>attachment</i></FontIcon>
+                          {object.data}</div>)
+                      })}
+                    </div>
+                  }
+                </div>
                 <div className={'buttons-center'}>
                   {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
                   <div className={'buttons-observation'}>
