@@ -114,7 +114,7 @@ class ViewTrials extends Component {
                       ((object.type !== 'EVENT') ? ' observation' : ' message')}>
                       {object.name}
                       <div className={'time'}>
-                        {moment(object.time, 'YYYY-MM-DDThh:mmZ').format('DD/MM/YYYY HH:mm:ss')}
+                        {moment(object.time, 'YYYY-MM-DDThh:mmZ').format('DD/MM/YYYY kk:mm:ss')}
                       </div>
                     </h3>} expanded={false}>
                     <div>
