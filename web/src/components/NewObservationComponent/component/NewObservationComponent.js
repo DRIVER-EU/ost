@@ -60,7 +60,7 @@ class NewObservationComponent extends Component {
       attachmentCoordinatesLat: '',
       images: [],
       listOfParticipants: [],
-      dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
+      dateTime: moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ss A'),
       isLoading: false,
       attachmentDescription: '',
       validParticipants: true,
@@ -192,7 +192,7 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
-    send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DDThh:mm:ss A').format('YYYY-MM-DDThh:mm:ssZ')
+    send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DDTHH:mm:ss A').format('YYYY-MM-DDTHH:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = []
