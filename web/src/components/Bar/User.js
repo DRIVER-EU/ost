@@ -36,7 +36,6 @@ class UserComponent extends Component {
           underlineStyle={{ borderTop: 'none' }}
           labelStyle={{ lineHeight: '48px', color: '#00497E' }}>
           <MenuItem value={1} primaryText={this.props.user.login} style={{ display: 'none' }} />
-          <MenuItem value={2} primaryText='Profile' />
           <MenuItem value={3} primaryText='Log out' />
         </DropDownMenu>
       )

@@ -39,8 +39,9 @@ class SelectObservation extends Component {
       <div className='main-container'>
         <div className='pages-box'>
           <div className='view-trials-container'>
-            <div className='trial-title' />
-            <div>New observation</div>
+            <div className='trial-title'>
+              New observation
+            </div>
             <div className='trials-header'>
               <List style={{ width: '100%' }}>
                 { this.state.listOfObservations.map((object, key) => (
