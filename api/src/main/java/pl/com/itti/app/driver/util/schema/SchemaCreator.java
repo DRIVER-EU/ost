@@ -34,9 +34,6 @@ public final class SchemaCreator {
             .put("description", "What you think about this question?")
             .put("type", "string");
 
-    private static final ObjectNode COMMENT_UI_SCHEMA = MAPPER.createObjectNode()
-            .put(FIELD_DISABLED, false);
-
     public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
         questions.sort(Comparator.comparing(Question::getPosition));
         ObjectNode schemaForm = MAPPER.createObjectNode();
@@ -80,7 +77,7 @@ public final class SchemaCreator {
         questions.forEach(question -> {
             schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question, disabled));
             if (question.isCommented()) {
-                schema.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_UI_SCHEMA);
+                schema.putPOJO(QUESTION_ID + question.getId() + "_comment", createCommentUiSchema(disabled));
             }
         });
         return schema;
@@ -97,6 +94,10 @@ public final class SchemaCreator {
         }
 
         return ui;
+    }
+
+    private static ObjectNode createCommentUiSchema(boolean disabled) {
+        return MAPPER.createObjectNode().put(FIELD_DISABLED, disabled);
     }
 
     public static ObjectNode createAttachmentSchemaForm(List<Attachment> attachments) {
