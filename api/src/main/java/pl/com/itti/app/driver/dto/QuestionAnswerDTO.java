@@ -4,6 +4,7 @@ import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.com.itti.app.driver.model.Answer;
+import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
@@ -14,10 +15,16 @@ public final class QuestionAnswerDTO {
     public static class MinimalItem implements EntityDTO<Answer> {
 
         public long answerId;
+        public String observationTypeName;
+        public String observationTypeDescription;
 
         @Override
         public void toDto(Answer answer) {
             this.answerId = answer.getId();
+
+            ObservationType observationType = answer.getObservationType();
+            this.observationTypeName = observationType.getName();
+            this.observationTypeDescription = observationType.getDescription();
         }
     }
 
