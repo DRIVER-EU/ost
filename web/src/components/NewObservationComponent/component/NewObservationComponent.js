@@ -123,7 +123,6 @@ class NewObservationComponent extends Component {
       change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
       change['observationForm']['attachments'] = nextProps.observationForm.attachments
       change['observationForm']['description'] = nextProps.observationForm.description
-      console.log(1)
       if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.coordinates &&
         nextProps.observationForm.attachments.coordinates[0]) {
           /* eslint-disable */
