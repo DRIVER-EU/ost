@@ -66,6 +66,8 @@ public final class AnswerDTO {
 
         public TrialUserDTO.ListItem user;
         public String roleName;
+        public String observationTypeName;
+        public String observationTypeDescription;
 
         @Override
         public void toDto(Answer answer) {
@@ -80,6 +82,10 @@ public final class AnswerDTO {
                     .filter(trialRoles::contains)
                     .findFirst();
             trialRole.ifPresent(trialRole1 -> this.roleName = DTO.from(trialRole1, TrialRoleDTO.ListItem.class).name);
+
+            ObservationType observationType = answer.getObservationType();
+            this.observationTypeName = observationType.getName();
+            this.observationTypeDescription = observationType.getDescription();
         }
     }
 
