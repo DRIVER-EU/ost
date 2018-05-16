@@ -33,7 +33,7 @@ public class ObservationType extends PersistentObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
-    @JoinColumn(name = "trial_stage_id", nullable = false)
+    @JoinColumn(name = "trial_stage_id")
     private TrialStage trialStage;
 
     @Column(nullable = false)
