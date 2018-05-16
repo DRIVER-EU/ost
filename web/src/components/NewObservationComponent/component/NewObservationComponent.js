@@ -192,15 +192,15 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
-    send['simulationTime'] = '2018-04-23T07:50:39+00:00'
-    send['fieldValue'] = 'test'
+    send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DDThh:mm:ss A').format('YYYY-MM-DDThh:mm:ssZ')
+    send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = []
     send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
-      { 'longitude': 32.2,
-        'latitude': 23.2,
-        'altitude': 0.0 }
+      { 'longitude': this.state.attachmentCoordinatesLong,
+        'latitude': this.state.attachmentCoordinatesLat,
+        'altitude': this.state.attachmentCoordinatesAlt }
     ]
     send['attachments'] = this.state.images
     if (this.validateParticipants() && this.validateCoords()) {
