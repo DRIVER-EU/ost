@@ -43,7 +43,7 @@ public class ObservationTypeSpecification {
             return cb.and(
                     cb.equal(trialSessionUserRoleSessionJoin.get(UserRoleSession_.trialSession), trialSession),
                     cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser),
-                    cb.equal(trialTrialSessionJoin.get(TrialSession_.lastTrialStage), trialSession.getLastTrialStage())
+                    cb.equal(root.get(ObservationType_.trialStage), trialSession.getLastTrialStage())
             );
         };
     }
