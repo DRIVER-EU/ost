@@ -151,7 +151,6 @@ class AdminTrials extends Component {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
-      console.log(2)
       this.setState({ changeDataTable: nextProps.observation }, () => {
         this.handleChangeChart(this.state.changeDataTable)
       })
@@ -458,7 +457,7 @@ class AdminTrials extends Component {
                               {row.roleName}
                             </TableRowColumn>
                             <TableRowColumn>
-                              Observation
+                              {row.observationTypeName}
                             </TableRowColumn>
                             <TableRowColumn>
                               <i className='cursor-pointer material-icons'
