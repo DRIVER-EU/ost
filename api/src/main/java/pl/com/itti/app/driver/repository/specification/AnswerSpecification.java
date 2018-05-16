@@ -60,7 +60,7 @@ public class AnswerSpecification {
             Path<TrialStage> actualTrialStage = observationTypeJoin.get(ObservationType_.trialStage);
 
             return cb.or(cb.equal(lastTrialStage, actualTrialStage),
-                    cb.isNull(lastTrialStage));
+                    cb.isNull(actualTrialStage));
         };
     }
 }
