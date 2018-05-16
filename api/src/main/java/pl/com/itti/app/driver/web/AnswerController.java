@@ -67,7 +67,7 @@ public class AnswerController {
 //    public AnswerDTO.Item answerQuestions(@RequestParam("observationTypeId") Long observationTypeId,
 //                                          @RequestParam("trialSessionId") Long trialSessionId,
 //                                          @RequestParam("simulationTime") String simulationTime,
-//                                          @RequestParam("fieldValue") String fieldValue,
+//                                          @RequestParam(value = "fieldValue", required = false) String fieldValue,
 //                                          @RequestParam("formData") String formData,
 //                                          @RequestParam("trialRoleIds") List<Long> trialRoleIds,
 //                                          @RequestParam(value = "texts", required = false) List<String> texts,
@@ -83,16 +83,17 @@ public class AnswerController {
 //        form.formData = new ObjectMapper().readTree(formData);
 //        form.trialRoleIds = trialRoleIds;
 //        form.descriptions = texts;
-//        List<AttachmentDTO.Coordinates> coordinates = new ArrayList<>();
-//        for (int i = 0; i < longitude.size(); i++) {
-//            AttachmentDTO.Coordinates coord = new AttachmentDTO.Coordinates();
-//            coord.longitude = longitude.get(i);
-//            coord.latitude = latitude.get(i);
-//            coord.altitude = altitude.get(i);
-//            coordinates.add(coord);
+//        if (longitude != null) {
+//            List<AttachmentDTO.Coordinates> coordinates = new ArrayList<>();
+//            for (int i = 0; i < longitude.size(); i++) {
+//                AttachmentDTO.Coordinates coord = new AttachmentDTO.Coordinates();
+//                coord.longitude = longitude.get(i);
+//                coord.latitude = latitude.get(i);
+//                coord.altitude = altitude.get(i);
+//                coordinates.add(coord);
+//            }
+//            form.coordinates = coordinates;
 //        }
-//        form.coordinates = coordinates;
-//
 //        Answer answer;
 //
 //        try {

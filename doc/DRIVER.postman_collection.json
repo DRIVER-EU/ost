@@ -1141,6 +1141,39 @@
 			]
 		},
 		{
+			"name": "/attachments",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/attachments/3",
+					"request": {
+						"url": "http://{{IP-Address}}/api/attachments/3",
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Auth-Token",
+								"value": "{{X-Auth-Token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/octet-stream",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic T2JzZXJ2ZXIxOmFkbWlu",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "/user?trialsession_id=2",
 			"request": {
 				"auth": {

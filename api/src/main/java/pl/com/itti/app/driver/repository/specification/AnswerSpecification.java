@@ -7,6 +7,7 @@ import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
 
 public class AnswerSpecification {
 
@@ -43,6 +44,22 @@ public class AnswerSpecification {
             Join<Answer, ObservationType> observationTypeJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.observationType, JoinType.LEFT);
 
             return cb.equal(observationTypeJoin.get(ObservationType_.id), observationTypeId);
+        };
+    }
+
+    public static Specification<Answer> inLastTrialStage(Long trialSessionId) {
+        if (trialSessionId == null) {
+            return null;
+        }
+
+        return (root, query, cb) -> {
+            Join<Answer, TrialSession> trialSessionJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.trialSession, JoinType.LEFT);
+            Path<TrialStage> lastTrialStage = trialSessionJoin.get(TrialSession_.lastTrialStage);
+
+            Join<Answer, ObservationType> observationTypeJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.observationType, JoinType.LEFT);
+            Path<TrialStage> actualTrialStage = observationTypeJoin.get(ObservationType_.trialStage);
+
+            return cb.equal(lastTrialStage, actualTrialStage);
         };
     }
 }

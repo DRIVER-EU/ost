@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.service;
 
 import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.lucene.analysis.Analyzer;
@@ -60,9 +59,6 @@ public class AnswerService {
 
     @Autowired
     private AnswerTrialRoleRepository answerTrialRoleRepository;
-
-    @Autowired
-    private AuthUserRepository authUserRepository;
 
     @Autowired
     private ObservationTypeRepository observationTypeRepository;
