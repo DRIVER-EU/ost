@@ -40,6 +40,7 @@
     .point-obs {
         font-size: 18px;
         font-weight: 600;
+        margin-bottom: 40px;
     }
     .form-group {
         div hr:nth-child(2) {
@@ -97,4 +98,8 @@
     .pointer {
         cursor: pointer;
     }
+    .field-string>div {
+        width: 100% !important;
+    }
+
 }
