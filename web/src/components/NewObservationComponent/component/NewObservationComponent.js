@@ -119,9 +119,13 @@ class NewObservationComponent extends Component {
       let change = { ...this.state }
       change['observationForm']['schema'] = nextProps.observationForm.jsonSchema.schema
       change['observationForm']['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
-      change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
+      if (nextProps.observationForm.jsonSchema.formData) {
+        change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
+      }
       change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
-      change['observationForm']['attachments'] = nextProps.observationForm.attachments
+      if (nextProps.observationForm.attachments) {
+        change['observationForm']['attachments'] = nextProps.observationForm.attachments
+      }
       change['observationForm']['description'] = nextProps.observationForm.description
       if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.coordinates &&
         nextProps.observationForm.attachments.coordinates[0]) {
@@ -145,7 +149,9 @@ class NewObservationComponent extends Component {
         change['files'] = nextProps.observationForm.attachments.files
       }
       change['isLoading'] = false
-      this.setState(change)
+      if (!_.isEqual(change.observationForm, nextProps.observationForm)) {
+        this.setState(change)
+      }
     }
     if (nextProps.mode) {
      // let change = { ...this.state }
