@@ -34,15 +34,16 @@ public class ObservationTypeSpecification {
         }
 
         return (root, query, cb) -> {
-            Join<ObservationType, ObservationTypeTrialRole> observationTypeTrialRoleJoin = RepositoryUtils.getOrCreateJoin(root, ObservationType_.observationTypeTrialRoles, JoinType.LEFT);
-            Join<ObservationTypeTrialRole, TrialRole> trialRoleJoin = observationTypeTrialRoleJoin.join(ObservationTypeTrialRole_.trialRole, JoinType.LEFT);
-            Join<TrialRole, UserRoleSession> userRoleSessionJoin = trialRoleJoin.join(TrialRole_.userRoleSessions, JoinType.LEFT);
+            Join<ObservationType, Trial> observationTypeTrialJoin = RepositoryUtils.getOrCreateJoin(root, ObservationType_.trial, JoinType.LEFT);
+            Join<Trial, TrialSession> trialTrialSessionJoin = observationTypeTrialJoin.join(Trial_.trialSessions, JoinType.LEFT);
+            Join<TrialSession, UserRoleSession> trialSessionUserRoleSessionJoin = trialTrialSessionJoin.join(TrialSession_.userRoleSessions, JoinType.LEFT);
 
-            Join<UserRoleSession, TrialUser> trialUserJoin = userRoleSessionJoin.join(UserRoleSession_.trialUser, JoinType.LEFT);
+            Join<UserRoleSession, TrialUser> trialUserJoin = trialSessionUserRoleSessionJoin.join(UserRoleSession_.trialUser, JoinType.LEFT);
 
             return cb.and(
-                    cb.equal(userRoleSessionJoin.get(UserRoleSession_.trialSession), trialSession),
-                    cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser)
+                    cb.equal(trialSessionUserRoleSessionJoin.get(UserRoleSession_.trialSession), trialSession),
+                    cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser),
+                    cb.equal(trialTrialSessionJoin.get(TrialSession_.lastTrialStage), trialSession.getLastTrialStage())
             );
         };
     }
