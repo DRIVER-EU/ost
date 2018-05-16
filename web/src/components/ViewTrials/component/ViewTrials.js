@@ -70,9 +70,10 @@ class ViewTrials extends Component {
   }
 
   handleFindObservation () {
+    console.log(1)
     let list = [...this.state.listOfTrials]
     let index = _.findIndex(list, { 'id': parseInt(this.props.params.id) })
-    if (index !== -1) {
+    if (index !== -1 && !list[index].initHasAnswer) {
       let change = { ...this.state }
       change['selectedObj'] = { id: list[index].initId }
       change['showModal'] = true
