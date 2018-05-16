@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './SelectObservation.scss'
 import { browserHistory } from 'react-router'
+import { RaisedButton, FontIcon } from 'material-ui'
 import { List, ListItem } from 'material-ui/List'
 import _ from 'lodash'
 
@@ -34,11 +35,27 @@ class SelectObservation extends Component {
     browserHistory.push(`/trials/${this.props.params.id}/new-observation/${id}`)
   }
 
+  back () {
+    browserHistory.push(`/trials/${this.props.params.id}`)
+  }
+
   render () {
     return (
       <div className='main-container'>
         <div className='pages-box'>
           <div className='view-trials-container'>
+            <RaisedButton
+              style={{ float: 'right' }}
+              buttonStyle={{ width: '240px' }}
+              backgroundColor='#244C7B'
+              labelColor='#FCB636'
+              label='Back to list of events'
+              secondary
+              icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
+                <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
+              onClick={this.back.bind(this)}
+          /><div style={{ clear: 'both' }} />
+
             <div className='trial-title'>
               New observation
             </div>
