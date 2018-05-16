@@ -19,7 +19,8 @@ class ViewTrials extends Component {
       selectedObj: {},
       showModal: false,
       trialSession: { name: '' },
-      listOfTrials: []
+      listOfTrials: [],
+      interval: ''
     }
   }
 
@@ -40,6 +41,15 @@ class ViewTrials extends Component {
     this.props.getTrials()
     this.props.getViewTrials(this.props.params.id)
     this.props.getTrialSession(this.props.params.id)
+    let interval = setInterval(() => {
+      this.props.getViewTrials(this.props.params.id)
+      this.props.getTrialSession(this.props.params.id)
+    }, 3000)
+    this.setState({ interval: interval })
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.state.interval)
   }
 
   componentWillReceiveProps (nextProps) {
