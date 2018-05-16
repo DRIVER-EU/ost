@@ -54,7 +54,7 @@ class ViewTrials extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrials.data &&
-      nextProps.listOfTrials.data !== this.state.listOfTrials &&
+      !_.isEqual(nextProps.listOfTrials.data, this.state.listOfTrials) &&
       nextProps.listOfTrials.data !== this.props.listOfTrials) {
       this.setState(
         { listOfTrials: nextProps.listOfTrials.data },
