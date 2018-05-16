@@ -123,6 +123,9 @@ class AdminTrials extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
+    // if (!_.isEqual(this.state, nextState)) {
+    //   return true
+    // }
     for (var key in this.state) {
       for (var nextKey in nextState) {
         if (nextKey === key && this.state[key] !== nextState[nextKey]) {
@@ -148,6 +151,7 @@ class AdminTrials extends Component {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
+      console.log(2)
       this.setState({ changeDataTable: nextProps.observation }, () => {
         this.handleChangeChart(this.state.changeDataTable)
       })
@@ -201,6 +205,8 @@ class AdminTrials extends Component {
         chartData.push({ date: moment(obj.date).format('DD/MM/YYYY HH:mm'), count: obj.count })
       ))
       this.setState({ chartData: chartData })
+    } else {
+      this.setState({ chartData: [] })
     }
   }
 
@@ -467,6 +473,11 @@ class AdminTrials extends Component {
                       </TableBody>
                     </Table>
                   </Card>
+                  {this.state.chartData.length === 0 &&
+                  <Card style={{ margin: '20px 30px', padding: '20px' }}>
+                    <div style={{ textAlign: 'center' }}>No chart data to show!</div>
+                  </Card>
+                  }
                   {this.state.chartData.length > 0 && <Card style={{ margin: '20px 30px' }}>
                     <div style={{ padding: '20px' }}>
                       <div className='dropdown-title'>select range of time</div>
@@ -485,6 +496,7 @@ class AdminTrials extends Component {
                 ))}
                       </DropDownMenu>
                     </div>
+
                     <ResponsiveContainer width='100%' height={400}>
                       <BarChart data={this.state.chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
