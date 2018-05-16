@@ -1,0 +1,1 @@
+ALTER TABLE public.observation_type ALTER COLUMN trial_stage_id DROP NOT NULL
