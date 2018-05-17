@@ -15,16 +15,16 @@ public final class QuestionAnswerDTO {
     public static class MinimalItem implements EntityDTO<Answer> {
 
         public long answerId;
-        public String observationTypeName;
-        public String observationTypeDescription;
+        public String name;
+        public String description;
 
         @Override
         public void toDto(Answer answer) {
             this.answerId = answer.getId();
 
             ObservationType observationType = answer.getObservationType();
-            this.observationTypeName = observationType.getName();
-            this.observationTypeDescription = observationType.getDescription();
+            this.name = observationType.getName();
+            this.description = observationType.getDescription();
         }
     }
 
