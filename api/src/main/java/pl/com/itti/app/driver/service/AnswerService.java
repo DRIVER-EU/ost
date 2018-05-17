@@ -167,6 +167,7 @@ public class AnswerService {
     private Specifications<Answer> getAnswerSpecifications(Long trialSessionId) {
         Set<Specification<Answer>> conditions = new HashSet<>();
         conditions.add(AnswerSpecification.inTrialSession(trialSessionId));
+        conditions.add(AnswerSpecification.inLastTrialStage(trialSessionId));
         return RepositoryUtils.concatenate(conditions);
     }
 

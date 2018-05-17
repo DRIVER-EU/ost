@@ -59,7 +59,8 @@ public class AnswerSpecification {
             Join<Answer, ObservationType> observationTypeJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.observationType, JoinType.LEFT);
             Path<TrialStage> actualTrialStage = observationTypeJoin.get(ObservationType_.trialStage);
 
-            return cb.or(cb.equal(lastTrialStage, actualTrialStage),
+            return cb.or(
+                    cb.equal(lastTrialStage, actualTrialStage),
                     cb.isNull(actualTrialStage));
         };
     }
