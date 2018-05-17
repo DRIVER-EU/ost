@@ -60,7 +60,7 @@ class NewObservationComponent extends Component {
       attachmentCoordinatesLat: '',
       images: [],
       listOfParticipants: [],
-      dateTime: moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss A'),
+      dateTime: moment(new Date().getTime()).format('YYYY-MM-DD kk:mm:ss'),
       isLoading: false,
       attachmentDescription: '',
       validParticipants: true,
@@ -192,7 +192,7 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
-    send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DDThh:mm:ss A').format('YYYY-MM-DDThh:mm:ssZ')
+    send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = []
@@ -258,7 +258,7 @@ class NewObservationComponent extends Component {
     this.setState({ observationForm: change })
   }
 
-  setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('YYYY-MM-DDThh:mm:ss A') })
+  setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('YYYY-MM-DD kk:mm:ss') })
 
   handleParticipants (id) {
     let change = [ ...this.state.listOfParticipants ]
@@ -378,7 +378,7 @@ class NewObservationComponent extends Component {
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
                 value={this.state.dateTime}
-                format='YYYY/MM/DD H:mm' />
+                format='YYYY-MM-DD kk:mm' />
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
                 {this.state.observationForm.roles.map((object) => (
@@ -415,7 +415,8 @@ class NewObservationComponent extends Component {
                 <div>
                   <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
-                  <TextField value={this.state.attachmentDescription}
+                  <TextField style={{ width:'100%' }}
+                    value={this.state.attachmentDescription}
                     onChange={(event, value) => { this.handleDescription(value) }}
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                     />
