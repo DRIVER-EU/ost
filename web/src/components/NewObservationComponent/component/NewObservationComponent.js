@@ -82,6 +82,12 @@ class NewObservationComponent extends Component {
   }
 
   componentWillMount () {
+    window.onkeypress = function (e) {
+      if (e.charCode === 13) {
+        e.preventDefault()
+      }
+    }
+
     this.props.getSchema(this.props.params.id_observation, this.props.params.id)
     this.setState({ isLoading: true })
     this.djsConfig = {
