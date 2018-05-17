@@ -51,7 +51,7 @@ class SummaryOfObservationModal extends Component {
         open={this.props.show}
         onRequestClose={() => this.props.handleShowModal()}
         bodyClassName={'content-schema'}
-        bodyStyle={{ padding: 0, maxHeight: '100%' }}
+        bodyStyle={{ padding: 0, maxHeight: '100%', color: 'rgb(40, 40, 41)' }}
         contentStyle={{ maxHeight: '100%' }}
         >
         {this.props.mode === 'usermodal'
