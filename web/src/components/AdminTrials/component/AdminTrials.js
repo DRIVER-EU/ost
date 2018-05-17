@@ -398,6 +398,7 @@ class AdminTrials extends Component {
                     <div>Summary of observations</div>
                     <DateComponent />
                   </div>
+                  {false &&
                   <Card style={{ padding: '20px', margin: '20px 30px' }}>
                     <div style={styles.searchPanelContainer}>
                       <div style={{ width: 'calc(100% - 108px)' }}>
@@ -416,6 +417,7 @@ class AdminTrials extends Component {
                         labelStyle={{ color: '#FDB913' }} />
                     </div>
                   </Card>
+                  }
                   <Card style={{ margin: '20px 30px' }}>
                     <Table
                       bodyStyle={{ overflowX: undefined, overflowY: undefined }}
