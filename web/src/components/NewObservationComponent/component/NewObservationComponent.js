@@ -82,6 +82,12 @@ class NewObservationComponent extends Component {
   }
 
   componentWillMount () {
+    window.onkeypress = function (e) {
+      if (e.charCode === 13) {
+        e.preventDefault()
+      }
+    }
+
     this.props.getSchema(this.props.params.id_observation, this.props.params.id)
     this.setState({ isLoading: true })
     this.djsConfig = {
@@ -195,7 +201,7 @@ class NewObservationComponent extends Component {
     send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
-    send['trialRoleIds'] = []
+    send['trialRoleIds'] = tab
     send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
       { 'longitude': this.state.attachmentCoordinatesLong,
