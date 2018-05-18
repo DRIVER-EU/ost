@@ -413,7 +413,7 @@ class NewObservationComponent extends Component {
                 uiSchema={this.state.observationForm.uiSchema}
                 formData={this.state.observationForm.formData}
                 widgets={widgets}
-                liveValidate
+
                 showErrorList={false}
                 onError={() => this.handleError()}
                 onSubmit={(value) => this.handleOnSubmit(value)}
