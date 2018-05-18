@@ -31,7 +31,7 @@ public final class SchemaCreator {
 
     private static final ObjectNode COMMENT_SCHEMA = MAPPER.createObjectNode()
             .put("title", "Comment")
-            .put("description", "What you think about this question?")
+            .put("description", "(Optional) Add rationale for Your observation:")
             .put("type", "string");
 
     public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
