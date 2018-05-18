@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.dto.TrialRoleDTO;
+import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialSession;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -45,19 +48,29 @@ public class ObservationTypeService {
     private TrialRoleRepository trialRoleRepository;
 
     @Transactional(readOnly = true)
-    public Page<ObservationType> find(Long trialSessionId, Pageable pageable) {
+    public List<ObservationType> find(Long trialSessionId) {
         AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
                 .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
 
         TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
-        return observationTypeRepository.findAll(
+        List<ObservationType> observationTypes = observationTypeRepository.findAll(
                 getObservationTypeSpecifications(
                         authUser,
                         trialSession
-                ), pageable
-        );
+                ));
+
+        return observationTypes.stream()
+                .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))
+                .collect(Collectors.toList());
+    }
+
+    private boolean hasObservationTypeNoAnswer(ObservationType observationType, AuthUser authUser) {
+        List<Answer> answers = observationType.getAnswers();
+
+        return answers.stream()
+                .noneMatch(answer -> answer.getTrialUser().getAuthUser().equals(authUser));
     }
 
     @Transactional(readOnly = true)

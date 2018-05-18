@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.service.ObservationTypeService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/observationtypes")
 public class ObservationTypeController {
@@ -20,8 +22,8 @@ public class ObservationTypeController {
     private ObservationTypeService observationTypeService;
 
     @FindAllGetMapping
-    public PageDTO<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialsession_id") Long trialSessionId, Pageable pageable) {
-        return DTO.from(observationTypeService.find(trialSessionId, pageable), ObservationTypeDTO.ListItem.class);
+    public List<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialsession_id") Long trialSessionId, Pageable pageable) {
+        return DTO.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.ListItem.class);
     }
 
     @GetMapping("/form")
