@@ -28,15 +28,9 @@ export const actions = {
 
 export const getObservations = (trialSessionId) => {
   return (dispatch) => {
-    // dispatch(getObservationsAction({
-    //   total: 3,
-    //   data: [
-    //     { id: 1, title: 'Profile photo', description: 'Change your Google+ profile photo' },
-    //     { id: 2, title: 'Show your status', description: 'Your status is visible to everyone you use with' }
-    //   ]
-    // }))
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
+      axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}
+      &size=1000&sort=id,asc`, getHeaders())
           .then((response) => {
             dispatch(getObservationsAction(response.data))
             resolve()
