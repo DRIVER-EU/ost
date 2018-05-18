@@ -435,9 +435,6 @@ class AdminTrials extends Component {
                       User
                     </TableHeaderColumn>
                           <TableHeaderColumn >
-                      Role
-                    </TableHeaderColumn>
-                          <TableHeaderColumn >
                       Observation Type
                     </TableHeaderColumn>
                           <TableHeaderColumn>
@@ -454,9 +451,6 @@ class AdminTrials extends Component {
                             </TableRowColumn>
                             <TableRowColumn>
                               {`${row.user.firstName} ${row.user.lastName}`}
-                            </TableRowColumn>
-                            <TableRowColumn>
-                              {row.roleName}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.observationTypeName}
