@@ -25,9 +25,10 @@ class SelectObservation extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    let listOfObsevationProps = [...nextProps.listOfObservations]
     let listOfObsevation = [...this.state.listOfObservations]
     if (nextProps.listOfObservations && this.props.listOfObservations &&
-      !_.isEqual(listOfObsevation.sort(), nextProps.listOfObservations.sort())) {
+      !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
   }
