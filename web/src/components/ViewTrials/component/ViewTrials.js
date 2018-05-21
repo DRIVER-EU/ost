@@ -19,7 +19,7 @@ class ViewTrials extends Component {
       selectedObj: {},
       showModal: false,
       trialSession: { name: '' },
-      listOfTrials: [],
+      listOfTrials: props.listOfTrials.data,
       interval: ''
     }
   }
@@ -81,6 +81,7 @@ class ViewTrials extends Component {
 
   handleFindObservation () {
     let list = [...this.state.listOfTrials]
+    console.log(1)
     let index = _.findIndex(list, { 'id': parseInt(this.props.params.id) })
     if (index !== -1 && !list[index].initHasAnswer && list[index].initHasAnswer !== null) {
       let change = { ...this.state }
