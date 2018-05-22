@@ -46,6 +46,7 @@ class ViewTrials extends Component {
       this.props.getTrialSession(this.props.params.id)
     }, 3000)
     this.setState({ interval: interval })
+    this.handleFindObservation()
   }
 
   componentWillUnmount () {
@@ -81,7 +82,6 @@ class ViewTrials extends Component {
 
   handleFindObservation () {
     let list = [...this.state.listOfTrials]
-    console.log(1)
     let index = _.findIndex(list, { 'id': parseInt(this.props.params.id) })
     if (index !== -1 && !list[index].initHasAnswer && list[index].initHasAnswer !== null) {
       let change = { ...this.state }
