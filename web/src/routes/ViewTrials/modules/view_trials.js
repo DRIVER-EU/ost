@@ -13,6 +13,7 @@ import { getHeaders, errorHandle } from '../../../store/addons'
 export const GET_VIEW_TRIALS = 'GET_VIEW_TRIALS'
 export const GET_TRIAL_SESSION = 'GET_TRIAL_SESSION'
 export const GET_TRIALS = 'GET_TRIALS'
+export const CLEAR_TRIALS = 'CLEAR_TRIALS'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -35,6 +36,13 @@ export const getTrialsAction = (data = null) => {
   return {
     type: GET_TRIALS,
     data: data
+  }
+}
+
+export const clearTrialsAction = (data = null) => {
+  return {
+    type: CLEAR_TRIALS,
+    data: []
   }
 }
 
@@ -90,6 +98,15 @@ export const getTrials = () => {
     })
   }
 }
+
+export const clearTrialList = () => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      dispatch(clearTrialsAction([]))
+      resolve()
+    })
+  }
+}
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -107,6 +124,12 @@ const ACTION_HANDLERS = {
     }
   },
   [GET_TRIALS]: (state, action) => {
+    return {
+      ...state,
+      listOfTrials: action.data
+    }
+  },
+  [CLEAR_TRIALS]: (state, action) => {
     return {
       ...state,
       listOfTrials: action.data

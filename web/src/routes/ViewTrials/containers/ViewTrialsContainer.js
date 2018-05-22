@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import ViewTrials from '../components/ViewTrials'
-import { getViewTrials, getTrialSession, getTrials } from './../modules/view_trials'
+import { getViewTrials, getTrialSession, getTrials, clearTrialList } from './../modules/view_trials'
 import { downloadFile, sendObservation } from './../../NewObservation/modules/newobservation'
 
 const mapDispatchToProps = {
@@ -8,7 +8,8 @@ const mapDispatchToProps = {
   getTrialSession,
   getTrials,
   downloadFile,
-  sendObservation
+  sendObservation,
+  clearTrialList
 }
 
 const mapStateToProps = (state) => ({
