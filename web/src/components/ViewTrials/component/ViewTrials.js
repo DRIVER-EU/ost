@@ -19,8 +19,9 @@ class ViewTrials extends Component {
       selectedObj: {},
       showModal: false,
       trialSession: { name: '' },
-      listOfTrials: props.listOfTrials.data,
-      interval: ''
+      listOfTrials: props.listOfTrials.data ? props.listOfTrials.data : [],
+      interval: '',
+      id: props.params.id
     }
   }
 
@@ -34,7 +35,8 @@ class ViewTrials extends Component {
     listOfTrials: PropTypes.object,
     observationForm: PropTypes.any,
     downloadFile: PropTypes.func,
-    sendObservation: PropTypes.func
+    sendObservation: PropTypes.func,
+    clearTrialList: PropTypes.func
   }
 
   componentWillMount () {
@@ -46,10 +48,12 @@ class ViewTrials extends Component {
       this.props.getTrialSession(this.props.params.id)
     }, 3000)
     this.setState({ interval: interval })
+
     this.handleFindObservation()
   }
 
   componentWillUnmount () {
+    this.props.clearTrialList()
     clearInterval(this.state.interval)
   }
 
@@ -144,7 +148,7 @@ class ViewTrials extends Component {
             show={this.state.showModal}
             object={this.state.selectedObj}
             handleShowModal={this.handleShowModal.bind(this)}
-            params={this.props.params.id}
+            params={this.state.id}
             observationForm={this.props.observationForm}
             downloadFile={this.props.downloadFile}
             sendObservation={this.props.sendObservation} />

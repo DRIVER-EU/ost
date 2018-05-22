@@ -88,7 +88,9 @@ class NewObservationComponent extends Component {
       }
     }
 
-    this.props.getSchema(this.props.params.id_observation, this.props.params.id)
+    if (this.props.params.id_observation) {
+      this.props.getSchema(this.props.params.id_observation, this.props.params.id)
+    }
     this.setState({ isLoading: true })
     this.djsConfig = {
       addRemoveLinks: true,
