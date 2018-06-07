@@ -29,7 +29,14 @@ class MenuLeft extends Component {
         <AppBar
           zDepth={3}
           style={{ backgroundColor: 'white' }}
-          iconElementLeft={<img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />}
+          iconElementLeft={
+            <div style={{ display: 'flex' }}>
+              <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
+              <span style={{ display: 'flex', alignItems: 'center', marginLeft: 5, fontSize: 18 }}>
+                Observer Support Tool
+              </span>
+            </div>
+          }
           iconElementRight={
             <List style={{ display: 'flex' }}>
               <ListItem
