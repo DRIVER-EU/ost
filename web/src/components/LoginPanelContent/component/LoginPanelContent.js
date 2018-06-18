@@ -88,7 +88,7 @@ class LoginPanelContent extends Component {
       <div className='main-container'>
         <div className='pages-box pages-flex'>
           <div className='login-box' onKeyPress={this._handleKeyPress}>
-            <p className='singin-title'>Sing in</p>
+            <p className='singin-title'>Sign in</p>
 
             <TextField
               type='email'
