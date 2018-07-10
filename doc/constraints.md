@@ -1,9 +1,8 @@
 # Constraints
 
-## Observer Support Tool - Mobile
+## Observer Support Tool 
 - Web browser
-- Android (tablet and smartphone)
-- iOS (tablet and smartphone)
+
 
 
 ## Observer Management Tool - Desktop
