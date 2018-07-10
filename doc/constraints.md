@@ -5,7 +5,7 @@
 
 
 
-## Observer Management Tool - Desktop
+## Observer Management Tool
 - Web browser
 
 
