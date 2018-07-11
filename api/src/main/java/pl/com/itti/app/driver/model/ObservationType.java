@@ -50,6 +50,9 @@ public class ObservationType extends PersistentObject implements Serializable {
     @Builder.Default
     private boolean withUsers = true;
 
+    @Column(nullable = false)
+    private int position;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "observationType")
     @Builder.Default
     private List<Question> questions = new ArrayList<>();
