@@ -5,8 +5,6 @@ import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
@@ -24,11 +22,7 @@ import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecificat
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collector;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +54,8 @@ public class ObservationTypeService {
                         authUser,
                         trialSession
                 ));
+
+        observationTypes.sort(Comparator.comparing(observationType -> observationType.getPosition()));
 
         return observationTypes.stream()
                 .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))

@@ -2,7 +2,6 @@ package pl.com.itti.app.driver.web;
 
 import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
