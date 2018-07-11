@@ -1,40 +1,23 @@
 # Implementation details
 Below are presented sample views for Observer and Trial Manager.
 
-## Trial Manager View
+## Log in
+![ ](./img/signin.png) 
+## Trials 
+![ ](./img/enter.png)
+## Events and aswers
+![ ](./img/answersEvents.png)
+## Observations
+![ ](./img/obsTypes.png)
+## Questionnaire
+![ ](./img/observation.png)
 
-#### Summary of Observations
-![1](./img/1.png)
-#### Summary of Observations in Time
-![2](./img/2.png)
-#### Events and Messages sent to Observer
-![3](./img/3.png)
+## TrialManager View
+![ ](./img/TMView.png)
 
-#### Welcome Window
-<img src="./img/welcome.png" width="300">
+## Events send to users
+![ ](./img/sendTo.png)
 
-#### Trial
-<img src="./img/trial.png" width="300">
-
-#### Events
-<img src="./img/obsEventView.png" width="300">
-
-#### Observation Types
-<img src="./img/type.png" width="300">
-
-#### Sample questions
-
-#### 1. Radio buttons
-<img src="./img/radiobut1.png" width="300">
-<img src="./img/radiobut2.png" width="300">
-
-#### 2. Checkboxes
-<img src="./img/chckbx1.png" width="300">
-<img src="./img/chbox2.png" width="300">
-
-#### 3. Slider
-<img src="./img/slider1.png" width="300">
-<img src="./img/slider2.png" width="300">
 
 
 
