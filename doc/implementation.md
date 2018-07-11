@@ -18,7 +18,8 @@ Below are presented sample views for Observer and Trial Manager.
 ## Events send to users
 ![ ](./img/sendTo.png)
 
-
+## Chart 
+![ ](./img/wykresik.png)
 
 
 
