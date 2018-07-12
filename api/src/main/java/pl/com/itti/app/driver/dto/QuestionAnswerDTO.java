@@ -9,6 +9,7 @@ import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 public final class QuestionAnswerDTO {
 
@@ -17,10 +18,12 @@ public final class QuestionAnswerDTO {
         public long answerId;
         public String name;
         public String description;
+        public String time;
 
         @Override
         public void toDto(Answer answer) {
             this.answerId = answer.getId();
+            this.time = answer.getSimulationTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
             ObservationType observationType = answer.getObservationType();
             this.name = observationType.getName();
@@ -33,6 +36,7 @@ public final class QuestionAnswerDTO {
         public JsonNode questionSchema;
         public JsonNode formData;
         public JsonNode attachments;
+        public JsonNode trialRoles;
 
         @Override
         public void toDto(Answer answer) {
@@ -42,6 +46,7 @@ public final class QuestionAnswerDTO {
                 this.questionSchema = SchemaCreator.createSchemaForm(answer.getObservationType().getQuestions(), true);
                 this.formData = new ObjectMapper().readTree(answer.getFormData());
                 this.attachments = SchemaCreator.createAttachmentSchemaForm(answer.getAttachments());
+                this.trialRoles = SchemaCreator.createTrialRolesSchemaForm(answer.getAnswerTrialRoles());
             } catch (IOException ioe) {
                 throw new InternalServerException("Error in jsonSchema", ioe);
             }
