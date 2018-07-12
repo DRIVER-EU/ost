@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONObject;
-import pl.com.itti.app.driver.model.Attachment;
-import pl.com.itti.app.driver.model.Question;
+import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 
 import java.io.IOException;
@@ -26,6 +26,10 @@ public final class SchemaCreator {
     private static final String FIELD_COORDINATES = "coordinates";
 
     private static final String FIELD_FILE = "files";
+
+    private static final String FIELD_TRIAL = "trial";
+
+    private static final String FIELD_TRIAL_CHECK = "check";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -125,5 +129,34 @@ public final class SchemaCreator {
                 .putPOJO(FIELD_DESCRIPTION, descriptionsNode)
                 .putPOJO(FIELD_COORDINATES, coordinatesNode)
                 .putPOJO(FIELD_FILE, filesNode);
+    }
+
+    public static ObjectNode createTrialRolesSchemaForm(List<AnswerTrialRole> trialRoles) {
+        ArrayNode trialNode = MAPPER.createArrayNode();
+        ArrayNode checkNode = MAPPER.createArrayNode();
+
+        if (!CollectionUtils.isEmpty(trialRoles)) {
+            List<TrialRole> lastTrialRoles = getLastTrialRoles(trialRoles.stream().findFirst().get().getTrialRole());
+
+            for (TrialRole trial : lastTrialRoles) {
+                trialNode.addPOJO(trial.getName());
+            }
+
+            for (AnswerTrialRole answerTrialRole : trialRoles) {
+                checkNode.addPOJO(answerTrialRole.getTrialRole().getName());
+            }
+        }
+
+        return MAPPER.createObjectNode()
+                .putPOJO(FIELD_TRIAL, trialNode)
+                .putPOJO(FIELD_TRIAL_CHECK, checkNode);
+    }
+
+    private static List<TrialRole> getLastTrialRoles(TrialRole trialRole) {
+        if (CollectionUtils.isEmpty(trialRole.getTrialRolesParents())) {
+            return trialRole.getTrialRoles();
+        }
+
+        return getLastTrialRoles(trialRole.getTrialRolesParents().stream().findFirst().get());
     }
 }
