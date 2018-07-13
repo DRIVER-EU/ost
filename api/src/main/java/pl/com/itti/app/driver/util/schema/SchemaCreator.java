@@ -159,4 +159,14 @@ public final class SchemaCreator {
 
         return getLastTrialRoles(trialRole.getTrialRolesParents().stream().findFirst().get());
     }
+
+    public static String getValueFromJSONObject(String jsonString, String key) {
+        JSONObject jsonObject = new JSONObject(jsonString);
+
+        if (!jsonObject.isNull(key)) {
+            return jsonObject.getString(key);
+        }
+
+        return "";
+    }
 }

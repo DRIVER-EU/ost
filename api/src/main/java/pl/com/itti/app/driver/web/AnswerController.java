@@ -10,22 +10,26 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.service.AnswerService;
-import pl.com.itti.app.driver.util.InvalidDataException;
-import pl.com.itti.app.driver.util.SchemaValidationException;
+import pl.com.itti.app.driver.util.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/answers")
 public class AnswerController {
 
-    private static final String AUDIO = "audio";
-
-    private static final String IMAGE = "image";
-
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private CSVProperties csvProperties;
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public AnswerDTO.Item answerQuestions(@RequestPart(value = "data") AnswerDTO.Form form,
@@ -52,10 +56,35 @@ public class AnswerController {
         return DTO.from(answerService.findAll(trialSessionId, text), AnswerDTO.ListItem.class);
     }
 
+    @GetMapping("/csv-file")
+    public void getCSVFile(HttpServletResponse response, @RequestParam(value = "trialsession_id") long trialSessionId) throws IOException {
+        if (!java.nio.file.Files.exists(Paths.get(csvProperties.getCsvDir()))) {
+            java.nio.file.Files.createDirectories(Paths.get(csvProperties.getCsvDir()));
+        }
+
+        String fileName = UUID.randomUUID().toString() + ".csv";
+        File file = new File(Paths.get(csvProperties.getCsvDir()) + "/" + fileName);
+        FileWriter writer = new FileWriter(file.getAbsolutePath());
+        answerService.createCSVFile(writer, trialSessionId);
+
+        writer.flush();
+        writer.close();
+
+        byte[] data = Files.readAllBytes(file.toPath());
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename = " + fileName);
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.getOutputStream().write(data);
+
+        file.delete();
+    }
+
     private void assertThatFilesAreValid(MultipartFile[] files) {
         if (files.length > 0) {
             for (MultipartFile file : files) {
-                if (!file.getContentType().startsWith(AUDIO) && !file.getContentType().startsWith(IMAGE)) {
+                if (!file.getContentType().startsWith(AnswerProperties.AUDIO) && !file.getContentType().startsWith(AnswerProperties.IMAGE)) {
                     throw new InvalidDataException("Invalid type of attachment: " + file.getContentType());
                 }
             }
