@@ -4,6 +4,7 @@ import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -32,27 +33,25 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
 import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.driver.model.enums.AttachmentType;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
+import pl.com.itti.app.driver.util.AnswerProperties;
+import pl.com.itti.app.driver.util.CSVUtils;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class AnswerService {
-
-    private static final String ID = "id";
-
-    private static final String TEXT = "text";
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -136,12 +135,12 @@ public class AnswerService {
             DirectoryReader reader = DirectoryReader.open(directory);
             IndexSearcher searcher = new IndexSearcher(reader);
 
-            QueryParser parser = new QueryParser(TEXT, analyzer);
+            QueryParser parser = new QueryParser(AnswerProperties.TEXT, analyzer);
             Query query = parser.parse(text);
             ScoreDoc[] hits = searcher.search(query, 1000, Sort.INDEXORDER).scoreDocs;
             for (ScoreDoc hit : hits) {
                 Document hitDoc = searcher.doc(hit.doc);
-                ids.add(Long.parseLong(hitDoc.get(ID)));
+                ids.add(Long.parseLong(hitDoc.get(AnswerProperties.ID)));
             }
             reader.close();
         } catch (IOException ioe) {
@@ -155,11 +154,11 @@ public class AnswerService {
     private void addDocumentsToWriter(List<Answer> answers, IndexWriter writer) throws IOException {
         for (Answer answer : answers) {
             Document doc = new Document();
-            doc.add(new Field(ID, String.valueOf(answer.getId()), TextField.TYPE_STORED));
+            doc.add(new Field(AnswerProperties.ID, String.valueOf(answer.getId()), TextField.TYPE_STORED));
 
             JsonNode node = new ObjectMapper().readTree(answer.getFormData());
             node.elements()
-                    .forEachRemaining(jsonNode -> doc.add(new Field(TEXT, jsonNode.asText(), TextField.TYPE_STORED)));
+                    .forEachRemaining(jsonNode -> doc.add(new Field(AnswerProperties.TEXT, jsonNode.asText(), TextField.TYPE_STORED)));
             writer.addDocument(doc);
         }
     }
@@ -198,5 +197,68 @@ public class AnswerService {
         conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
         List<Answer> observationTypes = answerRepository.findAll(RepositoryUtils.concatenate(conditions));
         return !observationTypes.isEmpty();
+    }
+
+    public void createCSVFile(FileWriter writer, long trialSessionId) throws IOException {
+        List<String> title = Arrays.asList(AnswerProperties.ANSWER_ID,
+                AnswerProperties.TIME,
+                AnswerProperties.USER,
+                AnswerProperties.ROLE,
+                AnswerProperties.OBSERVATION_TYPE_ID,
+                AnswerProperties.OBSERVATION_TYPE,
+                AnswerProperties.WHEN,
+                AnswerProperties.QUESTION,
+                AnswerProperties.ANSWER,
+                AnswerProperties.COMMENT,
+                AnswerProperties.LOCATION,
+                AnswerProperties.ATTACHMENT);
+
+        CSVUtils.writeLine(writer, title);
+        List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
+
+        for (Answer answer : answers) {
+            for (Question question : answer.getObservationType().getQuestions()) {
+                List<String> value = Arrays.asList(Long.toString(answer.getId()),
+                    answer.getSentSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
+                    answer.getTrialUser().getAuthUser().getFirstName() + " " + answer.getTrialUser().getAuthUser().getLastName(),
+                    trialRoleRepository.findById(answer.getTrialUser().getId()).get().getName(),
+                    Long.toString(answer.getObservationType().getId()),
+                    answer.getObservationType().getName(),
+                    answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
+                    SchemaCreator.getValueFromJSONObject(question.getJsonSchema(), AnswerProperties.TITLE_KEY),
+                    SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
+                    SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),
+                    getLocation(answer.getAttachments()),
+                    getUriOrDescription(answer.getAttachments()));
+
+                CSVUtils.writeLine(writer, value, ',', '"');
+            }
+        }
+    }
+
+    private String getLocation(List<Attachment> attachments) {
+        Optional<Attachment> attachment = attachments.stream()
+                .filter(attach -> attach.getType().name().contains(AttachmentType.LOCATION.name()))
+                .findFirst();
+
+        if (attachment.isPresent()) {
+            return attachment.get().getLongitude() + ", " + attachment.get().getLatitude() + ", " + attachment.get().getAltitude();
+        }
+
+        return "";
+    }
+
+    private String getUriOrDescription(List<Attachment> attachments) {
+        Optional<Attachment> attachment = attachments.stream()
+                .filter(attach -> attach.getType().name().contains(AttachmentType.DESCRIPTION.name()))
+                .findFirst();
+
+        if (attachment.isPresent() && !Strings.isNullOrEmpty(attachment.get().getUri())) {
+            return attachment.get().getUri();
+        } else if (attachment.isPresent()) {
+            return attachment.get().getDescription();
+        } else {
+            return "";
+        }
     }
 }
