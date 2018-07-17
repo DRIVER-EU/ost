@@ -21,6 +21,7 @@ import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -82,6 +83,16 @@ public class TrialSessionService {
 
         trialSession.setLastTrialStage(trialStage);
         return trialSessionRepository.save(trialSession);
+    }
+
+    public void changeStatus(long answerId, String status) {
+        Optional<TrialSession> trialSession = trialSessionRepository.findById(answerId);
+
+        if (trialSession.isPresent()) {
+            SessionStatus sessionStatus = SessionStatus.valueOf(status);
+            trialSession.get().setStatus(sessionStatus);
+            trialSessionRepository.save(trialSession.get());
+        }
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {

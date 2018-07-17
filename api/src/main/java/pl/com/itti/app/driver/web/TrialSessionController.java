@@ -35,6 +35,11 @@ public class TrialSessionController {
         return trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable);
     }
 
+    @PostMapping("/changeStatus")
+    public void changeStatus(@RequestParam(value = "trialsession_id") long answerId, @RequestParam(value = "status") String status) {
+        trialSessionService.changeStatus(answerId, status);
+    }
+
     @PutMapping
     private TrialSessionDTO.FullItem updateLastTrialStage(@PathVariable(value = "id") Long trialSessionId,
                                                           @RequestBody @Validated TrialStageDTO.MinimalItem minimalItem) {
