@@ -77,6 +77,9 @@ public class AnswerService {
     @Autowired
     private TrialUserService trialUserService;
 
+    @Autowired
+    private AttachmentRepository attachmentRepository;
+
     public Answer createAnswer(AnswerDTO.Form form, MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, form.observationTypeId));
@@ -149,6 +152,16 @@ public class AnswerService {
             throw new InternalServerException("Parse error while searching", pe);
         }
         return ids;
+    }
+
+    public void removeAnswer(long answerId) {
+        Optional<Answer> answer = answerRepository.findById(answerId);
+
+        if (answer.isPresent()) {
+            attachmentRepository.delete(answer.get().getAttachments());
+            answerTrialRoleRepository.delete(answer.get().getAnswerTrialRoles());
+            answerRepository.delete(answer.get());
+        }
     }
 
     private void addDocumentsToWriter(List<Answer> answers, IndexWriter writer) throws IOException {

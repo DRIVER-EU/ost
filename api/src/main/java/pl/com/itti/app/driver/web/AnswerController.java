@@ -81,6 +81,11 @@ public class AnswerController {
         file.delete();
     }
 
+    @PostMapping("/remove")
+    public void changeStatus(@RequestParam(value = "answer_id") long answerId) {
+        answerService.removeAnswer(answerId);
+    }
+
     private void assertThatFilesAreValid(MultipartFile[] files) {
         if (files.length > 0) {
             for (MultipartFile file : files) {
