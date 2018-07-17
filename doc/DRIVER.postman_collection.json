@@ -123,7 +123,8 @@
 				"5ab6d905-d78e-4fc1-85ed-49316d0b8f74",
 				"dbc480de-9df7-492e-ab9e-a72699dec168",
 				"bea24a38-827e-47f7-8afd-cd14ea23b41d",
-				"d661a67d-0db1-4d6c-9e36-687e4b92914d"
+				"d661a67d-0db1-4d6c-9e36-687e4b92914d",
+				"700c736b-12e9-4c35-b36c-252ab2d44983"
 			],
 			"folders_order": []
 		},
@@ -580,6 +581,65 @@
 			"events": null,
 			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
 			"rawModeData": "{\n\t\"password\": \"admin\"\n}",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "700c736b-12e9-4c35-b36c-252ab2d44983",
+			"name": "/trialsessions/changeStatus",
+			"url": "http://{{IP-Address}}/api/trialsessions/changeStatus?trialsession_id=1&status=ACTIVE",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trialsession_id",
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "status",
+					"value": "ACTIVE",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": [],
+			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
