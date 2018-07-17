@@ -32,7 +32,8 @@
 			"order": [
 				"dd43e6e2-370b-4f6b-9a4b-8c013b5b7c70",
 				"d4092391-2c36-4f7b-86f0-5a5ac2de049f",
-				"3c06240b-136d-4645-84e8-7329f1073311"
+				"3c06240b-136d-4645-84e8-7329f1073311",
+				"e9b2dc50-b606-4c71-9de4-f9cb68776339"
 			],
 			"folders_order": []
 		},
@@ -743,20 +744,22 @@
 			"queryParams": [
 				{
 					"key": "trialsession_id",
-					"value": "1"
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
 				}
 			],
 			"auth": {
-				"type": "basic",
 				"basic": [
-					{
-						"key": "username",
-						"value": "Alice1",
-						"type": "string"
-					},
 					{
 						"key": "password",
 						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "Observer1",
 						"type": "string"
 					},
 					{
@@ -769,7 +772,8 @@
 						"value": false,
 						"type": "boolean"
 					}
-				]
+				],
+				"type": "basic"
 			},
 			"events": null,
 			"folder": null,
@@ -1414,6 +1418,68 @@
 			"folder": null,
 			"rawModeData": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}",
 			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "e9b2dc50-b606-4c71-9de4-f9cb68776339",
+			"name": "/answers/remove",
+			"url": "http://{{IP-Address}}/api/answers/remove?answer_id=147",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "answer_id",
+					"value": "147",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "Observer1",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": [],
+			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
