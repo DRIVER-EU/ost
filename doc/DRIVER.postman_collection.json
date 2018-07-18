@@ -125,7 +125,8 @@
 				"dbc480de-9df7-492e-ab9e-a72699dec168",
 				"bea24a38-827e-47f7-8afd-cd14ea23b41d",
 				"d661a67d-0db1-4d6c-9e36-687e4b92914d",
-				"700c736b-12e9-4c35-b36c-252ab2d44983"
+				"700c736b-12e9-4c35-b36c-252ab2d44983",
+				"8b8de5e4-3b77-4abe-8a31-910aa412bdf8"
 			],
 			"folders_order": []
 		},
@@ -282,7 +283,7 @@
 				"basic": [
 					{
 						"key": "password",
-						"value": "admin",
+						"value": "adminpass",
 						"type": "string"
 					},
 					{
@@ -732,6 +733,60 @@
 			"pathVariables": {}
 		},
 		{
+			"id": "8b8de5e4-3b77-4abe-8a31-910aa412bdf8",
+			"name": "/trialsessions/trials",
+			"url": "http://{{IP-Address}}/api/trialsessions/trials",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": [],
+			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
 			"id": "9a1143d7-0ff0-4c04-b24f-cc3d15a34145",
 			"name": "/api/answers-events",
 			"url": "{{IP-Address}}/api/answers-events?trialsession_id=1",
@@ -982,7 +1037,31 @@
 			"method": "GET",
 			"pathVariableData": [],
 			"queryParams": [],
-			"auth": null,
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "Observer1",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
 			"events": null,
 			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
 			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
