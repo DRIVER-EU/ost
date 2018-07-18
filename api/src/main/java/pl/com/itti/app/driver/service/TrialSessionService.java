@@ -12,17 +12,19 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
+import pl.com.itti.app.driver.model.TrialManager;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.TrialUser;
+import pl.com.itti.app.driver.model.enums.ManagementRoleType;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialStageRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -42,6 +44,9 @@ public class TrialSessionService {
 
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private TrialUserRepository trialUserRepository;
 
     @Transactional(readOnly = true)
     public TrialSession findOneByManager(long trialSessionId) {
@@ -93,6 +98,19 @@ public class TrialSessionService {
             trialSession.get().setStatus(sessionStatus);
             trialSessionRepository.save(trialSession.get());
         }
+    }
+
+    public List<String> getTrials() {
+        TrialUser trialUser = trialUserRepository.findByAuthUser(trialUserService.getCurrentUser());
+        List<String> trialNames = new ArrayList<>();
+
+        for (TrialManager trialManager : trialUser.getTrialManagers()) {
+            if (ManagementRoleType.SESSION_MANAGER.equals(trialManager.getManagementRole())) {
+                trialNames.add(trialManager.getTrial().getName());
+            }
+        }
+
+        return trialNames;
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {

@@ -13,6 +13,8 @@ import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/trialsessions")
 public class TrialSessionController {
@@ -45,4 +47,10 @@ public class TrialSessionController {
                                                           @RequestBody @Validated TrialStageDTO.MinimalItem minimalItem) {
         return DTO.from(trialSessionService.updateLastTrialStage(trialSessionId, minimalItem.id), TrialSessionDTO.FullItem.class);
     }
+
+    @GetMapping("/trials")
+    public List<String> getTrials() {
+        return trialSessionService.getTrials();
+    }
+
 }
