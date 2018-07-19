@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.util.schema;
 
+import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -8,28 +9,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONObject;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.AnswerType;
+import pl.com.itti.app.driver.util.SchemaCreatorProperties;
 
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
 public final class SchemaCreator {
-
-    private static final String QUESTION_ID = "question_";
-
-    private static final String FIELD_DISABLED = "ui:disabled";
-
-    private static final String FIELD_WIDGET = "ui:widget";
-
-    private static final String FIELD_DESCRIPTION = "descriptions";
-
-    private static final String FIELD_COORDINATES = "coordinates";
-
-    private static final String FIELD_FILE = "files";
-
-    private static final String FIELD_TRIAL = "trial";
-
-    private static final String FIELD_TRIAL_CHECK = "check";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -61,9 +47,9 @@ public final class SchemaCreator {
 
         ObjectNode properties = MAPPER.createObjectNode();
         for (Question question : questions) {
-            properties.putPOJO(QUESTION_ID + question.getId(), createPropertyContent(question));
+            properties.putPOJO(SchemaCreatorProperties.QUESTION_ID + question.getId(), createPropertyContent(question));
             if (question.isCommented()) {
-                properties.putPOJO(QUESTION_ID + question.getId() + "_comment", COMMENT_SCHEMA);
+                properties.putPOJO(SchemaCreatorProperties.QUESTION_ID + question.getId() + "_comment", COMMENT_SCHEMA);
             }
         }
         schema.putPOJO("properties", properties);
@@ -79,9 +65,9 @@ public final class SchemaCreator {
         ObjectNode schema = MAPPER.createObjectNode();
 
         questions.forEach(question -> {
-            schema.putPOJO(QUESTION_ID + question.getId(), createUiSchema(question, disabled));
+            schema.putPOJO(SchemaCreatorProperties.QUESTION_ID + question.getId(), createUiSchema(question, disabled));
             if (question.isCommented()) {
-                schema.putPOJO(QUESTION_ID + question.getId() + "_comment", createCommentUiSchema(disabled));
+                schema.putPOJO(SchemaCreatorProperties.QUESTION_ID + question.getId() + "_comment", createCommentUiSchema(disabled));
             }
         });
         return schema;
@@ -89,19 +75,19 @@ public final class SchemaCreator {
 
     private static ObjectNode createUiSchema(Question question, boolean disabled) {
         ObjectNode ui = MAPPER.createObjectNode();
-        ui.put(FIELD_DISABLED, disabled);
+        ui.put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
 
         if (question.getAnswerType().equals(AnswerType.RADIO_BUTTON)) {
-            ui.put(FIELD_WIDGET, "radio");
+            ui.put(SchemaCreatorProperties.FIELD_WIDGET, "radio");
         } else if (question.getAnswerType().equals(AnswerType.SLIDER)) {
-            ui.put(FIELD_WIDGET, "slider");
+            ui.put(SchemaCreatorProperties.FIELD_WIDGET, "slider");
         }
 
         return ui;
     }
 
     private static ObjectNode createCommentUiSchema(boolean disabled) {
-        return MAPPER.createObjectNode().put(FIELD_DISABLED, disabled);
+        return MAPPER.createObjectNode().put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
     }
 
     public static ObjectNode createAttachmentSchemaForm(List<Attachment> attachments) {
@@ -126,9 +112,9 @@ public final class SchemaCreator {
         }
 
         return MAPPER.createObjectNode()
-                .putPOJO(FIELD_DESCRIPTION, descriptionsNode)
-                .putPOJO(FIELD_COORDINATES, coordinatesNode)
-                .putPOJO(FIELD_FILE, filesNode);
+                .putPOJO(SchemaCreatorProperties.FIELD_DESCRIPTION, descriptionsNode)
+                .putPOJO(SchemaCreatorProperties.FIELD_COORDINATES, coordinatesNode)
+                .putPOJO(SchemaCreatorProperties.FIELD_FILE, filesNode);
     }
 
     public static ObjectNode createTrialRolesSchemaForm(List<AnswerTrialRole> trialRoles) {
@@ -148,8 +134,8 @@ public final class SchemaCreator {
         }
 
         return MAPPER.createObjectNode()
-                .putPOJO(FIELD_TRIAL, trialNode)
-                .putPOJO(FIELD_TRIAL_CHECK, checkNode);
+                .putPOJO(SchemaCreatorProperties.FIELD_TRIAL, trialNode)
+                .putPOJO(SchemaCreatorProperties.FIELD_TRIAL_CHECK, checkNode);
     }
 
     private static List<TrialRole> getLastTrialRoles(TrialRole trialRole) {
@@ -168,5 +154,36 @@ public final class SchemaCreator {
         }
 
         return "";
+    }
+
+    public static ObjectNode createNewSessionSchemaForm(List<TrialStage> trialStages,
+                                                        List<TrialRole> trialRoles,
+                                                        List<AuthUser> authUsers) {
+
+        ArrayNode trialStageNode = MAPPER.createArrayNode();
+        ArrayNode usersNode = MAPPER.createArrayNode();
+        ArrayNode trialRoleNode = MAPPER.createArrayNode();
+
+        for (TrialStage trialStage : trialStages) {
+            trialStageNode.addPOJO(trialStage.getName());
+        }
+
+        for (AuthUser authUser : authUsers) {
+            ObjectNode userNode = MAPPER.createObjectNode()
+                    .putPOJO(SchemaCreatorProperties.FIELD_ID, authUser.getId())
+                    .putPOJO(SchemaCreatorProperties.FIELD_FIRST_NAME, authUser.getFirstName())
+                    .putPOJO(SchemaCreatorProperties.FIELD_LAST_NAME, authUser.getLastName());
+
+            usersNode.addPOJO(userNode);
+        }
+
+        for (TrialRole trialRole : trialRoles) {
+            trialRoleNode.addPOJO(trialRole.getName());
+        }
+
+        return MAPPER.createObjectNode()
+                .putPOJO(SchemaCreatorProperties.FIELD_TRIAL_STAGE, trialStageNode)
+                .putPOJO(SchemaCreatorProperties.FIELD_USER, usersNode)
+                .putPOJO(SchemaCreatorProperties.FIELD_TRIAL_ROLE, trialRoleNode);
     }
 }

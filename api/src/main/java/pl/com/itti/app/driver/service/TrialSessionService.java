@@ -3,7 +3,10 @@ package pl.com.itti.app.driver.service;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import co.perpixel.exception.EntityNotFoundException;
+import co.perpixel.security.model.AuthRole;
 import co.perpixel.security.model.AuthUser;
+import co.perpixel.security.repository.AuthUserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,17 +15,17 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
-import pl.com.itti.app.driver.model.TrialManager;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialStage;
-import pl.com.itti.app.driver.model.TrialUser;
+import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.driver.model.enums.AuthRoleType;
 import pl.com.itti.app.driver.model.enums.ManagementRoleType;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialStageRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.util.*;
 
@@ -47,6 +50,12 @@ public class TrialSessionService {
 
     @Autowired
     private TrialUserRepository trialUserRepository;
+
+    @Autowired
+    private AuthUserRepository authUserRepository;
+
+    @Autowired
+    private TrialRoleRepository trialRoleRepository;
 
     @Transactional(readOnly = true)
     public TrialSession findOneByManager(long trialSessionId) {
@@ -111,6 +120,25 @@ public class TrialSessionService {
         }
 
         return trialNames;
+    }
+
+    public JsonNode newSessionValues(long trialId) {
+        List<TrialStage> trialStages = trialStageRepository.findAllByTrialId(trialId);
+        List<TrialRole> trialRoles = trialRoleRepository.findAllByTrialId(trialId);
+        List<AuthUser> authUsers = new ArrayList<>();
+
+        for (AuthUser user : authUserRepository.findAll()) {
+            for (AuthRole role : user.getRoles()) {
+                if (AuthRoleType.ROLE_USER.name().contains(role.getShortName())) {
+                    authUsers.add(user);
+                    break;
+                }
+            }
+        }
+
+        authUsers.remove(trialUserService.getCurrentUser());
+        return SchemaCreator.createNewSessionSchemaForm(trialStages, trialRoles, authUsers);
+
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {

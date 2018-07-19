@@ -4,6 +4,7 @@ import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.annotation.web.PutMapping;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -51,6 +52,11 @@ public class TrialSessionController {
     @GetMapping("/trials")
     public List<String> getTrials() {
         return trialSessionService.getTrials();
+    }
+
+    @PostMapping("newSessionValues")
+    public JsonNode newSessionValues(@RequestParam(value = "trial_id") long trialId) {
+        return trialSessionService.newSessionValues(trialId);
     }
 
 }
