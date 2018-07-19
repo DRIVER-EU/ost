@@ -35,9 +35,9 @@ public class TrialSessionController {
         return trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable);
     }
 
-    @PostMapping("/changeStatus")
-    public void changeStatus(@RequestParam(value = "trialsession_id") long answerId, @RequestParam(value = "status") String status) {
-        trialSessionService.changeStatus(answerId, status);
+    @PutMapping("/{trialsession_id:\\d+}/changeStatus")
+    public void changeStatus(@PathVariable(value = "trialsession_id") long trialSessionId, @RequestParam(value = "status") String status) {
+        trialSessionService.changeStatus(trialSessionId, status);
     }
 
     @PutMapping

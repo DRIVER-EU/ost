@@ -85,14 +85,14 @@ public class TrialSessionService {
         return trialSessionRepository.save(trialSession);
     }
 
-    public void changeStatus(long answerId, String status) {
-        Optional<TrialSession> trialSession = trialSessionRepository.findById(answerId);
+    public void changeStatus(long trialSessionId, String status) {
+        Optional<TrialSession> trialSession = trialSessionRepository.findById(trialSessionId);
 
-        if (trialSession.isPresent()) {
+        trialSession.ifPresent(session -> {
             SessionStatus sessionStatus = SessionStatus.valueOf(status);
-            trialSession.get().setStatus(sessionStatus);
-            trialSessionRepository.save(trialSession.get());
-        }
+            session.setStatus(sessionStatus);
+            trialSessionRepository.save(session);
+        });
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {
