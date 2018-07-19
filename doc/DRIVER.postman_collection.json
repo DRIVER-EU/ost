@@ -126,7 +126,8 @@
 				"bea24a38-827e-47f7-8afd-cd14ea23b41d",
 				"d661a67d-0db1-4d6c-9e36-687e4b92914d",
 				"700c736b-12e9-4c35-b36c-252ab2d44983",
-				"8b8de5e4-3b77-4abe-8a31-910aa412bdf8"
+				"8b8de5e4-3b77-4abe-8a31-910aa412bdf8",
+				"b8afed13-ff65-4892-8bc1-de426adeafc6"
 			],
 			"folders_order": []
 		},
@@ -760,13 +761,13 @@
 				"type": "basic",
 				"basic": [
 					{
-						"key": "password",
-						"value": "adminpass",
+						"key": "username",
+						"value": "admin",
 						"type": "string"
 					},
 					{
-						"key": "username",
-						"value": "admin",
+						"key": "password",
+						"value": "adminpass",
 						"type": "string"
 					},
 					{
@@ -973,6 +974,68 @@
 			"folder": null,
 			"rawModeData": "",
 			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "b8afed13-ff65-4892-8bc1-de426adeafc6",
+			"name": "/api/trialsessions/newSessionValues",
+			"url": "http://{{IP-Address}}/api/trialsessions/newSessionValues?trial_id=1",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trial_id",
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": [],
+			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
