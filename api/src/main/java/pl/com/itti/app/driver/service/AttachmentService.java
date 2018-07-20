@@ -16,6 +16,8 @@ import pl.com.itti.app.driver.util.InternalServerException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -146,6 +148,17 @@ public class AttachmentService {
 
         FileUtils.save(new File(dir), file, fullName);
         return fullName;
+    }
+
+    public void removeFile(Attachment attachment) {
+        if (isFileAttachment(attachment)) {
+            Path path = Paths.get(getResourceDirOfAttachment(attachment), attachment.getUri(), attachment.getDescription());
+            try {
+                path.toFile().delete();
+            } catch (Exception e) {
+                throw new InternalServerException("Unable to Delete Attachment File: " + attachment.getDescription(), e);
+            }
+        }
     }
 
     private boolean isFileAttachment(Attachment attachment) {

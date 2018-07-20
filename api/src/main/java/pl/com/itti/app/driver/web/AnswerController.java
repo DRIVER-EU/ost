@@ -81,8 +81,8 @@ public class AnswerController {
         file.delete();
     }
 
-    @PostMapping("/remove")
-    public void changeStatus(@RequestParam(value = "answer_id") long answerId) {
+    @DeleteMapping("/{answer_id:\\d+}/remove")
+    public void changeStatus(@PathVariable(value = "answer_id") long answerId) {
         answerService.removeAnswer(answerId);
     }
 

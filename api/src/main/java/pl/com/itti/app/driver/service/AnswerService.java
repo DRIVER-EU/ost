@@ -157,11 +157,15 @@ public class AnswerService {
     public void removeAnswer(long answerId) {
         Optional<Answer> answer = answerRepository.findById(answerId);
 
-        if (answer.isPresent()) {
-            attachmentRepository.delete(answer.get().getAttachments());
-            answerTrialRoleRepository.delete(answer.get().getAnswerTrialRoles());
-            answerRepository.delete(answer.get());
-        }
+        answer.ifPresent(ans -> {
+            for (Attachment attachment : ans.getAttachments()) {
+                attachmentService.removeFile(attachment);
+            }
+
+            attachmentRepository.delete(ans.getAttachments());
+            answerTrialRoleRepository.delete(ans.getAnswerTrialRoles());
+            answerRepository.delete(ans);
+        });
     }
 
     private void addDocumentsToWriter(List<Answer> answers, IndexWriter writer) throws IOException {
