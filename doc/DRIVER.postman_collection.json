@@ -1558,7 +1558,7 @@
 		{
 			"id": "e9b2dc50-b606-4c71-9de4-f9cb68776339",
 			"name": "/answers/remove",
-			"url": "http://{{IP-Address}}/api/answers/remove?answer_id=147",
+			"url": "http://{{IP-Address}}/api/answers/145/remove",
 			"description": "",
 			"data": null,
 			"dataMode": "params",
@@ -1576,17 +1576,9 @@
 					"enabled": true
 				}
 			],
-			"method": "POST",
+			"method": "DELETE",
 			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "answer_id",
-					"value": "147",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
+			"queryParams": [],
 			"auth": {
 				"type": "basic",
 				"basic": [
