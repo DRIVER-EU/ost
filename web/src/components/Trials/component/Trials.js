@@ -11,7 +11,8 @@ class Trials extends Component {
     super(props)
     this.state = {
       listOfTrials: [],
-      isLoading: false
+      isLoading: false,
+      interval: ''
     }
   }
 
@@ -21,8 +22,13 @@ class Trials extends Component {
   }
 
   componentWillMount () {
-    this.props.getTrials()
-    this.setState({ isLoading: true })
+    let interval = setInterval(() => {
+      this.props.getTrials()
+    }, 5000)
+    this.setState({
+      interval: interval,
+      isLoading: true
+    })
   }
 
   componentWillReceiveProps (nextProps) {
