@@ -5,6 +5,8 @@ import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 import Spinner from 'react-spinkit'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 
 class TrialManager extends Component {
   constructor (props) {
@@ -52,7 +54,7 @@ class TrialManager extends Component {
         <div className='pages-box'>
           <div className='trials-container'>
             <div className='trials-header'>
-              <div className={'trial-select'}>Trial manager</div>
+              <div className={'trial-select'}>Trial Sessions</div>
             </div>
             {this.state.isLoading && <div className='spinner-box'>
               <div className={'spinner'}>
@@ -85,6 +87,9 @@ class TrialManager extends Component {
                 )
               })}
             </Accordion>
+            <FloatingActionButton style={{ float: 'right' }} secondary>
+              <ContentAdd />
+            </FloatingActionButton>
           </div>
         </div>
       </div>
