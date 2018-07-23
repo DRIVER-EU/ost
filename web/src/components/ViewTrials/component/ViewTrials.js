@@ -8,6 +8,9 @@ import { browserHistory } from 'react-router'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
+import Clear from 'material-ui/svg-icons/content/clear'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 import _ from 'lodash'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 
@@ -21,7 +24,8 @@ class ViewTrials extends Component {
       trialSession: { name: '' },
       listOfTrials: props.listOfTrials.data ? props.listOfTrials.data : [],
       interval: '',
-      id: props.params.id
+      id: props.params.id,
+      open: false
     }
   }
 
@@ -98,8 +102,28 @@ class ViewTrials extends Component {
   handleShowModal () {
     this.setState({ showModal: !this.state.showModal })
   }
+  handleOpen = () => {
+    this.setState({ open: true })
+  };
 
+  handleClose = () => {
+    this.setState({ open: false })
+  };
   render () {
+    const actions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label='Delete'
+        primary
+        keyboardFocused
+        onTouchTap={this.handleClose}
+      />
+    ]
+
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -123,7 +147,13 @@ class ViewTrials extends Component {
                       </div>
                     </h3>} expanded={false}>
                     <div>
-                      <p>{object.description}</p>
+                      <p>{object.description}
+                        <Clear
+                          style={{ float: 'right', color: 'red', cursor: 'pointer' }}
+                          label='Dialog'
+                          onTouchTap={this.handleOpen}
+                        />
+                      </p>
                       { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
@@ -153,6 +183,15 @@ class ViewTrials extends Component {
             downloadFile={this.props.downloadFile}
             sendObservation={this.props.sendObservation} />
         </div>
+        <Dialog
+          title='Do you want to remove this answer?'
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          The answer will be permanently deleted.
+        </Dialog>
       </div>
     )
   }
