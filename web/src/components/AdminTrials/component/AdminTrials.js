@@ -15,6 +15,7 @@ import DateComponent from '../../DateComponent/DateComponent'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
+import FileDownload from 'material-ui/svg-icons/file/file-download'
 import './AdminTrials.scss'
 import _ from 'lodash'
 
@@ -395,7 +396,7 @@ class AdminTrials extends Component {
                 value='a'>
                 <div>
                   <div className='trials-header'>
-                    <div>Summary of observations</div>
+                    <div>Summary of observations <FileDownload viewBox={'0 -4 24 24'} /></div>
                     <DateComponent />
                   </div>
                   {false &&
