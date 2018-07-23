@@ -15,6 +15,8 @@ import DateComponent from '../../DateComponent/DateComponent'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 import './AdminTrials.scss'
 import _ from 'lodash'
 
@@ -388,7 +390,9 @@ class AdminTrials extends Component {
             </div>
             <Tabs
               value={this.state.value}
-              onChange={this.handleChange}>
+              onChange={this.handleChange}
+              tabItemContainerStyle={{ whiteSpace: 'inherit' }}
+              >
               <Tab
                 style={this.state.value === 'a' ? styles.active : styles.default}
                 label='Summary of observations'
@@ -420,7 +424,7 @@ class AdminTrials extends Component {
                   }
                   <Card style={{ margin: '20px 30px' }}>
                     <Table
-                      bodyStyle={{ overflowX: undefined, overflowY: undefined }}
+                      bodyStyle={{ overflowX: 'auto', overflowY: undefined }}
                       fixedFooter={false} >
                       <TableHeader
                         displaySelectAll={false}
@@ -442,10 +446,12 @@ class AdminTrials extends Component {
                     </TableHeaderColumn>
                         </TableRow>
                       </TableHeader>
-                      <TableBody displayRowCheckbox={false} showRowHover>
+                      <TableBody
+                        displayRowCheckbox={false} showRowHover
+                      >
 
                         {this.state.changeDataTable.map((row, index) => (
-                          <TableRow key={index} selectable={false}>
+                          <TableRow key={index} selectable={false} style={{ whiteSpace: 'inherit' }}>
                             <TableRowColumn>
                               {moment(row.sentSimulationTime, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm')}
                             </TableRowColumn>
@@ -508,7 +514,8 @@ class AdminTrials extends Component {
               <Tab
                 style={this.state.value === 'b' ? styles.active : styles.default}
                 label='Events / messages send to observers'
-                value='b'>
+                value='b'
+                >
                 <div>
                   <div className='trials-header'>
                     <div>Events / messages send to observers</div>
@@ -709,6 +716,11 @@ class AdminTrials extends Component {
               observationForm={this.props.observationForm}
               params={this.props.params.id}
               downloadFile={this.props.downloadFile} />
+            <div style={{ position: 'fixed', right: 40, bottom: 40 }}>
+              <FloatingActionButton secondary>
+                <ContentAdd />
+              </FloatingActionButton>
+            </div>
           </div>
         </div>
       </div>
