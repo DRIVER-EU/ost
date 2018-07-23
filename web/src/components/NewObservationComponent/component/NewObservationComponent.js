@@ -372,10 +372,10 @@ class NewObservationComponent extends Component {
             {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
             <div className={'buttons-obs'} style={{ textAlign: 'right' }}>
               <RaisedButton
-                buttonStyle={{ width: '240px' }}
+                buttonStyle={{ width: '300px' }}
                 backgroundColor='#244C7B'
                 labelColor='#FCB636'
-                label='Back to list of events'
+                label='Back to list of Observations'
                 secondary
                 icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
                   <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
