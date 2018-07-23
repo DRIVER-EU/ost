@@ -20,6 +20,11 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import './AdminTrials.scss'
 import _ from 'lodash'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 const rangeList = [
   { id: 0, name: '5 minutes', value: 5 * 60 * 1000 },
@@ -103,7 +108,8 @@ class AdminTrials extends Component {
     params: PropTypes.any,
     observationForm: PropTypes.any,
     getSchemaView: PropTypes.func,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    exportToCSV: PropTypes.func
   }
 
   componentWillUnmount () {
@@ -361,6 +367,14 @@ class AdminTrials extends Component {
     this.props.getObservation(this.props.params.id, this.state.searchText)
   }
 
+  handleDwonloadSummary () {
+    if (this.state.changeDataTable.length !== 0) {
+      this.props.exportToCSV(this.props.params.id)
+    } else {
+      toastr.error('Export to CSV', `There isn't data to export!`, toastrOptions)
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -400,7 +414,11 @@ class AdminTrials extends Component {
                 value='a'>
                 <div>
                   <div className='trials-header'>
-                    <div>Summary of observations <FileDownload viewBox={'0 -4 24 24'} /></div>
+                    <div>Summary of observations <FileDownload
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => this.handleDwonloadSummary()}
+                      viewBox={'0 -4 24 24'} />
+                    </div>
                     <DateComponent />
                   </div>
                   {false &&

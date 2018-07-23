@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import AdminTrials from '../components/AdminTrials'
 import { getMessages, sendMessage, getObservation,
-  getUsers, getRoles, getStages, setStage } from './../modules/admin_trials'
+  getUsers, getRoles, getStages, setStage, exportToCSV } from './../modules/admin_trials'
 import { getSchemaView } from './../../Question/modules/question'
 import { downloadFile } from './../../NewObservation/modules/newobservation'
 
@@ -14,7 +14,8 @@ const mapDispatchToProps = {
   getStages,
   setStage,
   getSchemaView,
-  downloadFile
+  downloadFile,
+  exportToCSV
 }
 
 const mapStateToProps = (state) => ({

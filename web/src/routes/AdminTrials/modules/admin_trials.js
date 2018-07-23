@@ -8,7 +8,8 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, errorHandle, getHeadersFileDownload } from '../../../store/addons'
+import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
 
 const toastrOptions = {
@@ -22,6 +23,7 @@ export const GET_USERS = 'GET_USERS'
 export const GET_ROLES = 'GET_ROLES'
 export const GET_STAGES = 'GET_STAGES'
 export const SET_STAGE = 'SET_STAGE'
+export const EXPORT_TO_CSV = 'EXPORT_TO_CSV'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -75,6 +77,13 @@ export const setStageAction = (data = null) => {
   }
 }
 
+export const exportToCSVAction = (data = null) => {
+  return {
+    type: EXPORT_TO_CSV,
+    data: data
+  }
+}
+
 export const actions = {
   getMessages,
   sendMessage,
@@ -82,7 +91,8 @@ export const actions = {
   getUsers,
   getRoles,
   getStages,
-  setStage
+  setStage,
+  exportToCSV
 }
 
 export const getMessages = (id, sort = '') => {
@@ -199,6 +209,23 @@ export const setStage = (id, stageId) => {
   }
 }
 
+export const exportToCSV = (id) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/answers/csv-file?trialsession_id=${id}`, getHeadersFileDownload())
+        .then((response) => {
+          toastr.success('Export to CSV', 'Export has been successful!', toastrOptions)
+          fileDownload(response.data, 'summaryOfObservations.csv')
+          resolve()
+        })
+        .catch((error) => {
+          errorHandle(error.response.status)
+          resolve()
+        })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -243,6 +270,11 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       stageActive: action.data
+    }
+  },
+  [EXPORT_TO_CSV]: (state) => {
+    return {
+      ...state
     }
   }
 }
