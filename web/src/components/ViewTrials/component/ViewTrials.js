@@ -10,6 +10,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
 import _ from 'lodash'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
+import { toastr } from 'react-redux-toastr'
 
 class ViewTrials extends Component {
   constructor (props) {
@@ -58,6 +59,7 @@ class ViewTrials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    console.log('asdas', nextProps)
     if (nextProps.listOfTrials.data &&
       !_.isEqual(nextProps.listOfTrials.data, this.state.listOfTrials) &&
       nextProps.listOfTrials.data !== this.props.listOfTrials) {
@@ -69,6 +71,9 @@ class ViewTrials extends Component {
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
+      let newItem = _.difference(nextProps.viewTrials, this.state.viewTrials)
+
+      if (newItem && newItem.type === 'EVENT') { toastr.success('fdsfsd', 'fdsdfssd') }
       this.setState({ viewTrials: nextProps.viewTrials })
     }
     if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
@@ -92,6 +97,7 @@ class ViewTrials extends Component {
       change['selectedObj'] = { id: list[index].initId }
       change['showModal'] = true
       this.setState(change)
+      toastr.success('dgfs', 'gfds')
     }
   }
 
