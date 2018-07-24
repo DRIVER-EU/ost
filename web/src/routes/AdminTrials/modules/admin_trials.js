@@ -24,6 +24,7 @@ export const GET_ROLES = 'GET_ROLES'
 export const GET_STAGES = 'GET_STAGES'
 export const SET_STAGE = 'SET_STAGE'
 export const EXPORT_TO_CSV = 'EXPORT_TO_CSV'
+export const SET_STATUS = 'SET_STATUS'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -84,6 +85,13 @@ export const exportToCSVAction = (data = null) => {
   }
 }
 
+export const setStatusAction = (data = null) => {
+  return {
+    type: SET_STATUS,
+    data: data
+  }
+}
+
 export const actions = {
   getMessages,
   sendMessage,
@@ -92,7 +100,8 @@ export const actions = {
   getRoles,
   getStages,
   setStage,
-  exportToCSV
+  exportToCSV,
+  setStatus
 }
 
 export const getMessages = (id, sort = '') => {
@@ -226,6 +235,24 @@ export const exportToCSV = (id) => {
   }
 }
 
+export const setStatus = (id, statusName) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.put(`http://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`, {}, getHeaders())
+          .then((response) => {
+            dispatch(setStatusAction(response.data))
+            toastr.success('Session settings', 'Status was changed!', toastrOptions)
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            toastr.error('Session settings', 'Error!', toastrOptions)
+            resolve()
+          })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -273,6 +300,11 @@ const ACTION_HANDLERS = {
     }
   },
   [EXPORT_TO_CSV]: (state) => {
+    return {
+      ...state
+    }
+  },
+  [SET_STATUS]: (state) => {
     return {
       ...state
     }

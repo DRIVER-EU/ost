@@ -30,8 +30,11 @@ class TrialManager extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrialsManager.data &&
       nextProps.listOfTrialsManager.data !== this.state.listOfTrialsManager &&
-      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager) {
-      this.setState({ listOfTrialsManager: nextProps.listOfTrialsManager.data, isLoading: false })
+      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager.data) {
+      this.setState({
+        listOfTrialsManager: nextProps.listOfTrialsManager.data,
+        isLoading: false
+      })
     }
   }
 
@@ -67,10 +70,12 @@ class TrialManager extends Component {
             <Accordion>
               {this.state.listOfTrialsManager.map((object) => {
                 return (
-                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
+                  <AccordionItem key={object.id}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
                       {object.trialName}
-                      <h5 style={{ margin: '4px 0 10px' }}>session: #{object.id} stage: {object.name}</h5>
+                      <h5 style={{ margin: '4px 0 10px' }}>
+                        session: #{object.id} stage: {object.name} status: {object.status}
+                      </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                     </h3>} expanded={false} >
                     <div>

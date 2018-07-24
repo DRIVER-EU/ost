@@ -5,6 +5,11 @@ import { browserHistory } from 'react-router'
 import { RaisedButton, FontIcon } from 'material-ui'
 import { List, ListItem } from 'material-ui/List'
 import _ from 'lodash'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 class SelectObservation extends Component {
   constructor (props) {
@@ -29,6 +34,10 @@ class SelectObservation extends Component {
     let listOfObsevation = [...this.state.listOfObservations]
     if (nextProps.listOfObservations && this.props.listOfObservations &&
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
+      let newObs = _.differenceWith(listOfObsevationProps, this.props.listOfObservations, _.isEqual)
+      if (this.props.listOfObservations.length !== 0 && newObs.length !== 0) {
+        toastr.success('New Event', 'New Event received.', toastrOptions)
+      }
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
   }

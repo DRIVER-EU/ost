@@ -27,7 +27,8 @@ class AdminTrialsView extends Component {
     observationForm: PropTypes.any,
     getSchemaView: PropTypes.func,
     downloadFile: PropTypes.func,
-    exportToCSV: PropTypes.func
+    exportToCSV: PropTypes.func,
+    setStatus: PropTypes.func
   }
 
   render () {
@@ -53,6 +54,7 @@ class AdminTrialsView extends Component {
           getSchemaView={this.props.getSchemaView}
           downloadFile={this.props.downloadFile}
           exportToCSV={this.props.exportToCSV}
+          setStatus={this.props.setStatus}
         />
       </div>
     )

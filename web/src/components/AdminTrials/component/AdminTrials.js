@@ -26,6 +26,12 @@ const toastrOptions = {
   timeOut: 3000
 }
 
+const statusList = [
+  { id: 0, name: 'ACTIVE' },
+  { id: 1, name: 'SUSPENDED' },
+  { id: 2, name: 'ENDED' }
+]
+
 const rangeList = [
   { id: 0, name: '5 minutes', value: 5 * 60 * 1000 },
   { id: 1, name: '10 minutes', value: 10 * 60 * 1000 },
@@ -82,6 +88,7 @@ class AdminTrials extends Component {
       showModal: false,
       selectedObj: {},
       trialStage: '',
+      trialStatus: '',
       usersList: [],
       rolesList: [],
       stagesList: [],
@@ -109,7 +116,8 @@ class AdminTrials extends Component {
     observationForm: PropTypes.any,
     getSchemaView: PropTypes.func,
     downloadFile: PropTypes.func,
-    exportToCSV: PropTypes.func
+    exportToCSV: PropTypes.func,
+    setStatus: PropTypes.func
   }
 
   componentWillUnmount () {
@@ -357,6 +365,12 @@ class AdminTrials extends Component {
     this.handleShowModal()
   }
 
+  handleChangeStatus () {
+    if (this.state.trialStatus !== '') {
+      this.props.setStatus(this.props.params.id, this.state.trialStatus)
+    }
+  }
+
   handleChangeStage () {
     if (this.state.trialStage !== '') {
       this.props.setStage(this.props.params.id, { id: this.state.trialStage })
@@ -385,13 +399,13 @@ class AdminTrials extends Component {
             </div>
             <div style={{ marginBottom: '10px' }}>
               <SelectField
-                value={this.state.trialStage}
+                value={this.state.trialStatus}
                 floatingLabelText='Change Session Status'
-                onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
-                {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
+                onChange={this.handleChangeDropDown.bind(this, 'trialStatus')} >
+                {statusList.map((index) => (
                   <MenuItem
                     key={index.id}
-                    value={index.id}
+                    value={index.name}
                     style={{ color: 'grey' }}
                     primaryText={index.name} />
                 ))}
@@ -400,7 +414,7 @@ class AdminTrials extends Component {
                 style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
                 label='Set status'
                 primary
-                onClick={this.handleChangeStage.bind(this)}
+                onClick={this.handleChangeStatus.bind(this)}
                 labelStyle={{ color: '#FDB913' }} />
             </div>
             <div style={{ marginBottom: '20px' }}>
