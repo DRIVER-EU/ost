@@ -25,7 +25,8 @@ class ViewTrials extends Component {
       listOfTrials: props.listOfTrials.data ? props.listOfTrials.data : [],
       interval: '',
       id: props.params.id,
-      open: false
+      open: false,
+      answerId: ''
     }
   }
 
@@ -40,7 +41,8 @@ class ViewTrials extends Component {
     observationForm: PropTypes.any,
     downloadFile: PropTypes.func,
     sendObservation: PropTypes.func,
-    clearTrialList: PropTypes.func
+    clearTrialList: PropTypes.func,
+    removeAnswer: PropTypes.func
   }
 
   componentWillMount () {
@@ -102,13 +104,23 @@ class ViewTrials extends Component {
   handleShowModal () {
     this.setState({ showModal: !this.state.showModal })
   }
-  handleOpen = () => {
-    this.setState({ open: true })
-  };
+
+  handleOpen (id) {
+    this.setState({
+      open: true,
+      answerId: id
+    })
+  }
 
   handleClose = () => {
     this.setState({ open: false })
-  };
+  }
+
+  handleRemoveAnswer () {
+    this.props.removeAnswer(this.state.answerId)
+    this.handleClose()
+  }
+
   render () {
     const actions = [
       <FlatButton
@@ -120,10 +132,9 @@ class ViewTrials extends Component {
         label='Delete'
         primary
         keyboardFocused
-        onTouchTap={this.handleClose}
+        onTouchTap={() => this.handleRemoveAnswer()}
       />
     ]
-
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -148,11 +159,13 @@ class ViewTrials extends Component {
                     </h3>} expanded={false}>
                     <div>
                       <p>{object.description}
-                        <Clear
-                          style={{ float: 'right', color: 'red', cursor: 'pointer' }}
-                          label='Dialog'
-                          onTouchTap={this.handleOpen}
+                        {object.type === 'ANSWER' &&
+                          <Clear
+                            style={{ float: 'right', color: 'red', cursor: 'pointer' }}
+                            label='Dialog'
+                            onTouchTap={() => this.handleOpen(object.id)}
                         />
+                      }
                       </p>
                       { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
@@ -188,8 +201,7 @@ class ViewTrials extends Component {
           actions={actions}
           modal={false}
           open={this.state.open}
-          onRequestClose={this.handleClose}
-        >
+          onRequestClose={this.handleClose}>
           The answer will be permanently deleted.
         </Dialog>
       </div>

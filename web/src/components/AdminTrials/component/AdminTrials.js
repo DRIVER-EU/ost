@@ -383,10 +383,30 @@ class AdminTrials extends Component {
             <div className='trials-set-header'>
               <div>Session settings</div>
             </div>
-            <div style={{ marginBottom: '20px' }}>
+            <div style={{ marginBottom: '10px' }}>
               <SelectField
                 value={this.state.trialStage}
                 floatingLabelText='Change Session Status'
+                onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
+                {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.id}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
+                ))}
+              </SelectField>
+              <RaisedButton
+                style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
+                label='Set status'
+                primary
+                onClick={this.handleChangeStage.bind(this)}
+                labelStyle={{ color: '#FDB913' }} />
+            </div>
+            <div style={{ marginBottom: '20px' }}>
+              <SelectField
+                value={this.state.trialStage}
+                floatingLabelText='Change Trial Stage'
                 onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
                 {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
                   <MenuItem
