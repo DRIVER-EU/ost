@@ -74,6 +74,7 @@ class Trials extends Component {
                   <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
                       {object.trialName}
+                      <h5 style={{ margin: '4px 0 10px' }}>session: #{object.id} stage: {object.name}</h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                     </h3>} expanded={false} >
                     <div>
