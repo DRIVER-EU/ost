@@ -5,6 +5,8 @@ import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 import Spinner from 'react-spinkit'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 
 class TrialManager extends Component {
   constructor (props) {
@@ -28,8 +30,11 @@ class TrialManager extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrialsManager.data &&
       nextProps.listOfTrialsManager.data !== this.state.listOfTrialsManager &&
-      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager) {
-      this.setState({ listOfTrialsManager: nextProps.listOfTrialsManager.data, isLoading: false })
+      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager.data) {
+      this.setState({
+        listOfTrialsManager: nextProps.listOfTrialsManager.data,
+        isLoading: false
+      })
     }
   }
 
@@ -52,7 +57,7 @@ class TrialManager extends Component {
         <div className='pages-box'>
           <div className='trials-container'>
             <div className='trials-header'>
-              <div className={'trial-select'}>Trial manager</div>
+              <div className={'trial-select'}>Trial Sessions</div>
             </div>
             {this.state.isLoading && <div className='spinner-box'>
               <div className={'spinner'}>
@@ -65,9 +70,12 @@ class TrialManager extends Component {
             <Accordion>
               {this.state.listOfTrialsManager.map((object) => {
                 return (
-                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
+                  <AccordionItem key={object.id}
                     title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
                       {object.trialName}
+                      <h5 style={{ margin: '4px 0 10px' }}>
+                        session: #{object.id} stage: {object.name} status: {object.status}
+                      </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                     </h3>} expanded={false} >
                     <div>
@@ -85,6 +93,9 @@ class TrialManager extends Component {
                 )
               })}
             </Accordion>
+            <FloatingActionButton style={{ float: 'right' }} secondary>
+              <ContentAdd />
+            </FloatingActionButton>
           </div>
         </div>
       </div>

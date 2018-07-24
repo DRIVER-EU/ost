@@ -9,11 +9,17 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
 }
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 export const GET_VIEW_TRIALS = 'GET_VIEW_TRIALS'
 export const GET_TRIAL_SESSION = 'GET_TRIAL_SESSION'
 export const GET_TRIALS = 'GET_TRIALS'
 export const CLEAR_TRIALS = 'CLEAR_TRIALS'
+export const REMOVE_ANSWER = 'REMOVE_ANSWER'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -46,9 +52,17 @@ export const clearTrialsAction = (data = null) => {
   }
 }
 
+export const removeAnswerAction = (data = null) => {
+  return {
+    type: REMOVE_ANSWER,
+    data: data
+  }
+}
+
 export const actions = {
   getViewTrials,
-  getTrials
+  getTrials,
+  removeAnswer
 }
 
 export const getViewTrials = (trialsessionId) => {
@@ -104,6 +118,23 @@ export const clearTrialList = () => {
     return new Promise((resolve) => {
       dispatch(clearTrialsAction([]))
       resolve()
+    })
+  }
+}
+
+export const removeAnswer = (id) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.delete(`http://${origin}/api/answers/${id}/remove`, getHeaders())
+        .then(() => {
+          toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
+          dispatch(removeAnswerAction())
+          resolve()
+        })
+        .catch((error) => {
+          errorHandle(error)
+          resolve(error)
+        })
     })
   }
 }

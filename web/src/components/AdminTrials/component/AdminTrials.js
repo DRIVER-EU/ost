@@ -15,8 +15,22 @@ import DateComponent from '../../DateComponent/DateComponent'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
+import FileDownload from 'material-ui/svg-icons/file/file-download'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+import ContentAdd from 'material-ui/svg-icons/content/add'
 import './AdminTrials.scss'
 import _ from 'lodash'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
+
+const statusList = [
+  { id: 0, name: 'ACTIVE' },
+  { id: 1, name: 'SUSPENDED' },
+  { id: 2, name: 'ENDED' }
+]
 
 const rangeList = [
   { id: 0, name: '5 minutes', value: 5 * 60 * 1000 },
@@ -74,6 +88,7 @@ class AdminTrials extends Component {
       showModal: false,
       selectedObj: {},
       trialStage: '',
+      trialStatus: '',
       usersList: [],
       rolesList: [],
       stagesList: [],
@@ -100,7 +115,9 @@ class AdminTrials extends Component {
     params: PropTypes.any,
     observationForm: PropTypes.any,
     getSchemaView: PropTypes.func,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    exportToCSV: PropTypes.func,
+    setStatus: PropTypes.func
   }
 
   componentWillUnmount () {
@@ -348,6 +365,12 @@ class AdminTrials extends Component {
     this.handleShowModal()
   }
 
+  handleChangeStatus () {
+    if (this.state.trialStatus !== '') {
+      this.props.setStatus(this.props.params.id, this.state.trialStatus)
+    }
+  }
+
   handleChangeStage () {
     if (this.state.trialStage !== '') {
       this.props.setStage(this.props.params.id, { id: this.state.trialStage })
@@ -358,6 +381,14 @@ class AdminTrials extends Component {
     this.props.getObservation(this.props.params.id, this.state.searchText)
   }
 
+  handleDwonloadSummary () {
+    if (this.state.changeDataTable.length !== 0) {
+      this.props.exportToCSV(this.props.params.id)
+    } else {
+      toastr.error('Export to CSV', `There isn't data to export!`, toastrOptions)
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -366,10 +397,30 @@ class AdminTrials extends Component {
             <div className='trials-set-header'>
               <div>Session settings</div>
             </div>
+            <div style={{ marginBottom: '10px' }}>
+              <SelectField
+                value={this.state.trialStatus}
+                floatingLabelText='Change Session Status'
+                onChange={this.handleChangeDropDown.bind(this, 'trialStatus')} >
+                {statusList.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.name}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
+                ))}
+              </SelectField>
+              <RaisedButton
+                style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
+                label='Set status'
+                primary
+                onClick={this.handleChangeStatus.bind(this)}
+                labelStyle={{ color: '#FDB913' }} />
+            </div>
             <div style={{ marginBottom: '20px' }}>
               <SelectField
                 value={this.state.trialStage}
-                floatingLabelText='Choose Trial Stage'
+                floatingLabelText='Change Trial Stage'
                 onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
                 {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
                   <MenuItem
@@ -388,14 +439,20 @@ class AdminTrials extends Component {
             </div>
             <Tabs
               value={this.state.value}
-              onChange={this.handleChange}>
+              onChange={this.handleChange}
+              tabItemContainerStyle={{ whiteSpace: 'inherit' }}
+              >
               <Tab
                 style={this.state.value === 'a' ? styles.active : styles.default}
                 label='Summary of observations'
                 value='a'>
                 <div>
                   <div className='trials-header'>
-                    <div>Summary of observations</div>
+                    <div>Summary of observations <FileDownload
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => this.handleDwonloadSummary()}
+                      viewBox={'0 -4 24 24'} />
+                    </div>
                     <DateComponent />
                   </div>
                   {false &&
@@ -420,7 +477,7 @@ class AdminTrials extends Component {
                   }
                   <Card style={{ margin: '20px 30px' }}>
                     <Table
-                      bodyStyle={{ overflowX: undefined, overflowY: undefined }}
+                      bodyStyle={{ overflowX: 'auto', overflowY: undefined }}
                       fixedFooter={false} >
                       <TableHeader
                         displaySelectAll={false}
@@ -442,10 +499,12 @@ class AdminTrials extends Component {
                     </TableHeaderColumn>
                         </TableRow>
                       </TableHeader>
-                      <TableBody displayRowCheckbox={false} showRowHover>
+                      <TableBody
+                        displayRowCheckbox={false} showRowHover
+                      >
 
                         {this.state.changeDataTable.map((row, index) => (
-                          <TableRow key={index} selectable={false}>
+                          <TableRow key={index} selectable={false} style={{ whiteSpace: 'inherit' }}>
                             <TableRowColumn>
                               {moment(row.sentSimulationTime, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm')}
                             </TableRowColumn>
@@ -508,7 +567,8 @@ class AdminTrials extends Component {
               <Tab
                 style={this.state.value === 'b' ? styles.active : styles.default}
                 label='Events / messages send to observers'
-                value='b'>
+                value='b'
+                >
                 <div>
                   <div className='trials-header'>
                     <div>Events / messages send to observers</div>
@@ -709,6 +769,11 @@ class AdminTrials extends Component {
               observationForm={this.props.observationForm}
               params={this.props.params.id}
               downloadFile={this.props.downloadFile} />
+            <div style={{ position: 'fixed', right: 40, bottom: 40 }}>
+              <FloatingActionButton secondary>
+                <ContentAdd />
+              </FloatingActionButton>
+            </div>
           </div>
         </div>
       </div>

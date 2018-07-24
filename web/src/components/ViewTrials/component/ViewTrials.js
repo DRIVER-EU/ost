@@ -8,8 +8,16 @@ import { browserHistory } from 'react-router'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
+import Clear from 'material-ui/svg-icons/content/clear'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 import _ from 'lodash'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 class ViewTrials extends Component {
   constructor (props) {
@@ -21,7 +29,9 @@ class ViewTrials extends Component {
       trialSession: { name: '' },
       listOfTrials: props.listOfTrials.data ? props.listOfTrials.data : [],
       interval: '',
-      id: props.params.id
+      id: props.params.id,
+      open: false,
+      answerId: ''
     }
   }
 
@@ -36,7 +46,8 @@ class ViewTrials extends Component {
     observationForm: PropTypes.any,
     downloadFile: PropTypes.func,
     sendObservation: PropTypes.func,
-    clearTrialList: PropTypes.func
+    clearTrialList: PropTypes.func,
+    removeAnswer: PropTypes.func
   }
 
   componentWillMount () {
@@ -69,6 +80,10 @@ class ViewTrials extends Component {
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
+      let newItem = _.differenceWith(nextProps.viewTrials, this.props.viewTrials, _.isEqual)
+      if (this.props.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
+        toastr.success('Trial', 'New event was added!', toastrOptions)
+      }
       this.setState({ viewTrials: nextProps.viewTrials })
     }
     if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
@@ -99,7 +114,36 @@ class ViewTrials extends Component {
     this.setState({ showModal: !this.state.showModal })
   }
 
+  handleOpen (id) {
+    this.setState({
+      open: true,
+      answerId: id
+    })
+  }
+
+  handleClose = () => {
+    this.setState({ open: false })
+  }
+
+  handleRemoveAnswer () {
+    this.props.removeAnswer(this.state.answerId)
+    this.handleClose()
+  }
+
   render () {
+    const actions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label='Delete'
+        primary
+        keyboardFocused
+        onTouchTap={() => this.handleRemoveAnswer()}
+      />
+    ]
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -123,7 +167,15 @@ class ViewTrials extends Component {
                       </div>
                     </h3>} expanded={false}>
                     <div>
-                      <p>{object.description}</p>
+                      <p>{object.description}
+                        {object.type === 'ANSWER' &&
+                          <Clear
+                            style={{ float: 'right', color: 'red', cursor: 'pointer' }}
+                            label='Dialog'
+                            onTouchTap={() => this.handleOpen(object.id)}
+                        />
+                      }
+                      </p>
                       { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
@@ -153,6 +205,14 @@ class ViewTrials extends Component {
             downloadFile={this.props.downloadFile}
             sendObservation={this.props.sendObservation} />
         </div>
+        <Dialog
+          title='Do you want to remove this answer?'
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}>
+          The answer will be permanently deleted.
+        </Dialog>
       </div>
     )
   }

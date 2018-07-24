@@ -8,7 +8,8 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, errorHandle, getHeadersFileDownload } from '../../../store/addons'
+import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
 
 const toastrOptions = {
@@ -22,6 +23,8 @@ export const GET_USERS = 'GET_USERS'
 export const GET_ROLES = 'GET_ROLES'
 export const GET_STAGES = 'GET_STAGES'
 export const SET_STAGE = 'SET_STAGE'
+export const EXPORT_TO_CSV = 'EXPORT_TO_CSV'
+export const SET_STATUS = 'SET_STATUS'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -75,6 +78,20 @@ export const setStageAction = (data = null) => {
   }
 }
 
+export const exportToCSVAction = (data = null) => {
+  return {
+    type: EXPORT_TO_CSV,
+    data: data
+  }
+}
+
+export const setStatusAction = (data = null) => {
+  return {
+    type: SET_STATUS,
+    data: data
+  }
+}
+
 export const actions = {
   getMessages,
   sendMessage,
@@ -82,7 +99,9 @@ export const actions = {
   getUsers,
   getRoles,
   getStages,
-  setStage
+  setStage,
+  exportToCSV,
+  setStatus
 }
 
 export const getMessages = (id, sort = '') => {
@@ -199,6 +218,41 @@ export const setStage = (id, stageId) => {
   }
 }
 
+export const exportToCSV = (id) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/answers/csv-file?trialsession_id=${id}`, getHeadersFileDownload())
+        .then((response) => {
+          toastr.success('Export to CSV', 'Export has been successful!', toastrOptions)
+          fileDownload(response.data, 'summaryOfObservations.csv')
+          resolve()
+        })
+        .catch((error) => {
+          errorHandle(error.response.status)
+          resolve()
+        })
+    })
+  }
+}
+
+export const setStatus = (id, statusName) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.put(`http://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`, {}, getHeaders())
+          .then((response) => {
+            dispatch(setStatusAction(response.data))
+            toastr.success('Session settings', 'Status was changed!', toastrOptions)
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            toastr.error('Session settings', 'Error!', toastrOptions)
+            resolve()
+          })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -243,6 +297,16 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       stageActive: action.data
+    }
+  },
+  [EXPORT_TO_CSV]: (state) => {
+    return {
+      ...state
+    }
+  },
+  [SET_STATUS]: (state) => {
+    return {
+      ...state
     }
   }
 }
