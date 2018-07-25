@@ -11,7 +11,9 @@ class SelectObservationComponent extends Component {
   static propTypes = {
     getObservations: PropTypes.func,
     listOfObservations: PropTypes.any,
-    params: PropTypes.any
+    params: PropTypes.any,
+    getViewTrials: PropTypes.func,
+    clearTrialList: PropTypes.func
   }
 
   render () {
@@ -20,6 +22,8 @@ class SelectObservationComponent extends Component {
         <SelectObservation
           getObservations={this.props.getObservations}
           listOfObservations={this.props.listOfObservations}
+          getViewTrials={this.props.getViewTrials}
+          clearTrialList={this.props.clearTrialList}
           params={this.props.params} />
       </div>
     )

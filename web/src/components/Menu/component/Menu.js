@@ -23,14 +23,6 @@ class MenuLeft extends Component {
     user: PropTypes.any
   }
 
-  handleChangeUrl () {
-    if (localStorage.getItem('driverrole') === 'ROLE_ADMIN') {
-      return '/trial-manager'
-    } else {
-      return '/trials'
-    }
-  }
-
   render () {
     return (
       <div>
@@ -54,7 +46,9 @@ class MenuLeft extends Component {
               <ListItem
                 primaryText='Trials'
                 style={{ color: '#00497E' }}
-                containerElement={<IndexLink to={this.handleChangeUrl()} activeClassName='route--active' />} />
+                containerElement={<IndexLink
+                  to={localStorage.getItem('driverrole') === 'ROLE_ADMIN' ? '/trial-manager' : '/trials'}
+                  activeClassName='route--active' />} />
               <UserComponent activeClassName='route--active' />
             </List>
           }
