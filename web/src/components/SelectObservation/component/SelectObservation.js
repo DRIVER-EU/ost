@@ -15,18 +15,32 @@ class SelectObservation extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfObservations: []
+      listOfObservations: [],
+      viewTrials: [],
+      interval: ''
     }
   }
 
   static propTypes = {
     getObservations: PropTypes.func,
     listOfObservations: PropTypes.any,
-    params: PropTypes.any
+    params: PropTypes.any,
+    getViewTrials: PropTypes.func,
+    viewTrials: PropTypes.array,
+    clearTrialList: PropTypes.func
   }
 
   componentWillMount () {
     this.props.getObservations(this.props.params.id)
+    let interval = setInterval(() => {
+      this.props.getViewTrials(this.props.params.id)
+    }, 3000)
+    this.setState({ interval: interval })
+  }
+
+  componentWillUnmount () {
+    this.props.clearTrialList()
+    clearInterval(this.state.interval)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -34,11 +48,16 @@ class SelectObservation extends Component {
     let listOfObsevation = [...this.state.listOfObservations]
     if (nextProps.listOfObservations && this.props.listOfObservations &&
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
-      let newObs = _.differenceWith(listOfObsevationProps, this.props.listOfObservations, _.isEqual)
-      if (this.props.listOfObservations.length !== 0 && newObs.length !== 0) {
+      this.setState({ listOfObservations: nextProps.listOfObservations })
+    }
+    if (nextProps.viewTrials &&
+      nextProps.viewTrials !== this.state.viewTrials &&
+      nextProps.viewTrials !== this.props.viewTrials) {
+      let newItem = _.differenceWith(nextProps.viewTrials, this.props.viewTrials, _.isEqual)
+      if (this.props.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
         toastr.success('New Event', 'New Event received.', toastrOptions)
       }
-      this.setState({ listOfObservations: nextProps.listOfObservations })
+      this.setState({ viewTrials: nextProps.viewTrials })
     }
   }
 

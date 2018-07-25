@@ -13,11 +13,6 @@ import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import _ from 'lodash'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
-import { toastr } from 'react-redux-toastr'
-
-const toastrOptions = {
-  timeOut: 3000
-}
 
 class ViewTrials extends Component {
   constructor (props) {
@@ -80,10 +75,6 @@ class ViewTrials extends Component {
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
-      let newItem = _.differenceWith(nextProps.viewTrials, this.props.viewTrials, _.isEqual)
-      if (this.props.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
-        toastr.success('Trial', 'New event was added!', toastrOptions)
-      }
       this.setState({ viewTrials: nextProps.viewTrials })
     }
     if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
