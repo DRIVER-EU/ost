@@ -1,0 +1,105 @@
+.question-container {
+    width: 100%;
+    height: calc(100% - 20px);
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #feb912;
+    margin-top: 10px;
+    background: white;
+    .coords-title {
+        padding-top: 20px;
+    }
+    .buttons-obs {
+        margin: 10px 0 10px 0;
+    }
+    .trials-header {
+        font-size: 16pt;
+        .data-time {
+            font-size: 14px;
+        }
+    }
+    .submit {
+        margin: 10px;
+        text-align: center;
+    }
+    .title-obs {
+        font-size: 12pt;
+        font-weight: 600;
+        margin: 15px 0;
+    }
+    .desc-obs {
+        font-size: 11pt;
+        font-weight: 400;
+        padding: 0 0px;
+        margin: 15px 0;
+    }
+    .point-obs {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 40px;
+        margin-top: 20px;
+    }
+    .form-group {
+        div hr:nth-child(2) {
+            border-top: #064C7B!important;
+            border-left: #064C7B!important;
+            border-right: #064C7B!important;
+            border-bottom: 2px solid #064C7B!important;
+        }
+    }
+    .buttons-center {
+        text-align: center;
+    }
+    .buttons-observation {
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+        margin: 10px;
+    }
+    label {
+        font-weight: normal;
+    }
+    label.control-label {
+        font-weight: 500;
+    }
+    label span {
+        vertical-align: top;
+        position: relative;
+    }
+    label>div:first-child{
+        display: inline-block !important;
+        width: auto !important;
+    }
+    .checkbox .field-description {
+        padding-bottom: 10px;
+    }
+    .checkbox label, .radio label {
+        padding-left: 0px;
+    }
+    .form-group  p.field-description{
+        margin-top: 5px;
+        margin-bottom: 10px;
+        font-size: 11pt;
+    }
+    .spinner-box {
+        height: 100%;
+        width: 100%;
+        min-width: 150px;
+        display: flex;
+        align-items: center;
+        justify-items: center;
+        .spinner {
+            margin: 0 auto;
+        }
+    }
+    .pointer {
+        cursor: pointer;
+    }
+    .field-string>div {
+        width: 100% !important;
+    }
+}
