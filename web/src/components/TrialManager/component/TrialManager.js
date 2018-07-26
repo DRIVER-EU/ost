@@ -48,7 +48,6 @@ class TrialManager extends Component {
       nextProps.listOfTrials.map((name, index) => {
         listOfTrials.push({ id: index, name: name })
       })
-      console.log('listOfTrials', listOfTrials)
       this.setState({ listOfTrials: listOfTrials })
     }
   }

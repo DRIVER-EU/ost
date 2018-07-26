@@ -11,6 +11,7 @@ import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import moment from 'moment'
 import PropTypes from 'prop-types'
 import MenuItem from 'material-ui/MenuItem'
+import _ from 'lodash'
 import { browserHistory } from 'react-router'
 
 class NewSessionComponent extends Component {
@@ -22,9 +23,10 @@ class NewSessionComponent extends Component {
       rolesList: [],
       stagesList: [],
       stageItem: '',
-      userItem: '',
       isStateValid: false,
-      isUserValid: false
+      isUserValid: false,
+      userItemsArray: [],
+      indexuserItemsArray: 0
     }
   }
 
@@ -45,7 +47,6 @@ class NewSessionComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
     if (nextProps.stagesList &&
       nextProps.stagesList !== this.props.stagesList) {
       this.setState({ stagesList: nextProps.stagesList.data })
@@ -60,7 +61,20 @@ class NewSessionComponent extends Component {
     }
   }
 
-  handleChange = (event, index, value) => this.setState({ value });
+  createUserItem () {
+    let item = [ ...this.state.userItemsArray ]
+    item.push({
+      id: this.state.indexuserItemsArray,
+      userName: '',
+      role: []
+    })
+    this.setState({
+      userItemsArray: item,
+      indexuserItemsArray: this.state.indexuserItemsArray + 1
+    })
+  }
+
+  handleChange = (event, index, value) => this.setState({ value })
 
   handleChangeDropDown (stateName, event, index, value) {
     let change = {}
@@ -73,16 +87,48 @@ class NewSessionComponent extends Component {
       this.setState({ isUserValid: true })
     }
   }
+
+  handleChangeDropDownList (id, event, index, value) {
+    console.log(value, id)
+    let change = [ ...this.state.userItemsArray ]
+    let checkIndex = _.findIndex(change, { id: id })
+    if (checkIndex !== -1) {
+      change[checkIndex].userName = value
+    } else {
+      change.push({
+        id: id,
+        userName: value
+      })
+    }
+    this.setState({ userItemsArray: change })
+  }
+
+  handleChangeCheckbox (index, indexButton) {
+    let change = [ ...this.state.userItemsArray ]
+    let checkIndex = _.findIndex(change, { id: index })
+    let isIn = _.findIndex(change[checkIndex].role, { id: indexButton })
+    if (isIn !== -1) {
+      change[checkIndex].role = _.remove(change[checkIndex].role, function (n) {
+        return n.id !== indexButton
+      })
+    } else {
+      change[checkIndex].role.push({ id: indexButton })
+    }
+  }
+
   back = () => {
     browserHistory.push(`/trial-manager`)
   }
+
   setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('DD-MM-YYYY hh:mm:ss') })
 
   validateForm () {
     let isTrue = this.state.isStateValid && this.state.isUserValid
     return isTrue
   }
+
   render () {
+    console.log('asdasdasdasddasdgsgsd', this.state.userItemsArray)
     return (
       <div className='main-container'>
         <div className='pages-box' style={{ height: '100%' }}>
@@ -128,38 +174,45 @@ class NewSessionComponent extends Component {
               </SelectField>
             </div>
             <h3 style={{ paddingTop: 180 }}>Users:</h3>
-            <div>
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                height: 40 }}>
-                <SelectField
-                  value={this.state.userItem}
-                  floatingLabelText='Select User'
-                  onChange={this.handleChangeDropDown.bind(this, 'userItem')} >
-                  {this.state.usersList !== undefined && this.state.usersList.map((index) => (
-                    <MenuItem
-                      key={index.id}
-                      value={index.id}
-                      style={{ color: 'grey' }}
-                      primaryText={index.firstName + ' ' + index.lastName} />
+            {this.state.userItemsArray.map((object, index) => {
+              return (
+                <div key={index} style={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  height: 40,
+                  marginBottom: 50 }}>
+                  <SelectField
+                    value={object.userName}
+                    floatingLabelText='Select User'
+                    onChange={this.handleChangeDropDownList.bind(this, index)} >
+                    {this.state.usersList !== undefined && this.state.usersList.map((index) => (
+                      <MenuItem
+                        key={index.id}
+                        value={index.id}
+                        style={{ color: 'grey' }}
+                        primaryText={`${index.firstName} ${index.lastName}`} />
                 ))}
-                </SelectField>
-                <div className='col-xs-12 col-md-6'
-                  style={{ display: 'flex', flexDirection: 'row', overflowX: 'scroll', width: '100%' }}>
-                  {this.state.rolesList.map((user, index) => (
-                    <Checkbox
-                      label={user.name}
-                      labelStyle={{ width:'200', height: '30' }}
+                  </SelectField>
+                  <div className='col-xs-12 col-md-6'
+                    style={{ display: 'flex', flexDirection: 'row', overflowX: 'scroll', width: '100%' }}>
+                    {this.state.rolesList.map((user, indexChecked) => (
+                      <Checkbox
+                        key={indexChecked}
+                        label={user.name}
+                        labelStyle={{ width: 200, height: 30 }}
+                        onCheck={this.handleChangeCheckbox.bind(this, index, indexChecked)}
                     />
                     ))}
+                  </div>
                 </div>
-              </div>
-              <div style={{ float: 'right' }}>
-                <FloatingActionButton secondary>
-                  <ContentAdd />
-                </FloatingActionButton>
-              </div>
+              )
+            })}
+            <div style={{ float: 'right' }}>
+              <FloatingActionButton
+                onClick={this.createUserItem.bind(this)}
+                secondary>
+                <ContentAdd />
+              </FloatingActionButton>
             </div>
             <RaisedButton
               label='Submit'
