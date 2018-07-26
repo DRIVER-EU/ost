@@ -5,11 +5,8 @@ import locationReducer from './location'
 import loginReducer from '../routes/Login/modules/login'
 import newObservationReducer from '../routes/NewObservation/modules/newobservation'
 import Question from '../routes/Question/modules/question'
-<<<<<<< HEAD
 import adminTrialsReducer from '../routes/AdminTrials/modules/admin_trials'
-=======
 import viewTrialsReducer from '../routes/ViewTrials/modules/view_trials'
->>>>>>> origin/develop
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -19,11 +16,8 @@ export const makeRootReducer = (asyncReducers) => {
     toastr: toastReducer,
     newobservation: newObservationReducer,
     question: Question,
-<<<<<<< HEAD
     adminTrials: adminTrialsReducer,
-=======
     viewTrials: viewTrialsReducer,
->>>>>>> origin/develop
     ...asyncReducers
   })
 }
