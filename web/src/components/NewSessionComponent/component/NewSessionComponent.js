@@ -1,18 +1,55 @@
 import React, { Component } from 'react'
 import { RaisedButton, FloatingActionButton } from 'material-ui'
 import FontIcon from 'material-ui/FontIcon'
-import DatePicker from 'material-ui/DatePicker'
 import SelectField from 'material-ui/SelectField'
 import Checkbox from 'material-ui/Checkbox'
 import './newSession.scss'
 import ContentAdd from 'material-ui/svg-icons/content/add'
+import DateTimePicker from 'material-ui-datetimepicker'
+import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
+import moment from 'moment'
+import PropTypes from 'prop-types'
+import MenuItem from 'material-ui/MenuItem'
 
 class NewSessionComponent extends Component {
-  state = {
-    value: null
-  };
+  constructor (props) {
+    super(props)
+    const t = moment(new Date().getTime()).format('DD/MM/YYYY hh:mm')
+    this.state = {
+      time: t,
+      usersList: [],
+      rolesList: [],
+      stagesList: [],
+      stageItem: ''
+    }
+  }
+
+  static propTypes = {
+    getUsers: PropTypes.func,
+    usersList: PropTypes.object,
+    getRoles: PropTypes.func,
+    rolesList: PropTypes.object,
+    getStages: PropTypes.func,
+    stagesList: PropTypes.object
+  }
 
   handleChange = (event, index, value) => this.setState({ value });
+
+  handleChangeDropDown (stateName, event, index, value) {
+    let change = {}
+    change[stateName] = value
+    this.setState(change)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.stagesList &&
+      nextProps.stagesList !== this.props.stagesList) {
+      console.log(nextProps.stagesList)
+      this.setState({ stagesList: nextProps.stagesList })
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -34,16 +71,26 @@ class NewSessionComponent extends Component {
             <div className='col-md-5'
               style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', paddingTop: 20 }}>
               <h3 style={{ paddingRight: 20 }}>Time:</h3>
-              <DatePicker hintText='Time' textFieldStyle={{ width: 150 }} />
+              <DateTimePicker
+                onChange={this.setDate}
+                DatePicker={DatePickerDialog}
+                TimePicker={TimePickerDialog}
+                value={this.state.dateTime}
+                format='YYYY-MM-DD kk:mm' />
             </div>
             <div className='col-md-7' style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <h3 style={{ paddingRight: 20, paddingTop: 20 }}>Start Stage:</h3>
               <SelectField
-                value={this.state.value}
-                onChange={this.handleChange}
-                floatingLabelText='Stage'
-                  >
-                {}
+                value={this.state.stageItem}
+                floatingLabelText='Change Session Status'
+                onChange={this.handleChangeDropDown.bind(this, 'stageItem')} >
+                {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.id}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
+                ))}
               </SelectField>
             </div>
             <h3 style={{ paddingTop: 180 }}>Users:</h3>

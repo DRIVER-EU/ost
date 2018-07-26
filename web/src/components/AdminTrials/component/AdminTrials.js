@@ -381,7 +381,7 @@ class AdminTrials extends Component {
     this.props.getObservation(this.props.params.id, this.state.searchText)
   }
 
-  handleDwonloadSummary () {
+  handleDownloadSummary () {
     if (this.state.changeDataTable.length !== 0) {
       this.props.exportToCSV(this.props.params.id)
     } else {
@@ -450,7 +450,7 @@ class AdminTrials extends Component {
                   <div className='trials-header'>
                     <div>Summary of observations <FileDownload
                       style={{ cursor: 'pointer' }}
-                      onClick={() => this.handleDwonloadSummary()}
+                      onClick={() => this.handleDownloadSummary()}
                       viewBox={'0 -4 24 24'} />
                     </div>
                     <DateComponent />
