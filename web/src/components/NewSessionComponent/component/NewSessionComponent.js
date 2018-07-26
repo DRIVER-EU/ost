@@ -22,7 +22,9 @@ class NewSessionComponent extends Component {
       rolesList: [],
       stagesList: [],
       stageItem: '',
-      userItem: ''
+      userItem: '',
+      isStateValid: false,
+      isUserValid: false
     }
   }
 
@@ -64,12 +66,22 @@ class NewSessionComponent extends Component {
     let change = {}
     change[stateName] = value
     this.setState(change)
+    if (stateName === 'stageItem') {
+      this.setState({ isStateValid: true })
+    }
+    if (stateName === 'userItem') {
+      this.setState({ isUserValid: true })
+    }
   }
   back = () => {
     browserHistory.push(`/trial-manager`)
   }
   setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('DD-MM-YYYY hh:mm:ss') })
 
+  validateForm () {
+    let isTrue = this.state.isStateValid && this.state.isUserValid
+    return isTrue
+  }
   render () {
     return (
       <div className='main-container'>
@@ -97,6 +109,7 @@ class NewSessionComponent extends Component {
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
                 value={this.state.dateTime}
+                textFieldStyle={{ width:200 }}
                 format='YYYY-MM-DD kk:mm' />
             </div>
             <div className='col-md-7' style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -118,7 +131,8 @@ class NewSessionComponent extends Component {
             <div>
               <div style={{
                 display: 'flex',
-                alignItems: 'center' }}>
+                alignItems: 'flex-end',
+                height: 40 }}>
                 <SelectField
                   value={this.state.userItem}
                   floatingLabelText='Select User'
@@ -131,12 +145,14 @@ class NewSessionComponent extends Component {
                       primaryText={index.firstName + ' ' + index.lastName} />
                 ))}
                 </SelectField>
-                <div className='col-xs-12 col-md-8' style={{ display: 'flex', flexDirection: 'row' }}>
-                  <Checkbox />
-                  <Checkbox />
-                  <Checkbox />
-                  <Checkbox />
-                  <Checkbox />
+                <div className='col-xs-12 col-md-6'
+                  style={{ display: 'flex', flexDirection: 'row', overflowX: 'scroll', width: '100%' }}>
+                  {this.state.rolesList.map((user, index) => (
+                    <Checkbox
+                      label={user.name}
+                      labelStyle={{ width:'200', height: '30' }}
+                    />
+                    ))}
                 </div>
               </div>
               <div style={{ float: 'right' }}>
@@ -147,7 +163,9 @@ class NewSessionComponent extends Component {
             </div>
             <RaisedButton
               label='Submit'
+              onClick={this.back.bind(this)}
               style={{ display: 'table', margin: '0 auto', width: 200, marginTop: 120 }}
+              disabled={!this.validateForm()}
               primary />
           </div>
         </div>

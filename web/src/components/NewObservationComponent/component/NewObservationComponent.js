@@ -335,7 +335,7 @@ class NewObservationComponent extends Component {
   }
 
   back () {
-    browserHistory.push(`/trials/${this.props.params.id}`)
+    browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
   }
 
   handleDescription (value) {
