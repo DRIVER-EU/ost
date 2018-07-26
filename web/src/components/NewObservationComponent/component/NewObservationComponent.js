@@ -234,7 +234,7 @@ class NewObservationComponent extends Component {
       if (this.props.mode === 'profileQuestion') {
         this.props.closeModal()
       }
-      browserHistory.push(`/trials`)
+      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
     }
   }
 
