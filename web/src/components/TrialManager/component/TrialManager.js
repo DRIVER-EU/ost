@@ -39,8 +39,11 @@ class TrialManager extends Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrialsManager.data &&
       nextProps.listOfTrialsManager.data !== this.state.listOfTrialsManager &&
-      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager) {
-      this.setState({ listOfTrialsManager: nextProps.listOfTrialsManager.data, isLoading: false })
+      nextProps.listOfTrialsManager.data !== this.props.listOfTrialsManager.data) {
+      this.setState({
+        listOfTrialsManager: nextProps.listOfTrialsManager.data,
+        isLoading: false
+      })
     }
     if (nextProps.listOfTrials &&
       nextProps.listOfTrials !== this.props.listOfTrials) {
@@ -107,11 +110,14 @@ class TrialManager extends Component {
             <Accordion>
               {this.state.listOfTrialsManager.map((object) => {
                 return (
-                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
-                    title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
-                      {object.trialName}
+                  <AccordionItem key={object.id}
+                    title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
+                      {object.trialName}</h3>
+                      <h5 style={{ margin: '4px 0 10px' }}>
+                        session: #{object.id} stage: {object.name} status: {object.status}
+                      </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
-                    </h3>} expanded={false} >
+                    </div>} expanded={false} >
                     <div>
                       <p>{object.trialDescription}</p>
                       <div style={{ display: 'table', margin: '0 auto' }}>
@@ -151,12 +157,13 @@ class TrialManager extends Component {
               value={this.state.trialName}
               floatingLabelText='Select Trial'
               onChange={this.handleChangeDropDown.bind(this, 'trialName')} >
-              {this.state.listOfTrials !== undefined && this.state.listOfTrials.map((index) => (
-                <MenuItem
-                  key={index.id}
-                  value={index.id}
-                  style={{ color: 'grey' }}
-                  primaryText={index.name} />
+              {(this.state.listOfTrials && this.state.listOfTrials.length !== 0) &&
+                this.state.listOfTrials.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.id}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
                 ))}
             </SelectField>
           </div>

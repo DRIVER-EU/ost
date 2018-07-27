@@ -72,11 +72,13 @@ class Trials extends Component {
               {this.state.listOfTrials.map((object) => {
                 return (
                   <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
-                    title={<h3 className={'react-sanfona-item-title cursor-pointer'}>
-                      {object.trialName}
-                      <h5 style={{ margin: '4px 0 10px' }}>session: #{object.id} stage: {object.name}</h5>
+                    title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
+                      {object.trialName}</h3>
+                      <h5 style={{ margin: '4px 0 10px' }}>
+                        session: #{object.id} stage: {object.name}
+                      </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
-                    </h3>} expanded={false} >
+                    </div>} expanded={false} >
                     <div>
                       <p>{object.trialDescription}</p>
                       <div style={{ display: 'table', margin: '0 auto' }}>
