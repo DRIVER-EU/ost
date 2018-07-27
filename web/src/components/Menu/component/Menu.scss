@@ -5,3 +5,14 @@
 .menu{
   font-size: 11pt;
 }
+.driver-title {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  font-size: 18px;
+}
+@media only screen and (max-width: 520px) {
+  .driver-title {
+    display: none;
+  }
+}

@@ -32,7 +32,7 @@ class MenuLeft extends Component {
           iconElementLeft={
             <div style={{ display: 'flex' }}>
               <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
-              <span style={{ display: 'flex', alignItems: 'center', marginLeft: 5, fontSize: 18 }}>
+              <span className='driver-title'>
                 Observer Support Tool
               </span>
             </div>
