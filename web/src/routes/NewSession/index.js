@@ -1,7 +1,7 @@
 import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
-  path : 'newsession',
+  path : 'newsession/:id',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const NewSession = require('./containers/NewSession').default

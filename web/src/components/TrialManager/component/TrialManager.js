@@ -71,7 +71,7 @@ class TrialManager extends Component {
   }
 
   newSession = () => {
-    browserHistory.push(`/newsession`)
+    browserHistory.push(`/newsession/1`)
   }
 
   handleChangeDropDown (stateName, event, index, value) {

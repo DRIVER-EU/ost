@@ -29,7 +29,6 @@ class AdminTrialsView extends Component {
     downloadFile: PropTypes.func,
     exportToCSV: PropTypes.func,
     setStatus: PropTypes.func
-
   }
 
   render () {

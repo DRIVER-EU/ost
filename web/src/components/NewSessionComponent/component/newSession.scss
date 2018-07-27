@@ -1,4 +1,4 @@
-.question-container {
+.new-session-container {
     width: 100%;
     height: calc(100% - 20px);
     padding: 20px;
@@ -101,5 +101,22 @@
     }
     .field-string>div {
         width: 100% !important;
+    }
+    .datetime-container {
+        margin-top: 12px;
+    }
+    .element {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        h3 {
+            margin-top: 34px;
+            margin-right: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
     }
 }
