@@ -20,7 +20,7 @@ class TrialManager extends Component {
       listOfTrials: [],
       isLoading: false,
       open: false,
-      trialName: ''
+      trialId: ''
     }
   }
 
@@ -48,8 +48,8 @@ class TrialManager extends Component {
     if (nextProps.listOfTrials &&
       nextProps.listOfTrials !== this.props.listOfTrials) {
       let listOfTrials = []
-      nextProps.listOfTrials.map((name, index) => {
-        listOfTrials.push({ id: index, name: name })
+      nextProps.listOfTrialsManager.data.map((object) => {
+        listOfTrials.push({ id: object.id, name: object.trialName })
       })
       this.setState({ listOfTrials: listOfTrials })
     }
@@ -74,7 +74,7 @@ class TrialManager extends Component {
   }
 
   newSession = () => {
-    browserHistory.push(`/newsession/1`)
+    browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
   }
 
   handleChangeDropDown (stateName, event, index, value) {
@@ -154,9 +154,9 @@ class TrialManager extends Component {
             marginBottom: 10 }}>
             <h2 style={{ display: 'inline-block', padding: '50px 40px 55px 50px' }}>Trial:</h2>
             <SelectField
-              value={this.state.trialName}
+              value={this.state.trialId}
               floatingLabelText='Select Trial'
-              onChange={this.handleChangeDropDown.bind(this, 'trialName')} >
+              onChange={this.handleChangeDropDown.bind(this, 'trialId')} >
               {(this.state.listOfTrials && this.state.listOfTrials.length !== 0) &&
                 this.state.listOfTrials.map((index) => (
                   <MenuItem
