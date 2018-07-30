@@ -19,8 +19,8 @@ class TrialManager extends Component {
       listOfTrialsManager: [],
       listOfTrials: [],
       isLoading: false,
-      open: false,
-      trialName: ''
+      openModal: false,
+      trialId: ''
     }
   }
 
@@ -48,8 +48,8 @@ class TrialManager extends Component {
     if (nextProps.listOfTrials &&
       nextProps.listOfTrials !== this.props.listOfTrials) {
       let listOfTrials = []
-      nextProps.listOfTrials.map((name, index) => {
-        listOfTrials.push({ id: index, name: name })
+      nextProps.listOfTrialsManager.data.map((object) => {
+        listOfTrials.push({ id: object.id, name: object.trialName })
       })
       this.setState({ listOfTrials: listOfTrials })
     }
@@ -70,21 +70,35 @@ class TrialManager extends Component {
 
   handleOpen = () => {
     this.props.getListOfTrials()
-    this.setState({ open: true })
+    this.setState({
+      trialId: '',
+      openModal: true
+    })
+  }
+
+  handleClose = () => {
+    this.setState({ openModal: false })
   }
 
   newSession = () => {
-    browserHistory.push(`/newsession/1`)
+    if (this.state.trialId !== '') {
+      browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
+    }
   }
 
   handleChangeDropDown (stateName, event, index, value) {
-    let change = {}
+    let change = { ...this.state }
     change[stateName] = value
     this.setState(change)
   }
 
   render () {
     const actions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleClose}
+      />,
       <FlatButton
         label='Next'
         secondary
@@ -142,7 +156,7 @@ class TrialManager extends Component {
           title='Select Trial'
           actions={actions}
           modal={false}
-          open={this.state.open}
+          open={this.state.openModal}
           onRequestClose={this.handleClose}
         >
           <div style={{
@@ -154,9 +168,9 @@ class TrialManager extends Component {
             marginBottom: 10 }}>
             <h2 style={{ display: 'inline-block', padding: '50px 40px 55px 50px' }}>Trial:</h2>
             <SelectField
-              value={this.state.trialName}
+              value={this.state.trialId}
               floatingLabelText='Select Trial'
-              onChange={this.handleChangeDropDown.bind(this, 'trialName')} >
+              onChange={this.handleChangeDropDown.bind(this, 'trialId')} >
               {(this.state.listOfTrials && this.state.listOfTrials.length !== 0) &&
                 this.state.listOfTrials.map((index) => (
                   <MenuItem

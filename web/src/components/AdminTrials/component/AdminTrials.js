@@ -16,8 +16,6 @@ import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOf
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
 import FileDownload from 'material-ui/svg-icons/file/file-download'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ContentAdd from 'material-ui/svg-icons/content/add'
 import './AdminTrials.scss'
 import _ from 'lodash'
 import { toastr } from 'react-redux-toastr'
@@ -769,11 +767,6 @@ class AdminTrials extends Component {
               observationForm={this.props.observationForm}
               params={this.props.params.id}
               downloadFile={this.props.downloadFile} />
-            <div style={{ position: 'fixed', right: 40, bottom: 40 }}>
-              <FloatingActionButton secondary>
-                <ContentAdd />
-              </FloatingActionButton>
-            </div>
           </div>
         </div>
       </div>
