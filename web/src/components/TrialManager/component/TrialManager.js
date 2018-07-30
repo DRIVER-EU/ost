@@ -19,7 +19,7 @@ class TrialManager extends Component {
       listOfTrialsManager: [],
       listOfTrials: [],
       isLoading: false,
-      open: false,
+      openModal: false,
       trialId: ''
     }
   }
@@ -70,21 +70,35 @@ class TrialManager extends Component {
 
   handleOpen = () => {
     this.props.getListOfTrials()
-    this.setState({ open: true })
+    this.setState({
+      trialId: '',
+      openModal: true
+    })
+  }
+
+  handleClose = () => {
+    this.setState({ openModal: false })
   }
 
   newSession = () => {
-    browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
+    if (this.state.trialId !== '') {
+      browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
+    }
   }
 
   handleChangeDropDown (stateName, event, index, value) {
-    let change = {}
+    let change = { ...this.state }
     change[stateName] = value
     this.setState(change)
   }
 
   render () {
     const actions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleClose}
+      />,
       <FlatButton
         label='Next'
         secondary
@@ -142,7 +156,7 @@ class TrialManager extends Component {
           title='Select Trial'
           actions={actions}
           modal={false}
-          open={this.state.open}
+          open={this.state.openModal}
           onRequestClose={this.handleClose}
         >
           <div style={{

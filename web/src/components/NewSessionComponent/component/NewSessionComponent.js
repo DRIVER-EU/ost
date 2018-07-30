@@ -12,6 +12,7 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import MenuItem from 'material-ui/MenuItem'
 import { browserHistory } from 'react-router'
+import ReactTooltip from 'react-tooltip'
 import _ from 'lodash'
 
 class NewSessionComponent extends Component {
@@ -23,9 +24,7 @@ class NewSessionComponent extends Component {
       rolesList: [],
       stagesList: [],
       stageItem: '',
-      isStateValid: false,
-      isUserValid: false,
-      userItemsArray: []
+      userItems: []
     }
   }
 
@@ -56,24 +55,19 @@ class NewSessionComponent extends Component {
     }
     if (nextProps.rolesList &&
       nextProps.rolesList !== this.props.rolesList) {
-      this.setState({ rolesList: nextProps.rolesList.data })
+      this.setState({ rolesList: nextProps.rolesList.data },
+        () => this.createUserItem())
     }
   }
 
   handleChangeDropDown (stateName, event, index, value) {
-    let change = {}
+    let change = { ...this.state }
     change[stateName] = value
     this.setState(change)
-    if (stateName === 'stageItem') {
-      this.setState({ isStateValid: true })
-    }
-    if (stateName === 'userItem') {
-      this.setState({ isUserValid: true })
-    }
   }
 
   createUserItem () {
-    let items = [ ...this.state.userItemsArray ]
+    let items = [ ...this.state.userItems ]
     let lastItem = _.last(items)
     let id = 0
     if (lastItem) {
@@ -85,12 +79,12 @@ class NewSessionComponent extends Component {
       role: []
     })
     this.setState({
-      userItemsArray: items
+      userItems: items
     })
   }
 
   handleChangeDropDownList (id, event, index, value) {
-    let change = [ ...this.state.userItemsArray ]
+    let change = [ ...this.state.userItems ]
     let checkIndex = _.findIndex(change, { id: id })
     if (checkIndex !== -1) {
       change[checkIndex].userId = value
@@ -101,11 +95,11 @@ class NewSessionComponent extends Component {
         role: []
       })
     }
-    this.setState({ userItemsArray: change })
+    this.setState({ userItems: change })
   }
 
   handleChangeCheckbox (id, roleId) {
-    let change = [ ...this.state.userItemsArray ]
+    let change = [ ...this.state.userItems ]
     let checkIndex = _.findIndex(change, { id: id })
     let isIn = _.findIndex(change[checkIndex].role, { id: roleId })
     if (isIn !== -1) {
@@ -113,7 +107,7 @@ class NewSessionComponent extends Component {
     } else {
       change[checkIndex].role.push({ id: roleId })
     }
-    this.setState({ userItemsArray: change })
+    this.setState({ userItems: change })
   }
 
   handleCheckRole (object, roleId) {
@@ -129,10 +123,10 @@ class NewSessionComponent extends Component {
   }
 
   handleRemoveUser (id) {
-    let change = [ ...this.state.userItemsArray ]
+    let change = [ ...this.state.userItems ]
     let checkIndex = _.findIndex(change, { id: id })
     change.splice(checkIndex, 1)
-    this.setState({ userItemsArray: change })
+    this.setState({ userItems: change })
   }
 
   back = () => {
@@ -142,8 +136,19 @@ class NewSessionComponent extends Component {
   setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('DD-MM-YYYY hh:mm:ss') })
 
   validateForm () {
-    let isTrue = this.state.isStateValid && this.state.isUserValid
-    return isTrue
+    let isValid = true
+    let validTab = []
+    if (this.state.stageItem !== '' && this.state.dateTime !== '' && this.state.userItems.length !== 0) {
+      this.state.userItems.map(object => {
+        if (object.userId === '' || object.role.length === 0) {
+          validTab.push(object.userId)
+        }
+      })
+      if (validTab.length === 0) {
+        isValid = false
+      }
+    }
+    return isValid
   }
 
   render () {
@@ -197,7 +202,7 @@ class NewSessionComponent extends Component {
               </div>
             </div>
             <h3 style={{ marginTop: 50, marginBottom: 28 }}>Users:</h3>
-            {this.state.userItemsArray.length !== 0 && this.state.userItemsArray.map((object, index) => {
+            {this.state.userItems.length !== 0 && this.state.userItems.map((object, index) => {
               return (
                 <div key={index} className='users-row'>
                   <SelectField
@@ -224,6 +229,7 @@ class NewSessionComponent extends Component {
                     {this.state.rolesList.length !== 0 && this.state.rolesList.map((role, index) => {
                       return (
                         <Checkbox
+                          data-tip={role.name}
                           key={index}
                           label={role.name}
                           defaultChecked={this.handleCheckRole(object, role.id)}
@@ -239,6 +245,7 @@ class NewSessionComponent extends Component {
                     />)
                     }
                     )}
+                    <ReactTooltip place='top' type='dark' effect='solid' />
                   </div>
                   <i className='material-icons' onClick={() => this.handleRemoveUser(object.id)}>
                     clear
@@ -257,7 +264,7 @@ class NewSessionComponent extends Component {
               label='Submit'
               onClick={this.back.bind(this)}
               style={{ display: 'table', margin: '0 auto', width: 200, marginTop: 120 }}
-              disabled={!this.validateForm()}
+              disabled={this.validateForm()}
               primary />
           </div>
         </div>
