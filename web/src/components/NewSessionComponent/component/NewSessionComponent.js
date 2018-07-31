@@ -5,21 +5,21 @@ import SelectField from 'material-ui/SelectField'
 import Checkbox from 'material-ui/Checkbox'
 import './NewSessionComponent.scss'
 import ContentAdd from 'material-ui/svg-icons/content/add'
-import DateTimePicker from 'material-ui-datetimepicker'
-import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
-import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
-import moment from 'moment'
 import PropTypes from 'prop-types'
 import MenuItem from 'material-ui/MenuItem'
 import { browserHistory } from 'react-router'
 import ReactTooltip from 'react-tooltip'
 import _ from 'lodash'
 
+const statusList = [
+  { id: 0, name: 'ACTIVE' },
+  { id: 1, name: 'SUSPENDED' }
+]
+
 class NewSessionComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      dateTime: moment(new Date().getTime()).format('DD-MM-YYYY hh:mm:ss'),
       usersList: [],
       rolesList: [],
       stagesList: [],
@@ -133,12 +133,10 @@ class NewSessionComponent extends Component {
     browserHistory.push(`/trial-manager`)
   }
 
-  setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('DD-MM-YYYY hh:mm:ss') })
-
   validateForm () {
     let isValid = true
     let validTab = []
-    if (this.state.stageItem !== '' && this.state.dateTime !== '' && this.state.userItems.length !== 0) {
+    if (this.state.stageItem !== '' && this.state.status !== '' && this.state.userItems.length !== 0) {
       this.state.userItems.map(object => {
         if (object.userId === '' || object.role.length === 0) {
           validTab.push(object.userId)
@@ -176,17 +174,7 @@ class NewSessionComponent extends Component {
               alignItems: 'center'
             }}>
               <div className='element'>
-                <h3>Time:</h3>
-                <DateTimePicker
-                  onChange={this.setDate}
-                  DatePicker={DatePickerDialog}
-                  TimePicker={TimePickerDialog}
-                  value={this.state.dateTime}
-                  textFieldStyle={{ width:200 }}
-                  format='YYYY-MM-DD kk:mm' />
-              </div>
-              <div className='element'>
-                <h3>Start Stage:</h3>
+                <h3>Initial Stage:</h3>
                 <SelectField
                   value={this.state.stageItem}
                   floatingLabelText='Stage'
@@ -195,6 +183,21 @@ class NewSessionComponent extends Component {
                     <MenuItem
                       key={index.id}
                       value={index.id}
+                      style={{ color: 'grey' }}
+                      primaryText={index.name} />
+                ))}
+                </SelectField>
+              </div>
+              <div className='element'>
+                <h3>Status:</h3>
+                <SelectField
+                  value={this.state.status}
+                  floatingLabelText='Change Session Status'
+                  onChange={this.handleChangeDropDown.bind(this, 'status')} >
+                  {statusList.map((index) => (
+                    <MenuItem
+                      key={index.id}
+                      value={index.name}
                       style={{ color: 'grey' }}
                       primaryText={index.name} />
                 ))}

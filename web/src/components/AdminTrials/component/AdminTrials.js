@@ -15,7 +15,6 @@ import DateComponent from '../../DateComponent/DateComponent'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
-import FileDownload from 'material-ui/svg-icons/file/file-download'
 import './AdminTrials.scss'
 import _ from 'lodash'
 import { toastr } from 'react-redux-toastr'
@@ -26,8 +25,7 @@ const toastrOptions = {
 
 const statusList = [
   { id: 0, name: 'ACTIVE' },
-  { id: 1, name: 'SUSPENDED' },
-  { id: 2, name: 'ENDED' }
+  { id: 1, name: 'SUSPENDED' }
 ]
 
 const rangeList = [
@@ -446,10 +444,15 @@ class AdminTrials extends Component {
                 value='a'>
                 <div>
                   <div className='trials-header'>
-                    <div>Summary of observations <FileDownload
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => this.handleDownloadSummary()}
-                      viewBox={'0 -4 24 24'} />
+                    <div>Summary of observations
+                      <RaisedButton
+                        buttonStyle={{ width: 150 }}
+                        style={{ marginLeft: 10 }}
+                        backgroundColor='#244C7B'
+                        labelColor='#FCB636'
+                        label='Download'
+                        secondary
+                        onClick={() => this.handleDownloadSummary()} />
                     </div>
                     <DateComponent />
                   </div>
