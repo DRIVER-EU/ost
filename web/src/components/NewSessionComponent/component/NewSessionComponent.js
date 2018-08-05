@@ -3,24 +3,24 @@ import { RaisedButton, FloatingActionButton } from 'material-ui'
 import FontIcon from 'material-ui/FontIcon'
 import SelectField from 'material-ui/SelectField'
 import Checkbox from 'material-ui/Checkbox'
+import TextField from 'material-ui/TextField'
 import './NewSessionComponent.scss'
 import ContentAdd from 'material-ui/svg-icons/content/add'
-import DateTimePicker from 'material-ui-datetimepicker'
-import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
-import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
-import moment from 'moment'
 import PropTypes from 'prop-types'
 import MenuItem from 'material-ui/MenuItem'
 import { browserHistory } from 'react-router'
 import ReactTooltip from 'react-tooltip'
 import _ from 'lodash'
 
+const statusList = [
+  { id: 0, name: 'ACTIVE' },
+  { id: 1, name: 'SUSPENDED' }
+]
+
 class NewSessionComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      dateTime: moment(new Date().getTime()).format('DD-MM-YYYY hh:mm:ss'),
-      usersList: [],
       rolesList: [],
       stagesList: [],
       stageItem: '',
@@ -29,8 +29,6 @@ class NewSessionComponent extends Component {
   }
 
   static propTypes = {
-    getUsers: PropTypes.func,
-    usersList: PropTypes.object,
     getRoles: PropTypes.func,
     rolesList: PropTypes.object,
     getStages: PropTypes.func,
@@ -39,7 +37,6 @@ class NewSessionComponent extends Component {
   }
 
   componentWillMount () {
-    this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.id)
     this.props.getStages(this.props.params.id)
   }
@@ -48,10 +45,6 @@ class NewSessionComponent extends Component {
     if (nextProps.stagesList &&
       nextProps.stagesList !== this.props.stagesList) {
       this.setState({ stagesList: nextProps.stagesList.data })
-    }
-    if (nextProps.usersList &&
-      nextProps.usersList !== this.props.usersList) {
-      this.setState({ usersList: nextProps.usersList.data })
     }
     if (nextProps.rolesList &&
       nextProps.rolesList !== this.props.rolesList) {
@@ -75,27 +68,12 @@ class NewSessionComponent extends Component {
     }
     items.push({
       id: id,
-      userId: '',
+      email: '',
       role: []
     })
     this.setState({
       userItems: items
     })
-  }
-
-  handleChangeDropDownList (id, event, index, value) {
-    let change = [ ...this.state.userItems ]
-    let checkIndex = _.findIndex(change, { id: id })
-    if (checkIndex !== -1) {
-      change[checkIndex].userId = value
-    } else {
-      change.push({
-        id: id,
-        userId: value,
-        role: []
-      })
-    }
-    this.setState({ userItems: change })
   }
 
   handleChangeCheckbox (id, roleId) {
@@ -133,15 +111,30 @@ class NewSessionComponent extends Component {
     browserHistory.push(`/trial-manager`)
   }
 
-  setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('DD-MM-YYYY hh:mm:ss') })
+  handleChangeEmail (object, e) {
+    let change = [ ...this.state.userItems ]
+    let checkIndex = _.findIndex(change, { id: object.id })
+    change[checkIndex].email = e.target.value
+    this.setState({ userItems: change })
+  }
+
+  handleValidEmail (object) {
+    let regex = new RegExp('[^@]+@[^@]+\\.[^@]+')
+    let validated = regex.test(object.email)
+    if (!validated) {
+      return 'The email is not correct!'
+    } else {
+      return ''
+    }
+  }
 
   validateForm () {
     let isValid = true
     let validTab = []
-    if (this.state.stageItem !== '' && this.state.dateTime !== '' && this.state.userItems.length !== 0) {
+    if (this.state.stageItem !== '' && this.state.status !== '' && this.state.userItems.length !== 0) {
       this.state.userItems.map(object => {
-        if (object.userId === '' || object.role.length === 0) {
-          validTab.push(object.userId)
+        if (object.email === '' || object.role.length === 0) {
+          validTab.push(object.email)
         }
       })
       if (validTab.length === 0) {
@@ -149,6 +142,10 @@ class NewSessionComponent extends Component {
       }
     }
     return isValid
+  }
+
+  send () {
+    // POST method
   }
 
   render () {
@@ -176,17 +173,7 @@ class NewSessionComponent extends Component {
               alignItems: 'center'
             }}>
               <div className='element'>
-                <h3>Time:</h3>
-                <DateTimePicker
-                  onChange={this.setDate}
-                  DatePicker={DatePickerDialog}
-                  TimePicker={TimePickerDialog}
-                  value={this.state.dateTime}
-                  textFieldStyle={{ width:200 }}
-                  format='YYYY-MM-DD kk:mm' />
-              </div>
-              <div className='element'>
-                <h3>Start Stage:</h3>
+                <h3>Initial Stage:</h3>
                 <SelectField
                   value={this.state.stageItem}
                   floatingLabelText='Stage'
@@ -200,24 +187,33 @@ class NewSessionComponent extends Component {
                 ))}
                 </SelectField>
               </div>
+              <div className='element'>
+                <h3>Status:</h3>
+                <SelectField
+                  value={this.state.status}
+                  floatingLabelText='Change Session Status'
+                  onChange={this.handleChangeDropDown.bind(this, 'status')} >
+                  {statusList.map((index) => (
+                    <MenuItem
+                      key={index.id}
+                      value={index.name}
+                      style={{ color: 'grey' }}
+                      primaryText={index.name} />
+                ))}
+                </SelectField>
+              </div>
             </div>
             <h3 style={{ marginTop: 50, marginBottom: 28 }}>Users:</h3>
             {this.state.userItems.length !== 0 && this.state.userItems.map((object, index) => {
               return (
                 <div key={index} className='users-row'>
-                  <SelectField
+                  <TextField
                     style={{ minWidth: 200, maxWidth: 200 }}
-                    value={object.userId}
-                    floatingLabelText='Select User'
-                    onChange={this.handleChangeDropDownList.bind(this, object.id)} >
-                    {this.state.usersList && this.state.usersList.map((index) => (
-                      <MenuItem
-                        key={index.id}
-                        value={index.id}
-                        style={{ color: 'grey' }}
-                        primaryText={`${index.firstName} ${index.lastName}`} />
-                ))}
-                  </SelectField>
+                    value={object.email}
+                    hintText='enter the email'
+                    errorText={object.email !== '' && this.handleValidEmail(object)}
+                    fullWidth
+                    onChange={this.handleChangeEmail.bind(this, object)} />
                   <div style={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -262,7 +258,7 @@ class NewSessionComponent extends Component {
             </div>
             <RaisedButton
               label='Submit'
-              onClick={this.back.bind(this)}
+              onClick={this.send.bind(this)}
               style={{ display: 'table', margin: '0 auto', width: 200, marginTop: 120 }}
               disabled={this.validateForm()}
               primary />

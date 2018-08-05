@@ -19,7 +19,9 @@ class ViewTrial extends Component {
     downloadFile: PropTypes.func,
     sendObservation: PropTypes.func,
     clearTrialList: PropTypes.func,
-    removeAnswer: PropTypes.func
+    removeAnswer: PropTypes.func,
+    editComment: PropTypes.func,
+    editedComment: PropTypes.object
   }
 
   render () {
@@ -37,6 +39,8 @@ class ViewTrial extends Component {
           sendObservation={this.props.sendObservation}
           clearTrialList={this.props.clearTrialList}
           removeAnswer={this.props.removeAnswer}
+          editComment={this.props.editComment}
+          editedComment={this.props.editedComment}
         />
       </div>
     )

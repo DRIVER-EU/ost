@@ -9,8 +9,6 @@ class NewSession extends Component {
   }
 
   static propTypes = {
-    getUsers: PropTypes.func,
-    usersList: PropTypes.object,
     getRoles: PropTypes.func,
     rolesList: PropTypes.object,
     getStages: PropTypes.func,
@@ -21,8 +19,6 @@ class NewSession extends Component {
   render () {
     return (
       <NewSessionComponent
-        getUsers={this.props.getUsers}
-        usersList={this.props.usersList}
         getRoles={this.props.getRoles}
         rolesList={this.props.rolesList}
         getStages={this.props.getStages}
