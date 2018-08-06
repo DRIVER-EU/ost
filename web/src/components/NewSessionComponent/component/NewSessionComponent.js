@@ -128,6 +128,12 @@ class NewSessionComponent extends Component {
     }
   }
 
+  handleChangeLoginPrefix (name, e) {
+    let change = { ...this.state }
+    change[name] = e.target.value
+    this.setState(change)
+  }
+
   validateForm () {
     let isValid = true
     let validTab = []
@@ -202,6 +208,14 @@ class NewSessionComponent extends Component {
                 ))}
                 </SelectField>
               </div>
+              <div className='element'>
+                <h3>Login prefix:</h3>
+                <TextField
+                  style={{ marginTop: 20 }}
+                  value={this.state.loginPrefix}
+                  hintText='enter the login prefix'
+                  onChange={this.handleChangeLoginPrefix.bind(this, 'loginPrefix')} />
+              </div>
             </div>
             <h3 style={{ marginTop: 50, marginBottom: 28 }}>Users:</h3>
             {this.state.userItems.length !== 0 && this.state.userItems.map((object, index) => {
@@ -212,12 +226,11 @@ class NewSessionComponent extends Component {
                     value={object.email}
                     hintText='enter the email'
                     errorText={object.email !== '' && this.handleValidEmail(object)}
-                    fullWidth
                     onChange={this.handleChangeEmail.bind(this, object)} />
                   <div style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    overflowX: 'scroll',
+                    overflowX: 'auto',
                     overflowY: 'hidden',
                     width: '100%',
                     marginLeft: 15
