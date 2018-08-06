@@ -33,7 +33,8 @@ const rangeList = [
   { id: 1, name: '10 minutes', value: 10 * 60 * 1000 },
   { id: 2, name: '15 minutes', value: 15 * 60 * 1000 },
   { id: 3, name: '30 minutes', value: 30 * 60 * 1000 },
-  { id: 4, name: '60 minutes', value: 60 * 60 * 1000 }
+  { id: 4, name: '60 minutes', value: 60 * 60 * 1000 },
+  { id: 5, name: '1 day', value: 24 * 60 * 60 * 1000 }
 ]
 
 const styles = {
@@ -90,7 +91,8 @@ class AdminTrials extends Component {
       stagesList: [],
       interval: '',
       searchText: '',
-      timeRange: ''
+      timeRange: '',
+      isOneDay: false
     }
   }
 
@@ -164,9 +166,21 @@ class AdminTrials extends Component {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
-      this.setState({ changeDataTable: nextProps.observation }, () => {
-        this.handleChangeChart(this.state.changeDataTable)
-      })
+      let sortedList = _.orderBy(nextProps.observation, ['sentSimulationTime'], ['asc'])
+      let dateMax = (new Date(_.maxBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime())
+      let dateMin = new Date(_.minBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime()
+      if (dateMax - dateMin > 2 * 3600 * 1000) {
+        let change = {}
+        change['timeRange'] = 5
+        change['isOneDay'] = true
+        this.setState(change, () => this.setState({ changeDataTable: nextProps.observation }, () => {
+          this.handleChangeChart(this.state.changeDataTable)
+        }))
+      } else {
+        this.setState({ changeDataTable: nextProps.observation }, () => {
+          this.handleChangeChart(this.state.changeDataTable)
+        })
+      }
     }
     if (nextProps.observationForm && !_.isEqual(nextProps.observationForm, this.state.observationForm)) {
       this.setState({ observationForm: nextProps.observationForm })
@@ -223,7 +237,7 @@ class AdminTrials extends Component {
   }
 
   handleChangeRange (event, value) {
-    let change = {}
+    let change = { ...this.state }
     change['timeRange'] = value
     this.setState(change, () => this.handleChangeChart(this.state.changeDataTable))
   }
@@ -240,7 +254,7 @@ class AdminTrials extends Component {
   }
 
   handleChangeTextField (name, e) {
-    let change = {}
+    let change = { ...this.state }
     change[name] = e.target.value
     if (name === 'title') {
       if (e.target.value === '') {
@@ -501,9 +515,7 @@ class AdminTrials extends Component {
                         </TableRow>
                       </TableHeader>
                       <TableBody
-                        displayRowCheckbox={false} showRowHover
-                      >
-
+                        displayRowCheckbox={false} showRowHover>
                         {this.state.changeDataTable.map((row, index) => (
                           <TableRow key={index} selectable={false} style={{ whiteSpace: 'inherit' }}>
                             <TableRowColumn>
@@ -524,7 +536,7 @@ class AdminTrials extends Component {
                               <ReactTooltip />
                             </TableRowColumn>
                           </TableRow>
-                ))}
+                          ))}
                       </TableBody>
                     </Table>
                   </Card>
@@ -538,6 +550,7 @@ class AdminTrials extends Component {
                       <div className='dropdown-title'>select range of time</div>
                       <DropDownMenu
                         style={{ width: '220px' }}
+                        disabled={this.state.isOneDay}
                         value={this.state.timeRange}
                         underlineStyle={{ marginLeft: '0' }}
                         labelStyle={{ color: '#282829', paddingLeft: '0' }}
