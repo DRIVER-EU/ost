@@ -7,14 +7,6 @@ import { connect } from 'react-redux'
 import Auth from 'components/Auth'
 
 const styles = {
-  toastStyle: {
-    backgroundColor: 'green',
-    textAlign: 'center'
-  },
-  logo: {
-    position: 'absolute',
-    background: '#00022A'
-  },
   menubox: {
     borderBottom: '1px solid #ffc300'
   }
@@ -24,27 +16,21 @@ class CoreLayout extends Component {
   constructor (props) {
     super()
     this.state = {
-      openToast: false,
-      toastDescription: '',
-      user: 'Gawron',
-      role: 'Admin'
+      role: ''
     }
   }
 
   static propTypes = {
     children: PropTypes.element.isRequired,
-    isLoggedIn: PropTypes.any
+    isLoggedIn: PropTypes.any,
+    user: PropTypes.object
   }
 
-  componentWillMount () {
-    localStorage.removeItem('close-pathname')
-    localStorage.removeItem('cancel-pathname')
-    localStorage.removeItem('close-telescope-pathname')
-    localStorage.removeItem('cancel-telescope-pathname')
-  }
-
-  handleRequestClose () {
-    this.setState({ openToast: false, toastDescription: '' })
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.user && nextProps.user !== this.props.user &&
+      nextProps.user.roles[0] !== this.state.role) {
+      this.setState({ role: nextProps.user.roles[0] })
+    }
   }
 
   render () {

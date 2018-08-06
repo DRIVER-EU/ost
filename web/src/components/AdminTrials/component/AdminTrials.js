@@ -154,13 +154,13 @@ class AdminTrials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.usersList && nextProps.usersList !== null && this.props.usersList) {
+    if (nextProps.usersList && nextProps.usersList !== this.props.usersList) {
       this.setState({ usersList: nextProps.usersList.data })
     }
-    if (nextProps.rolesList && nextProps.rolesList !== null && this.props.rolesList) {
+    if (nextProps.rolesList && nextProps.rolesList !== this.props.rolesList) {
       this.setState({ rolesList: nextProps.rolesList.data })
     }
-    if (nextProps.stagesList && nextProps.stagesList !== null && this.props.stagesList) {
+    if (nextProps.stagesList && nextProps.stagesList !== this.props.stagesList) {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
@@ -555,7 +555,7 @@ class AdminTrials extends Component {
                     <ResponsiveContainer width='100%' height={400}>
                       <BarChart data={this.state.chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
-                        <XAxis dataKey='date' hide='true' />
+                        <XAxis dataKey='date' hide />
                         <YAxis />
                         <CartesianGrid strokeDasharray='3 3' />
                         <Tooltip />
