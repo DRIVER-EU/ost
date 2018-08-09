@@ -155,7 +155,7 @@ export const getObservation = (id, search) => {
 export const getUsers = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/user?trialsession_id=${id}`, getHeaders())
+      axios.get(`http://${origin}/api/user?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
             dispatch(getUsersAction(response.data))
             resolve()
@@ -171,7 +171,7 @@ export const getUsers = (id) => {
 export const getRoles = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/role?trialsession_id=${id}`, getHeaders())
+      axios.get(`http://${origin}/api/role?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
             dispatch(getRolesAction(response.data))
             resolve()
@@ -187,7 +187,7 @@ export const getRoles = (id) => {
 export const getStages = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/stages?trialsession_id=${id}`, getHeaders())
+      axios.get(`http://${origin}/api/stages?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
             dispatch(getStagesAction(response.data))
             resolve()

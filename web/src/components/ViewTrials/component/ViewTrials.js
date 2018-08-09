@@ -94,6 +94,9 @@ class ViewTrials extends Component {
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
       let change = [...nextProps.viewTrials]
+      change.map(obj => {
+        obj.comment = ''
+      })
       change[change.length - 1].comment = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       Nullam dictum consequat ullamcorper. Fusce aliquet auctor tincidunt. Quisque id risus laoreet, 
       feugiat nisl at, congue metus. Aenean nec iaculis quam. Morbi in convallis turpis, quis
@@ -296,12 +299,14 @@ class ViewTrials extends Component {
           open={this.state.open}
           onRequestClose={this.handleClose}>
           The answer will be permanently deleted. Please provide, why do you want to remove it:
-          <TextField
-            value={this.state.answerRemove}
-            hintText='enter the answer'
-            errorText={this.state.answerRemoveErrorText}
-            fullWidth
-            onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
+            <TextField
+              value={this.state.answerRemove}
+              hintText='enter the answer'
+              errorText={this.state.answerRemoveErrorText}
+              multiLine
+              fullWidth
+              rows={3}
+              onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
         </Dialog>
         <Dialog
           title='Comment'
@@ -313,7 +318,9 @@ class ViewTrials extends Component {
             value={this.state.comment}
             hintText='enter the comment'
             errorText={this.state.commentErrorText}
+            multiLine
             fullWidth
+            rows={5}
             onChange={this.handleChangeTextField.bind(this, 'comment')} />
         </Dialog>
       </div>
