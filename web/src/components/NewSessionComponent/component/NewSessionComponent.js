@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { RaisedButton, FloatingActionButton } from 'material-ui'
+import Dropzone from 'react-dropzone'
 import FontIcon from 'material-ui/FontIcon'
 import SelectField from 'material-ui/SelectField'
 import Checkbox from 'material-ui/Checkbox'
@@ -24,7 +25,8 @@ class NewSessionComponent extends Component {
       rolesList: [],
       stagesList: [],
       stageItem: '',
-      userItems: []
+      userItems: [],
+      listOfemails: []
     }
   }
 
@@ -150,6 +152,36 @@ class NewSessionComponent extends Component {
     return isValid
   }
 
+  onDrop (file) {
+    if (file) {
+      let reader = new FileReader()
+      reader.onload = () => {
+        this.setState({
+          listOfemails: reader.result.split(`\n`) },
+          () => this.onDrop(null)
+        )
+      }
+      reader.readAsText(file[0])
+    }
+    let items = [ ...this.state.userItems ]
+    let lastItem = _.last(items)
+    let id = 0
+    this.state.listOfemails.map(value => {
+      if (items[0].email === '') {
+        items[0].email = value
+      } else {
+        lastItem = _.last(items)
+        id = lastItem.id + 1
+        items.push({
+          id: id,
+          email: value,
+          role: []
+        })
+      }
+    })
+    this.setState({ userItems: items })
+  }
+
   send () {
     // POST method
   }
@@ -217,7 +249,13 @@ class NewSessionComponent extends Component {
                   onChange={this.handleChangeLoginPrefix.bind(this, 'loginPrefix')} />
               </div>
             </div>
-            <h3 style={{ marginTop: 50, marginBottom: 28 }}>Users:</h3>
+            <h3 style={{ marginTop: 50, marginBottom: 28, marginRight: 10, display: 'inline-block' }}>Users:</h3>
+            <Dropzone
+              accept='text/plain, .txt'
+              className='btn-dropzone'
+              onDrop={this.onDrop.bind(this)}>
+              Import E-mails
+            </Dropzone>
             {this.state.userItems.length !== 0 && this.state.userItems.map((object, index) => {
               return (
                 <div key={index} className='users-row'>
