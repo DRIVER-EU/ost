@@ -40,12 +40,14 @@ public class TrialSessionDTO {
 
         public Long initId;
         public Boolean initHasAnswer;
+        public String name;
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
 
             Optional<ObservationType> optionalInit = Optional.ofNullable(trialSession.getTrial().getInitId());
             this.initId = optionalInit.map(PersistentObject::getId).orElse(null);
+            this.name = trialSession.getLastTrialStage().getName();
         }
     }
 

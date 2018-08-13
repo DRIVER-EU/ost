@@ -1,26 +1,19 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { IndexLink } from 'react-router'
+import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar'
 import { List, ListItem } from 'material-ui/List'
 import UserComponent from '../../Bar/User'
-
 import './Menu.scss'
 
-class MenuLeft extends Component {
+class Menu extends Component {
   constructor (props) {
     super()
-    this.state = {
-      openToast: false,
-      toastDescription: '',
-      isLoggedIn: true,
-      user: 'Andrew',
-      role: 'user'
-    }
+    this.state = {}
   }
 
   static propTypes = {
-    user: PropTypes.any
+    role: PropTypes.string
   }
 
   render () {
@@ -32,7 +25,7 @@ class MenuLeft extends Component {
           iconElementLeft={
             <div style={{ display: 'flex' }}>
               <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
-              <span style={{ display: 'flex', alignItems: 'center', marginLeft: 5, fontSize: 18 }}>
+              <span className='driver-title'>
                 Observer Support Tool
               </span>
             </div>
@@ -46,7 +39,9 @@ class MenuLeft extends Component {
               <ListItem
                 primaryText='Trials'
                 style={{ color: '#00497E' }}
-                containerElement={<IndexLink to='/trials' activeClassName='route--active' />} />
+                containerElement={<IndexLink
+                  to={this.props.role === 'ROLE_ADMIN' ? '/trial-manager' : '/trials'}
+                  activeClassName='route--active' />} />
               <UserComponent activeClassName='route--active' />
             </List>
           }
@@ -56,4 +51,4 @@ class MenuLeft extends Component {
   }
 }
 
-export default MenuLeft
+export default Menu

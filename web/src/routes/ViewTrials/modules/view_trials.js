@@ -9,11 +9,18 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
 }
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 export const GET_VIEW_TRIALS = 'GET_VIEW_TRIALS'
 export const GET_TRIAL_SESSION = 'GET_TRIAL_SESSION'
 export const GET_TRIALS = 'GET_TRIALS'
 export const CLEAR_TRIALS = 'CLEAR_TRIALS'
+export const REMOVE_ANSWER = 'REMOVE_ANSWER'
+export const EDIT_COMMENT = 'EDIT_COMMENT'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -46,9 +53,25 @@ export const clearTrialsAction = (data = null) => {
   }
 }
 
+export const removeAnswerAction = (data = null) => {
+  return {
+    type: REMOVE_ANSWER,
+    data: data
+  }
+}
+
+export const editCommentAction = (data = null) => {
+  return {
+    type: EDIT_COMMENT,
+    data: data
+  }
+}
+
 export const actions = {
   getViewTrials,
-  getTrials
+  getTrials,
+  removeAnswer,
+  editComment
 }
 
 export const getViewTrials = (trialsessionId) => {
@@ -107,6 +130,41 @@ export const clearTrialList = () => {
     })
   }
 }
+
+export const removeAnswer = (id) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.delete(`http://${origin}/api/answers/${id}/remove`, getHeaders())
+        .then(() => {
+          toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
+          dispatch(removeAnswerAction())
+          resolve()
+        })
+        .catch((error) => {
+          errorHandle(error)
+          resolve(error)
+        })
+    })
+  }
+}
+
+export const editComment = (id, comment) => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.put(`http://${origin}/api/trialsessions/${id}`, comment, getHeaders())
+          .then((response) => {
+            dispatch(editCommentAction(response.data))
+            toastr.success('Comment', 'Changed was save!', toastrOptions)
+            resolve()
+          })
+          .catch((error) => {
+            errorHandle(error)
+            toastr.error('Comment', 'Error!', toastrOptions)
+            resolve()
+          })
+    })
+  }
+}
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -134,6 +192,12 @@ const ACTION_HANDLERS = {
       ...state,
       listOfTrials: action.data
     }
+  },
+  [EDIT_COMMENT]: (state, action) => {
+    return {
+      ...state,
+      eidtedComment: action.data
+    }
   }
 }
 // ------------------------------------
@@ -142,7 +206,8 @@ const ACTION_HANDLERS = {
 const initialState = {
   viewTrials: [],
   trialSession: {},
-  listOfTrials: {}
+  listOfTrials: {},
+  eidtedComment: {}
 }
 
 export default function viewTrialsReducer (state = initialState, action) {

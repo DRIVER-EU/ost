@@ -3,8 +3,6 @@ import Menu from './component/Menu'
 
 const mapDispatchToProps = {}
 
-const mapStateToProps = (state) => ({
-  name: state.menu.name
-})
+const mapStateToProps = (state) => ({})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)

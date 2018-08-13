@@ -10,7 +10,9 @@ class TrialManagerView extends Component {
 
   static propTypes = {
     getTrialManager: PropTypes.func,
-    listOfTrialsManager: PropTypes.object
+    listOfTrialsManager: PropTypes.object,
+    getListOfTrials: PropTypes.func,
+    listOfTrials: PropTypes.array
   }
 
   render () {
@@ -19,6 +21,8 @@ class TrialManagerView extends Component {
         <TrialManager
           getTrialManager={this.props.getTrialManager}
           listOfTrialsManager={this.props.listOfTrialsManager}
+          getListOfTrials={this.props.getListOfTrials}
+          listOfTrials={this.props.listOfTrials}
         />
       </div>
     )

@@ -4,6 +4,7 @@ import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.annotation.web.PutMapping;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,8 @@ import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/trialsessions")
@@ -50,5 +53,15 @@ public class TrialSessionController {
     @PostMapping("createNewSession")
     public void createNewSesson(@RequestBody NewSessionForm newSessionForm) {
         trialSessionService.createNewSession(newSessionForm);
+    }
+
+    @GetMapping("/trials")
+    public List<String> getTrials() {
+        return trialSessionService.getTrials();
+    }
+
+    @PostMapping("newSessionValues")
+    public JsonNode newSessionValues(@RequestParam(value = "trial_id") long trialId) {
+        return trialSessionService.newSessionValues(trialId);
     }
 }

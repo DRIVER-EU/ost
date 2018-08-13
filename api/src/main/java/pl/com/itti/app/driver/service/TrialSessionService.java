@@ -11,6 +11,7 @@ import co.perpixel.security.repository.AuthUnitRepository;
 import co.perpixel.security.repository.AuthUserPositionRepository;
 import co.perpixel.security.repository.AuthUserRepository;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -20,16 +21,23 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.form.UserForm;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
-import pl.com.itti.app.driver.repository.*;
+import pl.com.itti.app.driver.model.enums.AuthRoleType;
+import pl.com.itti.app.driver.model.enums.ManagementRoleType;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
+import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialStageRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import javax.mail.MessagingException;
 import java.time.OffsetDateTime;
@@ -71,6 +79,9 @@ public class TrialSessionService {
 
     @Autowired
     private AuthRoleRepository authRoleRepository;
+
+    @Autowired
+    private TrialRoleRepository trialRoleRepository;
 
     @Transactional(readOnly = true)
     public TrialSession findOneByManager(long trialSessionId) {
@@ -177,6 +188,37 @@ public class TrialSessionService {
         authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
 
         return authUserRepository.saveAndFlush(authUser);
+    }
+
+    public List<String> getTrials() {
+        TrialUser trialUser = trialUserRepository.findByAuthUser(trialUserService.getCurrentUser());
+        List<String> trialNames = new ArrayList<>();
+
+        for (TrialManager trialManager : trialUser.getTrialManagers()) {
+            if (ManagementRoleType.SESSION_MANAGER.equals(trialManager.getManagementRole())) {
+                trialNames.add(trialManager.getTrial().getName());
+            }
+        }
+
+        return trialNames;
+    }
+
+    public JsonNode newSessionValues(long trialId) {
+        List<TrialStage> trialStages = trialStageRepository.findAllByTrialId(trialId);
+        List<TrialRole> trialRoles = trialRoleRepository.findAllByTrialId(trialId);
+        List<AuthUser> authUsers = new ArrayList<>();
+
+        for (AuthUser user : authUserRepository.findAll()) {
+            for (AuthRole role : user.getRoles()) {
+                if (AuthRoleType.ROLE_USER.name().contains(role.getShortName())) {
+                    authUsers.add(user);
+                    break;
+                }
+            }
+        }
+
+        authUsers.remove(trialUserService.getCurrentUser());
+        return SchemaCreator.createNewSessionSchemaForm(trialStages, trialRoles, authUsers);
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {

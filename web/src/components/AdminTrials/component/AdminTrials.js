@@ -17,13 +17,24 @@ import { Tabs, Tab } from 'material-ui/Tabs'
 import ReactTooltip from 'react-tooltip'
 import './AdminTrials.scss'
 import _ from 'lodash'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
+
+const statusList = [
+  { id: 0, name: 'ACTIVE' },
+  { id: 1, name: 'SUSPENDED' }
+]
 
 const rangeList = [
   { id: 0, name: '5 minutes', value: 5 * 60 * 1000 },
   { id: 1, name: '10 minutes', value: 10 * 60 * 1000 },
   { id: 2, name: '15 minutes', value: 15 * 60 * 1000 },
   { id: 3, name: '30 minutes', value: 30 * 60 * 1000 },
-  { id: 4, name: '60 minutes', value: 60 * 60 * 1000 }
+  { id: 4, name: '60 minutes', value: 60 * 60 * 1000 },
+  { id: 5, name: '1 day', value: 24 * 60 * 60 * 1000 }
 ]
 
 const styles = {
@@ -74,12 +85,14 @@ class AdminTrials extends Component {
       showModal: false,
       selectedObj: {},
       trialStage: '',
+      trialStatus: '',
       usersList: [],
       rolesList: [],
       stagesList: [],
       interval: '',
       searchText: '',
-      timeRange: ''
+      timeRange: '',
+      isOneDay: false
     }
   }
 
@@ -100,7 +113,9 @@ class AdminTrials extends Component {
     params: PropTypes.any,
     observationForm: PropTypes.any,
     getSchemaView: PropTypes.func,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    exportToCSV: PropTypes.func,
+    setStatus: PropTypes.func
   }
 
   componentWillUnmount () {
@@ -141,19 +156,31 @@ class AdminTrials extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.usersList && nextProps.usersList !== null && this.props.usersList) {
+    if (nextProps.usersList && nextProps.usersList !== this.props.usersList) {
       this.setState({ usersList: nextProps.usersList.data })
     }
-    if (nextProps.rolesList && nextProps.rolesList !== null && this.props.rolesList) {
+    if (nextProps.rolesList && nextProps.rolesList !== this.props.rolesList) {
       this.setState({ rolesList: nextProps.rolesList.data })
     }
-    if (nextProps.stagesList && nextProps.stagesList !== null && this.props.stagesList) {
+    if (nextProps.stagesList && nextProps.stagesList !== this.props.stagesList) {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
     if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
-      this.setState({ changeDataTable: nextProps.observation }, () => {
-        this.handleChangeChart(this.state.changeDataTable)
-      })
+      let sortedList = _.orderBy(nextProps.observation, ['sentSimulationTime'], ['asc'])
+      let dateMax = (new Date(_.maxBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime())
+      let dateMin = new Date(_.minBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime()
+      if (dateMax - dateMin > 2 * 3600 * 1000) {
+        let change = {}
+        change['timeRange'] = 5
+        change['isOneDay'] = true
+        this.setState(change, () => this.setState({ changeDataTable: nextProps.observation }, () => {
+          this.handleChangeChart(this.state.changeDataTable)
+        }))
+      } else {
+        this.setState({ changeDataTable: nextProps.observation }, () => {
+          this.handleChangeChart(this.state.changeDataTable)
+        })
+      }
     }
     if (nextProps.observationForm && !_.isEqual(nextProps.observationForm, this.state.observationForm)) {
       this.setState({ observationForm: nextProps.observationForm })
@@ -210,7 +237,7 @@ class AdminTrials extends Component {
   }
 
   handleChangeRange (event, value) {
-    let change = {}
+    let change = { ...this.state }
     change['timeRange'] = value
     this.setState(change, () => this.handleChangeChart(this.state.changeDataTable))
   }
@@ -227,7 +254,7 @@ class AdminTrials extends Component {
   }
 
   handleChangeTextField (name, e) {
-    let change = {}
+    let change = { ...this.state }
     change[name] = e.target.value
     if (name === 'title') {
       if (e.target.value === '') {
@@ -348,6 +375,12 @@ class AdminTrials extends Component {
     this.handleShowModal()
   }
 
+  handleChangeStatus () {
+    if (this.state.trialStatus !== '') {
+      this.props.setStatus(this.props.params.id, this.state.trialStatus)
+    }
+  }
+
   handleChangeStage () {
     if (this.state.trialStage !== '') {
       this.props.setStage(this.props.params.id, { id: this.state.trialStage })
@@ -358,6 +391,14 @@ class AdminTrials extends Component {
     this.props.getObservation(this.props.params.id, this.state.searchText)
   }
 
+  handleDownloadSummary () {
+    if (this.state.changeDataTable.length !== 0) {
+      this.props.exportToCSV(this.props.params.id)
+    } else {
+      toastr.error('Export to CSV', `There isn't data to export!`, toastrOptions)
+    }
+  }
+
   render () {
     return (
       <div className='main-container'>
@@ -366,10 +407,30 @@ class AdminTrials extends Component {
             <div className='trials-set-header'>
               <div>Session settings</div>
             </div>
+            <div style={{ marginBottom: '10px' }}>
+              <SelectField
+                value={this.state.trialStatus}
+                floatingLabelText='Change Session Status'
+                onChange={this.handleChangeDropDown.bind(this, 'trialStatus')} >
+                {statusList.map((index) => (
+                  <MenuItem
+                    key={index.id}
+                    value={index.name}
+                    style={{ color: 'grey' }}
+                    primaryText={index.name} />
+                ))}
+              </SelectField>
+              <RaisedButton
+                style={{ marginLeft: '20px', marginRight: '20px', marginBottom: '10px', verticalAlign: 'bottom' }}
+                label='Set status'
+                primary
+                onClick={this.handleChangeStatus.bind(this)}
+                labelStyle={{ color: '#FDB913' }} />
+            </div>
             <div style={{ marginBottom: '20px' }}>
               <SelectField
                 value={this.state.trialStage}
-                floatingLabelText='Choose Trial Stage'
+                floatingLabelText='Change Trial Stage'
                 onChange={this.handleChangeDropDown.bind(this, 'trialStage')} >
                 {this.state.stagesList !== undefined && this.state.stagesList.map((index) => (
                   <MenuItem
@@ -388,14 +449,25 @@ class AdminTrials extends Component {
             </div>
             <Tabs
               value={this.state.value}
-              onChange={this.handleChange}>
+              onChange={this.handleChange}
+              tabItemContainerStyle={{ whiteSpace: 'inherit' }}
+              >
               <Tab
                 style={this.state.value === 'a' ? styles.active : styles.default}
                 label='Summary of observations'
                 value='a'>
                 <div>
                   <div className='trials-header'>
-                    <div>Summary of observations</div>
+                    <div>Summary of observations
+                      <RaisedButton
+                        buttonStyle={{ width: 150 }}
+                        style={{ marginLeft: 10 }}
+                        backgroundColor='#244C7B'
+                        labelColor='#FCB636'
+                        label='Download'
+                        secondary
+                        onClick={() => this.handleDownloadSummary()} />
+                    </div>
                     <DateComponent />
                   </div>
                   {false &&
@@ -420,7 +492,7 @@ class AdminTrials extends Component {
                   }
                   <Card style={{ margin: '20px 30px' }}>
                     <Table
-                      bodyStyle={{ overflowX: undefined, overflowY: undefined }}
+                      bodyStyle={{ overflowX: 'auto', overflowY: undefined }}
                       fixedFooter={false} >
                       <TableHeader
                         displaySelectAll={false}
@@ -442,10 +514,10 @@ class AdminTrials extends Component {
                     </TableHeaderColumn>
                         </TableRow>
                       </TableHeader>
-                      <TableBody displayRowCheckbox={false} showRowHover>
-
+                      <TableBody
+                        displayRowCheckbox={false} showRowHover>
                         {this.state.changeDataTable.map((row, index) => (
-                          <TableRow key={index} selectable={false}>
+                          <TableRow key={index} selectable={false} style={{ whiteSpace: 'inherit' }}>
                             <TableRowColumn>
                               {moment(row.sentSimulationTime, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm')}
                             </TableRowColumn>
@@ -464,7 +536,7 @@ class AdminTrials extends Component {
                               <ReactTooltip />
                             </TableRowColumn>
                           </TableRow>
-                ))}
+                          ))}
                       </TableBody>
                     </Table>
                   </Card>
@@ -478,6 +550,7 @@ class AdminTrials extends Component {
                       <div className='dropdown-title'>select range of time</div>
                       <DropDownMenu
                         style={{ width: '220px' }}
+                        disabled={this.state.isOneDay}
                         value={this.state.timeRange}
                         underlineStyle={{ marginLeft: '0' }}
                         labelStyle={{ color: '#282829', paddingLeft: '0' }}
@@ -495,7 +568,7 @@ class AdminTrials extends Component {
                     <ResponsiveContainer width='100%' height={400}>
                       <BarChart data={this.state.chartData}
                         margin={{ top: 30, right: 30, left: 20, bottom: 60 }}>
-                        <XAxis dataKey='date' hide='true' />
+                        <XAxis dataKey='date' hide />
                         <YAxis />
                         <CartesianGrid strokeDasharray='3 3' />
                         <Tooltip />
@@ -508,7 +581,8 @@ class AdminTrials extends Component {
               <Tab
                 style={this.state.value === 'b' ? styles.active : styles.default}
                 label='Events / messages send to observers'
-                value='b'>
+                value='b'
+                >
                 <div>
                   <div className='trials-header'>
                     <div>Events / messages send to observers</div>

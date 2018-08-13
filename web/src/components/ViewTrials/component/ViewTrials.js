@@ -8,8 +8,22 @@ import { browserHistory } from 'react-router'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
+import TextField from 'material-ui/TextField'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 import _ from 'lodash'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
+import Paper from 'material-ui/Paper'
+
+const styles = {
+  paper: {
+    marginTop: 15,
+    padding: 15
+  },
+  commentTitle: {
+    sizeFont: 18
+  }
+}
 
 class ViewTrials extends Component {
   constructor (props) {
@@ -21,7 +35,14 @@ class ViewTrials extends Component {
       trialSession: { name: '' },
       listOfTrials: props.listOfTrials.data ? props.listOfTrials.data : [],
       interval: '',
-      id: props.params.id
+      id: props.params.id,
+      open: false,
+      answerId: '',
+      answerRemove: '',
+      answerRemoveErrorText: '',
+      comment: '',
+      commentErrorText: '',
+      commentModal: false
     }
   }
 
@@ -36,7 +57,10 @@ class ViewTrials extends Component {
     observationForm: PropTypes.any,
     downloadFile: PropTypes.func,
     sendObservation: PropTypes.func,
-    clearTrialList: PropTypes.func
+    clearTrialList: PropTypes.func,
+    removeAnswer: PropTypes.func,
+    editComment: PropTypes.func,
+    editedComment: PropTypes.object
   }
 
   componentWillMount () {
@@ -69,10 +93,23 @@ class ViewTrials extends Component {
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
-      this.setState({ viewTrials: nextProps.viewTrials })
+      let change = [...nextProps.viewTrials]
+      change.map(obj => {
+        obj.comment = ''
+      })
+      change[change.length - 1].comment = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Nullam dictum consequat ullamcorper. Fusce aliquet auctor tincidunt. Quisque id risus laoreet, 
+      feugiat nisl at, congue metus. Aenean nec iaculis quam. Morbi in convallis turpis, quis
+      ultrices turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+      ac turpis egestas. Maecenas dignissim felis vel lorem cursus, sed varius nibh porta. Aenean quis
+      fringilla magna.`
+      this.setState({ viewTrials: change })
     }
     if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
       this.setState({ trialSession: nextProps.trialSession })
+    }
+    if (nextProps.editedComment && nextProps.editedComment !== this.props.editedComment) {
+      this.props.getViewTrials(this.props.params.id)
     }
   }
 
@@ -99,7 +136,90 @@ class ViewTrials extends Component {
     this.setState({ showModal: !this.state.showModal })
   }
 
+  handleOpen (id) {
+    this.setState({
+      open: true,
+      answerId: id
+    })
+  }
+
+  handleClose = () => {
+    this.setState({ open: false })
+  }
+
+  handleRemoveAnswer () {
+    if (this.state.answerRemove !== '') {
+      this.props.removeAnswer(this.state.answerId)
+      this.handleClose()
+    }
+  }
+
+  handleChangeTextField (name, e) {
+    let change = { ...this.state }
+    change[name] = e.target.value
+    this.setState(change, () => this.validateTextField(name))
+  }
+
+  validateTextField (name) {
+    let change = { ...this.state }
+    let error = name + 'ErrorText'
+    if (change[name] !== '') {
+      change[error] = ''
+    } else {
+      change[error] = 'This field must be filled out!'
+    }
+    this.setState(change)
+  }
+
+  handleCommentModalClose = () => {
+    this.setState({ commentModal: false })
+  }
+
+  handleCommentModal (object) {
+    this.setState({
+      selectedObject: object,
+      comment: object.comment,
+      commentModal: true
+    })
+  }
+
+  handleAddComment () {
+    if (this.state.comment !== '') {
+      this.setState({ commentModal: false },
+        () => this.props.editComment(
+          this.state.selectedObject.id,
+          { comment: this.state.comment }
+        ))
+    }
+  }
+
   render () {
+    const actions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleClose}
+      />,
+      <FlatButton
+        label='Delete'
+        primary
+        keyboardFocused
+        onTouchTap={() => this.handleRemoveAnswer()}
+      />
+    ]
+    const commentActions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleCommentModalClose}
+      />,
+      <FlatButton
+        label='Send'
+        primary
+        keyboardFocused
+        onTouchTap={() => this.handleAddComment()}
+      />
+    ]
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -130,10 +250,29 @@ class ViewTrials extends Component {
                           buttonStyle={{ width: '200px' }}
                           backgroundColor='#244C7B'
                           labelColor='#FCB636'
+                          label={object.comment !== '' ? 'Edit comment' : 'Comment'}
+                          secondary
+                          onClick={this.handleCommentModal.bind(this, object)} />
+                        <RaisedButton
+                          buttonStyle={{ width: '200px' }}
+                          style={{ margin: '0 10px' }}
+                          backgroundColor='#244C7B'
+                          labelColor='#FCB636'
                           onClick={this.viewEvent.bind(this, object.id)}
                           label='View' />
+                        <RaisedButton
+                          buttonStyle={{ width: '200px' }}
+                          backgroundColor='red'
+                          labelColor='#fff'
+                          label='Remove'
+                          onClick={() => this.handleOpen(object.id)} />
                       </div>
                       }
+                      {object.comment !== '' &&
+                      <Paper style={styles.paper} zDepth={1}>
+                        <p style={{ fontSize: 18, fontWeight: 'bold' }}>Comment:</p>
+                        <p style={{ fontStyle: 'italic' }}>{object.comment}</p>
+                      </Paper>}
                     </div>
                   </AccordionItem>
                 )
@@ -153,6 +292,37 @@ class ViewTrials extends Component {
             downloadFile={this.props.downloadFile}
             sendObservation={this.props.sendObservation} />
         </div>
+        <Dialog
+          title='Do you want to remove this answer?'
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}>
+          The answer will be permanently deleted. Please provide, why do you want to remove it:
+            <TextField
+              value={this.state.answerRemove}
+              hintText='enter the answer'
+              errorText={this.state.answerRemoveErrorText}
+              multiLine
+              fullWidth
+              rows={3}
+              onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
+        </Dialog>
+        <Dialog
+          title='Comment'
+          actions={commentActions}
+          modal={false}
+          open={this.state.commentModal}
+          onRequestClose={this.handleCommentModalClose}>
+          <TextField
+            value={this.state.comment}
+            hintText='enter the comment'
+            errorText={this.state.commentErrorText}
+            multiLine
+            fullWidth
+            rows={5}
+            onChange={this.handleChangeTextField.bind(this, 'comment')} />
+        </Dialog>
       </div>
     )
   }

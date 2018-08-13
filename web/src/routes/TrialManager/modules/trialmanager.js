@@ -11,10 +11,10 @@ import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
 
 export const GET_TRIALMANAGER = 'GET_TRIALMANAGER'
+export const GET_LIST_OF_TRIALS = 'GET_LIST_OF_TRIALS'
 // ------------------------------------
 // Actions
 // ------------------------------------
-
 export const getTrialManagerAction = (data = null) => {
   return {
     type: GET_TRIALMANAGER,
@@ -22,8 +22,16 @@ export const getTrialManagerAction = (data = null) => {
   }
 }
 
+export const getListOfTrialsAction = (data = null) => {
+  return {
+    type: GET_LIST_OF_TRIALS,
+    data: data
+  }
+}
+
 export const actions = {
-  getTrialManager
+  getTrialManager,
+  getListOfTrials
 }
 
 export const getTrialManager = () => {
@@ -32,6 +40,22 @@ export const getTrialManager = () => {
       axios.get(`http://${origin}/api/trialsessions`, getHeaders())
        .then((response) => {
          dispatch(getTrialManagerAction(response.data))
+         resolve()
+       })
+       .catch((error) => {
+         errorHandle(error)
+         resolve()
+       })
+    })
+  }
+}
+
+export const getListOfTrials = () => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/trialsessions/trials`, getHeaders())
+       .then((response) => {
+         dispatch(getListOfTrialsAction(response.data))
          resolve()
        })
        .catch((error) => {
@@ -51,13 +75,20 @@ const ACTION_HANDLERS = {
       ...state,
       listOfTrialsManager: action.data
     }
+  },
+  [GET_LIST_OF_TRIALS]: (state, action) => {
+    return {
+      ...state,
+      listOfTrials: action.data
+    }
   }
 }
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = {
-  listOfTrialsManager: {}
+  listOfTrialsManager: {},
+  listOfTrials: []
 }
 
 export default function trialManagerReducer (state = initialState, action) {

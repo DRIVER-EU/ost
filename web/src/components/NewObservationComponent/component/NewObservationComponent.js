@@ -87,7 +87,6 @@ class NewObservationComponent extends Component {
         e.preventDefault()
       }
     }
-
     if (this.props.params.id_observation) {
       this.props.getSchema(this.props.params.id_observation, this.props.params.id)
     }
@@ -125,12 +124,30 @@ class NewObservationComponent extends Component {
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state }
+      if (nextProps.observationForm.hasOwnProperty('time') && nextProps.observationForm.time !== null) {
+        change['dateTime'] = nextProps.observationForm.time
+      }
+      if (nextProps.observationForm.hasOwnProperty('trialRoles') &&
+        nextProps.observationForm.trialRoles.trial.length !== 0) {
+        nextProps.observationForm.trialRoles.trial.map((name, index) => {
+          change['observationForm']['roles'].push({ id: index, name: name })
+        })
+      }
+      if (nextProps.observationForm.hasOwnProperty('trialRoles') &&
+        nextProps.observationForm.trialRoles.check.length !== 0) {
+        let index = []
+        nextProps.observationForm.trialRoles.check.map((obj) => {
+          index.push({ id:_.findIndex(change['observationForm']['roles'], { name: obj }) })
+        })
+        change['listOfParticipants'] = index
+      } else {
+        change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
+      }
       change['observationForm']['schema'] = nextProps.observationForm.jsonSchema.schema
       change['observationForm']['uiSchema'] = nextProps.observationForm.jsonSchema.uiSchema
       if (nextProps.observationForm.jsonSchema.formData) {
         change['observationForm']['formData'] = nextProps.observationForm.jsonSchema.formData
       }
-      change['observationForm']['roles'] = nextProps.observationForm.roles ? nextProps.observationForm.roles : []
       if (nextProps.observationForm.attachments) {
         change['observationForm']['attachments'] = nextProps.observationForm.attachments
       }
@@ -161,10 +178,10 @@ class NewObservationComponent extends Component {
         this.setState(change)
       }
     }
-    if (nextProps.mode) {
-     // let change = { ...this.state }
-     // change['listOfParticipants'] = []
-    //  this.setState(change)
+    if (nextProps.mode === 'view') {
+      // let change = { ...this.state }
+      // change['listOfParticipants'] = []
+      // this.setState(change)
     }
   }
 
@@ -217,7 +234,7 @@ class NewObservationComponent extends Component {
       if (this.props.mode === 'profileQuestion') {
         this.props.closeModal()
       }
-      browserHistory.push(`/trials/${this.props.params.id}`)
+      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
     }
   }
 
@@ -318,7 +335,7 @@ class NewObservationComponent extends Component {
   }
 
   back () {
-    browserHistory.push(`/trials/${this.props.params.id}`)
+    browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
   }
 
   handleDescription (value) {
@@ -355,10 +372,10 @@ class NewObservationComponent extends Component {
             {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
             <div className={'buttons-obs'} style={{ textAlign: 'right' }}>
               <RaisedButton
-                buttonStyle={{ width: '240px' }}
+                buttonStyle={{ width: '300px' }}
                 backgroundColor='#244C7B'
                 labelColor='#FCB636'
-                label='Back to list of events'
+                label='Back to list of Observations'
                 secondary
                 icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
                   <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
@@ -389,7 +406,7 @@ class NewObservationComponent extends Component {
                 format='YYYY-MM-DD kk:mm' />
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
-                {this.state.observationForm.roles.map((object) => (
+                {this.state.observationForm.roles.map((object, index) => (
                   <Checkbox
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                     label={object.name}

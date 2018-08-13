@@ -57,7 +57,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  listOfObservations: {}
+  listOfObservations: []
 }
 
 export default function selectReducer (state = initialState, action) {
