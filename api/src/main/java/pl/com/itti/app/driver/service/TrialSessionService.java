@@ -3,26 +3,40 @@ package pl.com.itti.app.driver.service;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import co.perpixel.exception.EntityNotFoundException;
+import co.perpixel.security.model.AuthRole;
 import co.perpixel.security.model.AuthUser;
+import co.perpixel.security.model.AuthUserPosition;
+import co.perpixel.security.repository.AuthRoleRepository;
+import co.perpixel.security.repository.AuthUnitRepository;
+import co.perpixel.security.repository.AuthUserPositionRepository;
+import co.perpixel.security.repository.AuthUserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.form.NewSessionForm;
+import pl.com.itti.app.driver.form.UserForm;
+import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
-import pl.com.itti.app.driver.repository.TrialStageRepository;
+import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
+import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import javax.mail.MessagingException;
+import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
@@ -42,6 +56,21 @@ public class TrialSessionService {
 
     @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private AuthUserRepository authUserRepository;
+
+    @Autowired
+    private AuthUserPositionRepository authUserPositionRepository;
+
+    @Autowired
+    private AuthUnitRepository authUnitRepository;
+
+    @Autowired
+    private TrialUserRepository trialUserRepository;
+
+    @Autowired
+    private AuthRoleRepository authRoleRepository;
 
     @Transactional(readOnly = true)
     public TrialSession findOneByManager(long trialSessionId) {
@@ -93,6 +122,61 @@ public class TrialSessionService {
             session.setStatus(sessionStatus);
             trialSessionRepository.save(session);
         });
+    }
+
+    public void createNewSession(NewSessionForm newSessionForm) {
+        newSessionForm.getUsers().forEach(user ->  {
+            try {
+                String password = UUID.randomUUID().toString();
+                AuthUser authUser = createUser(user, password, newSessionForm.prefix);
+                trialUserRepository.save(getTrialUser(authUser));
+                AuthRole authRole = StreamSupport.stream(authRoleRepository.findAll().spliterator(), false)
+                        .filter(role -> role.getShortName().contains("ROLE_USER"))
+                        .findFirst()
+                        .orElse(null);
+
+                authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
+                EmailService.send(authUser, password, newSessionForm.getTrialName(), user);
+            } catch (MessagingException e) {
+                throw new InternalServerException("Cannot crate new user: " + e.getMessage());
+            }
+        });
+    }
+
+    private TrialUser getTrialUser(AuthUser authUser) {
+        return TrialUser.builder().authUser(authUser)
+                .userLanguage(Languages.ENGLISH)
+                .isTrialCreator(true)
+                .build();
+    }
+
+    private AuthUser createUser(UserForm user, String password, String prefix) {
+        String name = prefix + "_" + String.join("_", user.getRole());
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        AuthUser authUser = new AuthUser();
+
+        authUser.setFirstName(name);
+        authUser.setActivated(true);
+
+        Example<AuthUser> example = Example.of(authUser);
+        List<AuthUser> users = authUserRepository.findAll(example);
+        String lastName = String.valueOf(users.size() + 1);
+
+        authUser.setEmail(user.getEmail());
+        authUser.setLogin(name + lastName);
+        authUser.setLastName(lastName);
+        authUser.setPassword(bCryptPasswordEncoder.encode(password));
+        authUser.setCreatedAt(OffsetDateTime.now());
+
+        AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
+                .filter(position -> position.getName().contains("User"))
+                .findFirst()
+                .orElse(null);
+
+        authUser.setPosition(authUserPosition);
+        authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
+
+        return authUserRepository.saveAndFlush(authUser);
     }
 
     private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {
