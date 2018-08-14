@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface TrialStageRepository
         extends PagingAndSortingRepository<TrialStage, Long>, JpaSpecificationExecutor<TrialStage> {
     Optional<TrialStage> findById(long id);
+    Optional<TrialStage> findByName(String name);
     List<TrialStage> findAllByTrialId(long trialId);
 }

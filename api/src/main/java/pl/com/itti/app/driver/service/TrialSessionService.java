@@ -30,16 +30,13 @@ import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.model.enums.AuthRoleType;
 import pl.com.itti.app.driver.model.enums.ManagementRoleType;
-import pl.com.itti.app.driver.repository.TrialRoleRepository;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
-import pl.com.itti.app.driver.repository.TrialStageRepository;
-import pl.com.itti.app.driver.repository.TrialUserRepository;
+import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
-import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,6 +79,12 @@ public class TrialSessionService {
 
     @Autowired
     private TrialRoleRepository trialRoleRepository;
+
+    @Autowired
+    private TrialRepository trialRepository;
+
+    @Autowired
+    private UserRoleSessionRepository userRoleSessionRepository;
 
     @Transactional(readOnly = true)
     public TrialSession findOneByManager(long trialSessionId) {
@@ -136,11 +139,14 @@ public class TrialSessionService {
     }
 
     public void createNewSession(NewSessionForm newSessionForm) {
-        newSessionForm.getUsers().forEach(user ->  {
+        Map<String, TrialUser> users = new HashMap<>();
+
+        newSessionForm.getUsers().forEach(user -> {
             try {
                 String password = UUID.randomUUID().toString();
                 AuthUser authUser = createUser(user, password, newSessionForm.prefix);
-                trialUserRepository.save(getTrialUser(authUser));
+
+                users.put(user.getEmail(), trialUserRepository.save(getTrialUser(authUser)));
                 AuthRole authRole = StreamSupport.stream(authRoleRepository.findAll().spliterator(), false)
                         .filter(role -> role.getShortName().contains("ROLE_USER"))
                         .findFirst()
@@ -148,10 +154,30 @@ public class TrialSessionService {
 
                 authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
                 EmailService.send(authUser, password, newSessionForm.getTrialName(), user);
-            } catch (MessagingException e) {
+            } catch (Exception e) {
                 throw new InternalServerException("Cannot crate new user: " + e.getMessage());
             }
         });
+
+        TrialSession trialSession = TrialSession.builder().trial(trialRepository.findByName(newSessionForm.getTrialName()).get())
+                .startTime(LocalDateTime.now())
+                .status(SessionStatus.valueOf(newSessionForm.getStatus()))
+                .pausedTime(LocalDateTime.now())
+                .lastTrialStage(trialStageRepository.findByName(newSessionForm.getInitialStage()).get())
+                .build();
+
+        trialSessionRepository.save(trialSession);
+
+        for (UserForm userForm : newSessionForm.getUsers()) {
+            for(String role : userForm.getRole()) {
+                UserRoleSession userRoleSession = UserRoleSession.builder().trialUser(users.get(userForm.getEmail()))
+                        .trialRole(trialRoleRepository.findFirstByName(role).get())
+                        .trialSession(trialSession)
+                        .build();
+
+                userRoleSessionRepository.save(userRoleSession);
+            }
+        }
     }
 
     private TrialUser getTrialUser(AuthUser authUser) {
@@ -163,6 +189,7 @@ public class TrialSessionService {
 
     private AuthUser createUser(UserForm user, String password, String prefix) {
         String name = prefix + "_" + String.join("_", user.getRole());
+        name = name.replaceAll(" ", "-");
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         AuthUser authUser = new AuthUser();
 
