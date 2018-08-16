@@ -28,11 +28,13 @@ public class TrialSessionDTO {
 
         public String trialName;
         public String trialDescription;
+        public String lastTrialStage;
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
+            this.lastTrialStage = trialSession.getLastTrialStage().getName();
         }
     }
 
