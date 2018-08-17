@@ -102,6 +102,7 @@ public class AnswerService {
                         .sentSimulationTime(LocalDateTime.now())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
+                        .comment(form.comment)
                         .build()
         );
         if (form.trialRoleIds != null) {
@@ -154,17 +155,12 @@ public class AnswerService {
         return ids;
     }
 
-    public void removeAnswer(long answerId) {
+    public void removeAnswer(long answerId, String comment) {
         Optional<Answer> answer = answerRepository.findById(answerId);
 
         answer.ifPresent(ans -> {
-            for (Attachment attachment : ans.getAttachments()) {
-                attachmentService.removeFile(attachment);
-            }
-
-            attachmentRepository.delete(ans.getAttachments());
-            answerTrialRoleRepository.delete(ans.getAnswerTrialRoles());
-            answerRepository.delete(ans);
+            ans.setDeleteComment(comment);
+            answerRepository.save(ans);
         });
     }
 

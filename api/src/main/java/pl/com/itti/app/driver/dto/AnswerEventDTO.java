@@ -22,6 +22,8 @@ public final class AnswerEventDTO {
 
     public static class AnswerItem extends Item implements EntityDTO<Answer> {
 
+        public String comment;
+
         @Override
         public void toDto(Answer answer) {
             this.id = answer.getId();
@@ -29,6 +31,7 @@ public final class AnswerEventDTO {
             this.description = answer.getObservationType().getDescription();
             this.time = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
             this.type = ANSWER_TYPE;
+            this.comment = answer.getComment();
         }
     }
 

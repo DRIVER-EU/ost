@@ -4,6 +4,7 @@ import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.dto.DTO;
 import org.everit.json.schema.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,9 +82,12 @@ public class AnswerController {
         file.delete();
     }
 
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
     @DeleteMapping("/{answer_id:\\d+}/remove")
-    public void changeStatus(@PathVariable(value = "answer_id") long answerId) {
-        answerService.removeAnswer(answerId);
+    public void changeStatus(@PathVariable(value = "answer_id") long answerId,
+                             @RequestParam("comment") String comment) {
+        answerService.removeAnswer(answerId, comment);
     }
 
     private void assertThatFilesAreValid(MultipartFile[] files) {
