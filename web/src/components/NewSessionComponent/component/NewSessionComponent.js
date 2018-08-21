@@ -11,12 +11,28 @@ import PropTypes from 'prop-types'
 import MenuItem from 'material-ui/MenuItem'
 import { browserHistory } from 'react-router'
 import ReactTooltip from 'react-tooltip'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import _ from 'lodash'
 
 const statusList = [
   { id: 0, name: 'ACTIVE' },
   { id: 1, name: 'SUSPENDED' }
 ]
+
+const styles = {
+  radioBox: {
+    marginTop: 15
+  },
+  radioButton: {
+    marginBottom: 5
+  },
+  radioLabel: {
+    fontWeight: 'normal',
+    color: 'rgba(40, 40, 41, 0.6)'
+  }
+}
 
 class NewSessionComponent extends Component {
   constructor (props) {
@@ -26,7 +42,8 @@ class NewSessionComponent extends Component {
       stagesList: [],
       stageItem: '',
       userItems: [],
-      listOfemails: []
+      listOfemails: [],
+      openModal: false
     }
   }
 
@@ -182,11 +199,45 @@ class NewSessionComponent extends Component {
     this.setState({ userItems: items })
   }
 
+  handleCloseModal = () => {
+    this.setState({ openModal: false })
+  }
+
+  handleOpenModal = () => {
+    this.setState({ openModal: true })
+  }
+
+  handleRadioButton = (e) => {
+    switch (e.target.value) {
+      case 0:
+      // this.props.send and that is all
+        console.log('zero', e.target.value)
+        break
+      case 1:
+      // this.props.send download
+        console.log('one', e.target.value)
+        break
+    }
+  }
+
   send () {
     // POST method
   }
 
   render () {
+    const actions = [
+      <FlatButton
+        label='Cancel'
+        primary
+        onTouchTap={this.handleCloseModal}
+      />,
+      <FlatButton
+        label='OK'
+        primary
+        keyboardFocused
+        onTouchTap={() => this.send()}
+      />
+    ]
     return (
       <div className='main-container'>
         <div className='pages-box' style={{ height: '100%' }}>
@@ -309,12 +360,36 @@ class NewSessionComponent extends Component {
             </div>
             <RaisedButton
               label='Submit'
-              onClick={this.send.bind(this)}
+              onClick={this.handleOpenModal}
               style={{ display: 'table', margin: '0 auto', width: 200, marginTop: 120 }}
-              disabled={this.validateForm()}
+              // disabled={this.validateForm()}
               primary />
           </div>
         </div>
+        <Dialog
+          title='Trial Session Created'
+          actions={actions}
+          modal={false}
+          open={this.state.openModal}
+          onRequestClose={this.handleCloseModal}>
+          What you would like to do?
+          <RadioButtonGroup
+            style={styles.radioBox}
+            name='radioButtons'
+            defaultSelected={0}
+            onChange={this.handleRadioButton}>
+            <RadioButton
+              value={0}
+              label='Invite trial participants automatically'
+              labelStyle={styles.radioLabel}
+              style={styles.radioButton} />
+            <RadioButton
+              value={1}
+              label='Generate a list of accounts with login and passwords'
+              labelStyle={styles.radioLabel}
+              style={styles.radioButton} />
+          </RadioButtonGroup>
+        </Dialog>
       </div>
     )
   }
