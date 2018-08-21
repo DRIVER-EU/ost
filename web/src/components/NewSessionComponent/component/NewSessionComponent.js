@@ -208,7 +208,7 @@ class NewSessionComponent extends Component {
   }
 
   handleRadioButton = (e) => {
-    switch (e.target.value) {
+    switch (parseInt(e.target.value)) {
       case 0:
       // this.props.send and that is all
         console.log('zero', e.target.value)

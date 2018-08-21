@@ -1,7 +1,7 @@
 import { injectReducer } from '../../store/reducers'
 
 export default (store) => ({
-  path : 'login',
+  path : '/login',
   getComponent (nextState, cb) {
     require.ensure([], (require) => {
       const LoginPanelContent = require('./containers/Login').default
