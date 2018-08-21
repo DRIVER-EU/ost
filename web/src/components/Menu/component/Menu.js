@@ -22,7 +22,7 @@ class Menu extends Component {
       <div>
         <AppBar
           zDepth={3}
-          style={{ backgroundColor: 'white' }}
+          style={{ backgroundColor: 'white', height: 74 }}
           iconElementLeft={
             <div style={{ display: 'flex' }}>
               <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
