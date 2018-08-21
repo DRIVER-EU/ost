@@ -8,8 +8,7 @@ class Auth extends Component {
     this.state = {
       publicPaths: [
         '',
-        '/',
-        '/login'
+        '/'
       ]
     }
   }
@@ -20,9 +19,9 @@ class Auth extends Component {
 
   isPublicLocation () {
     let isPublic = false
-    this.state.publicPaths.forEach(function (object) {
+    this.state.publicPaths.forEach(path => {
       if (
-      window.location.pathname === object) {
+      window.location.pathname === path) {
         isPublic = true
       }
     })
@@ -32,20 +31,20 @@ class Auth extends Component {
   componentWillMount () {
     this.props.checkLogin()
     browserHistory.listen(location => {
-      if (location.pathname !== '/login') {
+      if (location.pathname !== '/') {
         if (!this.props.isLoggedIn && !this.isPublicLocation()) {
-          window.location.replace('/login')
+          window.location.replace('/')
         }
       }
     })
     if (!this.props.isLoggedIn && !this.isPublicLocation()) {
-      browserHistory.push('/login')
+      browserHistory.push('/')
     }
   }
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.isLoggedIn && !this.isPublicLocation()) {
-      browserHistory.push('/login')
+      browserHistory.push('/')
     }
   }
 

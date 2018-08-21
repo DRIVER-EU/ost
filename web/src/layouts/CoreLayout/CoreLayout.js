@@ -8,7 +8,8 @@ import Auth from 'components/Auth'
 
 const styles = {
   menubox: {
-    borderBottom: '1px solid #ffc300'
+    borderBottom: '1px solid #ffc300',
+    height: 74
   }
 }
 
@@ -43,7 +44,6 @@ class CoreLayout extends Component {
             <Menu role={this.state.role} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
-            <div style={styles.menubox} />
             {this.props.children}
           </div>
         </div>
