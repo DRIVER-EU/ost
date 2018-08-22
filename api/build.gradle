@@ -149,6 +149,9 @@ dependencies {
     compile("${perpixelGroupName}:perpixel-spring-security:${perpixelSpringSecurityVersion}")
     compile("${perpixelGroupName}:perpixel-spring-utils:${perpixelSpringUtilsVersion}")
 
+    // javax mail
+    compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
+
     // ----------------------------------------
     // Test
     // ----------------------------------------

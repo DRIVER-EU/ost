@@ -11,5 +11,6 @@ public interface TrialRoleRepository
         extends PagingAndSortingRepository<TrialRole, Long>, JpaSpecificationExecutor<TrialRole> {
 
     Optional<TrialRole> findById(Long id);
+    Optional<TrialRole> findFirstByName(String name);
     List<TrialRole> findAllByTrialId(Long trialId);
 }
