@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.dto.TrialStageDTO;
+import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 
@@ -49,6 +50,11 @@ public class TrialSessionController {
         return DTO.from(trialSessionService.updateLastTrialStage(trialSessionId, minimalItem.id), TrialSessionDTO.FullItem.class);
     }
 
+    @PostMapping("createNewSession")
+    public void createNewSesson(@RequestBody NewSessionForm newSessionForm) {
+        trialSessionService.createNewSession(newSessionForm);
+    }
+
     @GetMapping("/trials")
     public List<String> getTrials() {
         return trialSessionService.getTrials();
@@ -58,5 +64,4 @@ public class TrialSessionController {
     public JsonNode newSessionValues(@RequestParam(value = "trial_id") long trialId) {
         return trialSessionService.newSessionValues(trialId);
     }
-
 }

@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import LoginPanel from '../../LoginPanelContent/component/LoginPanelContent'
 
 const styles = {
   logoPosition: {
@@ -16,14 +18,22 @@ class HomeDesktop extends Component {
     this.state = { }
   }
 
-  static propTypes = { }
+  static propTypes = {
+    logIn: PropTypes.func,
+    isLoggedIn: PropTypes.bool
+  }
 
   render () {
     return (
       <div className='main-container'>
         <div className='pages-box'>
           <div style={styles.logoPosition}>
-            <img className='img-responsive driver-logo' src='/images/driver-logo.png' />
+            <div>
+              <img className='img-responsive driver-logo' src='/images/driver-logo.png' />
+              <LoginPanel
+                isLoggedIn={this.props.isLoggedIn}
+                logIn={this.props.logIn} />
+            </div>
           </div>
         </div>
       </div>

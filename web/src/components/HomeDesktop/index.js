@@ -1,9 +1,14 @@
 import { connect } from 'react-redux'
 import HomeDesktop from './component/HomeDesktop'
+import { logIn } from './../../routes/Login/modules/login'
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  logIn
+}
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.login.isLoggedIn
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeDesktop)
 

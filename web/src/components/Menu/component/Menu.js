@@ -13,7 +13,8 @@ class Menu extends Component {
   }
 
   static propTypes = {
-    role: PropTypes.string
+    role: PropTypes.string,
+    isLoggedIn: PropTypes.bool
   }
 
   render () {
@@ -21,7 +22,7 @@ class Menu extends Component {
       <div>
         <AppBar
           zDepth={3}
-          style={{ backgroundColor: 'white' }}
+          style={{ backgroundColor: 'white', height: 74 }}
           iconElementLeft={
             <div style={{ display: 'flex' }}>
               <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
@@ -31,11 +32,8 @@ class Menu extends Component {
             </div>
           }
           iconElementRight={
+            this.props.isLoggedIn &&
             <List style={{ display: 'flex' }}>
-              <ListItem
-                primaryText='Home'
-                style={{ color: '#00497E' }}
-                containerElement={<IndexLink to='/' activeClassName='route--active' />} />
               <ListItem
                 primaryText='Trials'
                 style={{ color: '#00497E' }}

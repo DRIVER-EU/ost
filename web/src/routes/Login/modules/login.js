@@ -77,7 +77,7 @@ export const logOut = () => {
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
           resolve()
-          browserHistory.push('/login')
+          browserHistory.push('/')
         })
         .catch((error) => {
           toastr.error('Logout', 'Error!', toastrOptions)

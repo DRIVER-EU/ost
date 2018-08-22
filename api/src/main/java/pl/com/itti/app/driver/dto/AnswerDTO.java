@@ -110,6 +110,8 @@ public final class AnswerDTO {
         public List<AttachmentDTO.Coordinates> coordinates;
 
         public List<String> descriptions;
+
+        public String comment;
     }
 
     private AnswerDTO() {

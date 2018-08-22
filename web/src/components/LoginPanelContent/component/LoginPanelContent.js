@@ -11,7 +11,7 @@ const styles = {
     marginTop: 15,
     marginBottom: 15
   },
-  forgot: {
+  signIn: {
     marginTop: 15,
     display: 'block'
   }
@@ -79,49 +79,37 @@ class LoginPanelContent extends Component {
     }
   }
 
-  forgot () {
-    browserHistory.push('/forgotpassword')
-  }
-
   render () {
     return (
-      <div className='main-container'>
-        <div className='pages-box pages-flex'>
-          <div className='login-box' onKeyPress={this._handleKeyPress}>
-            <p className='singin-title'>Sign in</p>
+      <div className='pages-flex'>
+        <div className='login-box' onKeyPress={this._handleKeyPress}>
+          <p className='singin-title'>Sign in</p>
 
-            <TextField
-              type='email'
-              onChange={this.handleChange.bind(this, 'name')}
-              value={this.state.name}
-              floatingLabelText='Login'
-              fullWidth
-              errorText={this.state.nameErrorText !== '' ? this.state.nameErrorText : ''} />
+          <TextField
+            type='email'
+            onChange={this.handleChange.bind(this, 'name')}
+            value={this.state.name}
+            floatingLabelText='Login'
+            fullWidth
+            errorText={this.state.nameErrorText !== '' ? this.state.nameErrorText : ''} />
 
-            <TextField
-              type='password'
-              onChange={this.handleChange.bind(this, 'password')}
-              value={this.state.password}
-              floatingLabelText='Password'
-              fullWidth
-              errorText={this.state.passwordErrorText !== '' ? this.state.passwordErrorText : ''} />
+          <TextField
+            type='password'
+            onChange={this.handleChange.bind(this, 'password')}
+            value={this.state.password}
+            floatingLabelText='Password'
+            fullWidth
+            errorText={this.state.passwordErrorText !== '' ? this.state.passwordErrorText : ''} />
 
-            <span
-              className='cursor-pointer'
-              onClick={this.forgot.bind(this)}>
-              Forgot your password?
-            </span>
-
-            <RaisedButton
-              label='Sign in'
-              style={styles.forgot}
-              backgroundColor='#244C7B'
-              labelColor='#FCB636'
-              onClick={() => {
-                this.isDisabled(['name', 'password'])
-                this.props.logIn(this.state.name, this.state.password)
-              }} />
-          </div>
+          <RaisedButton
+            label='Sign in'
+            style={styles.signIn}
+            backgroundColor='#244C7B'
+            labelColor='#FCB636'
+            onClick={() => {
+              this.isDisabled(['name', 'password'])
+              this.props.logIn(this.state.name, this.state.password)
+            }} />
         </div>
       </div>
     )

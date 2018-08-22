@@ -102,6 +102,7 @@ public class AnswerService {
                         .sentSimulationTime(LocalDateTime.now())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
+                        .comment(form.comment)
                         .build()
         );
         if (form.trialRoleIds != null) {
@@ -154,17 +155,12 @@ public class AnswerService {
         return ids;
     }
 
-    public void removeAnswer(long answerId) {
+    public void removeAnswer(long answerId, String comment) {
         Optional<Answer> answer = answerRepository.findById(answerId);
 
         answer.ifPresent(ans -> {
-            for (Attachment attachment : ans.getAttachments()) {
-                attachmentService.removeFile(attachment);
-            }
-
-            attachmentRepository.delete(ans.getAttachments());
-            answerTrialRoleRepository.delete(ans.getAnswerTrialRoles());
-            answerRepository.delete(ans);
+            ans.setDeleteComment(comment);
+            answerRepository.save(ans);
         });
     }
 
@@ -217,7 +213,10 @@ public class AnswerService {
     }
 
     public void createCSVFile(FileWriter writer, long trialSessionId) throws IOException {
-        List<String> title = Arrays.asList(AnswerProperties.ANSWER_ID,
+        List<String> title = Arrays.asList(
+                AnswerProperties.TRIAL_ID,
+                AnswerProperties.TRIAL_NAME,
+                AnswerProperties.TRIAL_SESSION,
                 AnswerProperties.TIME,
                 AnswerProperties.USER,
                 AnswerProperties.ROLE,
@@ -228,17 +227,22 @@ public class AnswerService {
                 AnswerProperties.ANSWER,
                 AnswerProperties.COMMENT,
                 AnswerProperties.LOCATION,
-                AnswerProperties.ATTACHMENT);
+                AnswerProperties.ATTACHMENT,
+                AnswerProperties.DELETE_COMMENT,
+                AnswerProperties.PRIMARY_COMMENT);
 
         CSVUtils.writeLine(writer, title);
         List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
 
         for (Answer answer : answers) {
             for (Question question : answer.getObservationType().getQuestions()) {
-                List<String> value = Arrays.asList(Long.toString(answer.getId()),
+                List<String> value = Arrays.asList(
+                    String.valueOf(answer.getTrialSession().getTrial().getId()),
+                    String.valueOf(answer.getTrialSession().getTrial().getName()),
+                    String.valueOf(trialSessionId),
                     answer.getSentSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
                     answer.getTrialUser().getAuthUser().getFirstName() + " " + answer.getTrialUser().getAuthUser().getLastName(),
-                    trialRoleRepository.findById(answer.getTrialUser().getId()).get().getName(),
+                    answer.getTrialUser().getUserRoleSessions().get(0).getTrialRole().getName(),
                     Long.toString(answer.getObservationType().getId()),
                     answer.getObservationType().getName(),
                     answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
@@ -246,9 +250,11 @@ public class AnswerService {
                     SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
                     SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),
                     getLocation(answer.getAttachments()),
-                    getUriOrDescription(answer.getAttachments()));
+                    Optional.ofNullable(getUriOrDescription(answer.getAttachments())).orElse(""),
+                    Optional.ofNullable(answer.getDeleteComment()).orElse(""),
+                    answer.getComment());
 
-                CSVUtils.writeLine(writer, value, ',', '"');
+                CSVUtils.writeLine(writer, value, ',', ' ');
             }
         }
     }

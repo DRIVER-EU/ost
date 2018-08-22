@@ -1,5 +1,7 @@
 package pl.com.itti.app.driver.util;
 
+import com.google.common.base.Strings;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
@@ -45,7 +47,9 @@ public class CSVUtils {
     private static String followCVSformat(String value) {
         String result = value;
 
-        if (result.contains("\"")) {
+        if (Strings.isNullOrEmpty(result)) {
+            result = "";
+        } else if (result.contains("\"")) {
             result = result.replace("\"", "\"\"");
         }
 
