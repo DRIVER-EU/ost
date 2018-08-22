@@ -127,7 +127,8 @@
 				"d661a67d-0db1-4d6c-9e36-687e4b92914d",
 				"700c736b-12e9-4c35-b36c-252ab2d44983",
 				"8b8de5e4-3b77-4abe-8a31-910aa412bdf8",
-				"b8afed13-ff65-4892-8bc1-de426adeafc6"
+				"b8afed13-ff65-4892-8bc1-de426adeafc6",
+				"bf235dff-eae5-4985-830c-af2735e791af"
 			],
 			"folders_order": []
 		},
@@ -492,7 +493,31 @@
 			"method": "GET",
 			"pathVariableData": [],
 			"queryParams": [],
-			"auth": null,
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
 			"events": null,
 			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
 			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
@@ -971,7 +996,7 @@
 		},
 		{
 			"id": "b8afed13-ff65-4892-8bc1-de426adeafc6",
-			"name": "/api/trialsessions/newSessionValues",
+			"name": "/trialsessions/newSessionValues",
 			"url": "http://{{IP-Address}}/api/trialsessions/newSessionValues?trial_id=1",
 			"description": "",
 			"data": null,
@@ -1121,6 +1146,61 @@
 			"events": null,
 			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
 			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "bf235dff-eae5-4985-830c-af2735e791af",
+			"name": "/trialsessions/createNewSession",
+			"url": "http://{{IP-Address}}/api/trialsessions/createNewSession",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": [],
+			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
+			"rawModeData": "{\n\t\"trialName\": \"Tabletop Trial\",\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"lukasz.pulik@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"observer\", \"Validator\"]\n\t\t},\n\t\t{\n\t\t\t\"email\" : \"pulik.lukasz@gmail.com\",\n\t\t\t\"role\": [\"Participant\", \"Staff of CMC LANDPOL\", \"CMC LANDPOL C\"]\n\t\t}\n\t]\n}",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
@@ -1386,30 +1466,31 @@
 			"headerData": [
 				{
 					"key": "Content-Type",
-					"value": "application/json"
+					"value": "application/x-www-form-urlencoded",
+					"description": ""
 				}
 			],
 			"method": "POST",
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
-				"type": "basic",
 				"basic": [
-					{
-						"key": "username",
-						"value": "Mayer1",
-						"type": "string"
-					},
 					{
 						"key": "password",
 						"value": "admin",
 						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "Observer1",
+						"type": "string"
 					}
-				]
+				],
+				"type": "basic"
 			},
 			"events": null,
 			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
-			"headers": "Content-Type: application/json\n",
+			"headers": "Content-Type: application/x-www-form-urlencoded\n",
 			"pathVariables": {}
 		},
 		{
@@ -1560,7 +1641,15 @@
 			"name": "/answers/remove",
 			"url": "http://{{IP-Address}}/api/answers/145/remove",
 			"description": "",
-			"data": null,
+			"data": [
+				{
+					"key": "comment",
+					"value": "komentarz",
+					"description": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
 			"dataMode": "params",
 			"headerData": [
 				{
@@ -1571,9 +1660,8 @@
 				},
 				{
 					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
+					"value": "application/x-www-form-urlencoded",
+					"description": ""
 				}
 			],
 			"method": "DELETE",
@@ -1606,7 +1694,7 @@
 			},
 			"events": [],
 			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/x-www-form-urlencoded\n",
 			"pathVariables": {}
 		},
 		{
