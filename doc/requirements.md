@@ -8,7 +8,7 @@ Below there are described particular tables of OST Database.
 
 - Trial - main class representing particular Trial described by ID, name, description and language_version. Additional attribute of this table is boolean id_defined and init_id - this attibute shows which questionnaire will appear as a first - for example this one connected with Metrics. 
 
-- Trial Stage - Table representing data about stages of a Trial. They are described by TrialID, name and simulationTime.
+- Trial Stage - table representing data about stages of a Trial. They are described by TrialID, name and simulationTime.
 
 - Trial Session - one Trial includes many sessions. Trial Session is described in DB by trail_ID, startTime, status (ACTIVE,SUSPENDED, END), pausedTime and last_trial_stage_id.
 
@@ -29,7 +29,14 @@ Attribute "delete_comment" saves data connected with removing this answer.
 
 - Auth_user - data about users and their accounts.
 - Trial_user - maps table auth_user to real users of an application.
-- 
+- Trial role - stores data about user roles. Role is defined by Trial_ID, name and role_type (OBSERVER, PARTICIPANT).
+- Trial_role_m2m - this table shows assignment of participants to the observers. 
+- Answer_trial_role - this table stores data about which Participants markes Observer in particular answer. 
+- Attachment - each answer can have additional attachment added by user. Attachment may be a picture, sound or localization. In database, attachment is described by URI, Type, Description, longitude, latitude and altitude. 
+- ObservationType_TrialRole - this table shows assigment of observationType to roles. 
+- Trial Sesssion Manager - stores data about which user is a Trial Manager in particular session. 
+- User_role_session - table shows which user has which role in particular session. 
+
 
 
 
