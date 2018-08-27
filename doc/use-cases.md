@@ -45,6 +45,9 @@ Below there is a chart whcih shows how many answers Trial Manageer got in select
 3. Events/Messages sent to Observers - in this view, Trial Manager can send events/messages to the users. He can either select the user or select the role. Here Trial Manager has to enter the Title and content of the message. 
 Below there is presented the table with listed sent Events. 
 
+4. New Session - in this view Trial Manager can create new Trial Session. He decides which Trial is connected with new session. Then Trial Manager can choose inital stage of the session and its status. Trial Manager can also decide about Login Prefix of a user.
+In this panel users accounts are created. By entering users emails, password and login for each of them are generated. Here, Trial Manager also assignes users to the roles. 
+If it comes to the passwords and login - Trial Mananger can decide if he wants to obtain list with all passwords and logins or to send each password and login to particular user (on his mail address). 
 
 
 
