@@ -13,17 +13,38 @@ Observer Support Tool’s aim is to  collect observations, inform observers abou
 
 ## Actors
 
-### Observer
+### User
 
-Observer has a possibility to log into the app or register by entering an email and password. Next view he has displayed is view with trials. When he selects one, he sees the description and the name and then all events that have already taken place in that trial. Each event has time with date, name and short description. On the bottom of the screen there is a button, pushing on it gives Observer the opportunity to add new Observation. Observations are grouped into the types which  describe shortly and categorise all questions. Observation Types can give much more effective analyse of data that will be collected. Observer can then read question from selected type, enter the time he made observation and select which participants have been observed. Questions may have varied answers types – checkboxes, radio buttons, text fields or sliders. What is more, if Observer wants he can add something like pictures, voice record, location and some additional description. 
+Each user has his own account in the application. By given unique password and login user can logg into the OST. His main role in the OST is to fill in some questionnaires connected to the Trial he participates. 
+User's interaface inculdes following views: 
+
+- logging view
+- view with list of Questionnaires
+- one chosen Questionnaire that user can fill in
+- list of Events and given Answers 
+- view to change the Trial Session 
+
+
 
 ### Trial Manager
 
-Trial Manager is a person who is responsible for managing not only the event but also the user. He has different view for OST than Observer, he uses Desktop version of a tool. Trial Manager is responsible for confirming user account and assigning registered users to a role in a trial. The role may be the Observer or Participant. He also has to fill in list of Participants to be observed, assign Participants to Observer roles and send messages to them. If it comes to managing an event, Trial Manager creates observation types and groups them into packages. What Trial Manager have displayed is received observations,  messages which has been send in table  and locations of collected observations on the map. What is more, he can see the summary of observations in time on a diagram and change the range of time if it is needed. There is also a table with simple summary with observations, which present collected data about them.  To make analysing more comfortable, Trial Manager can export collected data to CSV file. 
+Trial Manager is a person who is responsible for managing not only the event but also the user. He has different view for OST than Observer. Trial Manager is responsible for creating new Trial Session, assigning registered users to a role in a Trial Session and sending some events to particular user. 
+
+What Trial Manager has displayed are received answers which have been send. What is more, he can see the summary of observations in time on a diagram and change the range of time if it is needed.  To make analysing more comfortable, Trial Manager can export collected data to CSV file. 
+
+If it comes to managing the Trial Session, Trial Manager has different options: 
+- ha can set sesssion status - make it active or suspended
+- he can change the trial stage.
+
+
 #### Trial Manager interface:
-1. Summary of Observations - collected data about observations are presented in the table. It indicates observer’s role and name. It also shows observation type for each user, observation that was sent and some attachments. Trial Manager can filter results by typing only these data that he wants to obtain in his table.
-2. Summary of Observations in time - it is a diagram which presents number of recieved observations in time. Trial Manager can change the range of it and for example have displayed observations in particular hour or in range of 15 minutes. 
-3. Events/Messages sent to Observers - table with time that event/message was sent, user who recevied it, his role and content of a message. There is possibility, that Trial Manager sends data to all users that he manages. 
+1. Summary of Observations - collected data about observations are presented in the table. It indicates time of sent answer, name of User, ObservationType and the whole filled Questionnaire. 
+Below there is a chart whcih shows how many answers Trial Manageer got in selected range of time. 
+
+
+3. Events/Messages sent to Observers - in this view, Trial Manager can send events/messages to the users. He can either select the user or select the role. Here Trial Manager has to enter the Title and content of the message. 
+Below there is presented the table with listed sent Events. 
+
 
 
 
