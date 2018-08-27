@@ -22,7 +22,10 @@ EXAMPLE:
 {"title":"The number of participants involved in the Trial was adequate to given tasks and enough to evaluate the solutions and their impact on the crisis management.","description":"","type":"string","enum":["Strongly disagree   ","Disagree", "Neutral", "Agree ", "Strongly agree   ", "Not applicable (add rationale for that)"],"required":true}
 
 
+- Answer - this table represents filled questionnaire - answers for each questions. Answers  are also defined in JSON_SCHEMA Form. They are also described by TrialSession_ID, TrialUserID, simulationTime, sent_simulation_Time, observationTypeID and comment. 
+Attribute "delete_comment" saves data connected with removing this answer.
 
+- 
 
 
 
