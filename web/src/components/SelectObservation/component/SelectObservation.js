@@ -50,7 +50,7 @@ class SelectObservation extends Component {
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
-    if (nextProps.viewTrials &&
+    if (nextProps.viewTrials && this.props.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
       let newItem = _.differenceWith(nextProps.viewTrials, this.props.viewTrials, _.isEqual)
