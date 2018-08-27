@@ -25,9 +25,11 @@ EXAMPLE:
 - Answer - this table represents filled questionnaire - answers for each questions. Answers  are also defined in JSON_SCHEMA Form. They are also described by TrialSession_ID, TrialUserID, simulationTime, sent_simulation_Time, observationTypeID and comment. 
 Attribute "delete_comment" saves data connected with removing this answer.
 
+- Event - this table saves data about events sent by Trial Manager to the User. It is defined by TrialSession_ID, description, language_version, name, event_time, trial_user_id, trial_role_id. 
+
+- Auth_user - data about users and their accounts.
+- Trial_user - maps table auth_user to real users of an application.
 - 
-
-
 
 
 
