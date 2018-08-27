@@ -4,32 +4,22 @@
 
 https://drive.google.com/file/d/1pU1wFpAuTKMu_bh-PEDvUF47ANxzusgk/view
 
-### User
-User Class stores data about each user of an Observer Support Tool. User is always assigned to a particular Role, which can be an Observer or Participant. 
-Except of the fact, that User is connected with Observation, there is also association between Observation and Role, which refers to a view with Observation, where Observer can choose which Participants he observes. 
-If it comes to connection Question – Role, it means that both Observers and Participants can send their observations and answer questions. 
-### Trial
-Trial is defined by description, default language (english) and name. 
-On the Trial Lebel there are defined following issues: 
-- assignment of Roles to Users and assignment of 'Roles to Roles'. That means that Trial Manager gives regisered User a role (Participant or Observer) and then assignes Observers to Participants. 
-- TrialStage – the stage of a Trial displayed to User. In one TrialStage ObservationTypes are defined - groups of questions, which are defined by description and name. 
-- Roles assigned to ObservationTypes – Each ObservationType has defined some Participants, who are performed by checkboxes. That assignment shows that dependently from ObservationTypes there are displayed different Participants.
-- Roles are also assigned on the Trial level - Trial Manager decides how many Observers and Participants are needed.
+Below there are described particular tables of OST Database. 
 
-### Questions
-Question is described by name, short description and Answer Type. Following Answer Types exist: checkboxes, radio buttons, text field and slider.
-Each answer type determines a value of an answer. Observations that are filled by Observer dependent on answer type are stored in QuestionItem Class. Observation can have many questions. 
-To observation user can also add some attachments which also have types: location, picture, voice and description.
-Each Observation Template can have many questions with different answer types. 
-### Trial Session
-Trial has very important feature - it is run in many sessions, which can be ended or in progress. 
-In each session there can be new assignment of Roles to Users. On the session level there is a process of making Observations. 
-From the Test - bed there are sent events defined as Events and events which are triggers (TrialStages) - they have an influence on changing the questions. 
-### Translation
-This model shows also new functionality of the tool. The application will be provided in different languages dependently on User's language. 
+- Trial - main class representing particular Trial described by ID, name, description and language_version. Additional attribute of this table is boolean id_defined and init_id - this attibute shows which questionnaire will appear as a first - for example this one connected with Metrics. 
 
+- Trial Stage - Table representing data about stages of a Trial. They are described by TrialID, name and simulationTime.
 
+- Trial Session - one Trial includes many sessions. Trial Session is described in DB by trail_ID, startTime, status (ACTIVE,SUSPENDED, END), pausedTime and last_trial_stage_id.
 
+- ObservationType - this class represents Questionnaires. Each questionnaire is assigned to the Trial and TrialStage. It is defined by description and name. There is also boolean attribute - multiplicity, which says if that particular obvservationType appears to the user only once, or more. Next boolean attribute is with_users. It says whether in that ObservationType user has to mark which Participants he was observing.
+
+- Question -  particular question in each Questionnaire. It is described by observationType_ID, name, description and answer_Type (TEXT_FIELD, RADIO_BUTTON). It is possible that Question has a text field, where user can enter a comment. It is defined by boolean attibute - commented. 
+Each question is saved in  JSON_SCHEMA Form. 
+
+EXAMPLE: 
+
+{"title":"The number of participants involved in the Trial was adequate to given tasks and enough to evaluate the solutions and their impact on the crisis management.","description":"","type":"string","enum":["Strongly disagree   ","Disagree", "Neutral", "Agree ", "Strongly agree   ", "Not applicable (add rationale for that)"],"required":true}
 
 
 
