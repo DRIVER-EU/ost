@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
+import { browserHistory } from 'react-router'
 import { logIn, logOut } from '../../routes/Login/modules/login'
 import { DropDownMenu, MenuItem } from 'material-ui'
 import './User.scss'
@@ -11,12 +12,19 @@ class UserComponent extends Component {
 
   static propTypes = {
     logOut: PropTypes.func,
+    role: PropTypes.string,
     user: PropTypes.any
   }
 
   changeActionMenu (event, key, value) {
-    if (value === 2) {
+    if (value === 3) {
       this.props.logOut()
+    } else if (value === 2) {
+      if (this.props.role === 'ROLE_ADMIN') {
+        browserHistory.push('/trial-manager')
+      } else {
+        browserHistory.push('/trials')
+      }
     }
   }
 
@@ -27,7 +35,8 @@ class UserComponent extends Component {
         underlineStyle={{ borderTop: 'none' }}
         labelStyle={{ lineHeight: '48px', color: '#00497E' }}>
         <MenuItem value={1} primaryText={this.props.user.login} style={{ display: 'none' }} />
-        <MenuItem value={2} primaryText='Log out' />
+        <MenuItem value={2} primaryText='Change Trial' />
+        <MenuItem value={3} primaryText='Log out' />
       </DropDownMenu>
     )
   }

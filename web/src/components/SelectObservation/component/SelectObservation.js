@@ -51,13 +51,15 @@ class SelectObservation extends Component {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
     if (nextProps.viewTrials &&
-      nextProps.viewTrials !== this.state.viewTrials &&
-      nextProps.viewTrials !== this.props.viewTrials) {
-      let newItem = _.differenceWith(nextProps.viewTrials, this.props.viewTrials, _.isEqual)
-      if (this.props.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
+      !_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {
+      let newItem = _.differenceWith(nextProps.viewTrials, this.state.viewTrials, _.isEqual)
+      if (this.state.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
         toastr.success('New Event', 'New Event received.', toastrOptions)
       }
       this.setState({ viewTrials: nextProps.viewTrials })
+    }
+    if (this.props.viewTrials) {
+      // eslint
     }
   }
 
