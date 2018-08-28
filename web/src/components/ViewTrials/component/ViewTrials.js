@@ -93,17 +93,7 @@ class ViewTrials extends Component {
     if (nextProps.viewTrials &&
       nextProps.viewTrials !== this.state.viewTrials &&
       nextProps.viewTrials !== this.props.viewTrials) {
-      let change = [...nextProps.viewTrials]
-      change.map(obj => {
-        obj.comment = ''
-      })
-      change[change.length - 1].comment = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Nullam dictum consequat ullamcorper. Fusce aliquet auctor tincidunt. Quisque id risus laoreet, 
-      feugiat nisl at, congue metus. Aenean nec iaculis quam. Morbi in convallis turpis, quis
-      ultrices turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames
-      ac turpis egestas. Maecenas dignissim felis vel lorem cursus, sed varius nibh porta. Aenean quis
-      fringilla magna.`
-      this.setState({ viewTrials: change })
+      this.setState({ viewTrials: nextProps.viewTrials })
     }
     if (nextProps.trialSession && nextProps.trialSession.trialName && this.props.trialSession) {
       this.setState({ trialSession: nextProps.trialSession })
@@ -184,7 +174,7 @@ class ViewTrials extends Component {
   }
 
   handleAddComment () {
-    if (this.state.comment !== '') {
+    if (this.state.comment) {
       this.setState({ commentModal: false },
         () => this.props.editComment(
           this.state.selectedObject.id,
@@ -250,7 +240,7 @@ class ViewTrials extends Component {
                           buttonStyle={{ width: '200px' }}
                           backgroundColor='#244C7B'
                           labelColor='#FCB636'
-                          label={object.comment !== '' ? 'Edit comment' : 'Comment'}
+                          label={object.comment ? 'Edit comment' : 'Comment'}
                           secondary
                           onClick={this.handleCommentModal.bind(this, object)} />
                         <RaisedButton
@@ -268,7 +258,7 @@ class ViewTrials extends Component {
                           onClick={() => this.handleOpen(object.id)} />
                       </div>
                       }
-                      {object.comment !== '' &&
+                      {object.comment &&
                       <Paper style={styles.paper} zDepth={1}>
                         <p style={{ fontSize: 18, fontWeight: 'bold' }}>Comment:</p>
                         <p style={{ fontStyle: 'italic' }}>{object.comment}</p>

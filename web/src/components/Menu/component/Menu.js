@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { IndexLink } from 'react-router'
 import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar'
-import { List, ListItem } from 'material-ui/List'
+import { List } from 'material-ui/List'
 import UserComponent from '../../Bar/User'
 import './Menu.scss'
 
@@ -34,13 +33,7 @@ class Menu extends Component {
           iconElementRight={
             this.props.isLoggedIn &&
             <List style={{ display: 'flex' }}>
-              <ListItem
-                primaryText='Trials'
-                style={{ color: '#00497E' }}
-                containerElement={<IndexLink
-                  to={this.props.role === 'ROLE_ADMIN' ? '/trial-manager' : '/trials'}
-                  activeClassName='route--active' />} />
-              <UserComponent activeClassName='route--active' />
+              <UserComponent role={this.props.role} activeClassName='route--active' />
             </List>
           }
   />
