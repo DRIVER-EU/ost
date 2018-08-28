@@ -22,4 +22,11 @@ public class QuestionAnswerService {
         return answerRepository.findById(answerId)
                 .orElseThrow(() -> new EntityNotFoundException(Answer.class, answerId));
     }
+
+    public void putComment(long answerId, String comment) {
+        Answer answer = getByAnswerId(answerId);
+        answer.setComment(comment);
+
+        answerRepository.save(answer);
+    }
 }

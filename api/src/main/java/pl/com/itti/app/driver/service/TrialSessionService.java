@@ -138,8 +138,11 @@ public class TrialSessionService {
         });
     }
 
-    public void createNewSession(NewSessionForm newSessionForm) {
+    public List<String> createNewSession(NewSessionForm newSessionForm, boolean isEmail) {
         Map<String, TrialUser> users = new HashMap<>();
+        Map<String, List<String>> emails = new HashMap<>();
+        StringBuilder longestEmail = new StringBuilder();
+        StringBuilder longestLogin = new StringBuilder();
 
         newSessionForm.getUsers().forEach(user -> {
             try {
@@ -153,7 +156,15 @@ public class TrialSessionService {
                         .orElse(null);
 
                 authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
-                EmailService.send(authUser, password, newSessionForm.getTrialName(), user);
+                if (isEmail) {
+                    EmailService.send(authUser, password, newSessionForm.getTrialName(), user);
+                } else {
+                    emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), authUser.getPassword()));
+                    longestEmail.replace(0, longestEmail.length(), authUser.getEmail().length() > longestEmail.length() ?
+                            authUser.getEmail() : longestEmail.toString());
+                    longestLogin.replace(0, longestLogin.length(), authUser.getLogin().length() > longestLogin.length() ?
+                            authUser.getLogin() : longestLogin.toString());
+                }
             } catch (Exception e) {
                 throw new InternalServerException("Cannot crate new user: " + e.getMessage());
             }
@@ -178,6 +189,24 @@ public class TrialSessionService {
                 userRoleSessionRepository.save(userRoleSession);
             }
         }
+
+        if (!isEmail) {
+            List<String> lines = new ArrayList<>();
+            String firstFormat = "%-" + longestEmail.length() + "s ";
+            String secondFormat = "%-" + longestLogin.length() + "s ";
+
+            String title = String.format(firstFormat + secondFormat + "%s%n", "E-mail", "Login", "Password");
+            lines.add(title);
+
+            emails.keySet().stream().forEach(key -> {
+                String result = String.format(firstFormat + secondFormat + "%s", key, emails.get(key).get(0), emails.get(key).get(1));
+                lines.add(result);
+            });
+
+            return lines;
+        }
+
+        return Collections.EMPTY_LIST;
     }
 
     private TrialUser getTrialUser(AuthUser authUser) {

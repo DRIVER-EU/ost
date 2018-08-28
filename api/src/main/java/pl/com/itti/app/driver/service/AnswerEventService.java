@@ -39,6 +39,7 @@ public class AnswerEventService {
 
         List<AnswerEventDTO.Item> items = getAsAnswersEvents(answers, events);
         items.sort(Comparator.comparing(item -> item.time));
+        Collections.reverse(items);
         return items;
     }
 
