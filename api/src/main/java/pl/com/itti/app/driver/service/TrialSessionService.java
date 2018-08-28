@@ -157,7 +157,8 @@ public class TrialSessionService {
 
                 authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
                 if (isEmail) {
-                    EmailService.send(authUser, password, newSessionForm.getTrialName(), user);
+                    String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
+                    EmailService.send(authUser, password, trialName, user);
                 } else {
                     emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), authUser.getPassword()));
                     longestEmail.replace(0, longestEmail.length(), authUser.getEmail().length() > longestEmail.length() ?
@@ -170,7 +171,7 @@ public class TrialSessionService {
             }
         });
 
-        TrialSession trialSession = TrialSession.builder().trial(trialRepository.findByName(newSessionForm.getTrialName()).get())
+        TrialSession trialSession = TrialSession.builder().trial(trialRepository.findById(newSessionForm.getTrialId()).get())
                 .startTime(LocalDateTime.now())
                 .status(SessionStatus.valueOf(newSessionForm.getStatus()))
                 .pausedTime(LocalDateTime.now())

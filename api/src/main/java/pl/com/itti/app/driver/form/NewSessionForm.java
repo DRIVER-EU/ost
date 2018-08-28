@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NewSessionForm {
 
-    public String trialName;
+    public long trialId;
     public String initialStage;
     public String prefix;
     public String status;
