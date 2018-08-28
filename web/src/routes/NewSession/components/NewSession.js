@@ -13,6 +13,8 @@ class NewSession extends Component {
     rolesList: PropTypes.object,
     getStages: PropTypes.func,
     stagesList: PropTypes.object,
+    newSession: PropTypes.func,
+    session: PropTypes.object,
     params: PropTypes.any
   }
 
@@ -23,6 +25,8 @@ class NewSession extends Component {
         rolesList={this.props.rolesList}
         getStages={this.props.getStages}
         stagesList={this.props.stagesList}
+        newSession={this.props.newSession}
+        session={this.props.session}
         params={this.props.params}
       />
     )

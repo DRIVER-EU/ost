@@ -41,6 +41,8 @@ class NewSessionComponent extends Component {
       rolesList: [],
       stagesList: [],
       stageItem: '',
+      status: '',
+      loginPrefix: '',
       userItems: [],
       listOfemails: [],
       openModal: false
@@ -52,6 +54,8 @@ class NewSessionComponent extends Component {
     rolesList: PropTypes.object,
     getStages: PropTypes.func,
     stagesList: PropTypes.object,
+    // newSession: PropTypes.func,
+    // session: PropTypes.object,
     params: PropTypes.any
   }
 
@@ -95,23 +99,23 @@ class NewSessionComponent extends Component {
     })
   }
 
-  handleChangeCheckbox (id, roleId) {
+  handleChangeCheckbox (id, roleName) {
     let change = [ ...this.state.userItems ]
     let checkIndex = _.findIndex(change, { id: id })
-    let isIn = _.findIndex(change[checkIndex].role, { id: roleId })
+    let isIn = _.findIndex(change[checkIndex].role, { name: roleName })
     if (isIn !== -1) {
       change[checkIndex].role.splice(isIn, 1)
     } else {
-      change[checkIndex].role.push({ id: roleId })
+      change[checkIndex].role.push({ name: roleName })
     }
     this.setState({ userItems: change })
   }
 
-  handleCheckRole (object, roleId) {
+  handleCheckRole (object, roleName) {
     let isCheck = false
     if (object.role.length !== 0) {
       object.role.map(element => {
-        if (element.id === roleId) {
+        if (element.name === roleName) {
           isCheck = true
         }
       })
@@ -221,7 +225,25 @@ class NewSessionComponent extends Component {
   }
 
   send () {
-    // POST method
+    let change = [ ...this.state.userItems ]
+    change.map(object => {
+      delete object.id
+      let role = []
+      object.role.map(item => {
+        role.push(item.name)
+      })
+      object.role = role
+    })
+    let data = {
+      trialId: this.props.params.id,
+      initialStage: this.state.stageItem,
+      prefix: this.state.loginPrefix,
+      status: this.state.status,
+      users: change
+    }
+    // this.props.newSession(data)
+    console.log('POST!!!', data)
+    browserHistory.push('/trial-manager')
   }
 
   render () {
@@ -270,7 +292,7 @@ class NewSessionComponent extends Component {
                   {this.state.stagesList.length !== 0 && this.state.stagesList.map((index) => (
                     <MenuItem
                       key={index.id}
-                      value={index.id}
+                      value={index.name}
                       style={{ color: 'grey' }}
                       primaryText={index.name} />
                 ))}
@@ -330,7 +352,7 @@ class NewSessionComponent extends Component {
                           data-tip={role.name}
                           key={index}
                           label={role.name}
-                          defaultChecked={this.handleCheckRole(object, role.id)}
+                          defaultChecked={this.handleCheckRole(object, role.name)}
                           labelStyle={{
                             minWidth: 100,
                             maxWidth: 200,
@@ -339,7 +361,7 @@ class NewSessionComponent extends Component {
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
-                          onCheck={this.handleChangeCheckbox.bind(this, object.id, role.id)}
+                          onCheck={this.handleChangeCheckbox.bind(this, object.id, role.name)}
                     />)
                     }
                     )}

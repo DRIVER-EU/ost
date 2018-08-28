@@ -20,7 +20,7 @@ class TrialManager extends Component {
       listOfTrials: [],
       isLoading: false,
       openModal: false,
-      trialId: ''
+      trialId: null
     }
   }
 
@@ -71,7 +71,7 @@ class TrialManager extends Component {
   handleOpen = () => {
     this.props.getListOfTrials()
     this.setState({
-      trialId: '',
+      trialId: null,
       openModal: true
     })
   }
@@ -81,7 +81,7 @@ class TrialManager extends Component {
   }
 
   newSession = () => {
-    if (this.state.trialId !== '') {
+    if (this.state.trialId) {
       browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
     }
   }
@@ -157,8 +157,7 @@ class TrialManager extends Component {
           actions={actions}
           modal={false}
           open={this.state.openModal}
-          onRequestClose={this.handleClose}
-        >
+          onRequestClose={this.handleClose}>
           <div style={{
             display: 'flex',
             flexDirection: 'row',
