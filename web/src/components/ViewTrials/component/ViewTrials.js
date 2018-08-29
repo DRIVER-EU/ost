@@ -178,7 +178,7 @@ class ViewTrials extends Component {
       this.setState({ commentModal: false },
         () => this.props.editComment(
           this.state.selectedObject.id,
-          { comment: this.state.comment }
+          this.state.comment
         ))
     }
   }
