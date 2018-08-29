@@ -18,9 +18,9 @@ public class QuestionAnswerController {
         return DTO.from(questionAnswerService.getByAnswerId(answerId), QuestionAnswerDTO.FullItem.class);
     }
 
-    @PostMapping("/{answer_id:\\d+}/putComment")
-    public void createNewSesson(@PathVariable(value = "answer_id") long answerId,
+    @PostMapping("/{answer_id:\\d+}/comment")
+    public void addComment(@PathVariable(value = "answer_id") long answerId,
                                 @RequestParam("comment") String comment) {
-        questionAnswerService.putComment(answerId, comment);
+        questionAnswerService.addComment(answerId, comment);
     }
 }

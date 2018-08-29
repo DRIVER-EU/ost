@@ -23,7 +23,7 @@ public class QuestionAnswerService {
                 .orElseThrow(() -> new EntityNotFoundException(Answer.class, answerId));
     }
 
-    public void putComment(long answerId, String comment) {
+    public void addComment(long answerId, String comment) {
         Answer answer = getByAnswerId(answerId);
         answer.setComment(comment);
 

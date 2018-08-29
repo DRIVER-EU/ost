@@ -171,7 +171,8 @@ public class TrialSessionService {
             }
         });
 
-        TrialSession trialSession = TrialSession.builder().trial(trialRepository.findById(newSessionForm.getTrialId()).get())
+        TrialSession trialSession = TrialSession.builder().trial(trialRepository.findById(newSessionForm.getTrialId())
+                .orElseThrow(() -> new EntityNotFoundException(Trial.class, newSessionForm.getTrialId())))
                 .startTime(LocalDateTime.now())
                 .status(SessionStatus.valueOf(newSessionForm.getStatus()))
                 .pausedTime(LocalDateTime.now())
