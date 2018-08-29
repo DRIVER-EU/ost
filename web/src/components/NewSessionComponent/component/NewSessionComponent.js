@@ -45,7 +45,8 @@ class NewSessionComponent extends Component {
       loginPrefix: '',
       userItems: [],
       listOfemails: [],
-      openModal: false
+      openModal: false,
+      type: ''
     }
   }
 
@@ -54,8 +55,7 @@ class NewSessionComponent extends Component {
     rolesList: PropTypes.object,
     getStages: PropTypes.func,
     stagesList: PropTypes.object,
-    // newSession: PropTypes.func,
-    // session: PropTypes.object,
+    newSession: PropTypes.func,
     params: PropTypes.any
   }
 
@@ -212,16 +212,7 @@ class NewSessionComponent extends Component {
   }
 
   handleRadioButton = (e) => {
-    switch (parseInt(e.target.value)) {
-      case 0:
-      // this.props.send and that is all
-        console.log('zero', e.target.value)
-        break
-      case 1:
-      // this.props.send download
-        console.log('one', e.target.value)
-        break
-    }
+    this.setState({ type: e.target.value })
   }
 
   send () {
@@ -241,8 +232,7 @@ class NewSessionComponent extends Component {
       status: this.state.status,
       users: change
     }
-    // this.props.newSession(data)
-    console.log('POST!!!', data)
+    this.props.newSession(data, this.state.type)
     browserHistory.push('/trial-manager')
   }
 
@@ -384,7 +374,7 @@ class NewSessionComponent extends Component {
               label='Submit'
               onClick={this.handleOpenModal}
               style={{ display: 'table', margin: '0 auto', width: 200, marginTop: 120 }}
-              // disabled={this.validateForm()}
+              disabled={this.validateForm()}
               primary />
           </div>
         </div>
@@ -398,15 +388,15 @@ class NewSessionComponent extends Component {
           <RadioButtonGroup
             style={styles.radioBox}
             name='radioButtons'
-            defaultSelected={0}
+            defaultSelected={'email'}
             onChange={this.handleRadioButton}>
             <RadioButton
-              value={0}
+              value={'email'}
               label='Invite trial participants automatically'
               labelStyle={styles.radioLabel}
               style={styles.radioButton} />
             <RadioButton
-              value={1}
+              value={'file'}
               label='Generate a list of accounts with login and passwords'
               labelStyle={styles.radioLabel}
               style={styles.radioButton} />

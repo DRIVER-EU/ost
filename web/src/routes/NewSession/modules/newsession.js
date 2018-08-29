@@ -9,6 +9,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
 }
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
+import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
 
 const toastrOptions = {
@@ -31,12 +32,22 @@ export const actions = {
   newSession
 }
 
-export const newSession = (data) => {
+export const newSession = (data, type) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.put(`http://${origin}/api/trialsessions/createNewSession`, data, getHeaders())
+      let url = ''
+      if (type === 'email') {
+        url = 'createNewSessionEmail'
+      } else {
+        url = 'createNewSessionFile'
+      }
+      axios.post(`http://${origin}/api/trialsessions/${url}`, data, getHeaders())
           .then((response) => {
-            dispatch(newSessionAction(response.data))
+            if (type === 'email') {
+              dispatch(newSessionAction(response.data))
+            } else {
+              fileDownload(response.data, 'listOfUsers.txt')
+            }
             toastr.success('New Session', 'New Session was created!', toastrOptions)
             resolve()
           })
