@@ -1359,7 +1359,7 @@
 		{
 			"id": "d9da26fd-156b-468f-8973-20545fd28395",
 			"name": "/api/questions-answers/147/putComment",
-			"url": "{{IP-Address}}/api/questions-answers/147/putComment",
+			"url": "{{IP-Address}}/api/questions-answers/147/comment",
 			"description": "",
 			"data": [
 				{
