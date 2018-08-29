@@ -232,7 +232,13 @@ class NewSessionComponent extends Component {
       status: this.state.status,
       users: change
     }
-    this.props.newSession(data, this.state.type)
+    let type = ''
+    if (this.state.type === '') {
+      type = 'email'
+    } else {
+      type = this.state.type
+    }
+    this.props.newSession(data, type)
     browserHistory.push('/trial-manager')
   }
 
