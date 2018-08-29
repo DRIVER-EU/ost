@@ -47,11 +47,7 @@ class TrialManager extends Component {
     }
     if (nextProps.listOfTrials &&
       nextProps.listOfTrials !== this.props.listOfTrials) {
-      let listOfTrials = []
-      nextProps.listOfTrialsManager.data.map((object) => {
-        listOfTrials.push({ id: object.id, name: object.trialName })
-      })
-      this.setState({ listOfTrials: listOfTrials })
+      this.setState({ listOfTrials: nextProps.listOfTrials })
     }
   }
 
@@ -128,7 +124,7 @@ class TrialManager extends Component {
                     title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
                       {object.trialName}</h3>
                       <h5 style={{ margin: '4px 0 10px' }}>
-                        session: #{object.id} stage: {object.name} status: {object.status}
+                        session: #{object.id} stage: {object.lastTrialStage} status: {object.status}
                       </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                     </div>} expanded={false} >
