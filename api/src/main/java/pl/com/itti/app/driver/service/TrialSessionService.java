@@ -160,7 +160,7 @@ public class TrialSessionService {
                     String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
                     EmailService.send(authUser, password, trialName, user);
                 } else {
-                    emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), authUser.getPassword()));
+                    emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), password));
                     longestEmail.replace(0, longestEmail.length(), authUser.getEmail().length() > longestEmail.length() ?
                             authUser.getEmail() : longestEmail.toString());
                     longestLogin.replace(0, longestLogin.length(), authUser.getLogin().length() > longestLogin.length() ?
@@ -197,11 +197,11 @@ public class TrialSessionService {
             String firstFormat = "%-" + longestEmail.length() + "s ";
             String secondFormat = "%-" + longestLogin.length() + "s ";
 
-            String title = String.format(firstFormat + secondFormat + "%s%n", "E-mail", "Login", "Password");
+            String title = String.format(firstFormat + secondFormat + "%s\r\n", "E-mail", "Login", "Password");
             lines.add(title);
 
             emails.keySet().stream().forEach(key -> {
-                String result = String.format(firstFormat + secondFormat + "%s", key, emails.get(key).get(0), emails.get(key).get(1));
+                String result = String.format(firstFormat + secondFormat + "%s\r\n", key, emails.get(key).get(0), emails.get(key).get(1));
                 lines.add(result);
             });
 
@@ -248,13 +248,13 @@ public class TrialSessionService {
         return authUserRepository.saveAndFlush(authUser);
     }
 
-    public List<String> getTrials() {
+    public Map<Long, String> getTrials() {
         TrialUser trialUser = trialUserRepository.findByAuthUser(trialUserService.getCurrentUser());
-        List<String> trialNames = new ArrayList<>();
+        Map<Long, String> trialNames = new HashMap<>();
 
         for (TrialManager trialManager : trialUser.getTrialManagers()) {
             if (ManagementRoleType.SESSION_MANAGER.equals(trialManager.getManagementRole())) {
-                trialNames.add(trialManager.getTrial().getName());
+                trialNames.put(trialManager.getTrial().getId(), trialManager.getTrial().getName());
             }
         }
 
