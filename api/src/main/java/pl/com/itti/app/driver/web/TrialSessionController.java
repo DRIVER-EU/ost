@@ -23,6 +23,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/trialsessions")
@@ -86,7 +87,7 @@ public class TrialSessionController {
     }
 
     @GetMapping("/trials")
-    public List<String> getTrials() {
+    public Map<Long, String> getTrials() {
         return trialSessionService.getTrials();
     }
 
