@@ -151,7 +151,9 @@ export const removeAnswer = (id) => {
 export const editComment = (id, comment) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.put(`http://${origin}/api/trialsessions/${id}`, comment, getHeaders())
+      const data = new FormData()
+      data.append('comment', comment)
+      axios.post(`http://${origin}/api/questions-answers/${id}/comment`, data, getHeaders())
           .then((response) => {
             dispatch(editCommentAction(response.data))
             toastr.success('Comment', 'Changed was save!', toastrOptions)

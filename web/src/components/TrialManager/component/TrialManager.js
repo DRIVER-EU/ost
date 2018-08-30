@@ -20,7 +20,7 @@ class TrialManager extends Component {
       listOfTrials: [],
       isLoading: false,
       openModal: false,
-      trialId: ''
+      trialId: null
     }
   }
 
@@ -71,7 +71,7 @@ class TrialManager extends Component {
   handleOpen = () => {
     this.props.getListOfTrials()
     this.setState({
-      trialId: '',
+      trialId: null,
       openModal: true
     })
   }
@@ -81,7 +81,7 @@ class TrialManager extends Component {
   }
 
   newSession = () => {
-    if (this.state.trialId !== '') {
+    if (this.state.trialId) {
       browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
     }
   }
@@ -128,7 +128,7 @@ class TrialManager extends Component {
                     title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
                       {object.trialName}</h3>
                       <h5 style={{ margin: '4px 0 10px' }}>
-                        session: #{object.id} stage: {object.name} status: {object.status}
+                        session: #{object.id} stage: {object.lastTrialStage} status: {object.status}
                       </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                     </div>} expanded={false} >
@@ -157,8 +157,7 @@ class TrialManager extends Component {
           actions={actions}
           modal={false}
           open={this.state.openModal}
-          onRequestClose={this.handleClose}
-        >
+          onRequestClose={this.handleClose}>
           <div style={{
             display: 'flex',
             flexDirection: 'row',
