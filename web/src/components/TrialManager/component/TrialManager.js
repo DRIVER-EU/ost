@@ -28,7 +28,7 @@ class TrialManager extends Component {
     getTrialManager: PropTypes.func,
     listOfTrialsManager: PropTypes.object,
     getListOfTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    listOfTrials: PropTypes.object
   }
 
   componentWillMount () {
@@ -47,7 +47,11 @@ class TrialManager extends Component {
     }
     if (nextProps.listOfTrials &&
       nextProps.listOfTrials !== this.props.listOfTrials) {
-      this.setState({ listOfTrials: nextProps.listOfTrials })
+      let listOfTrials = []
+      for (let key in nextProps.listOfTrials) {
+        listOfTrials.push({ id: key, name: nextProps.listOfTrials[key] })
+      }
+      this.setState({ listOfTrials })
     }
   }
 
