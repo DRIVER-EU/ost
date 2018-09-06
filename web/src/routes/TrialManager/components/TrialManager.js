@@ -12,7 +12,7 @@ class TrialManagerView extends Component {
     getTrialManager: PropTypes.func,
     listOfTrialsManager: PropTypes.object,
     getListOfTrials: PropTypes.func,
-    listOfTrials: PropTypes.array
+    listOfTrials: PropTypes.object
   }
 
   render () {

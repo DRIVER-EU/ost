@@ -154,7 +154,7 @@ class NewObservationComponent extends Component {
       change['observationForm']['description'] = nextProps.observationForm.description
       if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.coordinates &&
         nextProps.observationForm.attachments.coordinates[0]) {
-          /* eslint-disable */
+        /* eslint-disable */
         let coords = eval(nextProps.observationForm.attachments.coordinates[0].data)
         /* eslint-enable */
         if (coords.length > 0) {
@@ -177,11 +177,6 @@ class NewObservationComponent extends Component {
       if (!_.isEqual(change.observationForm, nextProps.observationForm)) {
         this.setState(change)
       }
-    }
-    if (nextProps.mode === 'view') {
-      // let change = { ...this.state }
-      // change['listOfParticipants'] = []
-      // this.setState(change)
     }
   }
 
