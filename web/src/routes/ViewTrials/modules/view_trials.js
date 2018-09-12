@@ -131,10 +131,10 @@ export const clearTrialList = () => {
   }
 }
 
-export const removeAnswer = (id) => {
+export const removeAnswer = (id, comment) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.delete(`http://${origin}/api/answers/${id}/remove`, getHeaders())
+      axios.delete(`http://${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
         .then(() => {
           toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
           dispatch(removeAnswerAction())

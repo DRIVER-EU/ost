@@ -139,7 +139,7 @@ class ViewTrials extends Component {
 
   handleRemoveAnswer () {
     if (this.state.answerRemove !== '') {
-      this.props.removeAnswer(this.state.answerId)
+      this.props.removeAnswer(this.state.answerId, this.state.answerRemove)
       this.handleClose()
     }
   }
