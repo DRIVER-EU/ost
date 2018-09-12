@@ -63,7 +63,9 @@ public class ObservationTypeService {
     }
 
     private boolean hasObservationTypeNoAnswer(ObservationType observationType, AuthUser authUser) {
-        List<Answer> answers = observationType.getAnswers();
+        List<Answer> answers = observationType.getAnswers().stream()
+                .filter(answer -> answer.getDeleteComment().equals(false))
+                .collect(Collectors.toList());
 
         return answers.stream()
                 .noneMatch(answer -> answer.getTrialUser().getAuthUser().equals(authUser));
