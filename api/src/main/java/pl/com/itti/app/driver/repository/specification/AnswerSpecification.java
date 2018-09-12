@@ -66,6 +66,6 @@ public class AnswerSpecification {
     }
 
     public static Specification<Answer> isNotDeleted() {
-        return (root, query, cb) -> cb.equal(root.get(Answer_.deleteComment), null);
+        return (root, query, cb) -> cb.isNull(root.get(Answer_.deleteComment));
     }
 }
