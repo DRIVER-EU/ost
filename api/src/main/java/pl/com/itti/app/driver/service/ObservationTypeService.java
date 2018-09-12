@@ -68,7 +68,7 @@ public class ObservationTypeService {
 
     }
     boolean answerContainAuthUserAndIsNotDeleted(Answer answer, AuthUser authUser){
-        return answer.getTrialUser().getAuthUser().equals(authUser) && answer.getDeleteComment().equals(false);
+        return answer.getTrialUser().getAuthUser().equals(authUser) && answer.getDeleteComment().equals(null);
     }
 
 
