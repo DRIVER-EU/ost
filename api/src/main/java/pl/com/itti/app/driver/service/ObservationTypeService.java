@@ -63,11 +63,15 @@ public class ObservationTypeService {
     }
 
     private boolean hasObservationTypeNoAnswer(ObservationType observationType, AuthUser authUser) {
-        List<Answer> answers = observationType.getAnswers();
+        return observationType.getAnswers().stream()
+                .noneMatch(answer -> answerContainAuthUserAndIsNotDeleted(answer, authUser));
 
-        return answers.stream()
-                .noneMatch(answer -> answer.getTrialUser().getAuthUser().equals(authUser));
     }
+
+    boolean answerContainAuthUserAndIsNotDeleted(Answer answer, AuthUser authUser) {
+        return answer.getTrialUser().getAuthUser().equals(authUser) && answer.getDeleteComment() == null;
+    }
+
 
     @Transactional(readOnly = true)
     public ObservationTypeDTO.SchemaItem generateSchema(Long observationTypeId, Long trialSessionId) {

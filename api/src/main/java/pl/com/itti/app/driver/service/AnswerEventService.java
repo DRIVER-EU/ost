@@ -48,6 +48,7 @@ public class AnswerEventService {
         conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
         conditions.add(AnswerSpecification.inTrialSession(trialSessionId));
         conditions.add(AnswerSpecification.inLastTrialStage(trialSessionId));
+        conditions.add(AnswerSpecification.isNotDeleted());
         return RepositoryUtils.concatenate(conditions);
     }
 

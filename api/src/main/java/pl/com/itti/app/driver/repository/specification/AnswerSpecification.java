@@ -64,4 +64,8 @@ public class AnswerSpecification {
                     cb.isNull(actualTrialStage));
         };
     }
+
+    public static Specification<Answer> isNotDeleted() {
+        return (root, query, cb) -> cb.isNull(root.get(Answer_.deleteComment));
+    }
 }
