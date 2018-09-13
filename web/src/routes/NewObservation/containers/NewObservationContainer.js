@@ -9,7 +9,8 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-  observationForm: state.newobservation.observationForm
+  observationForm: state.newobservation.observationForm,
+  observation: state.newobservation.observation
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewObservation)
