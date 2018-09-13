@@ -74,7 +74,8 @@ class NewObservationComponent extends Component {
     mode: PropTypes.string,
     params: PropTypes.any,
     downloadFile: PropTypes.func,
-    closeModal: PropTypes.func
+    closeModal: PropTypes.func,
+    observation: PropTypes.any
   }
 
   downloadFile (id, name) {
@@ -178,6 +179,9 @@ class NewObservationComponent extends Component {
         this.setState(change)
       }
     }
+    if (nextProps.observation && nextProps.observation !== this.props.observation) {
+      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+    }
   }
 
   initCallback (dropzone) {
@@ -229,7 +233,6 @@ class NewObservationComponent extends Component {
       if (this.props.mode === 'profileQuestion') {
         this.props.closeModal()
       }
-      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
     }
   }
 
