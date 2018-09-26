@@ -19,8 +19,8 @@ public class TrialRoleController {
     private TrialRoleService trialRoleService;
 
     @GetMapping
-    private PageDTO<TrialRoleDTO.FullItem> findByTrialSessionId(
-            @RequestParam(value = "trialsession_id") long trialSessionId, Pageable pageable) {
-        return DTO.from(trialRoleService.findByTrialSessionId(trialSessionId, pageable), TrialRoleDTO.FullItem.class);
+    private PageDTO<TrialRoleDTO.FullItem> findByTrialId(
+            @RequestParam(value = "trial_id") long trialId, Pageable pageable) {
+        return DTO.from(trialRoleService.findByTrialId(trialId, pageable), TrialRoleDTO.FullItem.class);
     }
 }

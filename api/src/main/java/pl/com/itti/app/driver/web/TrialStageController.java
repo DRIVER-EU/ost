@@ -19,8 +19,8 @@ public class TrialStageController {
     private TrialStageService trialStageService;
 
     @FindAllGetMapping
-    private PageDTO<TrialStageDTO.ListItem> findByTrialSessionId(
-            @RequestParam(value = "trialsession_id") long trialSessionId, Pageable pageable) {
-        return DTO.from(trialStageService.findByTrialSessionId(trialSessionId, pageable), TrialStageDTO.ListItem.class);
+    private PageDTO<TrialStageDTO.ListItem> findByTrialId(
+            @RequestParam(value = "trial_id") long trialId, Pageable pageable) {
+        return DTO.from(trialStageService.findByTrialId(trialId, pageable), TrialStageDTO.ListItem.class);
     }
 }

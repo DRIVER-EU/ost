@@ -1,5 +1,7 @@
 package pl.com.itti.app.driver.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import pl.com.itti.app.driver.model.TrialRole;
@@ -12,5 +14,7 @@ public interface TrialRoleRepository
 
     Optional<TrialRole> findById(Long id);
     Optional<TrialRole> findFirstByName(String name);
+
     List<TrialRole> findAllByTrialId(Long trialId);
+    Page<TrialRole> findAllByTrialId(Long trialId, Pageable pageable);
 }
