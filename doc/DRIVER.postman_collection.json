@@ -529,7 +529,7 @@
 		{
 			"id": "69244591-0db1-41d9-beba-44d4be397c5f",
 			"name": "/api/stages?trialsession_id=2",
-			"url": "{{IP-Address}}/api/stages?trialsession_id=2",
+			"url": "{{IP-Address}}/api/stages?trial_id=2",
 			"description": null,
 			"data": [],
 			"dataMode": "raw",
@@ -538,8 +538,11 @@
 			"pathVariableData": [],
 			"queryParams": [
 				{
-					"key": "trialsession_id",
-					"value": "2"
+					"key": "trial_id",
+					"value": "2",
+					"equals": true,
+					"description": "",
+					"enabled": true
 				}
 			],
 			"auth": {
@@ -962,7 +965,7 @@
 		{
 			"id": "b2bca8f2-482d-47ea-a238-dde66297e48e",
 			"name": "/role?trialsession_id=2",
-			"url": "http://{{IP-Address}}/api/role?trialsession_id=2",
+			"url": "http://{{IP-Address}}/api/role?trial_id=2",
 			"description": null,
 			"data": [],
 			"dataMode": "raw",
@@ -971,8 +974,11 @@
 			"pathVariableData": [],
 			"queryParams": [
 				{
-					"key": "trialsession_id",
-					"value": "2"
+					"key": "trial_id",
+					"value": "2",
+					"equals": true,
+					"description": "",
+					"enabled": true
 				}
 			],
 			"auth": {
@@ -1202,7 +1208,7 @@
 			},
 			"events": [],
 			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"lukasz.pulik@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"observer\", \"Validator\"]\n\t\t},\n\t\t{\n\t\t\t\"email\" : \"pulik.lukasz@gmail.com\",\n\t\t\t\"role\": [\"Participant\", \"Staff of CMC LANDPOL\", \"CMC LANDPOL C\"]\n\t\t}\n\t]\n}",
+			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"szymonn.panfilll@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"observer\", \"Validator\", \"Participant\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
@@ -1646,7 +1652,7 @@
 			},
 			"events": [],
 			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"lukasz.pulik@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"Validator\", \"observer\"]\n\t\t},\n\t\t{\n\t\t\t\"email\" : \"pulik.lukaszjhyg@gmail.com\",\n\t\t\t\"role\": [\"Participant\", \"CMC LANDPOL C\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
+			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"lukasz.puuulikk@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"Validator\", \"observer\"]\n\t\t},\n\t\t{\n\t\t\t\"email\" : \"pulik.lukaaaszjhygg@gmail.com\",\n\t\t\t\"role\": [\"Participant\", \"CMC LANDPOL C\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
