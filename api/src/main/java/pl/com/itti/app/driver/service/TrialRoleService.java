@@ -37,4 +37,8 @@ public class TrialRoleService {
         conditions.add(TrialRoleSpecification.trialRole(trialSessionId));
         return trialRoleRepository.findAll(RepositoryUtils.concatenate(conditions), pageable);
     }
+
+    public Page<TrialRole> findByTrialId(Long trialId, Pageable pageable) {
+        return trialRoleRepository.findAllByTrialId(trialId, pageable);
+    }
 }

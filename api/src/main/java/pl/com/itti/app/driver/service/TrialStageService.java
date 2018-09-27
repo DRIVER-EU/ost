@@ -32,6 +32,11 @@ public class TrialStageService {
         return trialStageRepository.findAll(getTrialStageSessionSpecifications(trialSessionId), pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<TrialStage> findByTrialId(Long trialId, Pageable pageable) {
+        return trialStageRepository.findAllByTrialId(trialId, pageable);
+    }
+
     private Specification<TrialStage> getTrialStageSessionSpecifications(Long trialSessionId) {
         Set<Specification<TrialStage>> conditions = new HashSet<>();
         conditions.add(TrialStageSpecification.trialStage(trialSessionId));

@@ -86,6 +86,9 @@ public class TrialSessionService {
     @Autowired
     private UserRoleSessionRepository userRoleSessionRepository;
 
+    @Autowired
+    private TrialSessionManagerRepository trialSessionManagerRepository;
+
     @Transactional(readOnly = true)
     public TrialSession findOneByManager(long trialSessionId) {
 
@@ -180,6 +183,11 @@ public class TrialSessionService {
                 .build();
 
         trialSessionRepository.save(trialSession);
+        TrialSessionManager trialSessionManager = TrialSessionManager.builder().trialSession(trialSession)
+                .trialUser(trialUserRepository.findByAuthUser(trialUserService.getCurrentUser()))
+                .build();
+
+        trialSessionManagerRepository.save(trialSessionManager);
 
         for (UserForm userForm : newSessionForm.getUsers()) {
             for(String role : userForm.getRole()) {
