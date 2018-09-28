@@ -91,7 +91,7 @@ class NewSessionComponent extends Component {
     }
     items.push({
       id: id,
-      email: '',
+      email: 'user@driverplus.itti.com.pl',
       role: []
     })
     this.setState({
@@ -335,8 +335,7 @@ class NewSessionComponent extends Component {
                     errorText={object.email !== '' && this.handleValidEmail(object)}
                     onChange={this.handleChangeEmail.bind(this, object)} />
                   <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
+                    display: 'inherit',
                     overflowX: 'auto',
                     overflowY: 'hidden',
                     width: '100%',
@@ -357,6 +356,7 @@ class NewSessionComponent extends Component {
                             textOverflow: 'ellipsis',
                             whiteSpace: 'nowrap'
                           }}
+                          style={{ display: 'inline-block' }}
                           onCheck={this.handleChangeCheckbox.bind(this, object.id, role.name)}
                     />)
                     }
