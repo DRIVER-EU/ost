@@ -179,7 +179,7 @@ public class TrialSessionService {
                 .startTime(LocalDateTime.now())
                 .status(SessionStatus.valueOf(newSessionForm.getStatus()))
                 .pausedTime(LocalDateTime.now())
-                .lastTrialStage(trialStageRepository.findByName(newSessionForm.getInitialStage()).get())
+                .lastTrialStage(trialStageRepository.findByTrialIdAndName(newSessionForm.getTrialId(), newSessionForm.getInitialStage()).get())
                 .build();
 
         trialSessionRepository.save(trialSession);
