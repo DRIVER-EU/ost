@@ -105,10 +105,20 @@
     .field-description {
         margin-bottom: 15px;
     }
+
+    .inline-group {
+        flex: 1 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .inline-group > div {
+        flex: 1 1 25%;
+    }
     .row.array-item-list {
         margin-left: 15px;
     }
     div.checkboxes div.checkbox label span {
         display: inline-flex;
+
     }
 }
