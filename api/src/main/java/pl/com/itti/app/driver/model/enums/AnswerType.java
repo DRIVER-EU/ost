@@ -4,5 +4,7 @@ public enum AnswerType {
     CHECKBOX,
     RADIO_BUTTON,
     SLIDER,
-    TEXT_FIELD
+    TEXT_FIELD,
+    BOX_LIST,
+    RADIO_LINE
 }
