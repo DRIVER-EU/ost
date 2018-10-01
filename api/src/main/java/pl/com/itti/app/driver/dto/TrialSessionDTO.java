@@ -26,12 +26,14 @@ public class TrialSessionDTO {
 
     public static class ListItem extends MinimalItem {
 
+        public long trialId;
         public String trialName;
         public String trialDescription;
         public String lastTrialStage;
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
+            this.trialId = trialSession.getTrial().getId();
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
             this.lastTrialStage = trialSession.getLastTrialStage().getName();
