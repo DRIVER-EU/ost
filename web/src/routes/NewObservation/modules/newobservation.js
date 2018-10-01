@@ -10,6 +10,11 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
 import axios from 'axios'
 import { getHeaders, getHeadersASCI, getHeadersReferences, errorHandle } from '../../../store/addons'
 import fileDownload from 'react-file-download'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 export const GET_SCHEMA = 'GET_SCHEMA'
 export const SEND_OBSERVATION = 'SEND_OBSERVATION'
@@ -85,10 +90,12 @@ export const sendObservation = (formData) => {
       axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
+            toastr.success('Observation form', 'Observation was send!', toastrOptions)
             resolve()
           })
           .catch((error) => {
             errorHandle(error)
+            toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
             resolve()
           })
     })

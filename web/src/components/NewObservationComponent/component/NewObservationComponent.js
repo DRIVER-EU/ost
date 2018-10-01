@@ -228,7 +228,6 @@ class NewObservationComponent extends Component {
     ]
     send['attachments'] = this.state.images
     if (this.validateParticipants() && this.validateCoords()) {
-      toastr.success('Observation form', 'Observation was send!', toastrOptions)
       this.props.sendObservation(send)
       if (this.props.mode === 'profileQuestion') {
         this.props.closeModal()
