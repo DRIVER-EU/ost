@@ -32,7 +32,7 @@ const styles = {
 }
 
 const widgets = {
-  Slider: (props) => {
+  slider: (props) => {
     return Slider(props)
   },
   radio: (props) => {
