@@ -8,6 +8,8 @@ public class SchemaCreatorProperties {
 
     public static final String FIELD_WIDGET = "ui:widget";
 
+    public static final String FIELD_OPTIONS = "ui:options";
+
     public static final String FIELD_DESCRIPTION = "descriptions";
 
     public static final String FIELD_COORDINATES = "coordinates";
@@ -29,4 +31,12 @@ public class SchemaCreatorProperties {
     public static final String FIELD_FIRST_NAME = "first_name";
 
     public static final String FIELD_LAST_NAME = "last_name";
+
+    public static final String FIELD_ADDABLE = "addable";
+
+    public static final String FIELD_ORDERABLE = "orderable";
+
+    public static final String FIELD_REMOVABLE = "removable";
+
+    public static final String FIELD_INLINE = "inline";
 }

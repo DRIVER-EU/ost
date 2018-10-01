@@ -81,9 +81,30 @@ public final class SchemaCreator {
             ui.put(SchemaCreatorProperties.FIELD_WIDGET, "radio");
         } else if (question.getAnswerType().equals(AnswerType.SLIDER)) {
             ui.put(SchemaCreatorProperties.FIELD_WIDGET, "slider");
+        } else if (question.getAnswerType().equals(AnswerType.CHECKBOX)) {
+            ui.put(SchemaCreatorProperties.FIELD_WIDGET, "checkboxes");
+        } else if (question.getAnswerType().equals(AnswerType.BOX_LIST)) {
+            ui.putPOJO(SchemaCreatorProperties.FIELD_OPTIONS, createOptions(AnswerType.BOX_LIST));
+        } else if (question.getAnswerType().equals(AnswerType.RADIO_LINE)) {
+            ui.put(SchemaCreatorProperties.FIELD_WIDGET, "radio");
+            ui.putPOJO(SchemaCreatorProperties.FIELD_OPTIONS, createOptions(AnswerType.RADIO_LINE));
         }
 
         return ui;
+    }
+
+    private static ObjectNode createOptions(AnswerType answerType) {
+        ObjectNode options = MAPPER.createObjectNode();
+
+        if (answerType.equals(AnswerType.BOX_LIST)) {
+            options.put(SchemaCreatorProperties.FIELD_ADDABLE, false);
+            options.put(SchemaCreatorProperties.FIELD_ORDERABLE, false);
+            options.put(SchemaCreatorProperties.FIELD_REMOVABLE, false);
+        } else if (answerType.equals(AnswerType.RADIO_LINE)) {
+            options.put(SchemaCreatorProperties.FIELD_INLINE, true);
+        }
+
+        return options;
     }
 
     private static ObjectNode createCommentUiSchema(boolean disabled) {
