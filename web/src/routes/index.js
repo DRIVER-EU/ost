@@ -22,11 +22,11 @@ export const createRoutes = (store) => ({
     Trials(store),
     LoginRoute(store),
     TrialManager(store),
-    AdminTrials(store),
     {
       path: 'trial-manager',
       childRoutes: [
-        NewSession(store)
+        NewSession(store),
+        AdminTrials(store)
       ]
     },
     {
