@@ -55,8 +55,8 @@ class TrialManager extends Component {
     }
   }
 
-  viewTrial (id) {
-    browserHistory.push(`/admin-trials/${id}`)
+  viewTrial (object) {
+    browserHistory.push(`trial-manager/${object.trialId}/admin-trials/${object.id}`)
   }
 
   getShortDesc (str) {
@@ -139,7 +139,7 @@ class TrialManager extends Component {
                           buttonStyle={{ width: '200px' }}
                           backgroundColor='#244C7B'
                           labelColor='#FCB636'
-                          onClick={this.viewTrial.bind(this, object.id)}
+                          onClick={this.viewTrial.bind(this, object)}
                           label='Enter' />
                       </div>
                     </div>
