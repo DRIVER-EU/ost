@@ -108,7 +108,12 @@ public final class SchemaCreator {
     }
 
     private static ObjectNode createCommentUiSchema(boolean disabled) {
-        return MAPPER.createObjectNode().put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
+        ObjectNode comment = MAPPER.createObjectNode();
+
+        comment.put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
+        comment.put(SchemaCreatorProperties.FIELD_CLASS_NAME, "comment-class");
+
+        return comment;
     }
 
     public static ObjectNode createAttachmentSchemaForm(List<Attachment> attachments) {

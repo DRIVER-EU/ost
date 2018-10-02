@@ -39,4 +39,6 @@ public class SchemaCreatorProperties {
     public static final String FIELD_REMOVABLE = "removable";
 
     public static final String FIELD_INLINE = "inline";
+
+    public static final String FIELD_CLASS_NAME = "classNames";
 }
