@@ -192,7 +192,7 @@ public class TrialSessionService {
         for (UserForm userForm : newSessionForm.getUsers()) {
             for(String role : userForm.getRole()) {
                 UserRoleSession userRoleSession = UserRoleSession.builder().trialUser(users.get(userForm.getEmail()))
-                        .trialRole(trialRoleRepository.findFirstByName(role).get())
+                        .trialRole(trialRoleRepository.findFirstByTrialIdAndName(newSessionForm.getTrialId(), role).get())
                         .trialSession(trialSession)
                         .build();
 
