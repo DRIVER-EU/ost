@@ -127,7 +127,7 @@ class AdminTrials extends Component {
     this.props.getObservation(this.props.params.id, this.state.searchText)
     this.props.getUsers(this.props.params.id)
     this.props.getRoles(this.props.params.trial_id)
-    this.props.getStages(this.props.params.id)
+    this.props.getStages(this.props.params.trial_id)
     this.handleChangeRange(null, 0)
 
     let interval = setInterval(() => {
