@@ -5,6 +5,7 @@ import { RadioButtonGroup, RadioButton } from 'material-ui'
 export const Radio = (props) => {
   return (
     <RadioButtonGroup name='shipSpeed' defaultSelected={props.value}
+      className={props.options.inline ? 'inline-group' : ''}
       onChange={(event, value) => props.onChange(value)}
 >
       {props.options.enumOptions.map(object => {
