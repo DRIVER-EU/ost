@@ -226,7 +226,7 @@ public class TrialSessionService {
                 .build();
     }
 
-    private AuthUser createUser(UserForm user, String password, String prefix) {
+    private AuthUser createUser(UserForm user, String password, String prefix) throws Exception {
         String name = prefix + "_" + String.join("_", user.getRole());
         name = name.replaceAll(" ", "-");
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -253,7 +253,11 @@ public class TrialSessionService {
         authUser.setPosition(authUserPosition);
         authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
 
-        return authUserRepository.saveAndFlush(authUser);
+        try {
+            return authUserRepository.saveAndFlush(authUser);
+        } catch (Exception e) {
+            throw new Exception("User " + authUser.getEmail() + " already exists!");
+        }
     }
 
     public Map<Long, String> getTrials() {
