@@ -14,6 +14,7 @@ public interface TrialRoleRepository
 
     Optional<TrialRole> findById(Long id);
     Optional<TrialRole> findFirstByName(String name);
+    Optional<TrialRole> findFirstByTrialIdAndName(long trial_id, String name);
 
     List<TrialRole> findAllByTrialId(Long trialId);
     Page<TrialRole> findAllByTrialId(Long trialId, Pageable pageable);
