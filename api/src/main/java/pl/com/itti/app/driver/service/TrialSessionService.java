@@ -12,6 +12,7 @@ import co.perpixel.security.repository.AuthUserPositionRepository;
 import co.perpixel.security.repository.AuthUserRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -149,7 +150,7 @@ public class TrialSessionService {
 
         newSessionForm.getUsers().forEach(user -> {
             try {
-                String password = UUID.randomUUID().toString();
+                String password = StringUtils.left(UUID.randomUUID().toString(), 8);
                 AuthUser authUser = createUser(user, password, newSessionForm.prefix);
 
                 users.put(user.getEmail(), trialUserRepository.save(getTrialUser(authUser)));
