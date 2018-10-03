@@ -56,6 +56,7 @@ class NewSessionComponent extends Component {
     getStages: PropTypes.func,
     stagesList: PropTypes.object,
     newSession: PropTypes.func,
+    session: PropTypes.object,
     params: PropTypes.any
   }
 
@@ -73,6 +74,9 @@ class NewSessionComponent extends Component {
       nextProps.rolesList !== this.props.rolesList) {
       this.setState({ rolesList: nextProps.rolesList.data },
         () => this.createUserItem())
+    }
+    if (nextProps.session && nextProps.session !== this.props.session) {
+      browserHistory.push(`/trial-manager`)
     }
   }
 
@@ -239,7 +243,6 @@ class NewSessionComponent extends Component {
       type = this.state.type
     }
     this.props.newSession(data, type)
-    browserHistory.push('/trial-manager')
   }
 
   render () {

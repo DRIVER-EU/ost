@@ -10,6 +10,7 @@ import MenuItem from 'material-ui/MenuItem'
 import TextField from 'material-ui/TextField'
 import SelectField from 'material-ui/SelectField'
 import RaisedButton from 'material-ui/RaisedButton'
+import Checkbox from 'material-ui/Checkbox'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import DateComponent from '../../DateComponent/DateComponent'
 import SummaryOfObservationModal from '../../SummaryOfObservationModal/SummaryOfObservationModal'
@@ -52,6 +53,11 @@ const styles = {
   active: {
     color: '#fff',
     backgroundColor: '#064C7B'
+  },
+  checkbox: {
+    marginBottom: 16,
+    width: 24,
+    display: 'inline-block'
   }
 }
 
@@ -92,7 +98,8 @@ class AdminTrials extends Component {
       interval: '',
       searchText: '',
       timeRange: '',
-      isOneDay: false
+      isOneDay: false,
+      checkedSendMessage: false
     }
   }
 
@@ -332,10 +339,9 @@ class AdminTrials extends Component {
       send.trialRoleId = this.state.roleValue
       send.trialUserId = ''
     }
-    send.name = this.state.title
     send.languageVersion = 'POLISH'
+    send.name = this.state.title
     send.description = this.state.messageValue
-    // send.eventTime = moment(new Date().getTime()).format('YYYY-MM-DDThh:mm:ss')
     if (this.checkValid()) {
       this.props.sendMessage(send)
     }
@@ -382,6 +388,17 @@ class AdminTrials extends Component {
     if (this.state.trialStage !== '') {
       this.props.setStage(this.props.params.id, { id: this.state.trialStage })
     }
+    if (this.state.checkedSendMessage) {
+      let send = {}
+      let stage = _.find(this.state.stagesList, { id: this.state.trialStage })
+      send.trialSessionId = parseInt(this.props.params.id)
+      send.trialUserId = null
+      send.trialRoleId = null
+      send.name = stage.name
+      send.languageVersion = 'POLISH'
+      send.description = `Trial stage chanched to ${stage.name}`
+      this.props.sendMessage(send)
+    }
   }
 
   search () {
@@ -394,6 +411,14 @@ class AdminTrials extends Component {
     } else {
       toastr.error('Export to CSV', `There isn't data to export!`, toastrOptions)
     }
+  }
+
+  sendMessageIfSetStage () {
+    this.setState((oldState) => {
+      return {
+        checkedSendMessage: !oldState.checkedSendMessage
+      }
+    })
   }
 
   render () {
@@ -443,6 +468,10 @@ class AdminTrials extends Component {
                 primary
                 onClick={this.handleChangeStage.bind(this)}
                 labelStyle={{ color: '#FDB913' }} />
+              <Checkbox
+                checked={this.state.checkedSendMessage}
+                onCheck={this.sendMessageIfSetStage.bind(this)}
+                style={styles.checkbox} />
             </div>
             <Tabs
               value={this.state.value}
