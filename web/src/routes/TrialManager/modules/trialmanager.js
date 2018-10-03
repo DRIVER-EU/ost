@@ -37,7 +37,7 @@ export const actions = {
 export const getTrialManager = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsessions`, getHeaders())
+      axios.get(`http://${origin}/api/trialsessions?size=1000`, getHeaders())
        .then((response) => {
          dispatch(getTrialManagerAction(response.data))
          resolve()

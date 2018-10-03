@@ -147,7 +147,11 @@ class TrialManager extends Component {
                 )
               })}
             </Accordion>
-            <FloatingActionButton style={{ float: 'right' }} onTouchTap={this.handleOpen} secondary>
+            <FloatingActionButton
+              className={'observation-add'}
+              style={{ float: 'right' }}
+              onTouchTap={this.handleOpen}
+              secondary>
               <ContentAdd />
             </FloatingActionButton>
           </div>

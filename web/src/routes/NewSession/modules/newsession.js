@@ -66,7 +66,7 @@ const ACTION_HANDLERS = {
   [NEW_SESSION]: (state, action) => {
     return {
       ...state,
-      session: action.data
+      session: new Date()
     }
   }
 }
@@ -74,7 +74,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  session: {}
+  session: null
 }
 
 export default function newsessionReducer (state = initialState, action) {
