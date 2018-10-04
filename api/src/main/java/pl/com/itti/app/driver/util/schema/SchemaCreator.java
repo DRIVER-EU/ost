@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.collections.CollectionUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.AnswerType;
@@ -14,6 +15,7 @@ import pl.com.itti.app.driver.util.SchemaCreatorProperties;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class SchemaCreator {
 
@@ -173,13 +175,22 @@ public final class SchemaCreator {
     }
 
     public static String getValueFromJSONObject(String jsonString, String key) {
-        JSONObject jsonObject = new JSONObject(jsonString);
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            Object keyObject = jsonObject.get(key);
 
-        if (!jsonObject.isNull(key)) {
+            if (keyObject instanceof Integer) {
+                return String.valueOf(keyObject);
+            } else if (keyObject instanceof JSONArray) {
+                return "[" + ((JSONArray) keyObject).toList().stream()
+                        .map(String::valueOf)
+                        .collect(Collectors.joining(", ")) + "]";
+            }
+
             return jsonObject.getString(key);
+        } catch (Exception e) {
+            return "";
         }
-
-        return "";
     }
 
     public static ObjectNode createNewSessionSchemaForm(List<TrialStage> trialStages,
