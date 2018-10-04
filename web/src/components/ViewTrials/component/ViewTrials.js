@@ -268,7 +268,10 @@ class ViewTrials extends Component {
                 )
               })}
             </Accordion>
-            <FloatingActionButton onClick={this.newObservation.bind(this)} className={'observation-add'} secondary>
+            <FloatingActionButton
+              className={'observation-add'}
+              onClick={this.newObservation.bind(this)}
+              secondary>
               <ContentAdd />
             </FloatingActionButton>
           </div>
