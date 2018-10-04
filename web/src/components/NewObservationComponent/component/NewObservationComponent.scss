@@ -115,6 +115,7 @@
         }
         div div label {
             padding: 0 20px 0 12px;
+            width: auto !important;
         }
     }
     div.checkboxes div.checkbox label span {
@@ -122,5 +123,18 @@
     }
     div.field- div.field-string {
         margin-left: 15px;
+    }
+    .form-group.field.field-string.comment-class {
+        padding-left: 45px;
+    }
+    .form-group.field.field-string.checkboxes-class {
+        padding-left: 25px;
+    }
+    .form-group.field.field-string,
+    .form-group.field.field-integer {
+        padding-left: 25px;
+    }
+    .row.array-item-list {
+        padding-left: 0;
     }
 }
