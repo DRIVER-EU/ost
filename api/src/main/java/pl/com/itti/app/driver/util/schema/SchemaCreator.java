@@ -84,7 +84,7 @@ public final class SchemaCreator {
         } else if (question.getAnswerType().equals(AnswerType.SLIDER)) {
             ui.put(SchemaCreatorProperties.FIELD_WIDGET, "slider");
         } else if (question.getAnswerType().equals(AnswerType.CHECKBOX)) {
-            ui.put(SchemaCreatorProperties.FIELD_WIDGET, "checkboxes");
+            ui.putPOJO(SchemaCreatorProperties.FIELD_WIDGET, createCheckBoxes());
         } else if (question.getAnswerType().equals(AnswerType.BOX_LIST)) {
             ui.putPOJO(SchemaCreatorProperties.FIELD_OPTIONS, createOptions(AnswerType.BOX_LIST));
         } else if (question.getAnswerType().equals(AnswerType.RADIO_LINE)) {
@@ -93,6 +93,13 @@ public final class SchemaCreator {
         }
 
         return ui;
+    }
+
+    private static ObjectNode createCheckBoxes() {
+        ObjectNode checkBoxes = MAPPER.createObjectNode();
+        checkBoxes.put(SchemaCreatorProperties.FIELD_CLASS_NAME, "checkboxes-class");
+
+        return checkBoxes;
     }
 
     private static ObjectNode createOptions(AnswerType answerType) {
