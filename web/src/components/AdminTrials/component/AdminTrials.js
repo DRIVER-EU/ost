@@ -55,9 +55,9 @@ const styles = {
     backgroundColor: '#064C7B'
   },
   checkbox: {
-    marginBottom: 16,
-    width: 24,
-    display: 'inline-block'
+    width: 150,
+    display: 'inline-block',
+    bottom: 9
   }
 }
 
@@ -469,6 +469,7 @@ class AdminTrials extends Component {
                 onClick={this.handleChangeStage.bind(this)}
                 labelStyle={{ color: '#FDB913' }} />
               <Checkbox
+                label='Notify users'
                 checked={this.state.checkedSendMessage}
                 onCheck={this.sendMessageIfSetStage.bind(this)}
                 style={styles.checkbox} />
