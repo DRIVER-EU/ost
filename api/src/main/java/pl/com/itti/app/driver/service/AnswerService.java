@@ -4,7 +4,6 @@ import co.perpixel.exception.EntityNotFoundException;
 import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Strings;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -227,35 +226,43 @@ public class AnswerService {
                 AnswerProperties.ANSWER,
                 AnswerProperties.COMMENT,
                 AnswerProperties.LOCATION,
-                AnswerProperties.ATTACHMENT,
+                AnswerProperties.ATTACHMENT_URI,
+                AnswerProperties.ATTACHMENT_DESCRIPTION,
                 AnswerProperties.DELETE_COMMENT,
                 AnswerProperties.PRIMARY_COMMENT);
 
         CSVUtils.writeLine(writer, title);
-        List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
+        List<Answer> answers = answerRepository.findAllByTrialSessionId(trialSessionId);
 
         for (Answer answer : answers) {
-            for (Question question : answer.getObservationType().getQuestions()) {
+            Iterator<Question> questionIterator = answer.getObservationType().getQuestions().iterator();
+            do {
+                Question question = new Question();
+                if (questionIterator.hasNext()) {
+                    question = questionIterator.next();
+                }
+
                 List<String> value = Arrays.asList(
-                    String.valueOf(answer.getTrialSession().getTrial().getId()),
-                    String.valueOf(answer.getTrialSession().getTrial().getName()),
-                    String.valueOf(trialSessionId),
-                    answer.getSentSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
-                    answer.getTrialUser().getAuthUser().getFirstName() + " " + answer.getTrialUser().getAuthUser().getLastName(),
-                    answer.getTrialUser().getUserRoleSessions().get(0).getTrialRole().getName(),
-                    Long.toString(answer.getObservationType().getId()),
-                    answer.getObservationType().getName(),
-                    answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
-                    SchemaCreator.getValueFromJSONObject(question.getJsonSchema(), AnswerProperties.TITLE_KEY),
-                    SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
-                    SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),
-                    getLocation(answer.getAttachments()),
-                    Optional.ofNullable(getUriOrDescription(answer.getAttachments())).orElse(""),
-                    Optional.ofNullable(answer.getDeleteComment()).orElse(""),
-                    answer.getComment());
+                        String.valueOf(answer.getTrialSession().getTrial().getId()),
+                        String.valueOf(answer.getTrialSession().getTrial().getName()),
+                        String.valueOf(trialSessionId),
+                        answer.getSentSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
+                        answer.getTrialUser().getAuthUser().getFirstName() + " " + answer.getTrialUser().getAuthUser().getLastName(),
+                        answer.getTrialUser().getUserRoleSessions().get(0).getTrialRole().getName(),
+                        Long.toString(answer.getObservationType().getId()),
+                        answer.getObservationType().getName(),
+                        answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
+                        SchemaCreator.getValueFromJSONObject(question.getJsonSchema(), AnswerProperties.TITLE_KEY),
+                        SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
+                        SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),
+                        getLocation(answer.getAttachments()),
+                        Optional.ofNullable(getUriOrDescription(answer.getAttachments(), AnswerProperties.ATTACHMENT_URI)).orElse(""),
+                        Optional.ofNullable(getUriOrDescription(answer.getAttachments(), AnswerProperties.ATTACHMENT_DESCRIPTION)).orElse(""),
+                        Optional.ofNullable(answer.getDeleteComment()).orElse(""),
+                        answer.getComment());
 
                 CSVUtils.writeLine(writer, value, ',', ' ');
-            }
+            } while (questionIterator.hasNext());
         }
     }
 
@@ -271,17 +278,17 @@ public class AnswerService {
         return "";
     }
 
-    private String getUriOrDescription(List<Attachment> attachments) {
+    private String getUriOrDescription(List<Attachment> attachments, String answerProperties) {
         Optional<Attachment> attachment = attachments.stream()
                 .filter(attach -> attach.getType().name().contains(AttachmentType.DESCRIPTION.name()))
                 .findFirst();
 
-        if (attachment.isPresent() && !Strings.isNullOrEmpty(attachment.get().getUri())) {
-            return attachment.get().getUri();
-        } else if (attachment.isPresent()) {
-            return attachment.get().getDescription();
-        } else {
+        if (!attachment.isPresent()) {
             return "";
+        } else if(answerProperties.equals(AnswerProperties.ATTACHMENT_URI)) {
+            return attachment.get().getUri();
+        } else {
+            return attachment.get().getDescription();
         }
     }
 }

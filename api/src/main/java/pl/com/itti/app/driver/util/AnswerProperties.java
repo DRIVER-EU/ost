@@ -21,8 +21,9 @@ public class AnswerProperties {
     public static final String ANSWER = "Answer";
     public static final String COMMENT = "Comment";
     public static final String LOCATION = "Location";
-    public static final String ATTACHMENT = "Attachment";
-    public static final String DELETE_COMMENT = "Delete Comment";
+    public static final String ATTACHMENT_URI = "Attachment_URI";
+    public static final String ATTACHMENT_DESCRIPTION = "Attachment_Comment";
+    public static final String DELETE_COMMENT = "Delete_Comment";
     public static final String PRIMARY_COMMENT = "Comment";
 
     public static final String TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
