@@ -11,6 +11,7 @@ import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
 import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
+import { browserHistory } from 'react-router'
 
 const toastrOptions = {
   timeOut: 3000
@@ -47,12 +48,14 @@ export const newSession = (data, type) => {
               dispatch(newSessionAction(response.data))
             } else {
               fileDownload(response.data, 'listOfUsers.txt')
+              browserHistory.push('/trial-manager')
             }
             toastr.success('New Session', 'New Session was created!', toastrOptions)
             resolve()
           })
           .catch((error) => {
             errorHandle(error)
+            browserHistory.push('/trial-manager')
             toastr.error('New Session', 'Error!', toastrOptions)
             resolve()
           })
