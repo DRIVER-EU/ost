@@ -149,7 +149,11 @@ develop:web:build:
   <<: *cache_web_def
   image: node:6.10-alpine
   script:
-  - cd web ; npm install ; npm run deploy:prod
+  - cd web ;
+  - npm install phantomjs-prebuilt
+  - npm install node-sass
+  - npm install
+  - npm run deploy:prod
   artifacts:
     when: on_success
     expire_in: 12 hrs
@@ -220,4 +224,8 @@ merge-check:web:build:
   - git config --global user.email "runner@gitlab.itti.com.pl" ; git config --global user.name "GitLab CI Runner"
   script:
   - git fetch ; git merge origin/develop
-  - cd web ; npm install ; npm run deploy:prod
+  - cd web 
+  - npm install phantomjs-prebuilt
+  - npm install node-sass
+  - npm install
+  - npm run deploy:prod
