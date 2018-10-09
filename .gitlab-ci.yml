@@ -147,7 +147,7 @@ develop:web:build:
   tags:
   - default-web
   <<: *cache_web_def
-  image: node:6-alpine
+  image: node:6.14.4-alpine
   script:
   - cd web ; npm install ; npm run deploy:prod
   artifacts:
@@ -214,7 +214,7 @@ merge-check:web:build:
   tags:
   - default-web
   <<: *cache_web_def
-  image: node:6-alpine
+  image: node:6.14.4-alpine
   before_script:
   - 'which git || ( apk update && apk add --update bash git openssh-client )'
   - git config --global user.email "runner@gitlab.itti.com.pl" ; git config --global user.name "GitLab CI Runner"
