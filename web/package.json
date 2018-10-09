@@ -2,7 +2,7 @@
   "name": "Driver",
   "version": "3.0.0-alpha.3",
   "description": "Get started with React, Redux, and React-Router!",
-  "main": "index.js",
+  "main": "main.js",
   "engines": {
     "node": ">=4.5.0",
     "npm": "^3.0.0"
