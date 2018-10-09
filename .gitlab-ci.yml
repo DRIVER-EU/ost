@@ -147,7 +147,7 @@ develop:web:build:
   tags:
   - default-web
   <<: *cache_web_def
-  image: 10.11.0-alpine
+  image: node:10.11.0-alpine
   script:
   - cd web ; npm install ; npm run deploy:prod
   artifacts:
