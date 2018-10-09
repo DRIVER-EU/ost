@@ -149,7 +149,7 @@ develop:web:build:
   <<: *cache_web_def
   image: node:8.12.0-alpine
   script:
-  - cd web ; npm install ; npm run deploy:prod
+  - cd web ; yarn install ; yarn build
   artifacts:
     when: on_success
     expire_in: 12 hrs
@@ -220,4 +220,4 @@ merge-check:web:build:
   - git config --global user.email "runner@gitlab.itti.com.pl" ; git config --global user.name "GitLab CI Runner"
   script:
   - git fetch ; git merge origin/develop
-  - cd web ; npm install ; npm run deploy:prod
+  - cd web ; yarn install ; yarn build
