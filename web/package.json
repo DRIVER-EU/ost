@@ -2,7 +2,7 @@
   "name": "Driver",
   "version": "3.0.0-alpha.3",
   "description": "Get started with React, Redux, and React-Router!",
-  "main": "index.js",
+  "main": "main.js",
   "engines": {
     "node": ">=4.5.0",
     "npm": "^3.0.0"
@@ -106,7 +106,7 @@
     "material-ui": "^0.17.4",
     "material-ui-datetimepicker": "^1.0.7",
     "moment": "^2.18.1",
-    "node-sass": "^4.0.0",
+    "node-sass": "4.9.3",
     "normalize.css": "^5.0.0",
     "postcss-loader": "^1.1.0",
     "prop-types": "^15.6.0",
