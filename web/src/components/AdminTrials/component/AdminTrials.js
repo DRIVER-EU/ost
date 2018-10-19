@@ -396,7 +396,7 @@ class AdminTrials extends Component {
       send.trialRoleId = null
       send.name = stage.name
       send.languageVersion = 'POLISH'
-      send.description = `Trial stage chanched to ${stage.name}`
+      send.description = `Trial stage changed to ${stage.name}`
       this.props.sendMessage(send)
     }
   }

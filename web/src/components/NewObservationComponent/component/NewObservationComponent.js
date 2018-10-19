@@ -460,16 +460,18 @@ class NewObservationComponent extends Component {
                     floatingLabelText='Altitude'
                     errorText={this.state.coords2ErrorText}
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'} />
-                  { (this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
+                  {false &&
                   <div>
-                    <p>Files:</p>
-                    <DropzoneComponent
-                      config={this.componentConfig}
-                      djsConfig={this.djsConfig}
-                      eventHandlers={this.eventHandlers} />
-                  </div>
+                    {(this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
+                    <div>
+                      <p>Files:</p>
+                      <DropzoneComponent
+                        config={this.componentConfig}
+                        djsConfig={this.djsConfig}
+                        eventHandlers={this.eventHandlers} />
+                    </div>
                   }
-                  { (this.props.mode !== 'new' && this.props.mode !== 'profileQuestion') &&
+                    { (this.props.mode !== 'new' && this.props.mode !== 'profileQuestion') &&
                   this.state.files.length > 0 &&
                     <div><p>Files:</p>
                       {this.state.files.map(object => {
@@ -480,6 +482,7 @@ class NewObservationComponent extends Component {
                       })}
                     </div>
                   }
+                  </div>}
                 </div>
                 <div className={'buttons-center'}>
                   {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
