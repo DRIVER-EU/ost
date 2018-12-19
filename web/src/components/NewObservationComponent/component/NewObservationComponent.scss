@@ -70,6 +70,11 @@
         vertical-align: top;
         position: relative;
     }
+    label span div {
+        width: auto !important;
+        float: left;
+        padding-right: 5px;
+    }
     label>div:first-child{
         display: inline-block !important;
         width: auto !important;
@@ -79,6 +84,7 @@
     }
     .checkbox label, .radio label {
         padding-left: 0px;
+        width: 100%;
     }
     .form-group  p.field-description{
         margin-top: 5px;
