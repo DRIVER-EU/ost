@@ -48,6 +48,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static pl.com.itti.app.driver.util.SimulationTime.getSimulationTime;
+import static pl.com.itti.app.driver.util.SimulationTime.getTimeElapsed;
+
 @Service
 @Transactional
 public class AnswerService {
@@ -98,7 +101,8 @@ public class AnswerService {
                         .trialUser(currentTrialUser)
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
-                        .sentSimulationTime(LocalDateTime.now())
+                        .sentSimulationTime(getSimulationTime())
+                        .timeElapsed(getTimeElapsed())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -222,6 +226,7 @@ public class AnswerService {
                 AnswerProperties.OBSERVATION_TYPE_ID,
                 AnswerProperties.OBSERVATION_TYPE,
                 AnswerProperties.WHEN,
+                AnswerProperties.TIME_ELAPSED,
                 AnswerProperties.QUESTION,
                 AnswerProperties.ANSWER,
                 AnswerProperties.COMMENT,
@@ -252,6 +257,7 @@ public class AnswerService {
                         Long.toString(answer.getObservationType().getId()),
                         answer.getObservationType().getName(),
                         answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
+                        answer.getTimeElapsed().toString(),
                         SchemaCreator.getValueFromJSONObject(question.getJsonSchema(), AnswerProperties.TITLE_KEY),
                         SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
                         SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),

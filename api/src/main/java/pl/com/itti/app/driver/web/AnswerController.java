@@ -100,7 +100,7 @@ public class AnswerController {
         }
     }
 
-    // TODO endpoint used for testing backend
+//    // TODO endpoint used for testing backend
 //    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 //    public AnswerDTO.Item answerQuestions(@RequestParam("observationTypeId") Long observationTypeId,
 //                                          @RequestParam("trialSessionId") Long trialSessionId,

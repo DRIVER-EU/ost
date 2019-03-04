@@ -17,6 +17,7 @@ public class AnswerProperties {
     public static final String OBSERVATION_TYPE_ID = "ObservationType_ID";
     public static final String OBSERVATION_TYPE = "ObservationType";
     public static final String WHEN = "When";
+    public static final String TIME_ELAPSED = "TimeElapsed";
     public static final String QUESTION = "Question";
     public static final String ANSWER = "Answer";
     public static final String COMMENT = "Comment";
