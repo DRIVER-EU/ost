@@ -1,26 +1,25 @@
 package pl.com.itti.app.driver.util;
 
 import eu.driver.adapter.core.CISAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
+@Component
 public class SimulationTime {
 
-    private static CISAdapter adapter = CISAdapter.getInstance();
-
-    public static String getSimulationTime(){
-
-        LocalDateTime date = adapter.getTrialTime().toInstant().atZone(ZoneId.of("UTC")).toLocalDateTime();
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-
-        return date.format(dateFormat);
+    @PostConstruct
+    public static CISAdapter adapterInit(){
+        return CISAdapter.getInstance();
     }
 
-    public static String getTimeElapsed(){
-        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(adapter.getTimeElapsed()), ZoneId.of("UTC"));
-        return date.toLocalTime().toString();
+    public static LocalDateTime getSimulationTime(){
+
+        return adapterInit().getTrialTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public static LocalTime getTimeElapsed(){
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(adapterInit().getTimeElapsed()), ZoneId.systemDefault()).toLocalTime();
     }
 }

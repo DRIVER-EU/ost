@@ -3,10 +3,8 @@ package pl.com.itti.app.driver.web;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.com.itti.app.driver.util.SimulationTime;
 
-import java.time.LocalTime;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 
 import static pl.com.itti.app.driver.util.SimulationTime.getSimulationTime;
 import static pl.com.itti.app.driver.util.SimulationTime.getTimeElapsed;
@@ -17,12 +15,13 @@ public class SimulationTimeController {
 
     @GetMapping("/simulation-time")
     public String simulationTime(){
-        return getSimulationTime();
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        return getSimulationTime().format(dateFormat);
     }
 
     @GetMapping("/time-elapsed")
     public String timeElapsed(){
-        return getTimeElapsed();
+        return getTimeElapsed().toString();
     }
 
 }
