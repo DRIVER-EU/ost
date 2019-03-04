@@ -108,6 +108,10 @@ repositories {
     maven {
         url 'http://gitlab.itti.com.pl:8081/repository/maven-public/'
     }
+
+    flatDir{
+        dirs 'libs'
+    }
 }
 
 dependencies {
@@ -151,6 +155,8 @@ dependencies {
 
     // javax mail
     compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
+
+    compile name: 'testbed-adapter-1.2.1'
 
     // ----------------------------------------
     // Test
