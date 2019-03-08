@@ -20,7 +20,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
@@ -43,13 +42,12 @@ import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.com.itti.app.driver.util.SimulationTime.getSimulationTime;
-import static pl.com.itti.app.driver.util.SimulationTime.getTimeElapsed;
+import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
+import static pl.com.itti.app.driver.util.SimulationTime.*;
 
 @Service
 @Transactional
@@ -87,7 +85,7 @@ public class AnswerService {
                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, form.observationTypeId));
 
         JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
-        Schema schema = SchemaLoader.load(jsonObject);
+        org.everit.json.schema.Schema schema = SchemaLoader.load(jsonObject);
         schema.validate(new JSONObject(form.formData.toString()));
 
         AuthUser currentUser = trialUserService.getCurrentUser();
@@ -112,6 +110,8 @@ public class AnswerService {
             answer.setAnswerTrialRoles(assignTrialRoles(form.trialRoleIds, answer));
         }
         answer.setAttachments(assignAttachments(form, files, answer));
+
+        sendToTestBed(answer, observationType, trialSession);
 
         return answerRepository.save(answer);
     }
