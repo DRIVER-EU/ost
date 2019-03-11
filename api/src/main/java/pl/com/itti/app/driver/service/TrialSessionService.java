@@ -38,6 +38,7 @@ import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.SimulationTime;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -177,9 +178,9 @@ public class TrialSessionService {
 
         TrialSession trialSession = TrialSession.builder().trial(trialRepository.findById(newSessionForm.getTrialId())
                 .orElseThrow(() -> new EntityNotFoundException(Trial.class, newSessionForm.getTrialId())))
-                .startTime(SimulationTime.getSimulationTime())
+                .startTime(LocalDateTime.now())
                 .status(SessionStatus.valueOf(newSessionForm.getStatus()))
-                .pausedTime(SimulationTime.getSimulationTime())
+                .pausedTime(LocalDateTime.now())
                 .lastTrialStage(trialStageRepository.findByTrialIdAndName(newSessionForm.getTrialId(), newSessionForm.getInitialStage()).get())
                 .build();
 

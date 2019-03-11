@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.format.DateTimeFormatter;
 
-import static pl.com.itti.app.driver.util.SimulationTime.getSimulationTime;
+import static pl.com.itti.app.driver.util.SimulationTime.getTrialTime;
 import static pl.com.itti.app.driver.util.SimulationTime.getTimeElapsed;
 
 @RestController
 @RequestMapping("/api")
 public class SimulationTimeController {
 
-    @GetMapping("/simulation-time")
-    public String simulationTime(){
+    @GetMapping("/trial-time")
+    public String trialTime(){
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        return getSimulationTime().format(dateFormat);
+        return getTrialTime().format(dateFormat);
     }
 
     @GetMapping("/time-elapsed")

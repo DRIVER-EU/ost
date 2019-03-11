@@ -49,7 +49,7 @@ public class Answer extends PersistentObject implements Serializable {
     private LocalDateTime sentSimulationTime;
 
     @Column
-    private LocalTime timeElapsed;
+    private LocalDateTime trialTime;
 
     @Column
     private String fieldValue;

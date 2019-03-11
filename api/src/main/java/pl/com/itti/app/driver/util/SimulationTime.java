@@ -12,11 +12,13 @@ public class SimulationTime {
         return CISAdapter.getInstance();
     }
 
-    public static LocalDateTime getSimulationTime(){
+    public static LocalDateTime getTrialTime(){
         return adapterInit().getTrialTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public static LocalTime getTimeElapsed(){
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(adapterInit().getTimeElapsed()), ZoneId.systemDefault()).toLocalTime();
     }
+
+
 }

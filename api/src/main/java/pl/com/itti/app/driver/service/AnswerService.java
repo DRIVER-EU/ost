@@ -42,6 +42,7 @@ import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -99,8 +100,8 @@ public class AnswerService {
                         .trialUser(currentTrialUser)
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
-                        .sentSimulationTime(getSimulationTime())
-                        .timeElapsed(getTimeElapsed())
+                        .sentSimulationTime(LocalDateTime.now())
+                        .trialTime(getTrialTime())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -226,7 +227,7 @@ public class AnswerService {
                 AnswerProperties.OBSERVATION_TYPE_ID,
                 AnswerProperties.OBSERVATION_TYPE,
                 AnswerProperties.WHEN,
-                AnswerProperties.TIME_ELAPSED,
+                AnswerProperties.TRIAL_TIME,
                 AnswerProperties.QUESTION,
                 AnswerProperties.ANSWER,
                 AnswerProperties.COMMENT,
@@ -257,7 +258,7 @@ public class AnswerService {
                         Long.toString(answer.getObservationType().getId()),
                         answer.getObservationType().getName(),
                         answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
-                        answer.getTimeElapsed().toString(),
+                        answer.getTrialTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
                         SchemaCreator.getValueFromJSONObject(question.getJsonSchema(), AnswerProperties.TITLE_KEY),
                         SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
                         SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),

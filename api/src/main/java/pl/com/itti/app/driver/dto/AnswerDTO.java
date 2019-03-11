@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static pl.com.itti.app.driver.util.SimulationTime.getTimeElapsed;
+import static pl.com.itti.app.driver.util.SimulationTime.getTrialTime;
 
 public final class AnswerDTO {
 
@@ -24,13 +24,13 @@ public final class AnswerDTO {
 
         public long id;
         public ZonedDateTime sentSimulationTime;
-        public String timeElapsed;
+        public String timeTrial;
 
         @Override
         public void toDto(Answer answer) {
             this.id = answer.getId();
             this.sentSimulationTime = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
-            this.timeElapsed = getTimeElapsed().toString();
+            this.timeTrial = getTrialTime().toString();
         }
     }
 
