@@ -5,8 +5,9 @@
 
 4. Clone http://gitlab.itti.com.pl/zwo/fp7-driver/tree/be-task-246
 5. Odpalić, projekt graddlea
-6. bootRun
-https://github.com/DRIVER-EU/java-test-bed-adapter/ nie jest wymagane ale przydatne. Aktualnie spakowane do paczki .jar
+6. bootRun  
+  
+https://github.com/DRIVER-EU/java-test-bed-adapter/ nie jest wymagane ale przydatne. Aktualnie spakowane do paczki .jar. Wersna 1.2.1 to paczka Łukasza, 1.2.4 najnowsza, 1.2.4 modified - moja wzbogacona o kod od Łukasza.
 
 ## Uwagi co do postmana
 Dokumentacja jest tutaj: http://gitlab.itti.com.pl/zwo/fp7-driver/tree/be-task-246/doc  
