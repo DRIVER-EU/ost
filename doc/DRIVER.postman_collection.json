@@ -2002,7 +2002,7 @@
 			"response": []
 		},
 		{
-			"name": "/api/simulation-time",
+			"name": "/api/trial-time",
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -2036,14 +2036,14 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://{{IP-Address}}/api/simulation-time",
+					"raw": "http://{{IP-Address}}/api/trial-time",
 					"protocol": "http",
 					"host": [
 						"{{IP-Address}}"
 					],
 					"path": [
 						"api",
-						"simulation-time"
+						"trial-time"
 					]
 				}
 			},
