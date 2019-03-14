@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import pl.com.itti.app.driver.util.CustomTimeDeserializer;
 import pl.com.itti.app.driver.util.CustomTimeSerializer;
 
@@ -22,6 +23,7 @@ import java.util.TimeZone;
 @EnableJpaRepositories("pl.com.itti")
 @EntityScan(basePackages = "pl.com.itti")
 @ComponentScan(basePackages = {"co.perpixel", "pl.com.itti"})
+@EnableScheduling
 public class Application {
 
     public static void main(String[] args) {

@@ -16,17 +16,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static pl.com.itti.app.driver.util.SimulationTime.getTrialTime;
+
 public final class AnswerDTO {
 
     public static class MinimalItem implements EntityDTO<Answer> {
 
         public long id;
         public ZonedDateTime sentSimulationTime;
+        public String timeTrial;
 
         @Override
         public void toDto(Answer answer) {
             this.id = answer.getId();
             this.sentSimulationTime = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
+            this.timeTrial = getTrialTime().toString();
         }
     }
 

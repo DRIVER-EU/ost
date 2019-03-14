@@ -20,7 +20,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.everit.json.schema.Schema;
 import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
@@ -47,6 +46,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
+import static pl.com.itti.app.driver.util.SimulationTime.*;
 
 @Service
 @Transactional
@@ -84,7 +86,7 @@ public class AnswerService {
                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, form.observationTypeId));
 
         JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
-        Schema schema = SchemaLoader.load(jsonObject);
+        org.everit.json.schema.Schema schema = SchemaLoader.load(jsonObject);
         schema.validate(new JSONObject(form.formData.toString()));
 
         AuthUser currentUser = trialUserService.getCurrentUser();
@@ -99,6 +101,7 @@ public class AnswerService {
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
                         .sentSimulationTime(LocalDateTime.now())
+                        .trialTime(getTrialTime())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -108,6 +111,8 @@ public class AnswerService {
             answer.setAnswerTrialRoles(assignTrialRoles(form.trialRoleIds, answer));
         }
         answer.setAttachments(assignAttachments(form, files, answer));
+
+        sendToTestBed(answer, observationType, trialSession);
 
         return answerRepository.save(answer);
     }
@@ -222,6 +227,7 @@ public class AnswerService {
                 AnswerProperties.OBSERVATION_TYPE_ID,
                 AnswerProperties.OBSERVATION_TYPE,
                 AnswerProperties.WHEN,
+                AnswerProperties.TRIAL_TIME,
                 AnswerProperties.QUESTION,
                 AnswerProperties.ANSWER,
                 AnswerProperties.COMMENT,
@@ -252,6 +258,7 @@ public class AnswerService {
                         Long.toString(answer.getObservationType().getId()),
                         answer.getObservationType().getName(),
                         answer.getSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
+                        answer.getTrialTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
                         SchemaCreator.getValueFromJSONObject(question.getJsonSchema(), AnswerProperties.TITLE_KEY),
                         SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()),
                         SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY),

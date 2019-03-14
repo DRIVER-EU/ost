@@ -2,6 +2,7 @@ package pl.com.itti.app.driver.web;
 
 import co.perpixel.annotation.web.FindAllGetMapping;
 import co.perpixel.dto.DTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.everit.json.schema.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.AnswerDTO;
+import pl.com.itti.app.driver.dto.AttachmentDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.service.AnswerService;
 import pl.com.itti.app.driver.util.*;
@@ -19,6 +21,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 

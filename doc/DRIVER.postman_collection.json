@@ -1,72 +1,77 @@
 {
-	"id": "feb365b1-107a-47bc-ba89-e93a9717081f",
+	"id": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 	"name": "DRIVER",
 	"description": null,
 	"auth": null,
 	"events": null,
 	"variables": null,
 	"order": [
-		"ddb4d3b7-52d8-4388-b612-c7e12e2ce0df",
-		"b2bca8f2-482d-47ea-a238-dde66297e48e",
-		"9a1143d7-0ff0-4c04-b24f-cc3d15a34145",
-		"69244591-0db1-41d9-beba-44d4be397c5f",
-		"e96cdc3b-0e11-4f25-9ea1-6fa7360a46b3",
-		"d9da26fd-156b-468f-8973-20545fd28395"
+		"adf8802c-6717-4b56-9e85-1dee0547b6b4",
+		"156a5e47-315d-49b4-8a11-2edb45303406",
+		"996b4837-4096-4e9b-a09f-353ff12488a1",
+		"043fc1ce-c126-4a1f-893c-cdb0387c975d",
+		"872eecb3-cb9c-4960-bf8a-2632d1fe583c",
+		"a603be0d-2782-442a-9692-7fa065b848de",
+		"fe60878b-6d58-45ac-bf79-a6ff19ed8ed9",
+		"8ce97f49-3f4d-49d6-b36a-275f89064be7",
+		"4801f2fc-36fe-43c5-b03f-63795932dca1",
+		"b2b34e9e-3967-4373-b007-8e6a7d0e547d",
+		"fedb2945-99bd-4b48-8d93-eaca0b322062"
 	],
 	"folders_order": [
-		"aae0c8bf-37e7-4cee-be21-30b7bd84b971",
-		"3a006ae7-72ee-453b-93d9-b47b0ff9faba",
-		"e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-		"504d4551-6ada-4773-b359-5664dfefb2b4",
-		"a171c9e6-816e-4bb1-b001-d0767e4322d7",
-		"eabd5381-e392-4393-8d67-0b895fff1285"
+		"aa998ba0-818c-4595-8839-815fe2c765e0",
+		"8a9f1063-5a8f-441c-8fc8-b0b250bc4fbf",
+		"512716dc-b44c-4bfb-8e05-e06d15842fcf",
+		"6fea2c4b-585c-40b4-9eb0-c493986d3c8a",
+		"819a5a57-3f59-44a8-84a9-3c2ab07d48c3",
+		"ae7e832e-a179-4b88-bd9c-e83df7d68f2f"
 	],
 	"folders": [
 		{
-			"id": "504d4551-6ada-4773-b359-5664dfefb2b4",
+			"id": "6fea2c4b-585c-40b4-9eb0-c493986d3c8a",
 			"name": "/answers",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 			"folder": null,
 			"order": [
-				"dd43e6e2-370b-4f6b-9a4b-8c013b5b7c70",
-				"d4092391-2c36-4f7b-86f0-5a5ac2de049f",
-				"3c06240b-136d-4645-84e8-7329f1073311",
-				"e9b2dc50-b606-4c71-9de4-f9cb68776339"
+				"f40ed48e-ff11-488d-a9b1-75e21031c010",
+				"b76ea443-dc42-49c2-bea6-a8e1817ced4f",
+				"be0c6594-06fb-4de8-8843-6f6406d1534c",
+				"27839b2a-ddd8-4121-b2c9-afde355e3ae3"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "eabd5381-e392-4393-8d67-0b895fff1285",
+			"id": "ae7e832e-a179-4b88-bd9c-e83df7d68f2f",
 			"name": "/attachments",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 			"folder": null,
 			"order": [
-				"041a41ee-ef0e-4795-8eca-3995b27b84af"
+				"bd9b6e54-d472-488f-9001-2088efc6e389"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "a171c9e6-816e-4bb1-b001-d0767e4322d7",
+			"id": "819a5a57-3f59-44a8-84a9-3c2ab07d48c3",
 			"name": "/event",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 			"folder": null,
 			"order": [
-				"a99fec97-54ef-4d3d-a4aa-36a8436d8d6d",
-				"bbe62734-bc2a-48f4-8561-74f4bcacd17a"
+				"174ba5e7-d401-465f-a199-494842419672",
+				"70af2ca3-2e57-453a-ba85-f1ecd8c8923d"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "3a006ae7-72ee-453b-93d9-b47b0ff9faba",
+			"id": "8a9f1063-5a8f-441c-8fc8-b0b250bc4fbf",
 			"name": "/observationtypes",
 			"description": null,
 			"auth": null,
@@ -92,157 +97,151 @@
 					}
 				}
 			],
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 			"folder": null,
 			"order": [
-				"7443cfbe-5518-456a-9e62-03f3b1808113",
-				"afb6403c-97c7-451e-b9c0-7451bd0dd934"
+				"2185f0a1-6121-4443-95d5-1c58844842af",
+				"9fee3d07-a6cd-46b0-a407-09eec41e58b4"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "0d69f0b0-332c-4b66-b1b2-1c588c2031fb",
+			"id": "a8c76f85-60bf-43d6-b7eb-0bb8a922d24c",
 			"name": "/roles",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
-			"folder": "aae0c8bf-37e7-4cee-be21-30b7bd84b971",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
+			"folder": "aa998ba0-818c-4595-8839-815fe2c765e0",
 			"order": [
-				"fc100d60-b0a7-48b2-8ce9-1f1a0c29aa79"
+				"91699bd7-d0e4-4bc7-ad6c-b90e53c2c087"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
+			"id": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
 			"name": "/trialsessions",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 			"folder": null,
 			"order": [
-				"5ab6d905-d78e-4fc1-85ed-49316d0b8f74",
-				"dbc480de-9df7-492e-ab9e-a72699dec168",
-				"bea24a38-827e-47f7-8afd-cd14ea23b41d",
-				"d661a67d-0db1-4d6c-9e36-687e4b92914d",
-				"700c736b-12e9-4c35-b36c-252ab2d44983",
-				"8b8de5e4-3b77-4abe-8a31-910aa412bdf8",
-				"b8afed13-ff65-4892-8bc1-de426adeafc6",
-				"bf235dff-eae5-4985-830c-af2735e791af",
-				"e0d29d66-cef1-4f62-a37d-ea8fca71be4a"
+				"8a21eb97-6744-4f31-befd-265adeb12610",
+				"f25ab6cf-e6c3-4538-a9c0-d6ca53617580",
+				"8fd7e2ad-326d-4552-a06e-f9dc24354005",
+				"23270f54-9695-44b2-88f8-d89c0102c3d4",
+				"f5f9b37c-a022-408e-ae42-956a504a92c6",
+				"622e4cba-fc7e-4604-9f59-e49179bd8e73",
+				"cc434a26-c367-466f-bffb-55394219d4dc",
+				"08d39710-be21-4d77-8095-a649a9f3041b",
+				"2e88a33b-dcf6-46ad-ae18-6c74676b7562"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
+			"id": "dea611ff-1079-4d53-832c-472f37955db9",
 			"name": "/users",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
-			"folder": "aae0c8bf-37e7-4cee-be21-30b7bd84b971",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
+			"folder": "aa998ba0-818c-4595-8839-815fe2c765e0",
 			"order": [
-				"4c04e92f-8bf0-4311-bc19-483b0ccaf942",
-				"446a59cd-b5e6-47f5-9ec0-2ed79e345510",
-				"cdd69e32-df54-421f-90c3-a52974f91b94",
-				"16b61d3d-4c45-4448-9ef9-72e591db162a",
-				"6a18d353-6cf7-4890-843d-4958d9c3ba5e",
-				"fea6511a-4a52-4b8b-aea0-a0df9a0f7974",
-				"e8e90117-eeaf-4c91-8e87-6cd5f51b17df"
+				"e718c5bd-5966-47e3-92cd-70077e785477",
+				"16299cd8-c667-4ce7-8547-0ea1e931cf2b",
+				"f001ad5d-f4b7-448e-b40a-fcf17d750355",
+				"5ecc2b84-57ae-4fb0-872f-2eae94c3fac9",
+				"b4afadd3-7019-4560-87ea-67397f1fcde8",
+				"1993ac6a-d25c-4c72-ada8-4a468e6b4ac8",
+				"f45d40d6-7319-4b70-a7b6-d85866b18b93"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "3747ec52-1d5a-477c-b479-ccfd6d6bb4b5",
+			"id": "c8d1e292-d362-4651-9992-2b86b6de19ad",
 			"name": "/users/positions",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
-			"folder": "aae0c8bf-37e7-4cee-be21-30b7bd84b971",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
+			"folder": "aa998ba0-818c-4595-8839-815fe2c765e0",
 			"order": [
-				"7be1b6a3-4a53-4796-8b43-bab063607e2f"
+				"9ab367c1-7459-40f1-995c-24e9494f1efa"
 			],
 			"folders_order": []
 		},
 		{
-			"id": "aae0c8bf-37e7-4cee-be21-30b7bd84b971",
+			"id": "aa998ba0-818c-4595-8839-815fe2c765e0",
 			"name": "auth",
 			"description": null,
 			"auth": null,
 			"events": null,
-			"collection": "feb365b1-107a-47bc-ba89-e93a9717081f",
+			"collection": "ac2ab9eb-1d17-4f0e-8fd0-2705ccdb611f",
 			"folder": null,
 			"order": [
-				"269644e8-1fd5-4330-9e0c-5ecd27ae8878",
-				"111cae6e-fa0b-460b-b0bd-35ceb0344593"
+				"1f6e5518-e3ae-4c40-a753-7bd44d264589",
+				"5fc93efa-ac1e-406e-aa61-78c099b8fa6e"
 			],
 			"folders_order": [
-				"0d69f0b0-332c-4b66-b1b2-1c588c2031fb",
-				"1f30f345-9936-4c7e-b1dd-5306e2bfa334",
-				"3747ec52-1d5a-477c-b479-ccfd6d6bb4b5"
+				"a8c76f85-60bf-43d6-b7eb-0bb8a922d24c",
+				"dea611ff-1079-4d53-832c-472f37955db9",
+				"c8d1e292-d362-4651-9992-2b86b6de19ad"
 			]
 		}
 	],
 	"requests": [
 		{
-			"id": "041a41ee-ef0e-4795-8eca-3995b27b84af",
-			"name": "/api/attachments/3",
-			"url": "http://{{IP-Address}}/api/attachments/3",
-			"description": null,
-			"data": [],
-			"dataMode": null,
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/octet-stream"
-				},
-				{
-					"key": "Authorization",
-					"value": "Basic T2JzZXJ2ZXIxOmFkbWlu"
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": null,
-			"events": null,
-			"folder": "eabd5381-e392-4393-8d67-0b895fff1285",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/octet-stream\nAuthorization: Basic T2JzZXJ2ZXIxOmFkbWlu\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "111cae6e-fa0b-460b-b0bd-35ceb0344593",
-			"name": "/auth/logout",
-			"url": "http://{{IP-Address}}/api/auth/logout",
+			"id": "043fc1ce-c126-4a1f-893c-cdb0387c975d",
+			"name": "/api/stages?trialsession_id=2",
+			"url": "{{IP-Address}}/api/stages?trial_id=2",
 			"description": null,
 			"data": [],
 			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				}
-			],
+			"headerData": [],
 			"method": "GET",
 			"pathVariableData": [],
-			"queryParams": [],
-			"auth": null,
+			"queryParams": [
+				{
+					"key": "trial_id",
+					"value": "2"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "Mayer1",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
 			"events": null,
-			"folder": "aae0c8bf-37e7-4cee-be21-30b7bd84b971",
+			"folder": null,
 			"rawModeData": "",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"headers": "",
 			"pathVariables": {}
 		},
 		{
-			"id": "16b61d3d-4c45-4448-9ef9-72e591db162a",
-			"name": "/users/{id}",
-			"url": "http://{{IP-Address}}/api/auth/users/1",
+			"id": "08d39710-be21-4d77-8095-a649a9f3041b",
+			"name": "/trialsessions/createNewSessionEmail",
+			"url": "http://{{IP-Address}}/api/trialsessions/createNewSessionEmail",
 			"description": null,
 			"data": [],
 			"dataMode": "raw",
@@ -256,30 +255,7 @@
 					"value": "application/json"
 				}
 			],
-			"method": "PUT",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": null,
-			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
-			"rawModeData": "{\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "269644e8-1fd5-4330-9e0c-5ecd27ae8878",
-			"name": "/auth/login",
-			"url": "http://{{IP-Address}}/api/auth/login",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "Authorization",
-					"value": "Basic YWRtaW46YWRtaW4="
-				}
-			],
-			"method": "GET",
+			"method": "POST",
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
@@ -308,75 +284,50 @@
 				]
 			},
 			"events": null,
-			"folder": "aae0c8bf-37e7-4cee-be21-30b7bd84b971",
-			"rawModeData": "",
-			"headers": "Authorization: Basic YWRtaW46YWRtaW4=\n",
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"szymonn.panfilll@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"observer\", \"Validator\", \"Participant\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "3c06240b-136d-4645-84e8-7329f1073311",
-			"name": "/answers/csv-file",
-			"url": "http://{{IP-Address}}/api/answers/csv-file?trialsession_id=1",
-			"description": "",
-			"data": null,
-			"dataMode": "params",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
+			"id": "156a5e47-315d-49b4-8a11-2edb45303406",
+			"name": "/role?trialsession_id=2",
+			"url": "http://{{IP-Address}}/api/role?trial_id=2",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [],
 			"method": "GET",
 			"pathVariableData": [],
 			"queryParams": [
 				{
-					"key": "trialsession_id",
-					"value": "1",
-					"equals": true,
-					"description": "",
-					"enabled": true
+					"key": "trial_id",
+					"value": "2"
 				}
 			],
 			"auth": {
 				"type": "basic",
 				"basic": [
 					{
-						"key": "password",
-						"value": "adminpass",
+						"key": "username",
+						"value": "Mayer1",
 						"type": "string"
 					},
 					{
-						"key": "username",
+						"key": "password",
 						"value": "admin",
 						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
 					}
 				]
 			},
-			"events": [],
-			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"events": null,
+			"folder": null,
+			"rawModeData": "",
+			"headers": "",
 			"pathVariables": {}
 		},
 		{
-			"id": "446a59cd-b5e6-47f5-9ec0-2ed79e345510",
+			"id": "16299cd8-c667-4ce7-8547-0ea1e931cf2b",
 			"name": "/users",
 			"url": "http://{{IP-Address}}/api/auth/users",
 			"description": null,
@@ -411,457 +362,13 @@
 				]
 			},
 			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
 			"rawModeData": "{\n\t\"login\": \"test\",\n\t\"password\": \"null\",\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "4c04e92f-8bf0-4311-bc19-483b0ccaf942",
-			"name": "/users",
-			"url": "http://{{IP-Address}}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "page",
-					"value": "0"
-				},
-				{
-					"key": "size",
-					"value": "10"
-				},
-				{
-					"key": "sort",
-					"value": "login,asc"
-				},
-				{
-					"key": "sort",
-					"value": "lastName,desc"
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
-			"rawModeData": "",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "5ab6d905-d78e-4fc1-85ed-49316d0b8f74",
-			"name": "/trialsessions",
-			"url": "http://{{IP-Address}}/api/trialsessions",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json"
-				},
-				{
-					"key": "",
-					"value": "",
-					"enabled": false
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "adminpass",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": null,
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "69244591-0db1-41d9-beba-44d4be397c5f",
-			"name": "/api/stages?trialsession_id=2",
-			"url": "{{IP-Address}}/api/stages?trial_id=2",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "trial_id",
-					"value": "2",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "Mayer1",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": null,
-			"folder": null,
-			"rawModeData": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}",
-			"headers": "",
-			"pathVariables": {}
-		},
-		{
-			"id": "6a18d353-6cf7-4890-843d-4958d9c3ba5e",
-			"name": "/users/{id}/change-password",
-			"url": "http://{{IP-Address}}/api/auth/users/1/change-password",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json"
-				}
-			],
-			"method": "PUT",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
-			"rawModeData": "{\n\t\"password\": \"admin\"\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "700c736b-12e9-4c35-b36c-252ab2d44983",
-			"name": "/trialsessions/1/changeStatus",
-			"url": "http://{{IP-Address}}/api/trialsessions/1/changeStatus?status=ACTIVE",
-			"description": "",
-			"data": null,
-			"dataMode": "params",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"method": "PUT",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "status",
-					"value": "ACTIVE",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "adminpass",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": [],
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "7443cfbe-5518-456a-9e62-03f3b1808113",
-			"name": "/api/observationtypes",
-			"url": "{{IP-Address}}/api/observationtypes?trialsession_id=1",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "trialsession_id",
-					"value": "1",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "Observer1",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": null,
-			"folder": "3a006ae7-72ee-453b-93d9-b47b0ff9faba",
-			"rawModeData": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}",
-			"headers": "",
-			"pathVariables": {}
-		},
-		{
-			"id": "7be1b6a3-4a53-4796-8b43-bab063607e2f",
-			"name": "/users/positions",
-			"url": "http://{{IP-Address}}/api/auth/users/positions",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": "3747ec52-1d5a-477c-b479-ccfd6d6bb4b5",
-			"rawModeData": "",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "8b8de5e4-3b77-4abe-8a31-910aa412bdf8",
-			"name": "/trialsessions/trials",
-			"url": "http://{{IP-Address}}/api/trialsessions/trials",
-			"description": "",
-			"data": null,
-			"dataMode": "params",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "adminpass",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": [],
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "9a1143d7-0ff0-4c04-b24f-cc3d15a34145",
-			"name": "/api/answers-events",
-			"url": "http://{{IP-Address}}/api/answers-events?trialsession_id=1",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "trialsession_id",
-					"value": "1",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"auth": {
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "Observer1",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				],
-				"type": "basic"
-			},
-			"events": null,
-			"folder": null,
-			"rawModeData": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}",
-			"headers": "",
-			"pathVariables": {}
-		},
-		{
-			"id": "a99fec97-54ef-4d3d-a4aa-36a8436d8d6d",
+			"id": "174ba5e7-d401-465f-a199-494842419672",
 			"name": "/event/search?trialsession_id=1",
 			"url": "http://{{IP-Address}}/api/event/search?trialsession_id=1",
 			"description": null,
@@ -906,134 +413,50 @@
 				]
 			},
 			"events": null,
-			"folder": "a171c9e6-816e-4bb1-b001-d0767e4322d7",
-			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
+			"folder": "819a5a57-3f59-44a8-84a9-3c2ab07d48c3",
+			"rawModeData": "",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "afb6403c-97c7-451e-b9c0-7451bd0dd934",
-			"name": "/api/observationtypes/form",
-			"url": "{{IP-Address}}/api/observationtypes/form?observationtype_id=1&trialsession_id=1",
+			"id": "1993ac6a-d25c-4c72-ada8-4a468e6b4ac8",
+			"name": "/users/{id}",
+			"url": "http://{{IP-Address}}/api/auth/users/1",
 			"description": null,
 			"data": [],
 			"dataMode": "raw",
-			"headerData": [],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "observationtype_id",
-					"value": "1"
-				},
-				{
-					"key": "trialsession_id",
-					"value": "1"
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "Alice1",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": null,
-			"folder": "3a006ae7-72ee-453b-93d9-b47b0ff9faba",
-			"rawModeData": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}",
-			"headers": "",
-			"pathVariables": {}
-		},
-		{
-			"id": "b2bca8f2-482d-47ea-a238-dde66297e48e",
-			"name": "/role?trialsession_id=2",
-			"url": "http://{{IP-Address}}/api/role?trial_id=2",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "trial_id",
-					"value": "2",
-					"equals": true,
-					"description": "",
-					"enabled": true
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "Mayer1",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": null,
-			"rawModeData": "",
-			"headers": "",
-			"pathVariables": {}
-		},
-		{
-			"id": "b8afed13-ff65-4892-8bc1-de426adeafc6",
-			"name": "/trialsessions/newSessionValues",
-			"url": "http://{{IP-Address}}/api/trialsessions/newSessionValues?trial_id=1",
-			"description": "",
-			"data": null,
-			"dataMode": "params",
 			"headerData": [
 				{
 					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
+					"value": "{{X-Auth-Token}}"
 				}
 			],
-			"method": "POST",
+			"method": "DELETE",
 			"pathVariableData": [],
-			"queryParams": [
+			"queryParams": [],
+			"auth": null,
+			"events": null,
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "1f6e5518-e3ae-4c40-a753-7bd44d264589",
+			"name": "/auth/login",
+			"url": "http://{{IP-Address}}/api/auth/login",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
 				{
-					"key": "trial_id",
-					"value": "1",
-					"equals": true,
-					"description": "",
-					"enabled": true
+					"key": "Authorization",
+					"value": "Basic YWRtaW46YWRtaW4="
 				}
 			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
 			"auth": {
 				"type": "basic",
 				"basic": [
@@ -1059,73 +482,28 @@
 					}
 				]
 			},
-			"events": [],
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "bbe62734-bc2a-48f4-8561-74f4bcacd17a",
-			"name": "/event",
-			"url": "http://{{IP-Address}}/api/event",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "Content-Type",
-					"value": "application/json"
-				}
-			],
-			"method": "POST",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "Mayer1",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
 			"events": null,
-			"folder": "a171c9e6-816e-4bb1-b001-d0767e4322d7",
-			"rawModeData": "{\n\t\"trialSessionId\": 2,\n\t\"idEvent\": 1,\n\t\"name\": \"Event\",\n\t\"description\": \"Event added\",\n\t\"languageVersion\": \"POLISH\",\n\t\"eventTime\": \"2018-04-12T09:20:25\",\n\t\"trialUserId\": 5\n}",
-			"headers": "Content-Type: application/json\n",
+			"folder": "aa998ba0-818c-4595-8839-815fe2c765e0",
+			"rawModeData": "",
+			"headers": "Authorization: Basic YWRtaW46YWRtaW4=\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "bea24a38-827e-47f7-8afd-cd14ea23b41d",
-			"name": "/trialsession/active",
-			"url": "http://{{IP-Address}}/api/trialsessions/active",
+			"id": "2185f0a1-6121-4443-95d5-1c58844842af",
+			"name": "/api/observationtypes",
+			"url": "{{IP-Address}}/api/observationtypes?trialsession_id=1",
 			"description": null,
 			"data": [],
 			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json"
-				},
-				{
-					"key": "",
-					"value": "",
-					"enabled": false
-				}
-			],
+			"headerData": [],
 			"method": "GET",
 			"pathVariableData": [],
-			"queryParams": [],
+			"queryParams": [
+				{
+					"key": "trialsession_id",
+					"value": "1"
+				}
+			],
 			"auth": {
 				"type": "basic",
 				"basic": [
@@ -1152,162 +530,13 @@
 				]
 			},
 			"events": null,
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "bf235dff-eae5-4985-830c-af2735e791af",
-			"name": "/trialsessions/createNewSessionEmail",
-			"url": "http://{{IP-Address}}/api/trialsessions/createNewSessionEmail",
-			"description": "",
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"method": "POST",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "adminpass",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": [],
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"szymonn.panfilll@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"observer\", \"Validator\", \"Participant\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "cdd69e32-df54-421f-90c3-a52974f91b94",
-			"name": "/users/{id}",
-			"url": "http://{{IP-Address}}/api/auth/users/1",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
+			"folder": "8a9f1063-5a8f-441c-8fc8-b0b250bc4fbf",
 			"rawModeData": "",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"headers": "",
 			"pathVariables": {}
 		},
 		{
-			"id": "d4092391-2c36-4f7b-86f0-5a5ac2de049f",
-			"name": "/answers",
-			"url": "http://{{IP-Address}}/api/answers?trialsession_id=2&search=communication",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json"
-				},
-				{
-					"key": "",
-					"value": "",
-					"enabled": false
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "trialsession_id",
-					"value": "2",
-					"equals": true
-				},
-				{
-					"key": "search",
-					"value": "communication",
-					"equals": true
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "Mayer1",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
-			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "d661a67d-0db1-4d6c-9e36-687e4b92914d",
+			"id": "23270f54-9695-44b2-88f8-d89c0102c3d4",
 			"name": "/trialsessions/2",
 			"url": "http://{{IP-Address}}/api/trialsessions/2",
 			"description": null,
@@ -1357,28 +586,35 @@
 				]
 			},
 			"events": null,
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
 			"rawModeData": "{\n\t\"id\":\"3\"\n}",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "d9da26fd-156b-468f-8973-20545fd28395",
-			"name": "/api/questions-answers/147/putComment",
-			"url": "{{IP-Address}}/api/questions-answers/147/comment",
-			"description": "",
+			"id": "27839b2a-ddd8-4121-b2c9-afde355e3ae3",
+			"name": "/answers/remove",
+			"url": "http://{{IP-Address}}/api/answers/145/remove",
+			"description": null,
 			"data": [
 				{
 					"key": "comment",
-					"value": "aasasasdadas",
-					"description": "",
-					"type": "text",
-					"enabled": true
+					"value": "komentarz",
+					"type": "text"
 				}
 			],
 			"dataMode": "params",
-			"headerData": [],
-			"method": "POST",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/x-www-form-urlencoded"
+				}
+			],
+			"method": "DELETE",
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
@@ -1406,18 +642,1068 @@
 					}
 				]
 			},
+			"events": null,
+			"folder": "6fea2c4b-585c-40b4-9eb0-c493986d3c8a",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/x-www-form-urlencoded\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "2e88a33b-dcf6-46ad-ae18-6c74676b7562",
+			"name": "/trialsessions/createNewSessionFile",
+			"url": "http://{{IP-Address}}/api/trialsessions/createNewSessionFile",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"lukasz.puuulikk@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"Validator\", \"observer\"]\n\t\t},\n\t\t{\n\t\t\t\"email\" : \"pulik.lukaaaszjhygg@gmail.com\",\n\t\t\t\"role\": [\"Participant\", \"CMC LANDPOL C\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "4801f2fc-36fe-43c5-b03f-63795932dca1",
+			"name": "/api/ostTrialId",
+			"url": "http://{{IP-Address}}/api/ostTrialId",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
 			"events": [],
 			"folder": null,
 			"headers": "",
 			"pathVariables": {}
 		},
 		{
-			"id": "dbc480de-9df7-492e-ab9e-a72699dec168",
+			"id": "5ecc2b84-57ae-4fb0-872f-2eae94c3fac9",
+			"name": "/users/{id}",
+			"url": "http://{{IP-Address}}/api/auth/users/1",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "PUT",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": null,
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
+			"rawModeData": "{\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "5fc93efa-ac1e-406e-aa61-78c099b8fa6e",
+			"name": "/auth/logout",
+			"url": "http://{{IP-Address}}/api/auth/logout",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": null,
+			"folder": "aa998ba0-818c-4595-8839-815fe2c765e0",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "622e4cba-fc7e-4604-9f59-e49179bd8e73",
+			"name": "/trialsessions/trials",
+			"url": "http://{{IP-Address}}/api/trialsessions/trials",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "70af2ca3-2e57-453a-ba85-f1ecd8c8923d",
+			"name": "/event",
+			"url": "http://{{IP-Address}}/api/event",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "Mayer1",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "819a5a57-3f59-44a8-84a9-3c2ab07d48c3",
+			"rawModeData": "{\n\t\"trialSessionId\": 2,\n\t\"idEvent\": 1,\n\t\"name\": \"Event\",\n\t\"description\": \"Event added\",\n\t\"languageVersion\": \"POLISH\",\n\t\"eventTime\": \"2018-04-12T09:20:25\",\n\t\"trialUserId\": 5\n}",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "872eecb3-cb9c-4960-bf8a-2632d1fe583c",
+			"name": "/api/questions-answers?answer_id=2",
+			"url": "http://{{IP-Address}}/api/questions-answers?answer_id=147",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "answer_id",
+					"value": "147",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "",
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "8a21eb97-6744-4f31-befd-265adeb12610",
+			"name": "/trialsessions",
+			"url": "http://{{IP-Address}}/api/trialsessions",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"key": "",
+					"value": "",
+					"enabled": false
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "8ce97f49-3f4d-49d6-b36a-275f89064be7",
+			"name": "/api/trial-time",
+			"url": "http://{{IP-Address}}/api/trial-time",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "",
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "8fd7e2ad-326d-4552-a06e-f9dc24354005",
+			"name": "/trialsession/active",
+			"url": "http://{{IP-Address}}/api/trialsessions/active",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"key": "",
+					"value": "",
+					"enabled": false
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "Observer1",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "91699bd7-d0e4-4bc7-ad6c-b90e53c2c087",
+			"name": "/roles",
+			"url": "http://{{IP-Address}}/api/auth/roles",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "a8c76f85-60bf-43d6-b7eb-0bb8a922d24c",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "996b4837-4096-4e9b-a09f-353ff12488a1",
+			"name": "/api/answers-events",
+			"url": "http://{{IP-Address}}/api/answers-events?trialsession_id=1",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trialsession_id",
+					"value": "1"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "Observer1",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "",
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "9ab367c1-7459-40f1-995c-24e9494f1efa",
+			"name": "/users/positions",
+			"url": "http://{{IP-Address}}/api/auth/users/positions",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "c8d1e292-d362-4651-9992-2b86b6de19ad",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "9fee3d07-a6cd-46b0-a407-09eec41e58b4",
+			"name": "/api/observationtypes/form",
+			"url": "{{IP-Address}}/api/observationtypes/form?observationtype_id=1&trialsession_id=1",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "observationtype_id",
+					"value": "1"
+				},
+				{
+					"key": "trialsession_id",
+					"value": "1"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "Alice1",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "8a9f1063-5a8f-441c-8fc8-b0b250bc4fbf",
+			"rawModeData": "",
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "a603be0d-2782-442a-9692-7fa065b848de",
+			"name": "/api/questions-answers/147/putComment",
+			"url": "http://{{IP-Address}}/api/questions-answers/147/comment",
+			"description": null,
+			"data": [
+				{
+					"key": "comment",
+					"value": "aasasasdadas",
+					"type": "text"
+				}
+			],
+			"dataMode": "params",
+			"headerData": [],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "adf8802c-6717-4b56-9e85-1dee0547b6b4",
+			"name": "/user?trialsession_id=2",
+			"url": "http://{{IP-Address}}/api/user?trialsession_id=2",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"key": "",
+					"value": "",
+					"enabled": false
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trialsession_id",
+					"value": "2"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "Mayer1",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "b2b34e9e-3967-4373-b007-8e6a7d0e547d",
+			"name": "/api/ostTrialSessionId",
+			"url": "http://{{IP-Address}}/api/ostTrialSessionId",
+			"description": "",
+			"data": null,
+			"dataMode": "params",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "b4afadd3-7019-4560-87ea-67397f1fcde8",
+			"name": "/users/{id}/change-password",
+			"url": "http://{{IP-Address}}/api/auth/users/1/change-password",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "PUT",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
+			"rawModeData": "{\n\t\"password\": \"admin\"\n}",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "b76ea443-dc42-49c2-bea6-a8e1817ced4f",
+			"name": "/answers",
+			"url": "http://{{IP-Address}}/api/answers?trialsession_id=2&search=communication",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				},
+				{
+					"key": "",
+					"value": "",
+					"enabled": false
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trialsession_id",
+					"value": "2"
+				},
+				{
+					"key": "search",
+					"value": "communication"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "Mayer1",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "6fea2c4b-585c-40b4-9eb0-c493986d3c8a",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "bd9b6e54-d472-488f-9001-2088efc6e389",
+			"name": "/api/attachments/3",
+			"url": "http://{{IP-Address}}/api/attachments/3",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/octet-stream"
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic T2JzZXJ2ZXIxOmFkbWlu"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": null,
+			"folder": "ae7e832e-a179-4b88-bd9c-e83df7d68f2f",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/octet-stream\nAuthorization: Basic T2JzZXJ2ZXIxOmFkbWlu\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "be0c6594-06fb-4de8-8843-6f6406d1534c",
+			"name": "/answers/csv-file",
+			"url": "http://{{IP-Address}}/api/answers/csv-file?trialsession_id=1",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trialsession_id",
+					"value": "1"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "6fea2c4b-585c-40b4-9eb0-c493986d3c8a",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "cc434a26-c367-466f-bffb-55394219d4dc",
+			"name": "/trialsessions/newSessionValues",
+			"url": "http://{{IP-Address}}/api/trialsessions/newSessionValues?trial_id=1",
+			"description": null,
+			"data": [],
+			"dataMode": null,
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "trial_id",
+					"value": "1"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "adminpass",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "e718c5bd-5966-47e3-92cd-70077e785477",
+			"name": "/users",
+			"url": "http://{{IP-Address}}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "page",
+					"value": "0"
+				},
+				{
+					"key": "size",
+					"value": "10"
+				},
+				{
+					"key": "sort",
+					"value": "login,asc"
+				},
+				{
+					"key": "sort",
+					"value": "lastName,desc"
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "f001ad5d-f4b7-448e-b40a-fcf17d750355",
+			"name": "/users/{id}",
+			"url": "http://{{IP-Address}}/api/auth/users/1",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
+			"rawModeData": "",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "f25ab6cf-e6c3-4538-a9c0-d6ca53617580",
 			"name": "/trialsessions/1",
 			"url": "http://{{IP-Address}}/api/trialsessions/1",
 			"description": null,
 			"data": [],
-			"dataMode": null,
+			"dataMode": "raw",
 			"headerData": [
 				{
 					"key": "X-Auth-Token",
@@ -1462,12 +1748,13 @@
 				]
 			},
 			"events": null,
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"rawModeData": "",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "dd43e6e2-370b-4f6b-9a4b-8c013b5b7c70",
+			"id": "f40ed48e-ff11-488d-a9b1-75e21031c010",
 			"name": "/answers",
 			"url": "http://{{IP-Address}}/api/answers",
 			"description": null,
@@ -1515,22 +1802,23 @@
 				},
 				{
 					"key": "attachments",
-					"value": "",
-					"type": "file"
+					"type": "file",
+					"src": "",
+					"value": ""
 				}
 			],
 			"dataMode": "params",
 			"headerData": [
 				{
 					"key": "Content-Type",
-					"value": "application/x-www-form-urlencoded",
-					"description": ""
+					"value": "application/x-www-form-urlencoded"
 				}
 			],
 			"method": "POST",
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
+				"type": "basic",
 				"basic": [
 					{
 						"key": "password",
@@ -1542,122 +1830,15 @@
 						"value": "Observer1",
 						"type": "string"
 					}
-				],
-				"type": "basic"
+				]
 			},
 			"events": null,
-			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
+			"folder": "6fea2c4b-585c-40b4-9eb0-c493986d3c8a",
 			"headers": "Content-Type: application/x-www-form-urlencoded\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "ddb4d3b7-52d8-4388-b612-c7e12e2ce0df",
-			"name": "/user?trialsession_id=2",
-			"url": "http://{{IP-Address}}/api/user?trialsession_id=2",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json"
-				},
-				{
-					"key": "",
-					"value": "",
-					"enabled": false
-				}
-			],
-			"method": "GET",
-			"pathVariableData": [],
-			"queryParams": [
-				{
-					"key": "trialsession_id",
-					"value": "2"
-				}
-			],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "Mayer1",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": null,
-			"rawModeData": "{\n\t\"title\":\"campaign title\",\n\t\"instituion\":\"instytucja\",\n\t\"description\":\"OOOOOPIIIISSS\",\n\t\"valid\":\"2000-10-31T01:30:00.000-05:00\",\n\t\"referenceType\":\"CAMPAIGN\",\n\t\"sharingPolicy\":[1,2,3],\n\t\"typeOfCampaign\":true\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "e0d29d66-cef1-4f62-a37d-ea8fca71be4a",
-			"name": "/trialsessions/createNewSessionFile",
-			"url": "http://{{IP-Address}}/api/trialsessions/createNewSessionFile",
-			"description": "",
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/json",
-					"description": "",
-					"enabled": true
-				}
-			],
-			"method": "POST",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"basic": [
-					{
-						"key": "password",
-						"value": "adminpass",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				],
-				"type": "basic"
-			},
-			"events": [],
-			"folder": "e3bbedb1-4ce0-4aaf-b005-9a1355a4e7b5",
-			"rawModeData": "{\n\t\"trialId\": 3,\n\t\"initialStage\": \"Session 1\",\n\t\"prefix\": \"prefix\",\n\t\"status\": \"ACTIVE\",\n\t\"users\": [\n\t\t{\n\t\t\t\"email\" : \"lukasz.puuulikk@itti.com.pl\",\n\t\t\t\"role\": [\"Observer\", \"Validator\", \"observer\"]\n\t\t},\n\t\t{\n\t\t\t\"email\" : \"pulik.lukaaaszjhygg@gmail.com\",\n\t\t\t\"role\": [\"Participant\", \"CMC LANDPOL C\", \"Staff of CMC LANDPOL\"]\n\t\t}\n\t]\n}",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "e8e90117-eeaf-4c91-8e87-6cd5f51b17df",
+			"id": "f45d40d6-7319-4b70-a7b6-d85866b18b93",
 			"name": "/users/validate-login",
 			"url": "http://{{IP-Address}}/api/auth/users/validate-login?login=admin",
 			"description": null,
@@ -1693,40 +1874,77 @@
 				]
 			},
 			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
+			"folder": "dea611ff-1079-4d53-832c-472f37955db9",
 			"rawModeData": "",
 			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
 			"pathVariables": {}
 		},
 		{
-			"id": "e96cdc3b-0e11-4f25-9ea1-6fa7360a46b3",
-			"name": "/api/questions-answers?answer_id=2",
-			"url": "{{IP-Address}}/api/questions-answers?answer_id=147",
+			"id": "f5f9b37c-a022-408e-ae42-956a504a92c6",
+			"name": "/trialsessions/1/changeStatus",
+			"url": "http://{{IP-Address}}/api/trialsessions/1/changeStatus?status=ACTIVE",
 			"description": null,
 			"data": [],
-			"dataMode": "raw",
-			"headerData": [],
-			"method": "GET",
+			"dataMode": null,
+			"headerData": [
+				{
+					"key": "X-Auth-Token",
+					"value": "{{X-Auth-Token}}"
+				},
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"method": "PUT",
 			"pathVariableData": [],
 			"queryParams": [
 				{
-					"key": "answer_id",
-					"value": "147",
-					"equals": true,
-					"description": "",
-					"enabled": true
+					"key": "status",
+					"value": "ACTIVE"
 				}
 			],
 			"auth": {
 				"type": "basic",
 				"basic": [
 					{
-						"key": "username",
-						"value": "Observer1",
+						"key": "password",
+						"value": "adminpass",
 						"type": "string"
 					},
 					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"events": null,
+			"folder": "512716dc-b44c-4bfb-8e05-e06d15842fcf",
+			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "fe60878b-6d58-45ac-bf79-a6ff19ed8ed9",
+			"name": "/api/time-elapsed",
+			"url": "http://{{IP-Address}}/api/time-elapsed",
+			"description": null,
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
 						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
 						"value": "admin",
 						"type": "string"
 					},
@@ -1744,129 +1962,25 @@
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n\t\"projectId\": \"1\",\n\t\"phaseId\": \"1\",\n\t\"stepId\": \"1\",\n\t\"aspectId\": \"1\",\n\t\"privateFlag\": false,\n\t\"name\": \"nazwa\"\n\t\n}",
+			"rawModeData": "",
 			"headers": "",
 			"pathVariables": {}
 		},
 		{
-			"id": "e9b2dc50-b606-4c71-9de4-f9cb68776339",
-			"name": "/answers/remove",
-			"url": "http://{{IP-Address}}/api/answers/145/remove",
+			"id": "fedb2945-99bd-4b48-8d93-eaca0b322062",
+			"name": "/api/ostTrialStageId",
+			"url": "http://{{IP-Address}}/api/ostTrialStageId",
 			"description": "",
-			"data": [
-				{
-					"key": "comment",
-					"value": "komentarz",
-					"description": "",
-					"type": "text",
-					"enabled": true
-				}
-			],
+			"data": null,
 			"dataMode": "params",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}",
-					"description": "",
-					"enabled": true
-				},
-				{
-					"key": "Content-Type",
-					"value": "application/x-www-form-urlencoded",
-					"description": ""
-				}
-			],
-			"method": "DELETE",
-			"pathVariableData": [],
-			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "Observer1",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
-			},
-			"events": [],
-			"folder": "504d4551-6ada-4773-b359-5664dfefb2b4",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\nContent-Type: application/x-www-form-urlencoded\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "fc100d60-b0a7-48b2-8ce9-1f1a0c29aa79",
-			"name": "/roles",
-			"url": "http://{{IP-Address}}/api/auth/roles",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				}
-			],
+			"headerData": [],
 			"method": "GET",
 			"pathVariableData": [],
 			"queryParams": [],
-			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "password",
-						"value": "admin",
-						"type": "string"
-					},
-					{
-						"key": "username",
-						"value": "admin",
-						"type": "string"
-					}
-				]
-			},
-			"events": null,
-			"folder": "0d69f0b0-332c-4b66-b1b2-1c588c2031fb",
-			"rawModeData": "",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
-			"pathVariables": {}
-		},
-		{
-			"id": "fea6511a-4a52-4b8b-aea0-a0df9a0f7974",
-			"name": "/users/{id}",
-			"url": "http://{{IP-Address}}/api/auth/users/1",
-			"description": null,
-			"data": [],
-			"dataMode": "raw",
-			"headerData": [
-				{
-					"key": "X-Auth-Token",
-					"value": "{{X-Auth-Token}}"
-				}
-			],
-			"method": "DELETE",
-			"pathVariableData": [],
-			"queryParams": [],
 			"auth": null,
-			"events": null,
-			"folder": "1f30f345-9936-4c7e-b1dd-5306e2bfa334",
-			"rawModeData": "",
-			"headers": "X-Auth-Token: {{X-Auth-Token}}\n",
+			"events": [],
+			"folder": null,
+			"headers": "",
 			"pathVariables": {}
 		}
 	]

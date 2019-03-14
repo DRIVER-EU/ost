@@ -48,6 +48,9 @@ modules.xml
 *.war
 *.ear
 
+# Load needed libs
+!libs/*
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -78,3 +81,11 @@ src/generated
 .project
 .settings
 .springBeans.idea
+
+### OS ###
+.DS_Store
+.DS_Store?
+
+### Vi ###
+.*.swp
+.*.swo
