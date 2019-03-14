@@ -12,6 +12,7 @@ import co.perpixel.security.repository.AuthUserPositionRepository;
 import co.perpixel.security.repository.AuthUserRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import eu.driver.model.core.RequestChangeOfTrialStage;
 import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +37,6 @@ import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
-import pl.com.itti.app.driver.util.SimulationTime;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
+import static pl.com.itti.app.driver.util.TrialStage.*;
 
 @Service
 @Transactional
@@ -62,7 +66,13 @@ public class TrialSessionService {
     private ObservationTypeService observationTypeService;
 
     @Autowired
+    private ObservationTypeRepository observationTypeRepository;
+
+    @Autowired
     private AnswerService answerService;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Autowired
     private AuthUserRepository authUserRepository;
@@ -308,5 +318,41 @@ public class TrialSessionService {
 
     private Boolean setInitAnswer(TrialSessionDTO.ActiveListItem activeListItem, AuthUser authUser) {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
+    }
+
+    @Scheduled(cron = "0/20 * * * * *")
+    public void checkTrialStage() {
+        RequestChangeOfTrialStage requestChangeOfTrialStage = adapterInit().getRequestChangeOfTrialStageInfo();
+        System.out.println("Start Receive Message from CheckTrialStage");
+
+        if (requestChangeOfTrialStage != null) {
+            long trialId = getOstTrialId();
+            long trialSessionId = getOstTrialSessionId();
+            long trialStageId = getOstTrialStageId();
+
+            Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
+            Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndTrialId(trialSessionId, trialId);
+
+            if (trialStage.isPresent() && trialSession.isPresent()) {
+                trialSession.get().setLastTrialStage(trialStage.get());
+                trialSessionRepository.save(trialSession.get());
+            }
+
+            List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
+
+            for (ObservationType observationType : listOfObservationType) {
+                Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
+
+                // TODO dodac synchronizacje z czasem aby nie wysylac tej samej wiadomosci !!!
+                if (trialSession.isPresent()) {
+                    System.out.println("SendToTestBed");
+                    answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
+                            .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
+                }
+            }
+
+            System.out.println("Stop Receive Message from CheckTrialStage: " + trialId + " " + trialSessionId + " " + trialStageId);
+        }
+
     }
 }

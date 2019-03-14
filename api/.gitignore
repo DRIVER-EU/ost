@@ -81,3 +81,11 @@ src/generated
 .project
 .settings
 .springBeans.idea
+
+### OS ###
+.DS_Store
+.DS_Store?
+
+### Vi ###
+.*.swp
+.*.swo

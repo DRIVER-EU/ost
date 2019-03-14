@@ -1,6 +1,8 @@
 package pl.com.itti.app.driver.util;
 
+import eu.driver.adapter.constants.TopicConstants;
 import eu.driver.adapter.core.CISAdapter;
+import eu.driver.examples.adapter.PrintAdapterCallback;
 import org.springframework.stereotype.Component;
 
 import java.time.*;
@@ -9,7 +11,9 @@ import java.time.*;
 public class SimulationTime {
 
     public static CISAdapter adapterInit(){
-        return CISAdapter.getInstance();
+        CISAdapter adapter = CISAdapter.getInstance();
+        adapter.addCallback(new PrintAdapterCallback(), TopicConstants.TIMING_TOPIC);
+        return adapter;
     }
 
     public static LocalDateTime getTrialTime(){

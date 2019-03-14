@@ -12,4 +12,6 @@ public interface AnswerRepository
     Optional<Answer> findById(Long answerId);
 
     List<Answer> findAllByTrialSessionId(Long trialSessionId);
+
+    List<Answer> findAllByTrialSessionIdAndObservationTypeId(Long trialSessionId, Long observationTypeId);
 }
