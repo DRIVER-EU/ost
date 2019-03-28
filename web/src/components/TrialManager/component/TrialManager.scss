@@ -1,0 +1,117 @@
+.trials-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow-y: auto;
+
+  .trial-select {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .trials-header {
+      display: flex;
+      justify-content: space-between;
+      color: #282829;
+      font-size: 20px;
+  }
+  .trials-header:first-child {
+    font-size: 25px;
+    padding-bottom: 10px;
+  }
+
+
+  .react-sanfona-item {
+    margin: 5px 0;
+    h3 {
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .desc {
+      font-size: 11pt;
+      color: #717171;
+      padding-top: 5px;
+    }
+  }
+
+  .react-sanfona-item-title {
+    background-color: #fafafa;
+    color: #064C7B;
+    transition: background-color .3s;
+    display: block;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 24px;
+    position: relative;
+    border: 1px solid #FCB636;
+    padding: 20px 38px;
+  }
+
+  .react-sanfona-item-title:hover {
+    background-color: #C4D1DB;
+  }
+
+  .react-sanfona-item.react-sanfona-item-expanded {
+    .react-sanfona-item-title:after {
+      transform: rotateZ(180deg);
+    }
+  }
+
+  .react-sanfona-item-title:before {
+    font-family:'Glyphicons Halflings';
+    content: '\e086';
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    color: #fcb636;
+    font-size: 24px;
+    display: block;
+    transition: transform 300ms;
+  }
+
+  .react-sanfona-item-title:after {
+    font-family:'Glyphicons Halflings';
+    content: '\e114';
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    display: block;
+    transition: transform 300ms;
+  }
+
+  .react-sanfona-item.react-sanfona-item-expanded:after {
+    transform: rotateZ(180deg);
+  }
+
+  .react-sanfona-item-body-wrapper {
+    color: #666;
+    padding: 20px;
+    position: relative;
+    border-top: none;
+    border-right: 1px solid #FCB636;
+    border-left: 1px solid #FCB636;
+    border-bottom: 1px solid #FCB636;
+  }
+  .no-sessions {
+    text-align: center;
+  }
+  .spinner-box {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    .spinner {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  .observation-add {
+    right: 60px;
+    margin-right: 5px;
+    margin-top: 10px;
+    position: fixed;
+    bottom: 40px;
+  }
+}

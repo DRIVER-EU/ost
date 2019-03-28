@@ -1,0 +1,51 @@
+.admin-trials-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: white;
+  overflow-y: auto;
+  .trials-header {
+      display: flex;
+      justify-content: space-between;
+      color: #282829;
+      font-size: 20px;
+      margin: 15px 0;
+  }
+  .trials-set-header {
+    display: flex;
+    justify-content: space-between;
+    color: #282829;
+    font-size: 20px;
+    margin: 15px 0 0;
+  }
+  .trials-title {
+      display: flex;
+      justify-content: flex-start;
+      color: #282829;
+      font-size: 20px;
+      margin: 20px 0;
+  }
+  .dropdown-title {
+      font-size: 12px;
+  }
+  .icons-color {
+    color: black;
+    padding: 7px;
+    font-size: 30px;
+  }
+  .sort-style {
+    display: -webkit-flex;
+    display: flex;
+    height: 27px;
+  }
+  .sort-style-icon {
+    padding-top: 5px;
+  }
+  .sort-cursor {
+    cursor: pointer;
+  }
+  div div button {
+    z-index: 0!important;
+  }
+}

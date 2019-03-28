@@ -1,0 +1,11 @@
+.content-schema {
+    .question-container {
+        height: calc(100% - 150px);
+        border: none;
+        margin-top: 0;
+        overflow-y: auto;
+    }
+    .pages-box {
+        border: none;
+    }
+}

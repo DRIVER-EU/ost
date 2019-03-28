@@ -1,0 +1,194 @@
+// ----------------------------------------
+// BUILD ENVIRONMENT
+// ----------------------------------------
+
+buildscript {
+    ext {
+        // Directories
+        buildGeneratedDir = "${project.buildDir}/generated/"
+    }
+
+    repositories {
+        maven {
+            url 'http://gitlab.itti.com.pl:8081/repository/maven-public/'
+        }
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}")
+    }
+}
+
+// ----------------------------------------
+// PLUGINS
+// ----------------------------------------
+
+// Core
+apply plugin: 'java'
+apply plugin: 'war'
+
+// Libraries
+apply plugin: 'org.springframework.boot'
+
+// Environment
+apply plugin: 'idea'
+
+// Analysis
+apply plugin: 'org.sonarqube'
+
+// ----------------------------------------
+// PLUGINS CONFIGURATION
+// ----------------------------------------
+
+// JAVA
+sourceCompatibility = 1.8
+
+// WAR
+war {
+    baseName = 'driver-api'
+    version = '0.0.1-SNAPSHOT'
+}
+
+// SONARQUBE
+sonarqube {
+    properties {
+        property 'sonar.projectName', 'Driver [API]'
+        property 'sonar.projectKey', 'pl.com.itti:driver-api'
+    }
+}
+
+// ----------------------------------------
+// CONFIGURATIONS
+// ----------------------------------------
+
+sourceSets {
+    main {
+        java {
+            srcDir file(buildGeneratedDir)
+        }
+    }
+
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+
+        resources {
+            srcDir file('src/integrationTest/resources')
+        }
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+
+    providedRuntime
+    jpaMetaModel
+}
+
+clean {
+    delete buildGeneratedDir
+}
+
+idea {
+    module {
+        sourceDirs += file("${buildGeneratedDir}/main/java")
+    }
+}
+
+// ----------------------------------------
+// DEPENDENCIES
+// ----------------------------------------
+
+repositories {
+    maven {
+        url 'http://gitlab.itti.com.pl:8081/repository/maven-public/'
+    }
+
+    flatDir{
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    // Spring Boot
+    compile("org.springframework.boot:spring-boot-starter-web")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    // Hibernate
+    jpaMetaModel("org.hibernate:hibernate-jpamodelgen")
+
+    // Lombok
+    compile("org.projectlombok:lombok:${lombokVersion}")
+
+    // Guava
+    compile("com.google.guava:guava:${guavaVersion}")
+
+    // JSON schema validator
+    compile("org.everit.json:org.everit.json.schema:${everitVersion}")
+    compile("com.github.fge:json-schema-validator:${jsonSchemaValidatorVersion}")
+
+    // JSON
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}")
+    compile("org.json:json:${jsonVersion}")
+
+    // Apache HTTP & Commons
+    compile("commons-codec:commons-codec:${commonsCodecVersion}")
+    compile("commons-io:commons-io:${commonsIoVersion}")
+
+    // Lucene
+    compile("org.apache.lucene:lucene-core:${luceneVersion}")
+    compile("org.apache.lucene:lucene-queryparser:${luceneVersion}")
+
+    // PerPixel
+    compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
+    compile("${perpixelGroupName}:perpixel-spring-dto:${perpixelSpringDtoVersion}")
+    compile("${perpixelGroupName}:perpixel-spring-exception:${perpixelSpringDtoVersion}")
+    compile("${perpixelGroupName}:perpixel-spring-persistence:${perpixelSpringPersistenceVersion}")
+    compile("${perpixelGroupName}:perpixel-spring-security:${perpixelSpringSecurityVersion}")
+    compile("${perpixelGroupName}:perpixel-spring-utils:${perpixelSpringUtilsVersion}")
+
+    // javax mail
+    compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
+
+    compile name: 'testbed-adapter-1.2.5-modified'
+
+    // ----------------------------------------
+    // Test
+    // ----------------------------------------
+
+    // Spring Boot
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    // Java JsonPath
+    testCompile("com.jayway.jsonpath:json-path:${jsonpathVersion}")
+
+    // ----------------------------------------
+    // Integration Test
+    // ----------------------------------------
+
+    // Apache HTTP Client
+    integrationTestCompile("org.apache.httpcomponents:httpclient:${httpclientVersion}")
+}
+
+// ----------------------------------------
+// TASKS
+// ----------------------------------------
+
+task generateMetaModel(type: JavaCompile) {
+    description = 'Generates JPA Meta-Model'
+    group = 'build'
+
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.jpaMetaModel
+
+    options.compilerArgs = ["-proc:only"]
+    destinationDir = file("${buildGeneratedDir}/${sourceSets.main.name}/java")
+}
+
+compileJava.dependsOn 'generateMetaModel'

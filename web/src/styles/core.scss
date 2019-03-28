@@ -1,0 +1,559 @@
+@import 'base';
+@import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../../node_modules/react-redux-toastr/src/styles/index';
+@import 'rdtime';
+@import 'calendar';
+@import '../../node_modules/dc/style/dc.scss';
+// Some best-practice CSS that's useful for most apps
+// Just remove them if they're not what you want
+
+html {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Roboto';
+}
+body {
+  color: $main-text-color;
+  font-size: 12pt;
+  background-position: left top;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+* {
+  box-sizing: inherit;
+  font-family: "Roboto";
+}
+.menu, .menu ul, .nav.menu .open>a {
+  background: $menu-background-color;
+  background-color: $menu-background-color;
+  text-align: left;
+}
+.menu li {
+    display: inline-block;
+    float: initial;
+}
+.menu .dropdown li {
+  text-align: left;
+}
+.menu .dropdown-menu {
+  min-width: initial;
+}
+.menu li>a {
+      margin: 15px 15px;
+      padding: 0 0;
+      color:  $menu-text-color;
+}
+.menu li>a>a {
+      margin: 15px 15px;
+      color:  $menu-text-color;
+}
+.dropdown-menu>li>a {
+      padding: 0;
+      margin: 0;
+      margin-left: 10px;
+      margin-right: 10px;
+}
+.dropdown-menu>li>a>a {
+    display: block;
+    padding: 5px 0px;
+    margin: 0;
+}
+.nav.menu {
+  li>a.active, li>a.active:focus, li>a.active:hover {
+    background: $menu-background-color-active;
+    color:  $menu-text-color;
+    border-bottom: 2px solid $border-active-color;
+    border-radius: 0;
+  }
+  li>a {
+  background: $menu-background-color-active;
+  color:  $menu-text-color;
+   border-bottom: 2px solid transparent;
+  }
+  li>a:focus, li>a:hover {
+    border-bottom: 2px solid $border-active-color;
+    border-radius: 0;
+    text-decoration: none;
+  }
+}
+.navbar {
+  border-radius: 0;
+}
+a,
+a:link,
+a:focus,
+a:hover,
+a:active {
+  color: $menu-text-color;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .nav a, ul.nav li {
+    display: table;
+    margin: 0 auto;
+  }
+  .menu, .menu ul, .nav.menu .open>a {
+    background: #00022a;
+    background-color: #00022a;
+    text-align: center;
+  }
+  .navbar-nav .open .dropdown-menu .dropdown-header,
+  .navbar-nav .open .dropdown-menu>li>a {
+    padding: 0;
+  }
+  .menu li>a {
+    margin: 5px;
+  }
+}
+
+.subheader{
+  border: 1px solid $border-sub-header-color;
+  background: $background-sub-header-color;
+}
+.pages-box{
+  border: 1px solid $border-sub-header-color;
+  border-radius: 5px;
+}
+body .redux-toastr .confirm-holder {
+  .confirm, .message {
+    background-color: #0f68a4;
+  }
+  button:hover{
+    background: grey;
+  }
+}
+
+.no-rl-margin {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.padding-form {
+  padding: 18px 10px;
+}
+
+.input-btn {
+  width: calc(100% - (57px  + 2%));
+  display: inline-block;
+  margin-right: 2%;
+}
+
+.btn-global-go {
+  text-transform: uppercase;
+  background: #175099;
+  color: #fff;
+  padding: 7px 20px;
+  border: none;
+  max-width: 57px;
+}
+
+.btn-global-go:hover,
+.btn-global-go:active:hover,
+.btn-global-go:focus {
+  text-transform: uppercase;
+  background: rgba(23,80,153,0.8);
+  color: #fff;
+  border: none;
+}
+
+span.input-group-addon {
+  background: #175099;
+  color: #fff;
+  border: #175099;
+}
+
+.btn-cancel {
+  text-transform: uppercase;
+  background: #ee2a54;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 0 4px;
+}
+
+.btn-cancel:hover,
+.btn-cancel:active:hover,
+.btn-cancel:focus,
+.btn-cancel:visited:hover,
+.btn-cancel:link:hover {
+  text-transform: uppercase;
+  background: rgba(238,42,84,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-back {
+  text-transform: uppercase;
+  background: #175099;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 18px 4px;
+  float: right;
+}
+
+.btn-back:hover,
+.btn-back:active:hover,
+.btn-back:focus,
+.btn-back:visited:hover,
+.btn-back:link:hover {
+  text-transform: uppercase;
+  background: rgba(23,80,153,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-close {
+  text-transform: uppercase;
+  background: #175099;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 0 4px;
+}
+
+.btn-close:hover,
+.btn-close:active:hover,
+.btn-close:focus,
+.btn-close:visited:hover,
+.btn-close:link:hover {
+  text-transform: uppercase;
+  background: rgba(23,80,153,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-comments {
+  text-transform: uppercase;
+  background: #0F68A4;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 0 4px;
+}
+
+.btn-comments:hover,
+.btn-comments:active:hover,
+.btn-comments:focus,
+.btn-comments:visited:hover,
+.btn-comments:link:hover {
+  text-transform: uppercase;
+  background: rgba(15,104,164,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-delete {
+  text-transform: uppercase;
+  background: #7B0F2E;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 0 4px;
+}
+
+.btn-delete:hover,
+.btn-delete:active:hover,
+.btn-delete:focus,
+.btn-delete:visited:hover,
+.btn-delete:link:hover {
+  text-transform: uppercase;
+  background: rgba(123,15,46,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-update {
+  text-transform: uppercase;
+  background: #fecb44;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 0 4px;
+}
+
+.btn-update:hover,
+.btn-update:active:hover,
+.btn-update:focus,
+.btn-update:visited:hover,
+.btn-update:link:hover {
+  text-transform: uppercase;
+  background: rgba(254,203,68,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-save {
+  text-transform: uppercase;
+  background: #00A65D;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 15px 0;
+}
+
+.btn-save:hover,
+.btn-save:active:hover,
+.btn-save:focus,
+.btn-save:visited:hover,
+.btn-save:link:hover {
+  text-transform: uppercase;
+  background: rgba(0,166,93,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-submit {
+  text-transform: uppercase;
+  background: #00A65D;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  padding: 6px 40px;
+  margin: 0 4px;
+}
+
+.btn-submit:hover,
+.btn-submit:active:hover,
+.btn-submit:focus,
+.btn-submit:visited:hover,
+.btn-submit:link:hover {
+  text-transform: uppercase;
+  background: rgba(0,166,93,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-calendar {
+  background: #175099;
+  color: #fff;
+  border: 1px solid #175099;
+}
+
+.btn-calendar:hover,
+.btn-calendar:active:hover,
+.btn-calendar:focus,
+.btn-calendar:visited:hover,
+.btn-calendar:link:hover {
+  background: rgba(23,80,153,0.8);
+  color: #fff;
+  border: 1px solid rgba(23,80,153,0.8);
+}
+
+.btn-header {
+  text-transform: capitalize;
+  background: #0b9edc;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  padding: 1px 26px;
+  margin: 0 4px;
+  float: right;
+}
+
+.btn-header:hover,
+.btn-header:active:hover,
+.btn-header:focus,
+.btn-header:visited:hover,
+.btn-header:link:hover {
+  text-transform: capitalize;
+  background: rgba(11,158,220,0.8);
+  color: #fff;
+  border: none;
+}
+
+.btn-confirm {
+  text-transform: capitalize;
+  background: #60a719;
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  padding: 1px 22px;
+  margin: 0 4px;
+  float: right;
+}
+
+.bootstrap-typeahead {
+  .dropdown-menu {
+    width: 100%;
+  }
+}
+
+.btn-action-margin {
+  margin: 12px 8px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.created {
+  padding: 15px 0;
+  text-align: left;
+}
+
+.view-container {
+  background: rgba(0,73,126,1);
+  height: 100%;
+}
+
+.navbar {
+    margin-bottom: 0;
+    border: none;
+}
+.navbar-toggle {
+  background-color: #fff;
+  border: 1px solid #00022A;
+
+    .icon-bar {
+      background: #00022A;
+    }
+}
+.collapsed {
+  background-color: #00022A;
+  border: 1px solid #fff;
+
+    .icon-bar {
+      background: #fff;
+    }
+}
+
+textarea.description-area {
+  width: 100% !important;
+}
+
+.navbar-right .dropdown-menu {
+    right: auto;
+}
+
+ul.sharing-policy {
+  padding-left: 0;
+  margin-left: 18px;
+}
+
+.input-btn {
+    margin-right: 2%;
+    display: inline-block;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+  background-color: rgb(12, 15, 66);
+}
+
+.table-hover>tbody>tr:hover {
+  background-color: rgba(235, 235, 235, 0.36);
+}
+
+ul.telescopes-list {
+  padding-left: 0;
+  margin-left: 18px;
+}
+
+ul, li {
+  a, a:link, a:active, a:focus {
+    color: #ffffff;
+  }
+  a:hover {
+    color: #9F9F9F;
+  }
+}
+
+table.table {
+  a, a:link, a:active, a:focus {
+    color: #ffffff;
+  }
+  a:hover {
+    color: #9F9F9F;
+  }
+}
+
+.DayPicker {
+  width: 100%;
+}
+
+.DayPicker-Month, .DayPicker-wrapper {
+  width: calc(100% - 2rem);
+}
+
+.dropzone .dz-preview .dz-image img {
+  width: 100%;
+}
+
+a {
+  span.glyphicon.glyphicon-remove {
+      color: #7b0f2e;
+  }
+}
+
+.float-right {
+  float: right;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+li a a.sign-in {
+  margin: 0;
+}
+
+.DayPicker-Day--resources:after {
+    display: inline-block;
+    content: "\E144";
+    font-family: Glyphicons Halflings;
+    font-size: 11px;
+    position: absolute;
+    padding: 3px;
+}
+
+tr.cursor-pointer,
+span.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.modal-advanced .modal-dialog {
+    max-width: 1280px;
+    width: 85%;
+}
+
+.view-container .form-group p {
+  margin: 0;
+}
+
+.table {
+  td,th {
+  text-align: center;
+  }
+}
+
+.chips-box {
+  display: inline-block;
+}
+
+.logo {
+  height: 50px;
+}
+.driver-logo {
+  width: 300px;
+  margin: 0 auto 50px auto;
+}
