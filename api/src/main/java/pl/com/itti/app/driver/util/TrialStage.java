@@ -15,14 +15,14 @@ public class TrialStage {
     }
 
     public static Integer getOstTrialId(){
-        return adapterInit().getRequestChangeOfTrialStageInfo().getTrialId();
+        return adapterInit().getRequestChangeOfTrialStageInfo().getOstTrialId();
     }
 
     public static Integer getOstTrialSessionId(){
-        return adapterInit().getRequestChangeOfTrialStageInfo().getTrialSessionId();
+        return adapterInit().getRequestChangeOfTrialStageInfo().getOstTrialSessionId();
     }
 
     public static Integer getOstTrialStageId() {
-        return adapterInit().getRequestChangeOfTrialStageInfo().getTrialStageId();
+        return adapterInit().getRequestChangeOfTrialStageInfo().getOstTrialStageId();
     }
 }
