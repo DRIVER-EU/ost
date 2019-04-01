@@ -223,12 +223,12 @@ class NewObservationComponent extends Component {
     send['trialRoleIds'] = tab
     send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
-      { 'longitude': this.state.attachmentCoordinatesLong,
-        'latitude': this.state.attachmentCoordinatesLat,
-        'altitude': this.state.attachmentCoordinatesAlt }
+      { 'longitude': '',
+        'latitude': '',
+        'altitude': '' }
     ]
     send['attachments'] = this.state.images
-    if (this.validateParticipants() && this.validateCoords()) {
+    if (this.validateParticipants()) {
       this.props.sendObservation(send)
       if (this.props.mode === 'profileQuestion') {
         this.props.closeModal()
