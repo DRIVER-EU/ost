@@ -90,6 +90,10 @@ configurations {
     jpaMetaModel
 }
 
+configurations.all {
+    exclude module: 'slf4j-log4j12'
+}
+
 clean {
     delete buildGeneratedDir
 }
@@ -107,6 +111,9 @@ idea {
 repositories {
     maven {
         url 'http://gitlab.itti.com.pl:8081/repository/maven-public/'
+        jcenter()
+        maven { url 'https://raw.github.com/DRIVER-EU/maven-repo/master' }
+        maven { url 'http://packages.confluent.io/maven' }
     }
 
     flatDir{
@@ -156,7 +163,8 @@ dependencies {
     // javax mail
     compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
 
-    compile name: 'testbed-adapter-1.2.7'
+    // TestBed
+    compile("driver.eu:testbed-adapter:1.2.7")
 
     // ----------------------------------------
     // Test

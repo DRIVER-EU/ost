@@ -322,13 +322,13 @@ public class TrialSessionService {
 
     @Scheduled(cron = "0/20 * * * * *")
     public void checkTrialStage() {
-        RequestChangeOfTrialStage requestChangeOfTrialStage = adapterInit().getRequestChangeOfTrialStageInfo();
-        System.out.println("Start Receive Message from CheckTrialStage");
+        RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
+        System.out.println("Receive Message from CheckTrialStage");
 
         if (requestChangeOfTrialStage != null) {
-            long trialId = getOstTrialId();
-            long trialSessionId = getOstTrialSessionId();
-            long trialStageId = getOstTrialStageId();
+            long trialId = requestChangeOfTrialStage.getOstTrialId();
+            long trialSessionId = requestChangeOfTrialStage.getOstTrialSessionId();
+            long trialStageId = requestChangeOfTrialStage.getOstTrialStageId();
 
             Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
             Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndTrialId(trialSessionId, trialId);
@@ -336,6 +336,8 @@ public class TrialSessionService {
             if (trialStage.isPresent() && trialSession.isPresent()) {
                 trialSession.get().setLastTrialStage(trialStage.get());
                 trialSessionRepository.save(trialSession.get());
+            } else {
+                System.out.println("Trial Stage or Trial Session does not exist");
             }
 
             List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
@@ -343,16 +345,12 @@ public class TrialSessionService {
             for (ObservationType observationType : listOfObservationType) {
                 Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
 
-                // TODO dodac synchronizacje z czasem aby nie wysylac tej samej wiadomosci !!!
                 if (trialSession.isPresent()) {
                     System.out.println("SendToTestBed");
                     answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
                             .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
                 }
             }
-
-            System.out.println("Stop Receive Message from CheckTrialStage: " + trialId + " " + trialSessionId + " " + trialStageId);
         }
-
     }
 }
