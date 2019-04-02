@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class TrialStage {
 
     public static CISAdapter adapterInit(){
+        CISAdapter.globalConfigPath = "/opt/config/";
         CISAdapter adapter = CISAdapter.getInstance();
         adapter.addCallback(new PrintAdapterCallback(), TopicConstants.TRIAL_STATE_CHANGE_TOPIC);
         return adapter;
