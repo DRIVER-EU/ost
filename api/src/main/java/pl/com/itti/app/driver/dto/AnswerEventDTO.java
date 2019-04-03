@@ -14,6 +14,7 @@ public final class AnswerEventDTO {
 
     public static abstract class Item {
         public long id;
+        public long observationTypeId;
         public String name;
         public String description;
         public ZonedDateTime time;
@@ -27,6 +28,7 @@ public final class AnswerEventDTO {
         @Override
         public void toDto(Answer answer) {
             this.id = answer.getId();
+            this.observationTypeId = answer.getObservationType().getId();
             this.name = answer.getObservationType().getName();
             this.description = answer.getObservationType().getDescription();
             this.time = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
