@@ -420,7 +420,7 @@ class NewObservationComponent extends Component {
                 />
                 <DateComponent
                   desc={'Trial Time:  '}
-                  data={new Date()/*this.state.trialTime*/}
+                  data={'10:20:50'/*this.state.trialTime*/}
                 />
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}

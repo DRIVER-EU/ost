@@ -11,13 +11,53 @@ class DateComponent extends Component {
   static propTypes = { }
 
   componentDidMount () {
-    this.interval = setInterval(() => this.setState({
-          time: this.props.data 
-            ? moment(this.props.data.getTime().add(moment.duration(this.state.seconds, 'seconds'))).format('DD/MM/YYYY HH:mm:ss') 
-            : moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss'),
+    this.props.data 
+      ? this.customClock(this.props.data) 
+      : this.interval = setInterval(() => this.setState({
+          time: moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss'),
             seconds: this.state.seconds +1
         }), 1000)
   }
+
+  customClock = (function() {
+    console.log('dupa')
+    var timeDiff;
+    var timeout;
+  
+    function addZ(n) {
+      return (n < 10? '0' : '') + n;
+    }
+  
+    function formatTime(d) {
+      return addZ(d.getHours()) + ':' +
+             addZ(d.getMinutes()) + ':' +
+             addZ(d.getSeconds());
+    }
+  
+    return function (s) {
+  
+      var now = new Date();
+      var then;
+  
+      // Set lag to just after next full second
+      var lag = 1015 - now.getMilliseconds();
+  
+      // Get the time difference if first run
+      if (s) {
+        s = s.split(':');
+        then = new Date(now);
+        then.setHours(+s[0], +s[1], +s[2], 0);
+        timeDiff = now - then;
+      }
+  
+      now = new Date(now - timeDiff);
+  
+      this.setState({
+        time: formatTime(now)
+      })
+      timeout = setTimeout(customClock, lag)
+    }
+  }())
 
   componentWillUnmount () {
     clearInterval(this.interval)
