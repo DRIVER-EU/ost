@@ -353,7 +353,6 @@ class NewObservationComponent extends Component {
     if (this.state.isShow && !prevProps.isShow) {
       setTimeout(() => { this.setState({ isShow: false }) }, 15000)
     }
-    console.log('componentDidUpdate', prevState, prevProps)
   }
 
   // handleCoordinatesLong (value) {
