@@ -495,7 +495,7 @@ class AdminTrials extends Component {
                         secondary
                         onClick={() => this.handleDownloadSummary()} />
                     </div>
-                    <DateComponent />
+                    <DateComponent/>
                   </div>
                   {false &&
                   <Card style={{ padding: '20px', margin: '20px 30px' }}>
@@ -613,7 +613,7 @@ class AdminTrials extends Component {
                 <div>
                   <div className='trials-header'>
                     <div>Events / messages send to observers</div>
-                    <DateComponent />
+                    <DateComponent/>
                   </div>
                   <Card style={{ padding: '20px', margin: '20px 30px' }}>
                     <div style={styles.searchPanelContainer}>

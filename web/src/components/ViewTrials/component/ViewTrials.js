@@ -219,7 +219,7 @@ class ViewTrials extends Component {
             </div>
             <div className='trials-header'>
               <div>List of events</div>
-              <DateComponent />
+              <DateComponent/>
             </div>
             <Accordion>
               {this.state.viewTrials.map((object) => {
