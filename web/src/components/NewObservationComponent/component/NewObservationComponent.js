@@ -65,7 +65,8 @@ class NewObservationComponent extends Component {
       attachmentDescription: '',
       validParticipants: true,
       files: [],
-      isShow: false
+      isShow: false,
+      trialTime: new Date()
     }
   }
 
@@ -76,7 +77,9 @@ class NewObservationComponent extends Component {
     params: PropTypes.any,
     downloadFile: PropTypes.func,
     closeModal: PropTypes.func,
-    observation: PropTypes.any
+    observation: PropTypes.any,
+    getTrialTime: PropTypes.func,
+    trialTime: PropTypes.number
   }
 
   downloadFile (id, name) {
@@ -123,6 +126,11 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (nextProps.trialTime && this.state.trialTime !== nextProps.trialTime) {
+      let change = { ...this.state }
+      change['trialTime'] = nextProps.trialTime
+      this.setState({ change })
+    }
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state }
@@ -349,6 +357,14 @@ class NewObservationComponent extends Component {
     }
   }
 
+  componentDidMount () {
+    this.trialTimeId = setInterval(() => this.props.getTrialTime(), 10000)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.trialTimeId)
+  }
+
   componentDidUpdate (prevState, prevProps) {
     if (this.state.isShow && !prevProps.isShow) {
       setTimeout(() => { this.setState({ isShow: false }) }, 15000)
@@ -399,6 +415,7 @@ class NewObservationComponent extends Component {
             <div>
               <div className='trials-header'>
                 <DateComponent />
+                <DateComponent trialTime={1517870340} />
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
                   <RaisedButton
