@@ -19,6 +19,8 @@ const toastrOptions = {
 export const GET_SCHEMA = 'GET_SCHEMA'
 export const SEND_OBSERVATION = 'SEND_OBSERVATION'
 export const DOWNLOAD_FILE = 'DOWNLOAD_FILE'
+export const GET_TRIAL_TIME = 'GET_TRIAL_TIME'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -44,10 +46,18 @@ export const downloadFileAction = (data = null) => {
   }
 }
 
+export const getTrialTimeAction = (data = null) => {
+  return {
+    type: GET_TRIAL_TIME,
+    data: data
+  }
+}
+
 export const actions = {
   getSchema,
   sendObservation,
-  downloadFile
+  downloadFile,
+  getTrialTime
 }
 
 export const getSchema = (idObs, idSession) => {
@@ -117,6 +127,23 @@ export const downloadFile = (id, name) => {
     })
   }
 }
+
+export const getTrialTime = () => {
+  return (dispatch) => {
+    return new Promise((resolve) => {
+      axios.get(`http://${origin}/api/trial-time`, getHeaders())
+      .then((response) => {
+        dispatch(getTrialTimeAction(response.data))
+        resolve()
+      })
+      .catch((error) => {
+        errorHandle(error)
+        resolve()
+      })
+    })
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -132,6 +159,12 @@ const ACTION_HANDLERS = {
       ...state,
       observation: action.data
     }
+  },
+  [GET_TRIAL_TIME]: (state, action) => {
+    return {
+      ...state,
+      trialTime: action.data
+    }
   }
 }
 // ------------------------------------
@@ -139,7 +172,8 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   observationForm: {},
-  observation: {}
+  observation: {},
+  trialTime: 0
 }
 
 export default function newobservationReducer (state = initialState, action) {

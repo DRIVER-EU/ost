@@ -1,29 +1,42 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
-
 class DateComponent extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      time: moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
+      time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }
   }
 
-  static propTypes = { }
+  static propTypes = {
+    trialTime: PropTypes.any
+  }
 
   componentDidMount () {
-    this.interval = setInterval(() => this.setState({
-      time: moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
-    }), 1000)
+    let interval = setInterval(() => {
+      let time = this.state.time
+      if (!this.props.trialTime) {
+        time = moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
+      } else {
+        time = moment(time, 'DD/MM/YYYY HH:mm:ss').add(1000, 'milliseconds').format('DD/MM/YYYY HH:mm:ss')
+      }
+      this.setState({
+        interval,
+        time })
+    }, 1000)
   }
+
   componentWillUnmount () {
-    clearInterval(this.interval)
+    clearInterval(this.state.interval)
   }
 
   render () {
     return (
-      <div className='data-time' style={{ textAlign: 'right' }}>
-        {this.state.time}
+      <div>
+        <div className='data-time' style={{ textAlign: 'right' }}>
+          {this.state.time}
+        </div>
       </div>
     )
   }

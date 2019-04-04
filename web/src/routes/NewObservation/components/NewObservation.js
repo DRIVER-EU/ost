@@ -14,7 +14,8 @@ class NewObservation extends Component {
     sendObservation: PropTypes.func,
     observation: PropTypes.any,
     params: PropTypes.any,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    getTrialTime: PropTypes.func
   }
 
   render () {
@@ -22,6 +23,7 @@ class NewObservation extends Component {
       <div className='background-home'>
         <NewObservationComponent
           getSchema={this.props.getSchema}
+          getTrialTime={this.props.getTrialTime}
           observationForm={this.props.observationForm}
           sendObservation={this.props.sendObservation}
           observation={this.props.observation}

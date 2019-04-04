@@ -52,19 +52,21 @@ class NewObservationComponent extends Component {
         roles: [],
         formData: {}
       },
-      coords1ErrorText: '',
-      coords2ErrorText: '',
-      coords3ErrorText: '',
-      attachmentCoordinatesLong: '',
-      attachmentCoordinatesAlt: '',
-      attachmentCoordinatesLat: '',
+      // coords1ErrorText: '',
+      // coords2ErrorText: '',
+      // coords3ErrorText: '',
+      // attachmentCoordinatesLong: '',
+      // attachmentCoordinatesAlt: '',
+      // attachmentCoordinatesLat: '',
       images: [],
       listOfParticipants: [],
       dateTime: moment(new Date().getTime()).format('YYYY-MM-DD kk:mm:ss'),
       isLoading: false,
       attachmentDescription: '',
       validParticipants: true,
-      files: []
+      files: [],
+      isShow: false,
+      trialTime: new Date()
     }
   }
 
@@ -75,7 +77,9 @@ class NewObservationComponent extends Component {
     params: PropTypes.any,
     downloadFile: PropTypes.func,
     closeModal: PropTypes.func,
-    observation: PropTypes.any
+    observation: PropTypes.any,
+    getTrialTime: PropTypes.func,
+    trialTime: PropTypes.number
   }
 
   downloadFile (id, name) {
@@ -122,6 +126,11 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    if (nextProps.trialTime && this.state.trialTime !== nextProps.trialTime) {
+      let change = { ...this.state }
+      change['trialTime'] = nextProps.trialTime
+      this.setState({ change })
+    }
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state }
@@ -222,12 +231,12 @@ class NewObservationComponent extends Component {
     send['trialRoleIds'] = tab
     send['descriptions'] = [this.state.attachmentDescription]
     send['coordinates'] = [
-      { 'longitude': this.state.attachmentCoordinatesLong,
-        'latitude': this.state.attachmentCoordinatesLat,
-        'altitude': this.state.attachmentCoordinatesAlt }
+      { 'longitude': '',
+        'latitude': '',
+        'altitude': '' }
     ]
     send['attachments'] = this.state.images
-    if (this.validateParticipants() && this.validateCoords()) {
+    if (this.validateParticipants()) {
       this.props.sendObservation(send)
       if (this.props.mode === 'profileQuestion') {
         this.props.closeModal()
@@ -235,34 +244,33 @@ class NewObservationComponent extends Component {
     }
   }
 
-  validateCoords () {
-    if (isNaN(this.state.attachmentCoordinatesLong)) {
-      this.setState({ coords1ErrorText: 'Error: incorrect value' })
-    } else {
-      this.setState({ coords1ErrorText: '' })
-    }
-    if (isNaN(this.state.attachmentCoordinatesAlt)) {
-      this.setState({ coords2ErrorText: 'Error: incorrect value' })
-    } else {
-      this.setState({ coords2ErrorText: '' })
-    }
-    if (isNaN(this.state.attachmentCoordinatesLat)) {
-      this.setState({ coords3ErrorText: 'Error: incorrect value' })
-    } else {
-      this.setState({ coords3ErrorText: '' })
-    }
-
-    let valid = true
-    if (isNaN(this.state.attachmentCoordinatesLong) ||
-      isNaN(this.state.attachmentCoordinatesAlt) ||
-      isNaN(this.state.attachmentCoordinatesLat)) {
-      toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
-      valid = false
-    } else {
-      this.setState({ coordsErrorText: '' })
-    }
-    return valid
-  }
+  // validateCoords () {
+  //   if (isNaN(this.state.attachmentCoordinatesLong)) {
+  //     this.setState({ coords1ErrorText: 'Error: incorrect value' })
+  //   } else {
+  //     this.setState({ coords1ErrorText: '' })
+  //   }
+  //   if (isNaN(this.state.attachmentCoordinatesAlt)) {
+  //     this.setState({ coords2ErrorText: 'Error: incorrect value' })
+  //   } else {
+  //     this.setState({ coords2ErrorText: '' })
+  //   }
+  //   if (isNaN(this.state.attachmentCoordinatesLat)) {
+  //     this.setState({ coords3ErrorText: 'Error: incorrect value' })
+  //   } else {
+  //     this.setState({ coords3ErrorText: '' })
+  //   }
+  //   let valid = true
+  //   if (isNaN(this.state.attachmentCoordinatesLong) ||
+  //     isNaN(this.state.attachmentCoordinatesAlt) ||
+  //     isNaN(this.state.attachmentCoordinatesLat)) {
+  //     toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+  //     valid = false
+  //   } else {
+  //     this.setState({ coordsErrorText: '' })
+  //   }
+  //   return valid
+  // }
 
   validateParticipants () {
     let valid = true
@@ -349,16 +357,36 @@ class NewObservationComponent extends Component {
     }
   }
 
-  handleCoordinatesLong (value) {
-    this.setState({ attachmentCoordinatesLong: value })
+  componentDidMount () {
+    this.trialTimeId = setInterval(() => this.props.getTrialTime(), 10000)
   }
 
-  handleCoordinatesLatitude (value) {
-    this.setState({ attachmentCoordinatesLat: value })
+  componentWillUnmount () {
+    clearInterval(this.trialTimeId)
   }
 
-  handleCoordinatesAlt (value) {
-    this.setState({ attachmentCoordinatesAlt: value })
+  componentDidUpdate (prevState, prevProps) {
+    if (this.state.isShow && !prevProps.isShow) {
+      setTimeout(() => { this.setState({ isShow: false }) }, 15000)
+    }
+  }
+
+  // handleCoordinatesLong (value) {
+  //   this.setState({ attachmentCoordinatesLong: value })
+  // }
+
+  // handleCoordinatesLatitude (value) {
+  //   this.setState({ attachmentCoordinatesLat: value })
+  // }
+
+  // handleCoordinatesAlt (value) {
+  //   this.setState({ attachmentCoordinatesAlt: value })
+  // }
+
+  showInfo = () => {
+    let change = { ...this.state }
+    change.isShow = !change.isShow
+    this.setState(change)
   }
 
   render () {
@@ -387,12 +415,22 @@ class NewObservationComponent extends Component {
             <div>
               <div className='trials-header'>
                 <DateComponent />
+                <DateComponent trialTime={1517870340} />
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
+                  <RaisedButton
+                    style={{ margin: 10 }}
+                    buttonStyle={{ width: 100 }}
+                    backgroundColor='#244C7B'
+                    labelColor='#FCB636'
+                    label='INFO'
+                    secondary
+                    onClick={this.showInfo}
+                  />
                 </div>
               </div>
               <p className='title-obs'>{this.state.observationForm.name}</p>
-              <p className='desc-obs'>{this.state.observationForm.description}</p>
+              {this.state.isShow && <p className='desc-obs'>{this.state.observationForm.description}</p>}
               <p className='point-obs'>When:</p>
               <DateTimePicker
                 disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
@@ -441,7 +479,7 @@ class NewObservationComponent extends Component {
                     onChange={(event, value) => { this.handleDescription(value) }}
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                     />
-                  <p className={'coords-title'}>Coordinates:</p>
+                  {/* <p className={'coords-title'}>Coordinates:</p>
                   <TextField value={this.state.attachmentCoordinatesLong}
                     style={{ marginRight:'20px', width: '150px' }}
                     onChange={(event, value) => { this.handleCoordinatesLong(value) }}
@@ -459,7 +497,7 @@ class NewObservationComponent extends Component {
                     onChange={(event, value) => { this.handleCoordinatesAlt(value) }}
                     floatingLabelText='Altitude'
                     errorText={this.state.coords2ErrorText}
-                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'} />
+                    disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'} /> */}
                   {false &&
                   <div>
                     {(this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
