@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-
 class DateComponent extends Component {
   constructor (props) {
     super(props)
@@ -15,10 +14,6 @@ class DateComponent extends Component {
   }
 
   componentDidMount () {
-    this.changeInterval()
-  }
-
-  changeInterval () {
     let interval = setInterval(() => {
       let time = this.state.time
       if (!this.props.trialTime) {
