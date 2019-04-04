@@ -126,11 +126,6 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.trialTime && this.state.trialTime !== nextProps.trialTime) {
-      let change = { ...this.state }
-      change['trialTime'] = nextProps.trialTime
-      this.setState({ change })
-    }
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state }
@@ -358,11 +353,7 @@ class NewObservationComponent extends Component {
   }
 
   componentDidMount () {
-    this.trialTimeId = setInterval(() => this.props.getTrialTime(), 10000)
-  }
-
-  componentWillUnmount () {
-    clearInterval(this.trialTimeId)
+    this.props.getTrialTime()
   }
 
   componentDidUpdate (prevState, prevProps) {
@@ -414,8 +405,14 @@ class NewObservationComponent extends Component {
             {(!this.state.isLoading) &&
             <div>
               <div className='trials-header'>
-                <DateComponent />
-                <DateComponent trialTime={1517870340} />
+                <DateComponent 
+                  mode={this.props.mode}
+                  desc={'Real Time: '}
+                  />
+                <DateComponent 
+                  trialTime={this.props.trialTime ? this.props.trialTime : new Date() } 
+                  desc={'Trial Time: '}
+                  mode={this.props.mode}/>
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
                   <RaisedButton
