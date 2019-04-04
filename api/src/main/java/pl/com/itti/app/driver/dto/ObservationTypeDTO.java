@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.dto;
 
+import co.perpixel.db.model.PersistentObject;
 import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import pl.com.itti.app.driver.model.ObservationType;
@@ -8,6 +9,7 @@ import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class ObservationTypeDTO {
 
@@ -23,12 +25,17 @@ public final class ObservationTypeDTO {
 
     public static class ListItem extends MinimalItem {
 
+        public List<Long> answersId;
         public String name;
         public String description;
 
         @Override
         public void toDto(ObservationType observationType) {
             super.toDto(observationType);
+            this.answersId = observationType.getAnswers()
+                    .stream()
+                    .map(PersistentObject::getId)
+                    .collect(Collectors.toList());
             this.name = observationType.getName();
             this.description = observationType.getDescription();
         }

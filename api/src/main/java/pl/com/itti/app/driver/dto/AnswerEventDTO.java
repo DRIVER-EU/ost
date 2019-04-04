@@ -4,8 +4,10 @@ import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Event;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public final class AnswerEventDTO {
 
@@ -14,9 +16,11 @@ public final class AnswerEventDTO {
 
     public static abstract class Item {
         public long id;
+        public long observationTypeId;
         public String name;
         public String description;
         public ZonedDateTime time;
+        public ZonedDateTime trialTime;
         public String type;
     }
 
@@ -27,9 +31,11 @@ public final class AnswerEventDTO {
         @Override
         public void toDto(Answer answer) {
             this.id = answer.getId();
+            this.observationTypeId = answer.getObservationType().getId();
             this.name = answer.getObservationType().getName();
             this.description = answer.getObservationType().getDescription();
             this.time = answer.getSentSimulationTime().atZone(ZoneId.systemDefault());
+            this.trialTime = Optional.ofNullable(answer.getTrialTime()).orElse(LocalDateTime.now()).atZone(ZoneId.systemDefault());
             this.type = ANSWER_TYPE;
             this.comment = answer.getComment();
         }
