@@ -399,6 +399,7 @@ class NewObservationComponent extends Component {
             <div>
               <div className='trials-header'>
                 <DateComponent />
+                <DateComponent trialTime={1517870340} />
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
                   <RaisedButton
