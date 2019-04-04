@@ -20,7 +20,6 @@ class DateComponent extends Component {
         time 
       })
     } else {
-      console.log('trialTime: ', moment(this.props.trialTime).format('DD/MM/YYYY HH:mm:ss'))
       let interval = setInterval(() => {
         let time = this.state.time
         if (!this.props.trialTime) {
