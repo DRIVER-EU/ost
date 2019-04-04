@@ -15,7 +15,7 @@ class DateComponent extends Component {
 
   componentDidMount () {
     if (this.props.mode !== 'new'){
-      time = moment(time, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
+      let time = moment(time, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
       this.setState({
         time 
       })
