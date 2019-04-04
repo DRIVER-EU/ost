@@ -131,7 +131,7 @@ export const downloadFile = (id, name) => {
 export const getTrialTime = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://dev.itti.com.pl:8009/api/trial-time`, getHeaders())
+      axios.get(`http://${origin}/api/trial-time`, getHeaders())
       .then((response) => {
         dispatch(getTrialTimeAction(response.data))
         resolve()
