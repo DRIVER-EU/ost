@@ -10,7 +10,7 @@ buildscript {
 
     repositories {
         maven {
-            url 'http://gitlab.itti.com.pl:8081/repository/maven-public/'
+            url 'https://repo.maven.apache.org/maven2/'
         }
     }
 
@@ -110,24 +110,35 @@ idea {
 
 repositories {
     maven {
-        url 'http://gitlab.itti.com.pl:8081/repository/maven-public/'
+        url 'https://repo.maven.apache.org/maven2/'
         jcenter()
         maven { url 'https://raw.github.com/DRIVER-EU/maven-repo/master' }
         maven { url 'http://packages.confluent.io/maven' }
     }
-
-    flatDir{
-        dirs 'libs'
-    }
 }
 
 dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
     // Spring Boot
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.session:spring-session'
+    compile("org.springframework.security:spring-security-data")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    // Flyway
+    compile 'org.flywaydb:flyway-core'
 
     // Hibernate
     jpaMetaModel("org.hibernate:hibernate-jpamodelgen")
+    compile("org.hibernate:hibernate-java8")
+    compile("org.hibernate:hibernate-validator")
+
+    // PostgreSQL
+    runtime("org.postgresql:postgresql")
+
 
     // Lombok
     compile("org.projectlombok:lombok:${lombokVersion}")
@@ -153,12 +164,12 @@ dependencies {
     compile("org.apache.lucene:lucene-queryparser:${luceneVersion}")
 
     // PerPixel
-    compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
-    compile("${perpixelGroupName}:perpixel-spring-dto:${perpixelSpringDtoVersion}")
-    compile("${perpixelGroupName}:perpixel-spring-exception:${perpixelSpringDtoVersion}")
-    compile("${perpixelGroupName}:perpixel-spring-persistence:${perpixelSpringPersistenceVersion}")
-    compile("${perpixelGroupName}:perpixel-spring-security:${perpixelSpringSecurityVersion}")
-    compile("${perpixelGroupName}:perpixel-spring-utils:${perpixelSpringUtilsVersion}")
+    // compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
+    // compile("${perpixelGroupName}:perpixel-spring-dto:${perpixelSpringDtoVersion}")
+    // compile("${perpixelGroupName}:perpixel-spring-exception:${perpixelSpringDtoVersion}")
+    // compile("${perpixelGroupName}:perpixel-spring-persistence:${perpixelSpringPersistenceVersion}")
+    // compile("${perpixelGroupName}:perpixel-spring-security:${perpixelSpringSecurityVersion}")
+    // compile("${perpixelGroupName}:perpixel-spring-utils:${perpixelSpringUtilsVersion}")
 
     // javax mail
     compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
