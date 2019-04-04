@@ -66,7 +66,7 @@ class NewObservationComponent extends Component {
       validParticipants: true,
       files: [],
       isShow: false,
-      trialTime: new Date()
+      time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }
   }
 
@@ -84,6 +84,12 @@ class NewObservationComponent extends Component {
 
   downloadFile (id, name) {
     this.props.downloadFile(id, name)
+  }
+
+  handleChangeTrialTime(time) {
+    this.setState({
+      time: time
+    })
   }
 
   componentWillMount () {
@@ -220,6 +226,7 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
+    send['trialTime'] = this.state.time
     send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
@@ -412,6 +419,7 @@ class NewObservationComponent extends Component {
                 <DateComponent 
                   trialTime={this.props.trialTime ? this.props.trialTime : new Date() } 
                   desc={'Trial Time: '}
+                  handleChangeTrialTime={(time) => this.handleChangeTrialTime(time)}
                   mode={this.props.mode}/>
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
