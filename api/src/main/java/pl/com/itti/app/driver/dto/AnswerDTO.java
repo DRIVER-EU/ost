@@ -101,6 +101,8 @@ public final class AnswerDTO {
         @NotNull
         public Long trialSessionId;
 
+        public String timeTrial;
+
         @NotNull
         public ZonedDateTime simulationTime;
 
