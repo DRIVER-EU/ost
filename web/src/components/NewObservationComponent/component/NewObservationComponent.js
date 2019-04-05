@@ -86,7 +86,7 @@ class NewObservationComponent extends Component {
     this.props.downloadFile(id, name)
   }
 
-  handleChangeTrialTime(time) {
+  handleChangeTrialTime (time) {
     this.setState({
       time: time
     })
@@ -412,15 +412,15 @@ class NewObservationComponent extends Component {
             {(!this.state.isLoading) &&
             <div>
               <div className='trials-header'>
-                <DateComponent 
+                <DateComponent
                   mode={this.props.mode}
                   desc={'Real Time: '}
                   />
-                <DateComponent 
-                  trialTime={this.props.trialTime ? this.props.trialTime : new Date() } 
+                <DateComponent
+                  trialTime={this.props.trialTime ? this.props.trialTime : new Date()}
                   desc={'Trial Time: '}
                   handleChangeTrialTime={(time) => this.handleChangeTrialTime(time)}
-                  mode={this.props.mode}/>
+                  mode={this.props.mode} />
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
                   <RaisedButton
