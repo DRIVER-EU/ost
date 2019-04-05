@@ -10,14 +10,17 @@ class DateComponent extends Component {
   }
 
   static propTypes = {
-    trialTime: PropTypes.any
+    trialTime: PropTypes.any,
+    mode: PropTypes.any,
+    desc: PropTypes.any,
+    handleChangeTrialTime: PropTypes.func
   }
 
   componentDidMount () {
-    if (this.props.mode && this.props.mode !== 'new'){
+    if (this.props.mode && this.props.mode !== 'new') {
       let time = moment(this.props.trialTime, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
       this.setState({
-        time 
+        time
       })
     } else {
       let interval = setInterval(() => {
