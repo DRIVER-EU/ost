@@ -226,7 +226,7 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
-    send['trialTime'] = this.state.time
+    send['timeTrial'] = this.state.time
     send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
@@ -413,7 +413,6 @@ class NewObservationComponent extends Component {
             <div>
               <div className='trials-header'>
                 <DateComponent
-                  mode={this.props.mode}
                   desc={'Real Time: '}
                   />
                 <DateComponent
