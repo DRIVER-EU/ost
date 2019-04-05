@@ -66,7 +66,7 @@ class NewObservationComponent extends Component {
       validParticipants: true,
       files: [],
       isShow: false,
-      trialTime: new Date()
+      time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }
   }
 
@@ -84,6 +84,12 @@ class NewObservationComponent extends Component {
 
   downloadFile (id, name) {
     this.props.downloadFile(id, name)
+  }
+
+  handleChangeTrialTime(time) {
+    this.setState({
+      time: time
+    })
   }
 
   componentWillMount () {
@@ -126,11 +132,6 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.trialTime && this.state.trialTime !== nextProps.trialTime) {
-      let change = { ...this.state }
-      change['trialTime'] = nextProps.trialTime
-      this.setState({ change })
-    }
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state }
@@ -225,6 +226,7 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
+    send['trialTime'] = this.state.time
     send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
@@ -358,11 +360,7 @@ class NewObservationComponent extends Component {
   }
 
   componentDidMount () {
-    this.trialTimeId = setInterval(() => this.props.getTrialTime(), 10000)
-  }
-
-  componentWillUnmount () {
-    clearInterval(this.trialTimeId)
+    this.props.getTrialTime()
   }
 
   componentDidUpdate (prevState, prevProps) {
@@ -414,8 +412,15 @@ class NewObservationComponent extends Component {
             {(!this.state.isLoading) &&
             <div>
               <div className='trials-header'>
-                <DateComponent />
-                <DateComponent trialTime={1517870340} />
+                <DateComponent 
+                  mode={this.props.mode}
+                  desc={'Real Time: '}
+                  />
+                <DateComponent 
+                  trialTime={this.props.trialTime ? this.props.trialTime : new Date() } 
+                  desc={'Trial Time: '}
+                  handleChangeTrialTime={(time) => this.handleChangeTrialTime(time)}
+                  mode={this.props.mode}/>
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
                   <RaisedButton

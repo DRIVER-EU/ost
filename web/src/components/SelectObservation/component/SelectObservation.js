@@ -96,7 +96,7 @@ class SelectObservation extends Component {
                 { this.state.listOfObservations.map((object, key) => (
                   <ListItem
                     key={object.id}
-                    style={object.answersId.indexOf(object.id)
+                    style={object.answersId.length
                       ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                         : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
                     primaryText={object.name}

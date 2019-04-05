@@ -14,17 +14,25 @@ class DateComponent extends Component {
   }
 
   componentDidMount () {
-    let interval = setInterval(() => {
-      let time = this.state.time
-      if (!this.props.trialTime) {
-        time = moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
-      } else {
-        time = moment(time, 'DD/MM/YYYY HH:mm:ss').add(1000, 'milliseconds').format('DD/MM/YYYY HH:mm:ss')
-      }
+    if (this.props.mode && this.props.mode !== 'new'){
+      let time = moment(this.props.trialTime, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
       this.setState({
-        interval,
-        time })
-    }, 1000)
+        time 
+      })
+    } else {
+      let interval = setInterval(() => {
+        let time = this.state.time
+        if (!this.props.trialTime) {
+          time = moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
+        } else {
+          time = moment(time, 'DD/MM/YYYY HH:mm:ss').add(1000, 'milliseconds').format('DD/MM/YYYY HH:mm:ss')
+          this.props.handleChangeTrialTime(time)
+        }
+        this.setState({
+          interval,
+          time })
+      }, 1000)
+    }
   }
 
   componentWillUnmount () {
@@ -35,7 +43,7 @@ class DateComponent extends Component {
     return (
       <div>
         <div className='data-time' style={{ textAlign: 'right' }}>
-          {this.state.time}
+          {this.props.desc ? this.props.desc + this.state.time : this.state.time}
         </div>
       </div>
     )
