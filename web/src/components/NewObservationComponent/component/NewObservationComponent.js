@@ -50,7 +50,8 @@ class NewObservationComponent extends Component {
         schema: {},
         uiSchema: {},
         roles: [],
-        formData: {}
+        formData: {},
+        timeTestBed: null
       },
       // coords1ErrorText: '',
       // coords2ErrorText: '',
@@ -79,7 +80,7 @@ class NewObservationComponent extends Component {
     closeModal: PropTypes.func,
     observation: PropTypes.any,
     getTrialTime: PropTypes.func,
-    trialTime: PropTypes.number
+    trialTime: PropTypes.any
   }
 
   downloadFile (id, name) {
@@ -137,6 +138,9 @@ class NewObservationComponent extends Component {
       let change = { ...this.state }
       if (nextProps.observationForm.hasOwnProperty('time') && nextProps.observationForm.time !== null) {
         change['dateTime'] = nextProps.observationForm.time
+      }
+      if (nextProps.observationForm.hasOwnProperty('trialTime') && nextProps.observationForm.trialTime !== null) {
+        change['observationForm']['timeTestBed'] = nextProps.observationForm.trialTime
       }
       if (nextProps.observationForm.hasOwnProperty('trialRoles') &&
         nextProps.observationForm.trialRoles.trial.length !== 0) {
@@ -226,7 +230,7 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
-    send['timeTrial'] = this.state.time
+    // send['timeTrial'] = this.state.time
     send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
@@ -388,6 +392,7 @@ class NewObservationComponent extends Component {
   }
 
   render () {
+    console.log(this.state.observationForm.timeTestBed)
     return (
       <div className='main-container'>
         <div className='pages-box' style={{ height: '100%' }}>
@@ -416,7 +421,9 @@ class NewObservationComponent extends Component {
                   desc={'Real Time: '}
                   />
                 <DateComponent
-                  trialTime={this.props.trialTime ? this.props.trialTime : new Date()}
+                  trialTime={this.state.observationForm.timeTestBed
+                    ? this.state.observationForm.timeTestBed : (this.props.trialTime
+                      ? this.props.trialTime : new Date())}
                   desc={'Trial Time: '}
                   handleChangeTrialTime={(time) => this.handleChangeTrialTime(time)}
                   mode={this.props.mode} />

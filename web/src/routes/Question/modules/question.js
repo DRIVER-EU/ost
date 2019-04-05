@@ -48,7 +48,8 @@ export const getSchemaView = (idObs) => {
               jsonSchema: { ...response.data.questionSchema, formData: response.data.formData },
               attachments: response.data.attachments,
               trialRoles: response.data.trialRoles,
-              time: response.data.time
+              time: response.data.time,
+              trialTime: response.data.trialTime
             }
             dispatch(getSchemaAction(change))
             resolve()
