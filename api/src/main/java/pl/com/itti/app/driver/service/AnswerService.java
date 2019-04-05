@@ -101,7 +101,7 @@ public class AnswerService {
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
                         .sentSimulationTime(LocalDateTime.now())
-                        .trialTime(getTrialTime())
+                        .trialTime(Optional.ofNullable(getTrialTime()).orElse(LocalDateTime.now()))
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
