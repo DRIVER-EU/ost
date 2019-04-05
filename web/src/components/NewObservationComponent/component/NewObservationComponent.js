@@ -392,7 +392,6 @@ class NewObservationComponent extends Component {
   }
 
   render () {
-    console.log(this.state.observationForm.timeTestBed)
     return (
       <div className='main-container'>
         <div className='pages-box' style={{ height: '100%' }}>
