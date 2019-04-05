@@ -18,7 +18,7 @@ class DateComponent extends Component {
 
   componentDidMount () {
     if (this.props.mode && this.props.mode !== 'new') {
-      let time = moment(this.props.trialTime, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
+      let time = moment(this.props.trialTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')
       this.setState({
         time
       })
@@ -28,7 +28,7 @@ class DateComponent extends Component {
         if (!this.props.trialTime) {
           time = moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
         } else {
-          time = moment(time, 'DD/MM/YYYY HH:mm:ss').add(1000, 'milliseconds').format('DD/MM/YYYY HH:mm:ss')
+          time = moment(time, 'YYYY-MM-DD HH:mm:ss').add(1000, 'milliseconds').format('DD/MM/YYYY HH:mm:ss')
           this.props.handleChangeTrialTime(time)
         }
         this.setState({

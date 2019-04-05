@@ -173,7 +173,7 @@ const ACTION_HANDLERS = {
 const initialState = {
   observationForm: {},
   observation: {},
-  trialTime: 0
+  trialTime: null
 }
 
 export default function newobservationReducer (state = initialState, action) {
