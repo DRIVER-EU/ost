@@ -44,7 +44,7 @@ public class SendToTestBed {
             }
 
             GenericRecord formattedQuestion;
-            GenericRecordBuilder questionRecordBuilder = new GenericRecordBuilder(eu.driver.model.core.question.getClassSchema());
+            GenericRecordBuilder questionRecordBuilder = new GenericRecordBuilder(eu.driver.model.core.Question.getClassSchema());
 
             formattedQuestion = questionRecordBuilder
                     .set("id", Math.toIntExact(question.getId()))
@@ -52,7 +52,7 @@ public class SendToTestBed {
                     .set("description", question.getDescription())
                     .set("answer", SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId()))
                     .set("comment", SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY + question.getId() + AnswerProperties.COMMENT_KEY))
-                    .set("typeOfQuestion", new GenericData.EnumSymbol(eu.driver.model.core.question.getClassSchema().getField("typeOfQuestion").schema(), questionTypeOfAnswer))
+                    .set("typeOfQuestion", new GenericData.EnumSymbol(eu.driver.model.core.Question.getClassSchema().getField("typeOfQuestion").schema(), questionTypeOfAnswer))
                     .build();
 
             questionArray.add(formattedQuestion);
