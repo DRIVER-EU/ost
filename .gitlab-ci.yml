@@ -50,7 +50,7 @@ develop:api:build:
   tags:
   - default-api
   <<: *cache_api_def
-  image: openjdk:10
+  image: openjdk:9
   script:
   - cd api ; ./gradlew -g $CI_PROJECT_DIR/cache/gradle clean assemble -i
   artifacts:
@@ -66,7 +66,7 @@ develop:api:analyze:
   tags:
   - default-api
   <<: *cache_api_def
-  image: openjdk:10
+  image: openjdk:9
   services:
   - postgres:9.6-alpine
   variables:
@@ -121,7 +121,7 @@ merge-check:api:build:
   tags:
   - default-api
   <<: *cache_api_def
-  image: openjdk:10
+  image: openjdk:9
   services:
   - postgres:9.6-alpine
   variables:
@@ -166,7 +166,7 @@ develop:web:analyze:
   - develop
   tags:
   - default-web
-  image: openjdk:10-alpine
+  image: openjdk:9-alpine
   before_script:
   - apk add --no-cache  curl grep sed unzip
   - mkdir -p $CI_PROJECT_DIR/cache/sonar ; cd $CI_PROJECT_DIR/cache/sonar ; curl --insecure -o ./sonarscanner.zip -L http://central.maven.org/maven2/org/sonarsource/scanner/cli/sonar-scanner-cli/3.0.3.778/sonar-scanner-cli-3.0.3.778.zip && unzip sonarscanner.zip && rm sonarscanner.zip
