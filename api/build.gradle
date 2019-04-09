@@ -35,7 +35,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'idea'
 
 // Analysis
-apply plugin: 'org.sonarqube'
+//apply plugin: 'org.sonarqube'
 
 // ----------------------------------------
 // PLUGINS CONFIGURATION
@@ -51,12 +51,12 @@ war {
 }
 
 // SONARQUBE
-sonarqube {
-    properties {
-        property 'sonar.projectName', 'Driver [API]'
-        property 'sonar.projectKey', 'pl.com.itti:driver-api'
-    }
-}
+//sonarqube {
+//    properties {
+//        property 'sonar.projectName', 'Driver [API]'
+//        property 'sonar.projectKey', 'pl.com.itti:driver-api'
+//    }
+//}
 
 // ----------------------------------------
 // CONFIGURATIONS
