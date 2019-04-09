@@ -12,7 +12,6 @@ import co.perpixel.security.repository.AuthUserPositionRepository;
 import co.perpixel.security.repository.AuthUserRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import eu.driver.model.core.RequestChangeOfTrialStage;
 import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -45,9 +44,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
-import static pl.com.itti.app.driver.util.TrialStage.*;
 
 @Service
 @Transactional
@@ -318,39 +314,5 @@ public class TrialSessionService {
 
     private Boolean setInitAnswer(TrialSessionDTO.ActiveListItem activeListItem, AuthUser authUser) {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
-    }
-
-    @Scheduled(cron = "0/20 * * * * *")
-    public void checkTrialStage() {
-        RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
-        System.out.println("Receive Message from CheckTrialStage");
-
-        if (requestChangeOfTrialStage != null) {
-            long trialId = requestChangeOfTrialStage.getOstTrialId();
-            long trialSessionId = requestChangeOfTrialStage.getOstTrialSessionId();
-            long trialStageId = requestChangeOfTrialStage.getOstTrialStageId();
-
-            Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
-            Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndTrialId(trialSessionId, trialId);
-
-            if (trialStage.isPresent() && trialSession.isPresent()) {
-                trialSession.get().setLastTrialStage(trialStage.get());
-                trialSessionRepository.save(trialSession.get());
-            } else {
-                System.out.println("Trial Stage or Trial Session does not exist");
-            }
-
-            List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
-
-            for (ObservationType observationType : listOfObservationType) {
-                Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
-
-                if (trialSession.isPresent()) {
-                    System.out.println("SendToTestBed");
-                    answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
-                            .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
-                }
-            }
-        }
     }
 }
