@@ -142,6 +142,7 @@ dependencies {
 
     // Lombok
     compile("org.projectlombok:lombok:${lombokVersion}")
+    compile group: 'javax.xml', name: 'jaxb-api', version: '2.1'
 
     // Guava
     compile("com.google.guava:guava:${guavaVersion}")
