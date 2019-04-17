@@ -174,9 +174,6 @@ dependencies {
     // javax mail
     compile group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
 
-    // TestBed
-    compile("driver.eu:testbed-adapter:1.2.8")
-
     // ----------------------------------------
     // Test
     // ----------------------------------------

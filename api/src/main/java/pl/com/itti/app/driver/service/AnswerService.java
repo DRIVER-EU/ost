@@ -47,9 +47,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
-import static pl.com.itti.app.driver.util.SimulationTime.*;
-
 @Service
 @Transactional
 public class AnswerService {
@@ -101,7 +98,7 @@ public class AnswerService {
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
                         .sentSimulationTime(LocalDateTime.now())
-                        .trialTime(Optional.ofNullable(getTrialTime()).orElse(LocalDateTime.now()))
+                        .trialTime(LocalDateTime.now())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -111,8 +108,6 @@ public class AnswerService {
             answer.setAnswerTrialRoles(assignTrialRoles(form.trialRoleIds, answer));
         }
         answer.setAttachments(assignAttachments(form, files, answer));
-
-        sendToTestBed(answer, observationType, trialSession);
 
         return answerRepository.save(answer);
     }
