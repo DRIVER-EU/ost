@@ -63,7 +63,7 @@ class NewObservationComponent extends Component {
       listOfParticipants: [],
       dateTime: moment(new Date().getTime()).format('YYYY-MM-DD kk:mm:ss'),
       isLoading: false,
-      attachmentDescription: '',
+      // attachmentDescription: '',
       validParticipants: true,
       files: [],
       isShow: false,
@@ -182,9 +182,9 @@ class NewObservationComponent extends Component {
           change['attachmentCoordinatesAlt'] = coords[2].toString()
         }
       }
-      if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.descriptions) {
-        change['attachmentDescription'] = nextProps.observationForm.attachments.descriptions[0].data
-      }
+      // if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.descriptions) {
+      //   change['attachmentDescription'] = nextProps.observationForm.attachments.descriptions[0].data
+      // }
       if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.files) {
         change['files'] = nextProps.observationForm.attachments.files
       }
@@ -235,7 +235,7 @@ class NewObservationComponent extends Component {
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = tab
-    send['descriptions'] = [this.state.attachmentDescription]
+    send['descriptions'] = ['']
     send['coordinates'] = [
       { 'longitude': '',
         'latitude': '',
@@ -349,9 +349,9 @@ class NewObservationComponent extends Component {
     browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
   }
 
-  handleDescription (value) {
-    this.setState({ attachmentDescription: value })
-  }
+  // handleDescription (value) {
+  //   this.setState({ attachmentDescription: value })
+  // }
 
   handleError () {
     toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
@@ -482,13 +482,13 @@ class NewObservationComponent extends Component {
                 onSubmit={(value) => this.handleOnSubmit(value)}
                 onChange={(value) => this.changeObservation(value)}>
                 <div>
-                  <p className='point-obs'>Attachments:</p>
+                  {/* <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
                   <TextField style={{ width:'100%' }}
                     value={this.state.attachmentDescription}
                     onChange={(event, value) => { this.handleDescription(value) }}
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
-                    />
+                    /> */}
                   {/* <p className={'coords-title'}>Coordinates:</p>
                   <TextField value={this.state.attachmentCoordinatesLong}
                     style={{ marginRight:'20px', width: '150px' }}
