@@ -22,8 +22,8 @@ public final class SchemaCreator {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final ObjectNode COMMENT_SCHEMA = MAPPER.createObjectNode()
-            .put("title", "Comment")
-            .put("description", "If you have chosen \"Strongly agree\" or \"Not applicable\" please justify your answer here")
+            .put("title", "Please add justification here")
+            .put("description", "")
             .put("type", "string");
 
     public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
