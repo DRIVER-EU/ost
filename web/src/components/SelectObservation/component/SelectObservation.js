@@ -63,6 +63,26 @@ class SelectObservation extends Component {
     }
   }
 
+  checkAnswers (answersList) {
+    const { listOfObservations } = this.state
+    let isCheck = false
+    let listOfIds = []
+    listOfObservations.map((obj) => {
+      obj.answersId.map((id) => {
+        listOfIds.push({ id: id })
+      })
+    })
+    if (listOfIds && listOfIds.length) {
+      for (let i = 0; i < listOfIds.length; i++) {
+        isCheck = !!_.find(answersList, function (id) { if (id === listOfIds[i].id) return true })
+        if (isCheck) {
+          return isCheck
+        }
+      }
+    }
+    return isCheck
+  }
+
   newObservation (id) {
     browserHistory.push(`/trials/${this.props.params.id}/new-observation/${id}`)
   }
@@ -87,7 +107,6 @@ class SelectObservation extends Component {
                 <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
               onClick={this.back.bind(this)}
           /><div style={{ clear: 'both' }} />
-
             <div className='trial-title'>
               New observation
             </div>
@@ -96,7 +115,7 @@ class SelectObservation extends Component {
                 { this.state.listOfObservations.map((object, key) => (
                   <ListItem
                     key={object.id}
-                    style={object.answersId.length
+                    style={this.checkAnswers(object.answersId)
                       ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                         : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
                     primaryText={object.name}
