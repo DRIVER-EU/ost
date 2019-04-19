@@ -65,22 +65,27 @@ class SelectObservation extends Component {
 
   checkAnswers (answersList) {
     const { listOfObservations } = this.state
-    let isCheck = false
     let listOfIds = []
-    listOfObservations.map((obj) => {
-      obj.answersId.map((id) => {
-        listOfIds.push({ id: id })
-      })
-    })
-    if (listOfIds && listOfIds.length) {
-      for (let i = 0; i < listOfIds.length; i++) {
-        isCheck = !!_.find(answersList, function (id) { if (id === listOfIds[i].id) return true })
-        if (isCheck) {
-          return isCheck
+    if (answersList.length) {
+      if (listOfObservations.length) {
+        listOfObservations.map((obj) => {
+          obj.answersId.map((id) => {
+            listOfIds.push({ id: id })
+          })
+        })
+      }
+      if (listOfIds && listOfIds.length && answersList && answersList.length) {
+        for (let i = 0; i < listOfIds.length; i++) {
+          for (let j = 0; j < answersList.length; j++) {
+            if (listOfIds[i].id === answersList[j]) {
+              return true
+            } else {
+              return false
+            }
+          }
         }
       }
     }
-    return isCheck
   }
 
   newObservation (id) {
