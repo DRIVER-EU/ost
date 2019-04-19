@@ -44,7 +44,6 @@ class SelectObservation extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log('nextProps', nextProps)
     let listOfObsevationProps = [...nextProps.listOfObservations]
     let listOfObsevation = [...this.state.listOfObservations]
     if (nextProps.listOfObservations && this.props.listOfObservations &&
@@ -80,12 +79,6 @@ class SelectObservation extends Component {
           return isCheck
         }
       }
-      // listOfIds.map((item) => {
-      //   isCheck = !!_.find(answersList, function (id) { if (id === item.id) return true })
-      //   if (isCheck) {
-      //     return isCheck
-      //   }
-      // })
     }
     return isCheck
   }
