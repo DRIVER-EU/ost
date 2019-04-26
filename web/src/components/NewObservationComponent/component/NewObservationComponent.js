@@ -441,14 +441,14 @@ class NewObservationComponent extends Component {
               </div>
               <p className='title-obs'>{this.state.observationForm.name}</p>
               {this.state.isShow && <p className='desc-obs'>{this.state.observationForm.description}</p>}
-              <p className='point-obs'>When:</p>
+              {/*<p className='point-obs'>When:</p>
               <DateTimePicker
                 disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                 onChange={this.setDate}
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
                 value={this.state.dateTime}
-                format='YYYY-MM-DD kk:mm' />
+                format='YYYY-MM-DD kk:mm' />*/}
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
                 {this.state.observationForm.roles.map((object, index) => (
