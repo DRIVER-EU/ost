@@ -26,6 +26,8 @@ public class AnswerProperties {
     public static final String ATTACHMENT_DESCRIPTION = "Attachment_Comment";
     public static final String DELETE_COMMENT = "Delete_Comment";
     public static final String PRIMARY_COMMENT = "Comment";
+    public static final String OVERALL_COMMENT = "Overall_comment";
+    public static final String REMOVAL_REASON = "Removal_reason";
 
     public static final String TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
