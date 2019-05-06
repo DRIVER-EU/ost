@@ -5,6 +5,11 @@ import './CoreLayout.scss'
 import '../../styles/core.scss'
 import { connect } from 'react-redux'
 import Auth from 'components/Auth'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 const styles = {
   menubox: {
@@ -34,7 +39,12 @@ class CoreLayout extends Component {
     }
   }
 
+  updateIndicator () {
+    toastr.error('Observation form', 'Internet not available, please use paper forms', toastrOptions)
+  }
+
   render () {
+    window.addEventListener('offline', this.updateIndicator)
     return (
       <div className='core-container'>
         <div />

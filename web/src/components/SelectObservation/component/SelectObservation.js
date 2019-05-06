@@ -6,6 +6,7 @@ import { RaisedButton, FontIcon } from 'material-ui'
 import { List, ListItem } from 'material-ui/List'
 import _ from 'lodash'
 import { toastr } from 'react-redux-toastr'
+import Spinner from 'react-spinkit'
 
 const toastrOptions = {
   timeOut: 3000
@@ -14,10 +15,11 @@ const toastrOptions = {
 class SelectObservation extends Component {
   constructor (props) {
     super(props)
+    this.interval
     this.state = {
-      listOfObservations: [],
-      viewTrials: [],
-      interval: ''
+      listOfObservations: null,
+      viewTrials: null,
+      isLoading: true
     }
   }
 
@@ -32,34 +34,36 @@ class SelectObservation extends Component {
 
   componentWillMount () {
     this.props.getObservations(this.props.params.id)
-    let interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.props.getViewTrials(this.props.params.id)
     }, 3000)
-    this.setState({ interval: interval })
   }
 
   componentWillUnmount () {
     this.props.clearTrialList()
-    clearInterval(this.state.interval)
+    clearInterval(this.interval)
   }
 
   componentWillReceiveProps (nextProps) {
     let listOfObsevationProps = [...nextProps.listOfObservations]
-    let listOfObsevation = [...this.state.listOfObservations]
-    if (nextProps.listOfObservations && this.props.listOfObservations &&
+    let listOfObsevation = this.state.listOfObservations ? [...this.state.listOfObservations] : []
+    if (!_.isEqual(nextProps.listOfObservations, this.state.listOfObservations) &&
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
-    if (nextProps.viewTrials &&
-      !_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {
+    if (!_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {
       let newItem = _.differenceWith(nextProps.viewTrials, this.state.viewTrials, _.isEqual)
-      if (this.state.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
+      if (this.state.viewTrials && this.state.viewTrials.length !== 0 &&
+        newItem.length !== 0 && newItem[0].type === 'EVENT') {
         toastr.success('New Event', 'New Event received.', toastrOptions)
       }
       this.setState({ viewTrials: nextProps.viewTrials })
     }
-    if (this.props.viewTrials) {
+    if (this.props.viewTrials && this.props.listOfObservations) {
       // eslint
+    }
+    if (this.state.viewTrials && this.state.listOfObservations) {
+      this.setState({ isLoading: false })
     }
   }
 
@@ -67,7 +71,7 @@ class SelectObservation extends Component {
     const { viewTrials } = this.state
     let isCheck = false
     let listOfIds = []
-    if (answersList.length !== 0) {
+    if (answersList.length !== 0 && viewTrials.length !== 0) {
       if (viewTrials.length !== 0) {
         viewTrials.map((obj) => {
           listOfIds.push(obj.id)
@@ -98,7 +102,7 @@ class SelectObservation extends Component {
     return (
       <div className='main-container'>
         <div className='pages-box'>
-          <div className='view-trials-container'>
+          <div className='view-trials-observation-container'>
             <RaisedButton
               style={{ float: 'right' }}
               buttonStyle={{ width: '240px' }}
@@ -113,25 +117,30 @@ class SelectObservation extends Component {
             <div className='trial-title'>
               New observation
             </div>
-            <div className='trials-header'>
-              <List style={{ width: '100%' }}>
-                { this.state.listOfObservations.map((object, key) => (
-                  <ListItem
-                    key={object.id}
-                    style={this.checkAnswers(object.answersId)
-                      ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
-                        : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
-                    primaryText={object.name}
-                    secondaryText={object.description}
-                    onClick={() => this.newObservation(object.id)}
-                  />
-              ))}
-              </List>
+            {this.state.isLoading ? <div className='spinner-box'>
+              <div className={'spinner'}>
+                <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
+              </div>
             </div>
+              : <div className='trials-header'>
+                <List style={{ width: '100%' }}>
+                  {this.state.listOfObservations && this.state.listOfObservations.map((object) => (
+                    <ListItem
+                      key={object.id}
+                      style={this.checkAnswers(object.answersId)
+                    ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
+                      : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
+                      primaryText={object.name}
+                      secondaryText={object.description}
+                      onClick={() => this.newObservation(object.id)}
+                    />
+                ))}
+                </List>
+              </div>
+            }
           </div>
         </div>
       </div>
-
     )
   }
 }
