@@ -60,6 +60,9 @@ class SelectObservation extends Component {
       }
       this.setState({ viewTrials: nextProps.viewTrials })
     }
+    if (this.props.viewTrials) {
+      // eslint
+    }
     if (this.state.viewTrials && this.state.listOfObservations) {
       this.setState({ isLoading: false })
     }
