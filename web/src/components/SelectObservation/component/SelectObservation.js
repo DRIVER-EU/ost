@@ -64,18 +64,16 @@ class SelectObservation extends Component {
   }
 
   checkAnswers (answersList) {
-    const { listOfObservations } = this.state
+    const { viewTrials } = this.state
     let isCheck = false
     let listOfIds = []
-    if (answersList.length) {
-      if (listOfObservations.length) {
-        listOfObservations.map((obj) => {
-          obj.answersId.map((id) => {
-            listOfIds.push(id)
-          })
+    if (answersList.length !== 0) {
+      if (viewTrials.length !== 0) {
+        viewTrials.map((obj) => {
+          listOfIds.push(obj.id)
         })
       }
-      if (listOfIds && listOfIds.length && answersList && answersList.length) {
+      if (listOfIds && listOfIds.length !== 0 && answersList && answersList.length !== 0) {
         for (let i = 0; i < answersList.length; i++) {
           for (let j = 0; j < listOfIds.length; j++) {
             if (listOfIds[j] === answersList[i]) {
