@@ -32,6 +32,16 @@ class CoreLayout extends Component {
     user: PropTypes.object
   }
 
+  componentDidMount () {
+    this.interval = setInterval(() => {
+      window.navigator.onLine && (this.checkMod = true)
+      if (!window.navigator.onLine && this.checkMod) {
+        this.updateIndicator()
+        this.checkMod = false
+      }
+    }, 1000)
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user &&
       nextProps.user.roles[0] !== this.state.role) {
@@ -39,12 +49,15 @@ class CoreLayout extends Component {
     }
   }
 
+  componentWillUnmount () {
+    clearInterval(this.interval)
+  }
+
   updateIndicator () {
     toastr.error('Observation form', 'Internet not available, please use paper forms', toastrOptions)
   }
 
   render () {
-    window.addEventListener('offline', this.updateIndicator)
     return (
       <div className='core-container'>
         <div />
