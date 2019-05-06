@@ -6,6 +6,7 @@ import { RaisedButton, FontIcon } from 'material-ui'
 import { List, ListItem } from 'material-ui/List'
 import _ from 'lodash'
 import { toastr } from 'react-redux-toastr'
+import Spinner from 'react-spinkit'
 
 const toastrOptions = {
   timeOut: 3000
@@ -15,9 +16,10 @@ class SelectObservation extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      listOfObservations: [],
-      viewTrials: [],
-      interval: ''
+      listOfObservations: null,
+      viewTrials: null,
+      interval: '',
+      isLoading: true
     }
   }
 
@@ -45,21 +47,21 @@ class SelectObservation extends Component {
 
   componentWillReceiveProps (nextProps) {
     let listOfObsevationProps = [...nextProps.listOfObservations]
-    let listOfObsevation = [...this.state.listOfObservations]
-    if (nextProps.listOfObservations && this.props.listOfObservations &&
+    let listOfObsevation = this.state.listOfObservations ? [...this.state.listOfObservations] : []
+    if (!_.isEqual(nextProps.listOfObservations, this.props.listOfObservations) &&
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
-    if (nextProps.viewTrials &&
-      !_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {
+    if (!_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {
       let newItem = _.differenceWith(nextProps.viewTrials, this.state.viewTrials, _.isEqual)
-      if (this.state.viewTrials.length !== 0 && newItem.length !== 0 && newItem[0].type === 'EVENT') {
+      if (this.state.viewTrials && this.state.viewTrials.length !== 0 &&
+        newItem.length !== 0 && newItem[0].type === 'EVENT') {
         toastr.success('New Event', 'New Event received.', toastrOptions)
       }
       this.setState({ viewTrials: nextProps.viewTrials })
     }
-    if (this.props.viewTrials) {
-      // eslint
+    if (this.state.viewTrials && this.state.listOfObservations) {
+      this.setState({ isLoading: false })
     }
   }
 
@@ -67,7 +69,7 @@ class SelectObservation extends Component {
     const { viewTrials } = this.state
     let isCheck = false
     let listOfIds = []
-    if (answersList.length !== 0) {
+    if (answersList.length !== 0 && viewTrials.length !== 0) {
       if (viewTrials.length !== 0) {
         viewTrials.map((obj) => {
           listOfIds.push(obj.id)
@@ -113,25 +115,30 @@ class SelectObservation extends Component {
             <div className='trial-title'>
               New observation
             </div>
-            <div className='trials-header'>
-              <List style={{ width: '100%' }}>
-                { this.state.listOfObservations.map((object, key) => (
-                  <ListItem
-                    key={object.id}
-                    style={this.checkAnswers(object.answersId)
-                      ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
-                        : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
-                    primaryText={object.name}
-                    secondaryText={object.description}
-                    onClick={() => this.newObservation(object.id)}
-                  />
-              ))}
-              </List>
+            {this.state.isLoading ? <div className='spinner-box'>
+              <div className={'spinner'}>
+                <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
+              </div>
             </div>
+              : <div className='trials-header'>
+                <List style={{ width: '100%' }}>
+                  {this.state.listOfObservations && this.state.listOfObservations.map((object) => (
+                    <ListItem
+                      key={object.id}
+                      style={this.checkAnswers(object.answersId)
+                    ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
+                      : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
+                      primaryText={object.name}
+                      secondaryText={object.description}
+                      onClick={() => this.newObservation(object.id)}
+                    />
+                ))}
+                </List>
+              </div>
+            }
           </div>
         </div>
       </div>
-
     )
   }
 }
