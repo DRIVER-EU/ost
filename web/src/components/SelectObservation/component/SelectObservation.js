@@ -15,10 +15,10 @@ const toastrOptions = {
 class SelectObservation extends Component {
   constructor (props) {
     super(props)
+    this.interval
     this.state = {
       listOfObservations: null,
       viewTrials: null,
-      interval: '',
       isLoading: true
     }
   }
@@ -34,21 +34,20 @@ class SelectObservation extends Component {
 
   componentWillMount () {
     this.props.getObservations(this.props.params.id)
-    let interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.props.getViewTrials(this.props.params.id)
     }, 3000)
-    this.setState({ interval: interval })
   }
 
   componentWillUnmount () {
     this.props.clearTrialList()
-    clearInterval(this.state.interval)
+    clearInterval(this.interval)
   }
 
   componentWillReceiveProps (nextProps) {
     let listOfObsevationProps = [...nextProps.listOfObservations]
     let listOfObsevation = this.state.listOfObservations ? [...this.state.listOfObservations] : []
-    if (!_.isEqual(nextProps.listOfObservations, this.props.listOfObservations) &&
+    if (!_.isEqual(nextProps.listOfObservations, this.state.listOfObservations) &&
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
@@ -103,7 +102,7 @@ class SelectObservation extends Component {
     return (
       <div className='main-container'>
         <div className='pages-box'>
-          <div className='view-trials-container'>
+          <div className='view-trials-observation-container'>
             <RaisedButton
               style={{ float: 'right' }}
               buttonStyle={{ width: '240px' }}
