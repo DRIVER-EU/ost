@@ -4,9 +4,9 @@ import DateComponent from '../../DateComponent/DateComponent'
 import './NewObservationComponent.scss'
 import { Checkbox, RaisedButton } from 'material-ui'
 import _ from 'lodash'
-import DateTimePicker from 'material-ui-datetimepicker'
-import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
-import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
+// import DateTimePicker from 'material-ui-datetimepicker'
+// import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+// import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from './Slider'
 import radio from './Radio'
 import Form from 'react-jsonschema-form-mui'
@@ -441,14 +441,14 @@ class NewObservationComponent extends Component {
               </div>
               <p className='title-obs'>{this.state.observationForm.name}</p>
               {this.state.isShow && <p className='desc-obs'>{this.state.observationForm.description}</p>}
-              <p className='point-obs'>When:</p>
+              {/* <p className='point-obs'>When:</p>
               <DateTimePicker
                 disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                 onChange={this.setDate}
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
                 value={this.state.dateTime}
-                format='YYYY-MM-DD kk:mm' />
+                format='YYYY-MM-DD kk:mm' /> */}
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
                 {this.state.observationForm.roles.map((object, index) => (
