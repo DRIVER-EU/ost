@@ -546,7 +546,8 @@ class AdminTrials extends Component {
                         {this.state.changeDataTable.map((row, index) => (
                           <TableRow key={index} selectable={false} style={{ whiteSpace: 'inherit' }}>
                             <TableRowColumn>
-                              {moment(row.sentSimulationTime, 'YYYY-MM-DDTHH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+                              {moment(row.sentSimulationTime,
+                                'YYYY-MM-DDTHH:mm:ss').utcOffset(3).format('DD/MM/YYYY HH:mm:ss')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {`${row.user.firstName} ${row.user.lastName}`}
@@ -775,7 +776,7 @@ class AdminTrials extends Component {
                         {this.state.messages.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
-                              {moment(row.eventTime, 'YYYY-MM-DDTHH:mm:ss').format('DD/MM/YYYY hh:mm:ss')}
+                              {moment(row.eventTime, 'YYYY-MM-DDTHH:mm:ss').utcOffset(3).format('DD/MM/YYYY hh:mm:ss')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.trialUserId !== null &&

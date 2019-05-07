@@ -6,6 +6,7 @@ import '../../styles/core.scss'
 import { connect } from 'react-redux'
 import Auth from 'components/Auth'
 import { toastr } from 'react-redux-toastr'
+import { Detector } from 'react-detect-offline'
 
 const toastrOptions = {
   timeOut: 3000
@@ -32,15 +33,15 @@ class CoreLayout extends Component {
     user: PropTypes.object
   }
 
-  componentDidMount () {
-    this.interval = setInterval(() => {
-      window.navigator.onLine && (this.checkMod = true)
-      if (!window.navigator.onLine && this.checkMod) {
-        this.updateIndicator()
-        this.checkMod = false
-      }
-    }, 1000)
-  }
+  // componentDidMount () {
+  //   this.interval = setInterval(() => {
+  //     window.navigator.onLine && (this.checkMod = true)
+  //     if (!window.navigator.onLine && this.checkMod) {
+  //       this.updateIndicator()
+  //       this.checkMod = false
+  //     }
+  //   }, 1000)
+  // }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user &&
@@ -49,9 +50,9 @@ class CoreLayout extends Component {
     }
   }
 
-  componentWillUnmount () {
-    clearInterval(this.interval)
-  }
+  // componentWillUnmount () {
+  //   clearInterval(this.interval)
+  // }
 
   updateIndicator () {
     toastr.error('Observation form', 'Internet not available, please use paper forms', toastrOptions)
@@ -67,6 +68,15 @@ class CoreLayout extends Component {
             <Menu role={this.state.role} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
+            <Detector
+              render={({ online }) => (
+                <div style={{ display: 'none' }}>
+                  {online ? ''
+                    : toastr.error('Observation form',
+                      'Internet not available, please use paper forms', toastrOptions) }
+                </div>
+              )}
+            />
             {this.props.children}
           </div>
         </div>
