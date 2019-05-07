@@ -36,6 +36,7 @@ export const getTrials = () => {
        })
        .catch((error) => {
          errorHandle(error)
+         dispatch(getTrialsAction(JSON.parse(localStorage.getItem('listOfTrials') || '{ total: 0, data: [] }')))
          resolve()
        })
     })
