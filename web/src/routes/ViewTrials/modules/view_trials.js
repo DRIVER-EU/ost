@@ -95,6 +95,21 @@ export const getTrialSession = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
        .then((response) => {
+         if (!('indexedDB' in window)) {
+           console.warn('This browser doesn\'t support IndexedDB - offline app version won\'t be enabled.')
+         } else {
+           let DBOpenRequest = window.indexedDB.open('driver', 1)
+           DBOpenRequest.onerror = () => { console.error('Error occured while opening IndexedDB.') }
+           DBOpenRequest.onupgradeneeded = () => {
+             console.warn('sowa')
+             let idb = DBOpenRequest.result
+             let transaction = idb.transaction('trialsessions', 'readwrite')
+             let trials = transaction.objectStore('trialsessions')
+             let request = trials.add(response.data)
+             request.onerror = () => { console.error('Adding trials to IndexedDB failed') }
+             request.onsuccess = () => { console.log('Trials added to IndexedDB') }
+           }
+         }
          dispatch(getTrialSessionAction(response.data))
          resolve()
        })
@@ -111,6 +126,12 @@ export const getTrials = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
+         console.log('chuj')
+         let transaction = window.indexedDB.open('driver', 2).transaction(['trialsessions/active'], 'readwrite')
+         let trials = transaction.objectStore('trialsessions/active')
+         let request = trials.add(response.data)
+         request.onerror = () => { console.error('Adding trials to IndexedDB failed') }
+         request.onsuccess = () => { console.log('Trials added to IndexedDB') }
          dispatch(getTrialsAction(response.data))
          resolve()
        })

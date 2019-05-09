@@ -31,6 +31,26 @@ export const getTrials = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = () => {
+           let idb = DBOpenRequest.result
+           console.log('sowa 2: ', response.data.data, idb)
+           let trialsessionsActive = idb.transaction('trialsessionsActive', 'readwrite')
+           let objectStore = trialsessionsActive.objectStore('trialsessionsActive')
+           for (let i = 0; i < response.data.data.length; i++) {
+             let request = objectStore.add(response.data.data[i])
+             request.onsuccess = () => { console.log(':)') }
+             request.onerror = () => { console.error('Add error: ', request.error) }
+           }
+
+           trialsessionsActive.oncomplete = () => {
+             console.log('trialsessionsActive complete :D')
+           }
+
+           trialsessionsActive.onerror = () => {
+             console.error('trialsessionsActive error: ', trialsessionsActive)
+           }
+         }
          dispatch(getTrialsAction(response.data))
          resolve()
        })

@@ -49,7 +49,6 @@ class SelectObservation extends Component {
     let listOfObsevation = this.state.listOfObservations ? [...this.state.listOfObservations] : []
     if (!_.isEqual(nextProps.listOfObservations, this.state.listOfObservations) &&
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
-      localStorage.setItem('observationList', JSON.stringify(nextProps.listOfObservations))
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
     if (!_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {

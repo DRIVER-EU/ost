@@ -97,6 +97,7 @@ export const checkLogin = () => {
           resolve()
         })
         .catch((error) => {
+          console.log('check login error: ', error)
           // localStorage.removeItem('drivertoken')
           // localStorage.removeItem('driveruser')
           // localStorage.removeItem('driverrole')

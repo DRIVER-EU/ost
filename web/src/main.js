@@ -82,6 +82,28 @@ const initialState = window.__INITIAL_STATE__
 const store = createStore(initialState)
 
 // ========================================================
+// IndexedDB Instantiation
+// ========================================================
+if (!('indexedDB' in window)) {
+  console.warn('This browser doesn\'t support IndexedDB - offline app version won\'t be enabled.')
+} else {
+  let DBOpenRequest = window.indexedDB.open('driver', 1)
+  DBOpenRequest.onupgradeneeded = () => {
+    let idb = DBOpenRequest.result
+    idb.onerror = (event) => { console.error('IndexDB error: ', event.target.errorCode) }
+    if (!idb.objectStoreNames.contains('trialsessions')) {
+      idb.createObjectStore('trialsessions', { keyPath: 'id' })
+    }
+    if (!idb.objectStoreNames.contains('trials')) {
+      idb.createObjectStore('trials', { keyPath: 'id' })
+    }
+    if (!idb.objectStoreNames.contains('trialsessionsActive')) {
+      idb.createObjectStore('trialsessionsActive', { keyPath: 'id' })
+    }
+  }
+}
+
+// ========================================================
 // Render Setup
 // ========================================================
 const MOUNT_NODE = document.getElementById('root')
