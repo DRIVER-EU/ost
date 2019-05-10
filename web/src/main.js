@@ -87,10 +87,7 @@ const store = createStore(initialState)
 if (!('indexedDB' in window)) {
   console.warn('This browser doesn\'t support IndexedDB - offline app version won\'t be enabled.')
 } else {
-  let DBOpenRequest = window.indexedDB.open('driver', 1)
-  DBOpenRequest.onupgradeneeded = () => {
-    let idb = DBOpenRequest.result
-    idb.onerror = (event) => { console.error('IndexDB error: ', event.target.errorCode) }
+  let DBOpenRequest = window.indexedDB.open('driver', 1, () => {
     if (!idb.objectStoreNames.contains('trialsessions')) {
       idb.createObjectStore('trialsessions', { keyPath: 'id' })
     }
@@ -100,7 +97,7 @@ if (!('indexedDB' in window)) {
     if (!idb.objectStoreNames.contains('trialsessionsActive')) {
       idb.createObjectStore('trialsessionsActive', { keyPath: 'id' })
     }
-  }
+  })
 }
 
 // ========================================================

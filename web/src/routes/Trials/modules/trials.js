@@ -32,31 +32,20 @@ export const getTrials = () => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.onsuccess = () => {
-           let idb = DBOpenRequest.result
-           console.log('sowa 2: ', response.data.data, idb)
-           let trialsessionsActive = idb.transaction('trialsessionsActive', 'readwrite')
-           let objectStore = trialsessionsActive.objectStore('trialsessionsActive')
+         DBOpenRequest.then((db) => {
+           let transaction = db.transaction('trialsessionsActive', 'readwrite')
+           let store = transaction.objectStore('trialsessionsActive')
            for (let i = 0; i < response.data.data.length; i++) {
-             let request = objectStore.add(response.data.data[i])
-             request.onsuccess = () => { console.log(':)') }
-             request.onerror = () => { console.error('Add error: ', request.error) }
+             store.add(response.data.data[i])
            }
-
-           trialsessionsActive.oncomplete = () => {
-             console.log('trialsessionsActive complete :D')
-           }
-
-           trialsessionsActive.onerror = () => {
-             console.error('trialsessionsActive error: ', trialsessionsActive)
-           }
-         }
+           return transaction.complete
+         })
          dispatch(getTrialsAction(response.data))
          resolve()
        })
        .catch((error) => {
          errorHandle(error)
-         dispatch(getTrialsAction(JSON.parse(localStorage.getItem('listOfTrials') || '{ total: 0, data: [] }')))
+         console.log('sowa error: ', error)
          resolve()
        })
     })
