@@ -115,7 +115,7 @@ class SelectObservation extends Component {
               onClick={this.back.bind(this)}
           /><div style={{ clear: 'both' }} />
             <div className='trial-title'>
-              New observation
+              New entry
             </div>
             {this.state.isLoading ? <div className='spinner-box'>
               <div className={'spinner'}>
