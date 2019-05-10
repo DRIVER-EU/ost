@@ -116,7 +116,7 @@ export const getTrialSession = (trialsessionId) => {
            let store = transaction.objectStore('trial_session')
            if (trialsessionId) {
              store.get(trialsessionId).onsuccess = (event) => {
-               dispatch(getTrialsAction(event.target.result))
+               dispatch(getTrialSessionAction(event.target.result))
              }
            }
          }
@@ -167,6 +167,7 @@ export const getTrials = () => {
 export const clearTrialList = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
+      // usuń wszystkie aktywne trial_session z bazy
       dispatch(clearTrialsAction([]))
       resolve()
     })
