@@ -98,9 +98,8 @@ export const getTrialSession = (trialsessionId) => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
          DBOpenRequest.onsuccess = (event) => {
            let db = event.target.result
-           let transaction = db.transaction(['trialsessions'], 'readwrite')
-          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
-           let store = transaction.objectStore('trialsessions')
+           let transaction = db.transaction(['trial_session'], 'readwrite')
+           let store = transaction.objectStore('trial_session')
            let item = store.get(response.data.id)
            item.onsuccess = (x) => {
              if (!x.target.result) { store.add(response.data) }
@@ -113,11 +112,12 @@ export const getTrialSession = (trialsessionId) => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
          DBOpenRequest.onsuccess = (event) => {
            let db = event.target.result
-           let transaction = db.transaction(['trialsessions'], 'readonly')
-          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
-           let store = transaction.objectStore('trialsessions')
-           store.get(trialsessionId).onsuccess = (event) => {
-             dispatch(getTrialsAction(event.target.result))
+           let transaction = db.transaction(['trial_session'], 'readonly')
+           let store = transaction.objectStore('trial_session')
+           if (trialsessionId) {
+             store.get(trialsessionId).onsuccess = (event) => {
+               dispatch(getTrialsAction(event.target.result))
+             }
            }
          }
          errorHandle(error)
@@ -135,9 +135,8 @@ export const getTrials = () => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
          DBOpenRequest.onsuccess = (event) => {
            let db = event.target.result
-           let transaction = db.transaction(['trialsessionsActive'], 'readwrite')
-          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
-           let store = transaction.objectStore('trialsessionsActive')
+           let transaction = db.transaction(['trial_session'], 'readwrite')
+           let store = transaction.objectStore('trial_session')
            for (let i = 0; i < response.data.data.length; i++) {
              let item = store.get(response.data.data[i].id)
              item.onsuccess = (x) => {
@@ -152,10 +151,9 @@ export const getTrials = () => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
          DBOpenRequest.onsuccess = (event) => {
            let db = event.target.result
-           let transaction = db.transaction(['trialsessionsActive'], 'readonly')
-          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
-           let store = transaction.objectStore('trialsessionsActive')
-           store.getAll().onsuccess = (event) => {
+           let transaction = db.transaction(['trial_session'], 'readonly')
+           let store = transaction.objectStore('trial_session').index('status')
+           store.get('ACTIVE').onsuccess = (event) => {
              dispatch(getTrialsAction({ total: event.target.result.length, data: event.target.result }))
            }
          }
