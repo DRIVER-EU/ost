@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = '193.142.112.117:83' // 'dev.itti.com.pl:8009'
+  origin = 'dev.itti.com.pl:8009'
 } else {
   origin = window.location.host
 }
@@ -95,25 +95,31 @@ export const getTrialSession = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
        .then((response) => {
-         if (!('indexedDB' in window)) {
-           console.warn('This browser doesn\'t support IndexedDB - offline app version won\'t be enabled.')
-         } else {
-           let DBOpenRequest = window.indexedDB.open('driver', 1)
-           DBOpenRequest.onerror = () => { console.error('Error occured while opening IndexedDB.') }
-           DBOpenRequest.onupgradeneeded = () => {
-             console.warn('sowa')
-             let idb = DBOpenRequest.result
-             let transaction = idb.transaction('trialsessions', 'readwrite')
-             let trials = transaction.objectStore('trialsessions')
-             let request = trials.add(response.data)
-             request.onerror = () => { console.error('Adding trials to IndexedDB failed') }
-             request.onsuccess = () => { console.log('Trials added to IndexedDB') }
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let transaction = db.transaction(['trialsessions'], 'readwrite')
+          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
+           let store = transaction.objectStore('trialsessions')
+           let item = store.get(response.data.id)
+           item.onsuccess = (x) => {
+             if (!x.target.result) { store.add(response.data) }
            }
          }
          dispatch(getTrialSessionAction(response.data))
          resolve()
        })
        .catch((error) => {
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let transaction = db.transaction(['trialsessions'], 'readonly')
+          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
+           let store = transaction.objectStore('trialsessions')
+           store.get(trialsessionId).onsuccess = (event) => {
+             dispatch(getTrialsAction(event.target.result))
+           }
+         }
          errorHandle(error)
          resolve()
        })
@@ -126,16 +132,33 @@ export const getTrials = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
-         console.log('chuj')
-         let transaction = window.indexedDB.open('driver', 2).transaction(['trialsessions/active'], 'readwrite')
-         let trials = transaction.objectStore('trialsessions/active')
-         let request = trials.add(response.data)
-         request.onerror = () => { console.error('Adding trials to IndexedDB failed') }
-         request.onsuccess = () => { console.log('Trials added to IndexedDB') }
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let transaction = db.transaction(['trialsessionsActive'], 'readwrite')
+          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
+           let store = transaction.objectStore('trialsessionsActive')
+           for (let i = 0; i < response.data.data.length; i++) {
+             let item = store.get(response.data.data[i].id)
+             item.onsuccess = (x) => {
+               if (x.result) { store.add(response.data.data[i]) }
+             }
+           }
+         }
          dispatch(getTrialsAction(response.data))
          resolve()
        })
        .catch((error) => {
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let transaction = db.transaction(['trialsessionsActive'], 'readonly')
+          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
+           let store = transaction.objectStore('trialsessionsActive')
+           store.getAll().onsuccess = (event) => {
+             dispatch(getTrialsAction({ total: event.target.result.length, data: event.target.result }))
+           }
+         }
          errorHandle(error)
          resolve()
        })

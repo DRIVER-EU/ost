@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = '193.142.112.117:83' // 'dev.itti.com.pl:8009'
+  origin = 'dev.itti.com.pl:8009'
 } else {
   origin = window.location.host
 }
@@ -32,20 +32,33 @@ export const getTrials = () => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.then((db) => {
-           let transaction = db.transaction('trialsessionsActive', 'readwrite')
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let transaction = db.transaction(['trialsessionsActive'], 'readwrite')
+          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
            let store = transaction.objectStore('trialsessionsActive')
            for (let i = 0; i < response.data.data.length; i++) {
-             store.add(response.data.data[i])
+             let item = store.get(response.data.data[i].id)
+             item.onsuccess = (x) => {
+               if (!x.target.result) { store.add(response.data.data[i]) }
+             }
            }
-           return transaction.complete
-         })
+         }
          dispatch(getTrialsAction(response.data))
          resolve()
        })
        .catch((error) => {
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let transaction = db.transaction(['trialsessionsActive'], 'readonly')
+          //  transaction.onerror = (error) => { console.error('Transaction error: ', error) }
+           let store = transaction.objectStore('trialsessionsActive')
+           store.getAll().onsuccess = (event) => {
+             dispatch(getTrialsAction({ total: event.target.result.length, data: event.target.result }))
+           }
+         }
          errorHandle(error)
-         console.log('sowa error: ', error)
          resolve()
        })
     })
