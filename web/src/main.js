@@ -139,17 +139,6 @@ if (!('indexedDB' in window)) {
     if (!idb.objectStoreNames.contains('trial_session_manager')) {
       idb.createObjectStore('trial_session_manager', { keyPath: 'trial_user_id' })
     }
-
-
-    if (!idb.objectStoreNames.contains('trialsessions')) {
-      idb.createObjectStore('trialsessions', { keyPath: 'id' })
-    }
-    if (!idb.objectStoreNames.contains('trials')) {
-      idb.createObjectStore('trials', { keyPath: 'id' })
-    }
-    if (!idb.objectStoreNames.contains('trialsessionsActive')) {
-      idb.createObjectStore('trialsessionsActive', { keyPath: 'id' })
-    }
   }
 }
 

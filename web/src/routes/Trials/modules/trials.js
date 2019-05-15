@@ -43,6 +43,7 @@ export const getTrials = () => {
              }
            }
          }
+        //  console.log('sowa 1: ', response.data)
          dispatch(getTrialsAction(response.data))
          resolve()
        })
@@ -52,8 +53,11 @@ export const getTrials = () => {
            let db = event.target.result
            let transaction = db.transaction(['trial_session'], 'readonly')
            let store = transaction.objectStore('trial_session').index('status')
-           store.get('ACTIVE').onsuccess = (event) => {
-             dispatch(getTrialsAction({ total: event.target.result.length, data: event.target.result }))
+           store.get('ACTIVE').onsuccess = (e) => {
+            //  console.log('sowa 2: ', e)
+             let result = e.target.result.length ? { total: e.target.result.length, data: e.target.result }
+              : { total: 1, data: [e.target.result] }
+             dispatch(getTrialsAction(result))
            }
          }
          errorHandle(error)
