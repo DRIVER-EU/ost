@@ -70,6 +70,12 @@ export const logIn = (username, password) => {
 export const logOut = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
+      window.indexedDB.open('driver', 1).onsuccess = (event) => {
+        for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
+          event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
+            .objectStore(event.target.result.objectStoreNames[i]).clear()
+        }
+      }
       axios.get(`http://${origin}/api/auth/logout`, getHeaders())
         .then((response) => {
           localStorage.removeItem('drivertoken')
@@ -82,7 +88,12 @@ export const logOut = () => {
           browserHistory.push('/')
         })
         .catch((error) => {
-          toastr.error('Logout', 'Error!', toastrOptions)
+          localStorage.removeItem('drivertoken')
+          localStorage.removeItem('driveruser')
+          localStorage.removeItem('driverrole')
+          localStorage.removeItem('openTrial')
+          toastr.success('Logout', 'Logout correct!', toastrOptions)
+          dispatch(logOutAction())
           resolve()
         })
     })
@@ -97,10 +108,11 @@ export const checkLogin = () => {
           resolve()
         })
         .catch((error) => {
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          dispatch(logOutAction())
+          console.log('check login error: ', error)
+          // localStorage.removeItem('drivertoken')
+          // localStorage.removeItem('driveruser')
+          // localStorage.removeItem('driverrole')
+          // dispatch(logOutAction())
           resolve()
         })
     })

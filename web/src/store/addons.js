@@ -20,8 +20,8 @@ export const getHeadersReferences = () => {
 }
 export const errorHandle = (error) => {
   if (error === 401) {
-    localStorage.removeItem('drivertoken')
-    window.location.replace(window.location.origin)
+    // localStorage.removeItem('drivertoken')
+    // window.location.replace(window.location.origin)
   } else if (error === 403) {
   }
 }
