@@ -59,7 +59,7 @@ export const getTrialManager = () => {
          let DBOpenRequest = window.indexedDB.open('driver', 1)
          DBOpenRequest.onsuccess = (event) => {
            let db = event.target.result
-           let transaction = db.transaction(['trial_session'], 'readwrite')
+           let transaction = db.transaction(['trial_session'], 'readonly')
            let store = transaction.objectStore('trial_session')
            store.getAll().onsuccess = (e) => {
              console.log('sowa 8: ', e)

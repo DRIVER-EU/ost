@@ -79,6 +79,31 @@ export const getViewTrials = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
        .then((response) => {
+         let DBOpenRequest = window.indexedDB.open('driver', 1)
+         DBOpenRequest.onsuccess = (event) => {
+           let db = event.target.result
+           let answers = db.transaction(['answer'], 'readwrite').objectStore('answer')
+           let events = db.transaction(['event'], 'readwrite').objectStore('event')
+           for (let i = 0; i < response.data.length; i++) {
+             if (response.data[i].type === 'ANSWER') {
+               let item = answers.get(response.data[i].id)
+               item.onsuccess = (x) => {
+                 if (!x.result) {
+                   answers.add(Object.assign(response.data[i],
+                  { trialsession_id: Number(trialsessionId) }))
+                 }
+               }
+             } else if (response.data[i].type === 'EVENT') {
+               let item = events.get(response.data[i].id)
+               item.onsuccess = (x) => {
+                 if (!x.result) {
+                   events.add(Object.assign(response.data[i],
+                  { trialsession_id: Number(trialsessionId) }))
+                 }
+               }
+             }
+           }
+         }
          dispatch(getViewTrialsAction(response.data))
          resolve()
        })
@@ -105,6 +130,7 @@ export const getTrialSession = (trialsessionId) => {
              if (!x.target.result) { store.add(response.data) }
            }
          }
+         console.log('sowa 10: ', response.data)
          dispatch(getTrialSessionAction(response.data))
          resolve()
        })
@@ -115,8 +141,9 @@ export const getTrialSession = (trialsessionId) => {
            let transaction = db.transaction(['trial_session'], 'readonly')
            let store = transaction.objectStore('trial_session')
            if (trialsessionId) {
-             store.get(trialsessionId).onsuccess = (event) => {
-               dispatch(getTrialSessionAction(event.target.result))
+             store.get(trialsessionId).onsuccess = (e) => {
+               console.log('sowa 11: ', e)
+               dispatch(getTrialSessionAction(e.target.result))
              }
            }
          }
@@ -140,7 +167,7 @@ export const getTrials = () => {
            for (let i = 0; i < response.data.data.length; i++) {
              let item = store.get(response.data.data[i].id)
              item.onsuccess = (x) => {
-               if (x.result) { store.add(response.data.data[i]) }
+               if (!x.result) { store.add(response.data.data[i]) }
              }
            }
          }

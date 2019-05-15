@@ -94,7 +94,8 @@ if (!('indexedDB' in window)) {
       idb.createObjectStore('attachment', { keyPath: 'id' })
     }
     if (!idb.objectStoreNames.contains('answer')) {
-      idb.createObjectStore('answear', { keyPath: 'id' })
+      let session = idb.createObjectStore('answer', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('observation_type')) {
       idb.createObjectStore('observation_type', { keyPath: 'id' })
@@ -134,7 +135,8 @@ if (!('indexedDB' in window)) {
       session.createIndex("status", "status", { unique: false })
     }
     if (!idb.objectStoreNames.contains('event')) {
-      idb.createObjectStore('event', { keyPath: 'id' })
+      let session = idb.createObjectStore('event', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial_session_manager')) {
       idb.createObjectStore('trial_session_manager', { keyPath: 'trial_user_id' })
