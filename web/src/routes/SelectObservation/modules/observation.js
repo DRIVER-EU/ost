@@ -38,7 +38,6 @@ export const getObservations = (trialSessionId) => {
             errorHandle(error)
             let offline = localStorage.getItem('observationList')
             if (offline) {
-              console.log('sowa: ', offline)
               getObservationsAction(offline)
             }
             resolve()
