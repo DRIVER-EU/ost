@@ -31,11 +31,8 @@ export const getTrials = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
-         let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.onsuccess = (event) => {
-           let db = event.target.result
-           let transaction = db.transaction(['trial_session'], 'readwrite')
-           let store = transaction.objectStore('trial_session')
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           let store = event.target.result.transaction(['trial_session'], 'readwrite').objectStore('trial_session')
            for (let i = 0; i < response.data.data.length; i++) {
              let item = store.get(response.data.data[i].id)
              item.onsuccess = (x) => {
@@ -43,22 +40,17 @@ export const getTrials = () => {
              }
            }
          }
-        //  console.log('sowa 1: ', response.data)
          dispatch(getTrialsAction(response.data))
          resolve()
        })
        .catch((error) => {
-         let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.onsuccess = (event) => {
-           let db = event.target.result
-           let transaction = db.transaction(['trial_session'], 'readonly')
-           let store = transaction.objectStore('trial_session').index('status')
-           store.get('ACTIVE').onsuccess = (e) => {
-            //  console.log('sowa 2: ', e)
-             let result = e.target.result.length ? { total: e.target.result.length, data: e.target.result }
-              : { total: 1, data: [e.target.result] }
-             dispatch(getTrialsAction(result))
-           }
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           event.target.result.transaction(['trial_session'],
+            'readonly').objectStore('trial_session').index('status').getAll('ACTIVE').onsuccess = (e) => {
+              dispatch(getTrialsAction(e.target.result && e.target.result.length
+                ? { total: e.target.result.length, data: e.target.result }
+                : { total: 1, data: [e.target.result] }))
+            }
          }
          errorHandle(error)
          resolve()

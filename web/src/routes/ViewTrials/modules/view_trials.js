@@ -79,26 +79,25 @@ export const getViewTrials = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
        .then((response) => {
-         let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.onsuccess = (event) => {
-           let db = event.target.result
-           let answers = db.transaction(['answer'], 'readwrite').objectStore('answer')
-           let events = db.transaction(['event'], 'readwrite').objectStore('event')
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           let item
+           let answers = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
+           let events = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
            for (let i = 0; i < response.data.length; i++) {
-             if (response.data[i].type === 'ANSWER') {
-               let item = answers.get(response.data[i].id)
+             if (response.data[i] && response.data[i].type === 'ANSWER') {
+               item = answers.get(response.data[i].id)
                item.onsuccess = (x) => {
-                 if (!x.result) {
+                 if (!x.target.result) {
                    answers.add(Object.assign(response.data[i],
-                  { trialsession_id: Number(trialsessionId) }))
+                  { trialsession_id: trialsessionId }))
                  }
                }
-             } else if (response.data[i].type === 'EVENT') {
-               let item = events.get(response.data[i].id)
+             } else if (response.data[i] && response.data[i].type === 'EVENT') {
+               item = events.get(response.data[i].id)
                item.onsuccess = (x) => {
-                 if (!x.result) {
+                 if (!x.target.result) {
                    events.add(Object.assign(response.data[i],
-                  { trialsession_id: Number(trialsessionId) }))
+                  { trialsession_id: trialsessionId }))
                  }
                }
              }
@@ -108,6 +107,22 @@ export const getViewTrials = (trialsessionId) => {
          resolve()
        })
        .catch((error) => {
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           let result = []
+           let check = false
+           let answers = event.target.result.transaction(['answer'],
+            'readonly').objectStore('answer').index('trialsession_id')
+           let events = event.target.result.transaction(['event'],
+            'readonly').objectStore('event').index('trialsession_id')
+           answers.getAll(trialsessionId).onsuccess = e1 => {
+             result = Array.concat(result, e1.target.result)
+             if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+           }
+           events.getAll(trialsessionId).onsuccess = e2 => {
+             result = Array.concat(result, e2.target.result)
+             if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+           }
+         }
          errorHandle(error)
          resolve()
        })
@@ -120,31 +135,20 @@ export const getTrialSession = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
        .then((response) => {
-         let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.onsuccess = (event) => {
-           let db = event.target.result
-           let transaction = db.transaction(['trial_session'], 'readwrite')
-           let store = transaction.objectStore('trial_session')
-           let item = store.get(response.data.id)
-           item.onsuccess = (x) => {
-             if (!x.target.result) { store.add(response.data) }
-           }
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           let store = event.target.result.transaction(['trial_session'],
+            'readwrite').objectStore('trial_session').get(response.data.id).onsuccess = (x) => {
+              if (!x.target.result) { store.add(response.data) }
+            }
          }
-         console.log('sowa 10: ', response.data)
          dispatch(getTrialSessionAction(response.data))
          resolve()
        })
        .catch((error) => {
-         let DBOpenRequest = window.indexedDB.open('driver', 1)
-         DBOpenRequest.onsuccess = (event) => {
-           let db = event.target.result
-           let transaction = db.transaction(['trial_session'], 'readonly')
-           let store = transaction.objectStore('trial_session')
-           if (trialsessionId) {
-             store.get(trialsessionId).onsuccess = (e) => {
-               console.log('sowa 11: ', e)
-               dispatch(getTrialSessionAction(e.target.result))
-             }
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           event.target.result.transaction(['trial_session'],
+           'readonly').objectStore('trial_session').get(Number(trialsessionId)).onsuccess = (e) => {
+             dispatch(getTrialSessionAction(e.target.result))
            }
          }
          errorHandle(error)
