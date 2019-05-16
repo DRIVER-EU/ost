@@ -126,7 +126,8 @@ if (!('indexedDB' in window)) {
       idb.createObjectStore('trial_role', { keyPath: 'id' })
     }
     if (!idb.objectStoreNames.contains('trial_user')) {
-      idb.createObjectStore('trial_user', { keyPath: 'id' })
+      let session = idb.createObjectStore('trial_user', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial_manager')) {
       idb.createObjectStore('trial_manager', { keyPath: 'trial_user_id' })

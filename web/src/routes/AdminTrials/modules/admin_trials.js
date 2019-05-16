@@ -109,10 +109,26 @@ export const getMessages = (id, sort = '') => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`, getHeaders())
        .then((response) => {
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           let store = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
+           for (let i = 0; i < response.data.data.length; i++) {
+             store.get(response.data.data[i].id).onsuccess = x => {
+               if (!x.target.result) {
+                 store.add(Object.assign(response.data.data[i], { trialsession_id: id }))
+               }
+             }
+           }
+         }
          dispatch(getMessagesAction(response.data))
          resolve()
        })
        .catch((error) => {
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           event.target.result.transaction(['event'],
+         'readonly').objectStore('event').index('trialsession_id').getAll(id).onsuccess = (e) => {
+           dispatch(getMessagesAction({ total: e.target.result.length, data: e.target.result }))
+         }
+         }
          errorHandle(error)
          resolve()
        })
@@ -125,10 +141,12 @@ export const sendMessage = (message) => {
     return new Promise((resolve) => {
       axios.post(`http://${origin}/api/event`, message, getHeaders())
          .then((response) => {
+           // #TODO PWA
            dispatch(sendMessageAction(message))
            resolve()
          })
          .catch((error) => {
+           // #TODO PWA
            errorHandle(error.response.status)
            resolve()
          })
@@ -141,10 +159,26 @@ export const getObservation = (id, search) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = event => {
+              let store = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
+              for (let i = 0; i < response.data.length; i++) {
+                store.get(response.data[i].id).onsuccess = x => {
+                  if (!x.target.result) {
+                    store.add(Object.assign(response.data[i], { trialsession_id: id }))
+                  }
+                }
+              }
+            }
             dispatch(getObservationAction(response.data))
             resolve()
           })
           .catch((error) => {
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              event.target.result.transaction(['answer'],
+            'readonly').objectStore('answer').index('trialsession_id').getAll(id).onsuccess = (e) => {
+              dispatch(getObservationAction(e.target.result))
+            }
+            }
             errorHandle(error)
             resolve()
           })
@@ -157,10 +191,26 @@ export const getUsers = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/user?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = event => {
+              let store = event.target.result.transaction(['trial_user'], 'readwrite').objectStore('trial_user')
+              for (let i = 0; i < response.data.length; i++) {
+                store.get(response.data[i].id).onsuccess = x => {
+                  if (!x.target.result) {
+                    store.add(Object.assign(response.data[i], { trialsession_id: id }))
+                  }
+                }
+              }
+            }
             dispatch(getUsersAction(response.data))
             resolve()
           })
           .catch((error) => {
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              event.target.result.transaction(['trial_user'],
+            'readonly').objectStore('trial_user').index('trialsession_id').getAll(id).onsuccess = (e) => {
+              dispatch(getObservationAction(e.target.result))
+            }
+            }
             errorHandle(error)
             resolve()
           })
@@ -240,11 +290,13 @@ export const setStatus = (id, statusName) => {
     return new Promise((resolve) => {
       axios.put(`http://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`, {}, getHeaders())
           .then((response) => {
+            // #TODO PWA
             dispatch(setStatusAction(response.data))
             toastr.success('Session settings', 'Status was changed!', toastrOptions)
             resolve()
           })
           .catch((error) => {
+            // #TODO PWA
             errorHandle(error)
             toastr.error('Session settings', 'Error!', toastrOptions)
             resolve()

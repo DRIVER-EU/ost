@@ -63,10 +63,27 @@ export const actions = {
 export const getSchema = (idObs, idSession) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      /* eslint-disable */
-      axios.get(`http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`, getHeaders())
-      /* eslint-enable */
+      axios.get(
+        `http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
+        // 1. pobieram observation_type na podstawie idObs
+        //
+        getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              let store = event.target.result.transaction(['observation_type'],
+                'readwrite').objectStore('observation_type')
+              for (let i = 0; i < response.data.length; i++) {
+                store.get(response.data[i].id).onsuccess = (x) => {
+                  if (!x.target.result) {
+                    store.add(Object.assign(response.data[i], { trialsession_id: idSession }))
+                  } else {
+                    store.delete(response.data[i].id).onsuccess = () => {
+                      store.add(Object.assign(response.data[i], { trialsession_id: idSession }))
+                    }
+                  }
+                }
+              }
+            }
             dispatch(getSchemaAction(response.data))
             resolve()
           })
@@ -117,10 +134,22 @@ export const downloadFile = (id, name) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/attachments/${id}`, getHeadersASCI())
      .then((response) => {
+       window.indexedDB.open('driver', 1).onsuccess = (event) => {
+         let store = event.target.result.transaction(['attachment'],
+         'readwrite').objectStore('attachment').get(response.data.id).onsuccess = (x) => {
+           if (!x.target.result) { store.add(response.data) }
+         }
+       }
        fileDownload(response.data, name)
        resolve()
      })
      .catch((error) => {
+       window.indexedDB.open('driver', 1).onsuccess = (event) => {
+         event.target.result.transaction(['attachment'],
+        'readonly').objectStore('attachment').get(Number(id)).onsuccess = (e) => {
+          fileDownload(e.target.result, name)
+        }
+       }
        errorHandle(error)
        resolve()
      })
@@ -133,10 +162,13 @@ export const getTrialTime = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trial-time`, getHeaders())
       .then((response) => {
+        localStorage.setItem('trial-time', response.data)
         dispatch(getTrialTimeAction(response.data))
         resolve()
       })
       .catch((error) => {
+        let res = localStorage.getItem('trial-time')
+        if (res) { dispatch(getTrialTimeAction(res)) }
         errorHandle(error)
         resolve()
       })
