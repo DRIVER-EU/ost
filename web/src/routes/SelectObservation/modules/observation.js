@@ -31,10 +31,28 @@ export const getObservations = (trialSessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              let store = event.target.result.transaction(['observation_type'],
+                'readwrite').objectStore('observation_type')
+              for (let i = 0; i < response.data.length; i++) {
+                store.get(response.data[i].id).onsuccess = (x) => {
+                  if (!x.target.result) {
+                    store.add(Object.assign(response.data[i],
+                    { trialsession_id: trialSessionId }))
+                  }
+                }
+              }
+            }
             dispatch(getObservationsAction(response.data))
             resolve()
           })
           .catch((error) => {
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              event.target.result.transaction(['observation_type'], 'readonly').objectStore('observation_type')
+              .index('trialsession_id').getAll(trialSessionId).onsuccess = e1 => {
+                dispatch(getObservationsAction(e1.target.result))
+              }
+            }
             errorHandle(error)
             let offline = localStorage.getItem('observationList')
             if (offline) {

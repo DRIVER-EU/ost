@@ -70,14 +70,14 @@ export const logIn = (username, password) => {
 export const logOut = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      window.indexedDB.open('driver', 1).onsuccess = (event) => {
-        for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
-          event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
-            .objectStore(event.target.result.objectStoreNames[i]).clear()
-        }
-      }
       axios.get(`http://${origin}/api/auth/logout`, getHeaders())
         .then((response) => {
+          window.indexedDB.open('driver', 1).onsuccess = (event) => {
+            for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
+              event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
+                .objectStore(event.target.result.objectStoreNames[i]).clear()
+            }
+          }
           localStorage.removeItem('drivertoken')
           localStorage.removeItem('driveruser')
           localStorage.removeItem('driverrole')
@@ -88,12 +88,7 @@ export const logOut = () => {
           browserHistory.push('/')
         })
         .catch((error) => {
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          localStorage.removeItem('openTrial')
-          toastr.success('Logout', 'Logout correct!', toastrOptions)
-          dispatch(logOutAction())
+          toastr.error('Logout', 'Error!', toastrOptions)
           resolve()
         })
     })
