@@ -82,10 +82,7 @@ export const logOut = () => {
                 .objectStore(event.target.result.objectStoreNames[i]).clear()
             }
           }
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          localStorage.removeItem('openTrial')
+          localStorage.clear()
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
           resolve()
@@ -108,9 +105,7 @@ export const checkLogin = () => {
         })
         .catch((error) => {
           if (error.message !== 'Network Error') {
-            localStorage.removeItem('drivertoken')
-            localStorage.removeItem('driveruser')
-            localStorage.removeItem('driverrole')
+            localStorage.clear()
             dispatch(logOutAction())
           }
           resolve()

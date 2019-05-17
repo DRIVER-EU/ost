@@ -73,21 +73,31 @@ export const getSchema = (idObs, idSession) => {
               for (let i = 0; i < response.data.length; i++) {
                 store.get(response.data[i].id).onsuccess = (x) => {
                   if (!x.target.result) {
-                    store.add(Object.assign(response.data[i], { trialsession_id: idSession }))
+                    store.add(Object.assign(response.data[i],
+                      { trialsession_id: idSession, observationtype_id: idObs }))
                   } else {
                     store.delete(response.data[i].id).onsuccess = () => {
-                      store.add(Object.assign(response.data[i], { trialsession_id: idSession }))
+                      store.add(Object.assign(response.data[i],
+                        { trialsession_id: idSession, observationtype_id: idObs }))
                     }
                   }
                 }
               }
             }
+            console.log('sowa: ', response.data)
             dispatch(getSchemaAction(response.data))
             resolve()
           })
           .catch((error) => {
+            console.log('sowa 2: ', error)
             if (error.message === 'Network Error') {
-              // #TODO PWA
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['event'],
+             'readonly').objectStore('event').index('trialsession_id')
+             .getAll(idSession).index('observationtype_id').getAll(idObs).onsuccess = (e) => {
+               dispatch(getSchemaAction({ total: e.target.result.length, data: e.target.result }))
+             }
+              }
             }
             errorHandle(error)
             resolve()
