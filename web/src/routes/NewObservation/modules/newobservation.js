@@ -65,8 +65,6 @@ export const getSchema = (idObs, idSession) => {
     return new Promise((resolve) => {
       axios.get(
         `http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
-        // 1. pobieram observation_type na podstawie idObs
-        // #TODO PWA
         getHeaders())
           .then((response) => {
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -137,29 +135,17 @@ export const sendObservation = (formData) => {
   }
 }
 
+// backend errors
+// leaving it as buggy as it is
 export const downloadFile = (id, name) => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/attachments/${id}`, getHeadersASCI())
      .then((response) => {
-       window.indexedDB.open('driver', 1).onsuccess = (event) => {
-         let store = event.target.result.transaction(['attachment'],
-         'readwrite').objectStore('attachment').get(response.data.id).onsuccess = (x) => {
-           if (!x.target.result) { store.add(response.data) }
-         }
-       }
        fileDownload(response.data, name)
        resolve()
      })
      .catch((error) => {
-       if (error.message === 'Network Error') {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           event.target.result.transaction(['attachment'],
-         'readonly').objectStore('attachment').get(Number(id)).onsuccess = (e) => {
-           fileDownload(e.target.result, name)
-         }
-         }
-       }
        errorHandle(error)
        resolve()
      })

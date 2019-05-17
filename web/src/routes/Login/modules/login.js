@@ -75,7 +75,7 @@ export const logOut = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/auth/logout`, getHeaders())
-        .then((response) => {
+        .then(() => {
           window.indexedDB.open('driver', 1).onsuccess = (event) => {
             for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
               event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
@@ -103,7 +103,7 @@ export const checkLogin = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
-        .then((response) => {
+        .then(() => {
           resolve()
         })
         .catch((error) => {
