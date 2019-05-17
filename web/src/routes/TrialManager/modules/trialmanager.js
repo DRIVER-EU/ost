@@ -102,7 +102,7 @@ const ACTION_HANDLERS = {
   [GET_LIST_OF_TRIALS]: (state, action) => {
     return {
       ...state,
-      listOfTrials: action.data
+      listOfTrials2: action.data
     }
   }
 }
@@ -111,7 +111,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   listOfTrialsManager: {},
-  listOfTrials: {}
+  listOfTrials2: {}
 }
 
 export default function trialManagerReducer (state = initialState, action) {

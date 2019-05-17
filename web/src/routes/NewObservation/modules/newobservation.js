@@ -69,20 +69,18 @@ export const getSchema = (idObs, idSession) => {
           .then((response) => {
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
               let store = event.target.result.transaction(['observation_type'],
-                'readwrite').objectStore('observation_type')
-              for (let i = 0; i < response.data.length; i++) {
-                store.get(response.data[i].id).onsuccess = (x) => {
+                'readwrite').objectStore('observation_type').get(response.data.id).onsuccess = (x) => {
+                  console.log('sowa nowa: ', x)
                   if (!x.target.result) {
-                    store.add(Object.assign(response.data[i],
+                    store.add(Object.assign(response.data,
                       { trialsession_id: idSession, observationtype_id: idObs }))
                   } else {
-                    store.delete(response.data[i].id).onsuccess = () => {
-                      store.add(Object.assign(response.data[i],
+                    store.delete(response.data.id).onsuccess = () => {
+                      store.add(Object.assign(response.data,
                         { trialsession_id: idSession, observationtype_id: idObs }))
                     }
                   }
                 }
-              }
             }
             console.log('sowa: ', response.data)
             dispatch(getSchemaAction(response.data))
