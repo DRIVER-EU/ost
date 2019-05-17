@@ -66,7 +66,7 @@ export const getSchema = (idObs, idSession) => {
       axios.get(
         `http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
         // 1. pobieram observation_type na podstawie idObs
-        //
+        // #TODO PWA
         getHeaders())
           .then((response) => {
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -88,6 +88,9 @@ export const getSchema = (idObs, idSession) => {
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            }
             errorHandle(error)
             resolve()
           })
@@ -116,13 +119,18 @@ export const sendObservation = (formData) => {
       data.append('data', blob)
       axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
+            // #TODO PWA
             dispatch(sendObservationAction(response.data))
             toastr.success('Observation form', 'Observation was send!', toastrOptions)
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            } else {
+              toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+            }
             errorHandle(error)
-            toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
             resolve()
           })
     })
@@ -144,11 +152,13 @@ export const downloadFile = (id, name) => {
        resolve()
      })
      .catch((error) => {
-       window.indexedDB.open('driver', 1).onsuccess = (event) => {
-         event.target.result.transaction(['attachment'],
-        'readonly').objectStore('attachment').get(Number(id)).onsuccess = (e) => {
-          fileDownload(e.target.result, name)
-        }
+       if (error.message === 'Network Error') {
+         window.indexedDB.open('driver', 1).onsuccess = (event) => {
+           event.target.result.transaction(['attachment'],
+         'readonly').objectStore('attachment').get(Number(id)).onsuccess = (e) => {
+           fileDownload(e.target.result, name)
+         }
+         }
        }
        errorHandle(error)
        resolve()
@@ -167,8 +177,10 @@ export const getTrialTime = () => {
         resolve()
       })
       .catch((error) => {
-        let res = localStorage.getItem('trial-time')
-        if (res) { dispatch(getTrialTimeAction(res)) }
+        if (error.message === 'Network Error') {
+          let res = localStorage.getItem('trial-time')
+          if (res) { dispatch(getTrialTimeAction(res)) }
+        }
         errorHandle(error)
         resolve()
       })

@@ -60,7 +60,11 @@ export const logIn = (username, password) => {
           resolve()
         })
         .catch((error) => {
-          toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
+          if (error.message === 'Network Error') {
+            toastr.error('Login', 'You cannot Log In while being offline', toastrOptions)
+          } else {
+            toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
+          }
           resolve()
         })
     })
@@ -103,11 +107,12 @@ export const checkLogin = () => {
           resolve()
         })
         .catch((error) => {
-          console.log('check login error: ', error)
-          // localStorage.removeItem('drivertoken')
-          // localStorage.removeItem('driveruser')
-          // localStorage.removeItem('driverrole')
-          // dispatch(logOutAction())
+          if (error.message !== 'Network Error') {
+            localStorage.removeItem('drivertoken')
+            localStorage.removeItem('driveruser')
+            localStorage.removeItem('driverrole')
+            dispatch(logOutAction())
+          }
           resolve()
         })
     })

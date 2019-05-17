@@ -20,9 +20,10 @@ export const getHeadersReferences = () => {
 }
 export const errorHandle = (error) => {
   if (error === 401) {
-    // localStorage.removeItem('drivertoken')
-    // window.location.replace(window.location.origin)
-  } else if (error === 403) {
+    localStorage.removeItem('drivertoken')
+    window.location.replace(window.location.origin)
+  } else if (error.message === 'Network Error') {
+    // #TODO PWA
   }
 }
 export const setPathname = (value) => {

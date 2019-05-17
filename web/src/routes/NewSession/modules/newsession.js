@@ -44,6 +44,7 @@ export const newSession = (data, type) => {
       }
       axios.post(`http://${origin}/api/trialsessions/${url}`, data, getHeaders())
           .then((response) => {
+            // #TODO PWA
             if (type === 'email') {
               dispatch(newSessionAction(response.data))
             } else {
@@ -54,9 +55,13 @@ export const newSession = (data, type) => {
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            } else {
+              browserHistory.push('/trial-manager')
+              toastr.error('New Session', 'Error!', toastrOptions)
+            }
             errorHandle(error)
-            browserHistory.push('/trial-manager')
-            toastr.error('New Session', 'Error!', toastrOptions)
             resolve()
           })
     })

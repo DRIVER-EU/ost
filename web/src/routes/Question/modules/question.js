@@ -38,10 +38,9 @@ export const actions = {
 export const getSchemaView = (idObs) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      /* eslint-disable */
       axios.get(`http://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
-      /* eslint-enable */
           .then((response) => {
+            // #TODO PWA
             let change = {
               name: response.data.name,
               description: response.data.description,
@@ -55,6 +54,9 @@ export const getSchemaView = (idObs) => {
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            }
             errorHandle(error)
             resolve()
           })
@@ -67,10 +69,14 @@ export const sendObservation = () => {
     return new Promise((resolve) => {
       axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
           .then((response) => {
+            // #TODO PWA
             dispatch(sendObservationAction(response.data))
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            }
             errorHandle(error)
             resolve()
           })

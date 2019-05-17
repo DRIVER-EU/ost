@@ -51,12 +51,14 @@ export const getTrialManager = () => {
          resolve()
        })
        .catch((error) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           event.target.result.transaction(['trial_session'],
-           'readonly').objectStore('trial_session').getAll().onsuccess = (e) => {
-             dispatch(getTrialManagerAction(e.target.result && e.target.result.length
-              ? { total: e.target.result.length, data: e.target.result }
-              : { total: 1, data: [e.target.result] }))
+         if (error.message === 'Network Error') {
+           window.indexedDB.open('driver', 1).onsuccess = (event) => {
+             event.target.result.transaction(['trial_session'],
+            'readonly').objectStore('trial_session').getAll().onsuccess = (e) => {
+              dispatch(getTrialManagerAction(e.target.result && e.target.result.length
+               ? { total: e.target.result.length, data: e.target.result }
+               : { total: 1, data: [e.target.result] }))
+            }
            }
          }
          errorHandle(error)
@@ -71,25 +73,14 @@ export const getListOfTrials = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/trials`, getHeaders())
        .then((response) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           let store = event.target.result.transaction(['trial'], 'readwrite').objectStore('trial')
-           for (let i = 0; i < response.data.data.length; i++) {
-             store.get(response.data.data[i].id).onsuccess = (x) => {
-               if (!x.target.result) { store.add(response.data.data[i]) }
-             }
-           }
-         }
+         localStorage.setItem('listOfTrials', JSON.stringify(response.data))
          dispatch(getListOfTrialsAction(response.data))
          resolve()
        })
        .catch((error) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           event.target.result.transaction(['trial'],
-          'readonly').objectStore('trial').getAll().onsuccess = (e) => {
-            dispatch(getTrialManagerAction(e.target.result && e.target.result.length
-             ? { total: e.target.result.length, data: e.target.result }
-             : { total: 1, data: [e.target.result] }))
-          }
+         if (error.message === 'Network Error') {
+           let list = localStorage.getItem('listOfTrials')
+           if (list) { dispatch(getListOfTrialsAction(JSON.parse(list))) }
          }
          errorHandle(error)
          resolve()

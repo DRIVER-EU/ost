@@ -123,11 +123,13 @@ export const getMessages = (id, sort = '') => {
          resolve()
        })
        .catch((error) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           event.target.result.transaction(['event'],
-         'readonly').objectStore('event').index('trialsession_id').getAll(id).onsuccess = (e) => {
-           dispatch(getMessagesAction({ total: e.target.result.length, data: e.target.result }))
-         }
+         if (error.message === 'Network Error') {
+           window.indexedDB.open('driver', 1).onsuccess = (event) => {
+             event.target.result.transaction(['event'],
+          'readonly').objectStore('event').index('trialsession_id').getAll(id).onsuccess = (e) => {
+            dispatch(getMessagesAction({ total: e.target.result.length, data: e.target.result }))
+          }
+           }
          }
          errorHandle(error)
          resolve()
@@ -146,7 +148,9 @@ export const sendMessage = (message) => {
            resolve()
          })
          .catch((error) => {
-           // #TODO PWA
+           if (error.message === 'Network Error') {
+             // #TODO PWA
+           }
            errorHandle(error.response.status)
            resolve()
          })
@@ -173,11 +177,13 @@ export const getObservation = (id, search) => {
             resolve()
           })
           .catch((error) => {
-            window.indexedDB.open('driver', 1).onsuccess = (event) => {
-              event.target.result.transaction(['answer'],
-            'readonly').objectStore('answer').index('trialsession_id').getAll(id).onsuccess = (e) => {
-              dispatch(getObservationAction(e.target.result))
-            }
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['answer'],
+              'readonly').objectStore('answer').index('trialsession_id').getAll(id).onsuccess = (e) => {
+                dispatch(getObservationAction(e.target.result))
+              }
+              }
             }
             errorHandle(error)
             resolve()
@@ -205,11 +211,13 @@ export const getUsers = (id) => {
             resolve()
           })
           .catch((error) => {
-            window.indexedDB.open('driver', 1).onsuccess = (event) => {
-              event.target.result.transaction(['trial_user'],
-            'readonly').objectStore('trial_user').index('trialsession_id').getAll(id).onsuccess = (e) => {
-              dispatch(getObservationAction(e.target.result))
-            }
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['trial_user'],
+              'readonly').objectStore('trial_user').index('trialsession_id').getAll(id).onsuccess = (e) => {
+                dispatch(getObservationAction(e.target.result))
+              }
+              }
             }
             errorHandle(error)
             resolve()
@@ -223,10 +231,28 @@ export const getRoles = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/role?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = event => {
+              let store = event.target.result.transaction(['trial_role'], 'readwrite').objectStore('trial_role')
+              for (let i = 0; i < response.data.data.length; i++) {
+                store.get(response.data.data[i].id).onsuccess = x => {
+                  if (!x.target.result) {
+                    store.add(Object.assign(response.data.data[i], { trialsession_id: id }))
+                  }
+                }
+              }
+            }
             dispatch(getRolesAction(response.data))
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['trial_role'],
+              'readonly').objectStore('trial_role').index('trialsession_id').getAll(id).onsuccess = (e) => {
+                dispatch(getRolesAction({ total: e.target.result.length, data: e.target.result }))
+              }
+              }
+            }
             errorHandle(error)
             resolve()
           })
@@ -239,10 +265,28 @@ export const getStages = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/stages?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = event => {
+              let store = event.target.result.transaction(['trial_stage'], 'readwrite').objectStore('trial_stage')
+              for (let i = 0; i < response.data.data.length; i++) {
+                store.get(response.data.data[i].id).onsuccess = x => {
+                  if (!x.target.result) {
+                    store.add(Object.assign(response.data.data[i], { trialsession_id: id }))
+                  }
+                }
+              }
+            }
             dispatch(getStagesAction(response.data))
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['trial_stage'],
+              'readonly').objectStore('trial_stage').index('trialsession_id').getAll(id).onsuccess = (e) => {
+                dispatch(getStagesAction({ total: e.target.result.length, data: e.target.result }))
+              }
+              }
+            }
             errorHandle(error)
             resolve()
           })
@@ -260,8 +304,12 @@ export const setStage = (id, stageId) => {
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            } else {
+              toastr.error('Session settings', 'Error!', toastrOptions)
+            }
             errorHandle(error)
-            toastr.error('Session settings', 'Error!', toastrOptions)
             resolve()
           })
     })
@@ -273,11 +321,15 @@ export const exportToCSV = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers/csv-file?trialsession_id=${id}`, getHeadersFileDownload())
         .then((response) => {
+          // #TODO PWA
           toastr.success('Export to CSV', 'Export has been successful!', toastrOptions)
           fileDownload(response.data, 'summaryOfObservations.csv')
           resolve()
         })
         .catch((error) => {
+          if (error.message === 'Network Error') {
+            // #TODO PWA
+          }
           errorHandle(error.response.status)
           resolve()
         })
@@ -296,9 +348,12 @@ export const setStatus = (id, statusName) => {
             resolve()
           })
           .catch((error) => {
-            // #TODO PWA
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            } else {
+              toastr.error('Session settings', 'Error!', toastrOptions)
+            }
             errorHandle(error)
-            toastr.error('Session settings', 'Error!', toastrOptions)
             resolve()
           })
     })

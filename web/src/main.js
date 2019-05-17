@@ -105,7 +105,8 @@ if (!('indexedDB' in window)) {
       idb.createObjectStore('question', { keyPath: 'id' })
     }
     if (!idb.objectStoreNames.contains('trial_stage')) {
-      idb.createObjectStore('trial_stage', { keyPath: 'id' })
+      let session = idb.createObjectStore('trial_stage', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial')) {
       idb.createObjectStore('trial', { keyPath: 'id' })
@@ -123,7 +124,8 @@ if (!('indexedDB' in window)) {
       idb.createObjectStore('user_role_session', { keyPath: 'trial_user_id' })
     }
     if (!idb.objectStoreNames.contains('trial_role')) {
-      idb.createObjectStore('trial_role', { keyPath: 'id' })
+      let session = idb.createObjectStore('trial_role', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial_user')) {
       let session = idb.createObjectStore('trial_user', { keyPath: 'id' })

@@ -47,10 +47,12 @@ export const getObservations = (trialSessionId) => {
             resolve()
           })
           .catch((error) => {
-            window.indexedDB.open('driver', 1).onsuccess = (event) => {
-              event.target.result.transaction(['observation_type'], 'readonly').objectStore('observation_type')
-              .index('trialsession_id').getAll(trialSessionId).onsuccess = e1 => {
-                dispatch(getObservationsAction(e1.target.result))
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['observation_type'], 'readonly').objectStore('observation_type')
+                .index('trialsession_id').getAll(trialSessionId).onsuccess = e1 => {
+                  dispatch(getObservationsAction(e1.target.result))
+                }
               }
             }
             errorHandle(error)
