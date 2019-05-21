@@ -8,7 +8,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle, getHeadersFileDownload } from '../../../store/addons'
+import { getHeaders, errorHandle, getHeadersFileDownload, freeQueue } from '../../../store/addons'
 import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
 
@@ -109,6 +109,7 @@ export const getMessages = (id, sort = '') => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`, getHeaders())
        .then((response) => {
+         freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
            let store = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
            for (let i = 0; i < response.data.data.length; i++) {
@@ -155,13 +156,13 @@ export const sendMessage = (message) => {
                event.target.result.transaction(['sendQueue'], 'readwrite')
                .objectStore('sendQueue').getAll().onsuccess = e => {
                  length = e.target.result.length
+                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                   id: length,
+                   type: 'post',
+                   address: `http://${origin}/api/event`,
+                   data: message
+                 })
                }
-               event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
-                 id: length,
-                 type: 'post',
-                 address: `http://${origin}/api/event`,
-                 data: message
-               })
              }
            }
            errorHandle(error.response.status)
@@ -176,6 +177,7 @@ export const getObservation = (id, search) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
               for (let i = 0; i < response.data.length; i++) {
@@ -211,6 +213,7 @@ export const getUsers = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/user?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['trial_user'], 'readwrite').objectStore('trial_user')
               for (let i = 0; i < response.data.data.length; i++) {
@@ -245,6 +248,7 @@ export const getRoles = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/role?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['trial_role'], 'readwrite').objectStore('trial_role')
               for (let i = 0; i < response.data.data.length; i++) {
@@ -279,6 +283,7 @@ export const getStages = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/stages?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['trial_stage'], 'readwrite').objectStore('trial_stage')
               for (let i = 0; i < response.data.data.length; i++) {
