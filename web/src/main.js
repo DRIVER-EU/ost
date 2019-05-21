@@ -102,6 +102,7 @@ if (!('indexedDB' in window)) {
       let session = idb.createObjectStore('observation_type', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })
       session.createIndex("observationtype_id", "observationtype_id", { unique: false })
+      session.createIndex("trialsession_id, observationtype_id", ["trialsession_id", "observationtype_id"], { unique: false })
     }
     // questions are bugged in backend
     // if (!idb.objectStoreNames.contains('question')) {

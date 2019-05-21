@@ -88,12 +88,9 @@ export const getSchema = (idObs, idSession) => {
           .catch((error) => {
             if (error.message === 'Network Error') {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
-                let store = event.target.result.transaction(['observation_type'],
-             'readonly').objectStore('observation_type')
-                store.index('trialsession_id').getAll(idSession)
-                store.index('observationtype_id').get(idObs).onsuccess = (e) => {
-                  dispatch(getSchemaAction(e.target.result))
-                }
+                event.target.result.transaction(['observation_type'],
+                'readonly').objectStore('observation_type').index('trialsession_id, observationtype_id')
+                .get([idSession, idObs]).onsuccess = (e) => { dispatch(getSchemaAction(e.target.result)) }
               }
             }
             errorHandle(error)
