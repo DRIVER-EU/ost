@@ -69,32 +69,31 @@ export const getSchema = (idObs, idSession) => {
           .then((response) => {
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
               let store = event.target.result.transaction(['observation_type'],
-                'readwrite').objectStore('observation_type').get(response.data.id).onsuccess = (x) => {
-                  console.log('sowa nowa: ', x)
-                  if (!x.target.result) {
+                'readwrite').objectStore('observation_type')
+              store.get(response.data.id).onsuccess = (x) => {
+                if (!x.target.result) {
+                  store.add(Object.assign(response.data,
+                    { trialsession_id: idSession, observationtype_id: idObs }))
+                } else {
+                  store.delete(response.data.id).onsuccess = () => {
                     store.add(Object.assign(response.data,
                       { trialsession_id: idSession, observationtype_id: idObs }))
-                  } else {
-                    store.delete(response.data.id).onsuccess = () => {
-                      store.add(Object.assign(response.data,
-                        { trialsession_id: idSession, observationtype_id: idObs }))
-                    }
                   }
                 }
+              }
             }
-            console.log('sowa: ', response.data)
             dispatch(getSchemaAction(response.data))
             resolve()
           })
           .catch((error) => {
-            console.log('sowa 2: ', error)
             if (error.message === 'Network Error') {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
-                event.target.result.transaction(['event'],
-             'readonly').objectStore('event').index('trialsession_id')
-             .getAll(idSession).index('observationtype_id').getAll(idObs).onsuccess = (e) => {
-               dispatch(getSchemaAction({ total: e.target.result.length, data: e.target.result }))
-             }
+                let store = event.target.result.transaction(['observation_type'],
+             'readonly').objectStore('observation_type')
+                store.index('trialsession_id').getAll(idSession)
+                store.index('observationtype_id').get(idObs).onsuccess = (e) => {
+                  dispatch(getSchemaAction(e.target.result))
+                }
               }
             }
             errorHandle(error)
