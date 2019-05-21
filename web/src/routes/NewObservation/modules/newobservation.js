@@ -8,7 +8,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, getHeadersASCI, getHeadersReferences, errorHandle } from '../../../store/addons'
+import { getHeaders, getHeadersASCI, getHeadersReferences, errorHandle, freeQueue } from '../../../store/addons'
 import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
 
@@ -67,6 +67,7 @@ export const getSchema = (idObs, idSession) => {
         `http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
         getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
               let store = event.target.result.transaction(['observation_type'],
                 'readwrite').objectStore('observation_type')
@@ -121,14 +122,22 @@ export const sendObservation = (formData) => {
       data.append('data', blob)
       axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
-            // #TODO PWA
             dispatch(sendObservationAction(response.data))
             toastr.success('Observation form', 'Observation was send!', toastrOptions)
             resolve()
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
-              // #TODO PWA
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'post',
+                  address: `http://${origin}/api/answers`,
+                  data: data,
+                  headerType: 'refference'
+                })
+              }
             } else {
               toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
             }
@@ -162,6 +171,7 @@ export const getTrialTime = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trial-time`, getHeaders())
       .then((response) => {
+        freeQueue()
         localStorage.setItem('trial-time', response.data)
         dispatch(getTrialTimeAction(response.data))
         resolve()
