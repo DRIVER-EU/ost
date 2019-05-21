@@ -151,18 +151,12 @@ export const sendMessage = (message) => {
            if (error.message === 'Network Error') {
              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
-             window.indexedDB.open('driver', 1).onsuccess = (event) => {
-               let length = 0
-               event.target.result.transaction(['sendQueue'], 'readwrite')
-               .objectStore('sendQueue').getAll().onsuccess = e => {
-                 length = e.target.result.length
-                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
-                   id: length,
-                   type: 'post',
-                   address: `http://${origin}/api/event`,
-                   data: message
-                 })
-               }
+             window.indexedDB.open('driver', 1).onsuccess = event => {
+               event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                 type: 'post',
+                 address: `http://${origin}/api/event`,
+                 data: message
+               })
              }
            }
            errorHandle(error.response.status)
