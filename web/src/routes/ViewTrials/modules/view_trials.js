@@ -107,20 +107,22 @@ export const getViewTrials = (trialsessionId) => {
          resolve()
        })
        .catch((error) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           let result = []
-           let check = false
-           let answers = event.target.result.transaction(['answer'],
-            'readonly').objectStore('answer').index('trialsession_id')
-           let events = event.target.result.transaction(['event'],
-            'readonly').objectStore('event').index('trialsession_id')
-           answers.getAll(trialsessionId).onsuccess = e1 => {
-             result = Array.concat(result, e1.target.result)
-             if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
-           }
-           events.getAll(trialsessionId).onsuccess = e2 => {
-             result = Array.concat(result, e2.target.result)
-             if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+         if (error.message === 'Network Error') {
+           window.indexedDB.open('driver', 1).onsuccess = (event) => {
+             let result = []
+             let check = false
+             let answers = event.target.result.transaction(['answer'],
+             'readonly').objectStore('answer').index('trialsession_id')
+             let events = event.target.result.transaction(['event'],
+             'readonly').objectStore('event').index('trialsession_id')
+             answers.getAll(trialsessionId).onsuccess = e1 => {
+               result = Array.concat(result, e1.target.result)
+               if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+             }
+             events.getAll(trialsessionId).onsuccess = e2 => {
+               result = Array.concat(result, e2.target.result)
+               if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+             }
            }
          }
          errorHandle(error)
@@ -145,10 +147,12 @@ export const getTrialSession = (trialsessionId) => {
          resolve()
        })
        .catch((error) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           event.target.result.transaction(['trial_session'],
-           'readonly').objectStore('trial_session').get(Number(trialsessionId)).onsuccess = (e) => {
-             dispatch(getTrialSessionAction(e.target.result))
+         if (error.message === 'Network Error') {
+           window.indexedDB.open('driver', 1).onsuccess = (event) => {
+             event.target.result.transaction(['trial_session'],
+            'readonly').objectStore('trial_session').get(Number(trialsessionId)).onsuccess = (e) => {
+              dispatch(getTrialSessionAction(e.target.result))
+            }
            }
          }
          errorHandle(error)
@@ -175,10 +179,12 @@ export const getTrials = () => {
          resolve()
        })
        .catch((error) => {
-         window.indexedDB.open('driver', 1).onsuccess = (event) => {
-           event.target.result.transaction(['trial_session'],
-           'readonly').objectStore('trial_session').index('status').get('ACTIVE').onsuccess = (e) => {
-             dispatch(getTrialsAction({ total: e.target.result.length, data: e.target.result }))
+         if (error.message === 'Network Error') {
+           window.indexedDB.open('driver', 1).onsuccess = (event) => {
+             event.target.result.transaction(['trial_session'],
+            'readonly').objectStore('trial_session').index('status').get('ACTIVE').onsuccess = (e) => {
+              dispatch(getTrialsAction({ total: e.target.result.length, data: e.target.result }))
+            }
            }
          }
          errorHandle(error)
@@ -191,7 +197,7 @@ export const getTrials = () => {
 export const clearTrialList = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      // usuń wszystkie aktywne trial_session z bazy
+      localStorage.removeItem('listOfTrials')
       dispatch(clearTrialsAction([]))
       resolve()
     })
@@ -204,10 +210,14 @@ export const removeAnswer = (id, comment) => {
       axios.delete(`http://${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
         .then(() => {
           toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
+          // #TODO PWA
           dispatch(removeAnswerAction())
           resolve()
         })
         .catch((error) => {
+          if (error.message === 'Network Error') {
+            // #TODO PWA
+          }
           errorHandle(error)
           resolve(error)
         })
@@ -222,13 +232,18 @@ export const editComment = (id, comment) => {
       data.append('comment', comment)
       axios.post(`http://${origin}/api/questions-answers/${id}/comment`, data, getHeaders())
           .then((response) => {
+            // #TODO PWA
             dispatch(editCommentAction(response.data))
             toastr.success('Comment', 'Changed was save!', toastrOptions)
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            } else {
+              toastr.error('Comment', 'Error!', toastrOptions)
+            }
             errorHandle(error)
-            toastr.error('Comment', 'Error!', toastrOptions)
             resolve()
           })
     })

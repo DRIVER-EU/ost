@@ -63,14 +63,36 @@ export const actions = {
 export const getSchema = (idObs, idSession) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      /* eslint-disable */
-      axios.get(`http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`, getHeaders())
-      /* eslint-enable */
+      axios.get(
+        `http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
+        getHeaders())
           .then((response) => {
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              let store = event.target.result.transaction(['observation_type'],
+                'readwrite').objectStore('observation_type')
+              store.get(response.data.id).onsuccess = (x) => {
+                if (!x.target.result) {
+                  store.add(Object.assign(response.data,
+                    { trialsession_id: idSession, observationtype_id: idObs }))
+                } else {
+                  store.delete(response.data.id).onsuccess = () => {
+                    store.add(Object.assign(response.data,
+                      { trialsession_id: idSession, observationtype_id: idObs }))
+                  }
+                }
+              }
+            }
             dispatch(getSchemaAction(response.data))
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['observation_type'],
+                'readonly').objectStore('observation_type').index('trialsession_id, observationtype_id')
+                .get([idSession, idObs]).onsuccess = (e) => { dispatch(getSchemaAction(e.target.result)) }
+              }
+            }
             errorHandle(error)
             resolve()
           })
@@ -99,19 +121,26 @@ export const sendObservation = (formData) => {
       data.append('data', blob)
       axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
+            // #TODO PWA
             dispatch(sendObservationAction(response.data))
             toastr.success('Observation form', 'Observation was send!', toastrOptions)
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            } else {
+              toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
+            }
             errorHandle(error)
-            toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
             resolve()
           })
     })
   }
 }
 
+// backend errors
+// leaving it as buggy as it is
 export const downloadFile = (id, name) => {
   return (dispatch) => {
     return new Promise((resolve) => {
@@ -133,10 +162,15 @@ export const getTrialTime = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trial-time`, getHeaders())
       .then((response) => {
+        localStorage.setItem('trial-time', response.data)
         dispatch(getTrialTimeAction(response.data))
         resolve()
       })
       .catch((error) => {
+        if (error.message === 'Network Error') {
+          let res = localStorage.getItem('trial-time')
+          if (res) { dispatch(getTrialTimeAction(res)) }
+        }
         errorHandle(error)
         resolve()
       })

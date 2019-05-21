@@ -90,21 +90,27 @@ if (!('indexedDB' in window)) {
   let DBOpenRequest = window.indexedDB.open('driver', 1)
   DBOpenRequest.onupgradeneeded = (event) => {
     let idb = event.target.result
-    if (!idb.objectStoreNames.contains('attachment')) {
-      idb.createObjectStore('attachment', { keyPath: 'id' })
-    }
+    // attachements are bugged in backend
+    // if (!idb.objectStoreNames.contains('attachment')) {
+    //   idb.createObjectStore('attachment', { keyPath: 'id' })
+    // }
     if (!idb.objectStoreNames.contains('answer')) {
       let session = idb.createObjectStore('answer', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('observation_type')) {
-      idb.createObjectStore('observation_type', { keyPath: 'id' })
+      let session = idb.createObjectStore('observation_type', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
+      session.createIndex("observationtype_id", "observationtype_id", { unique: false })
+      session.createIndex("trialsession_id, observationtype_id", ["trialsession_id", "observationtype_id"], { unique: false })
     }
-    if (!idb.objectStoreNames.contains('question')) {
-      idb.createObjectStore('question', { keyPath: 'id' })
-    }
+    // questions are bugged in backend
+    // if (!idb.objectStoreNames.contains('question')) {
+    //   idb.createObjectStore('question', { keyPath: 'id' })
+    // }
     if (!idb.objectStoreNames.contains('trial_stage')) {
-      idb.createObjectStore('trial_stage', { keyPath: 'id' })
+      let session = idb.createObjectStore('trial_stage', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial')) {
       idb.createObjectStore('trial', { keyPath: 'id' })
@@ -122,10 +128,12 @@ if (!('indexedDB' in window)) {
       idb.createObjectStore('user_role_session', { keyPath: 'trial_user_id' })
     }
     if (!idb.objectStoreNames.contains('trial_role')) {
-      idb.createObjectStore('trial_role', { keyPath: 'id' })
+      let session = idb.createObjectStore('trial_role', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial_user')) {
-      idb.createObjectStore('trial_user', { keyPath: 'id' })
+      let session = idb.createObjectStore('trial_user', { keyPath: 'id' })
+      session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
     if (!idb.objectStoreNames.contains('trial_manager')) {
       idb.createObjectStore('trial_manager', { keyPath: 'trial_user_id' })

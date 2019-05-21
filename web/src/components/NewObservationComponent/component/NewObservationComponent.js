@@ -364,7 +364,7 @@ class NewObservationComponent extends Component {
   }
 
   componentDidMount () {
-    this.props.getTrialTime()
+    this.props.getTrialTime && this.props.getTrialTime()
   }
 
   componentDidUpdate (prevState, prevProps) {

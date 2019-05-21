@@ -60,7 +60,11 @@ export const logIn = (username, password) => {
           resolve()
         })
         .catch((error) => {
-          toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
+          if (error.message === 'Network Error') {
+            toastr.error('Login', 'You cannot Log In while being offline', toastrOptions)
+          } else {
+            toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
+          }
           resolve()
         })
     })
@@ -70,30 +74,22 @@ export const logIn = (username, password) => {
 export const logOut = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      window.indexedDB.open('driver', 1).onsuccess = (event) => {
-        for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
-          event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
-            .objectStore(event.target.result.objectStoreNames[i]).clear()
-        }
-      }
       axios.get(`http://${origin}/api/auth/logout`, getHeaders())
-        .then((response) => {
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          localStorage.removeItem('openTrial')
+        .then(() => {
+          window.indexedDB.open('driver', 1).onsuccess = (event) => {
+            for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
+              event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
+                .objectStore(event.target.result.objectStoreNames[i]).clear()
+            }
+          }
+          localStorage.clear()
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
           resolve()
           browserHistory.push('/')
         })
         .catch((error) => {
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          localStorage.removeItem('openTrial')
-          toastr.success('Logout', 'Logout correct!', toastrOptions)
-          dispatch(logOutAction())
+          toastr.error('Logout', 'Error!', toastrOptions)
           resolve()
         })
     })
@@ -104,15 +100,14 @@ export const checkLogin = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
-        .then((response) => {
+        .then(() => {
           resolve()
         })
         .catch((error) => {
-          console.log('check login error: ', error)
-          // localStorage.removeItem('drivertoken')
-          // localStorage.removeItem('driveruser')
-          // localStorage.removeItem('driverrole')
-          // dispatch(logOutAction())
+          if (error.message !== 'Network Error') {
+            localStorage.clear()
+            dispatch(logOutAction())
+          }
           resolve()
         })
     })

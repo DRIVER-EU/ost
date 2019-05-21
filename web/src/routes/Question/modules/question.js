@@ -35,12 +35,12 @@ export const actions = {
   sendObservation
 }
 
+// backend errors: The requested resource cannot be converted to DTO
+// leaving it as buggy as it is
 export const getSchemaView = (idObs) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      /* eslint-disable */
       axios.get(`http://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
-      /* eslint-enable */
           .then((response) => {
             let change = {
               name: response.data.name,
@@ -67,10 +67,14 @@ export const sendObservation = () => {
     return new Promise((resolve) => {
       axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
           .then((response) => {
+            // #TODO PWA
             dispatch(sendObservationAction(response.data))
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              // #TODO PWA
+            }
             errorHandle(error)
             resolve()
           })
