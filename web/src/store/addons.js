@@ -39,7 +39,10 @@ export const freeQueue = () => {
       let queue = event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue')
       queue.getAll().onsuccess = (e) => {
         for (let i = 0; i < e.target.result.length; i++) {
-          axios[e.target.result[i].type](e.target.result[i].address, e.target.result[i].data, getHeaders())
+          axios[e.target.result[i].type](e.target.result[i].address, e.target.result[i].data,
+            e.target.result[i].headerType ? (e.target.result[i].headerType === 'refference'
+            ? getHeadersReferences() : e.target.result[i].headerType === 'file'
+            ? getHeadersFileDownload() : getHeadersASCI()) : getHeaders())
         }
         queue.clear()
       }

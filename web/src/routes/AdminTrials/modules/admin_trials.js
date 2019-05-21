@@ -151,18 +151,12 @@ export const sendMessage = (message) => {
            if (error.message === 'Network Error') {
              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
-             window.indexedDB.open('driver', 1).onsuccess = (event) => {
-               let length = 0
-               event.target.result.transaction(['sendQueue'], 'readwrite')
-               .objectStore('sendQueue').getAll().onsuccess = e => {
-                 length = e.target.result.length
-                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
-                   id: length,
-                   type: 'post',
-                   address: `http://${origin}/api/event`,
-                   data: message
-                 })
-               }
+             window.indexedDB.open('driver', 1).onsuccess = event => {
+               event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                 type: 'post',
+                 address: `http://${origin}/api/event`,
+                 data: message
+               })
              }
            }
            errorHandle(error.response.status)
@@ -325,8 +319,15 @@ export const setStage = (id, stageId) => {
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
-              toastr.warning('Session settings', 'Error!', toastrOptions)
-              // #TODO PWA
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'put',
+                  address: `http://${origin}/api/trialsessions/${id}`,
+                  data: stageId
+                })
+              }
             } else {
               toastr.error('Session settings', 'Error!', toastrOptions)
             }
@@ -337,20 +338,18 @@ export const setStage = (id, stageId) => {
   }
 }
 
+// backend errors #NullPointerException
+// leaving it as buggy as it is
 export const exportToCSV = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers/csv-file?trialsession_id=${id}`, getHeadersFileDownload())
         .then((response) => {
-          // #TODO PWA
           toastr.success('Export to CSV', 'Export has been successful!', toastrOptions)
           fileDownload(response.data, 'summaryOfObservations.csv')
           resolve()
         })
         .catch((error) => {
-          if (error.message === 'Network Error') {
-            // #TODO PWA
-          }
           errorHandle(error.response.status)
           resolve()
         })
@@ -363,14 +362,21 @@ export const setStatus = (id, statusName) => {
     return new Promise((resolve) => {
       axios.put(`http://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`, {}, getHeaders())
           .then((response) => {
-            // #TODO PWA
             dispatch(setStatusAction(response.data))
             toastr.success('Session settings', 'Status was changed!', toastrOptions)
             resolve()
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
-              // #TODO PWA
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'put',
+                  address: `http://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`,
+                  data: {}
+                })
+              }
             } else {
               toastr.error('Session settings', 'Error!', toastrOptions)
             }

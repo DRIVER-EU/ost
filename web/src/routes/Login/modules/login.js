@@ -62,7 +62,7 @@ export const logIn = (username, password) => {
         })
         .catch((error) => {
           if (error.message === 'Network Error') {
-            toastr.error('Login', 'You cannot Log In while being offline', toastrOptions)
+            toastr.error('Login', 'You cannot log in while being offline', toastrOptions)
           } else {
             toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
           }
@@ -90,7 +90,11 @@ export const logOut = () => {
           browserHistory.push('/')
         })
         .catch((error) => {
-          toastr.error('Logout', 'Error!', toastrOptions)
+          if (error.message === 'Network Error') {
+            toastr.error('Login', 'You cannot log out while being offline', toastrOptions)
+          } else {
+            toastr.error('Logout', 'Error!', toastrOptions)
+          }
           resolve()
         })
     })

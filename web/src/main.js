@@ -95,7 +95,7 @@ if (!('indexedDB' in window)) {
     //   idb.createObjectStore('attachment', { keyPath: 'id' })
     // }
     if (!idb.objectStoreNames.contains('sendQueue')) {
-      idb.createObjectStore('sendQueue', { keyPath: 'id' })
+      idb.createObjectStore('sendQueue', { autoIncrement: true })
     }
     if (!idb.objectStoreNames.contains('answer')) {
       let session = idb.createObjectStore('answer', { keyPath: 'id' })
@@ -115,21 +115,21 @@ if (!('indexedDB' in window)) {
       let session = idb.createObjectStore('trial_stage', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
-    if (!idb.objectStoreNames.contains('trial')) {
-      idb.createObjectStore('trial', { keyPath: 'id' })
-    }
-    if (!idb.objectStoreNames.contains('answer_trial_role')) {
-      idb.createObjectStore('answer_trial_role', { keyPath: 'answer_id' })
-    }
-    if (!idb.objectStoreNames.contains('observation_type_trial_role')) {
-      idb.createObjectStore('observation_type_trial_role', { keyPath: 'observation_type_id' })
-    }
-    if (!idb.objectStoreNames.contains('trial_role_m2m')) {
-      idb.createObjectStore('trial_role_m2m', { keyPath: 'trial_observer_id' })
-    }
-    if (!idb.objectStoreNames.contains('user_role_session')) {
-      idb.createObjectStore('user_role_session', { keyPath: 'trial_user_id' })
-    }
+    // if (!idb.objectStoreNames.contains('trial')) {
+    //   idb.createObjectStore('trial', { keyPath: 'id' })
+    // }
+    // if (!idb.objectStoreNames.contains('answer_trial_role')) {
+    //   idb.createObjectStore('answer_trial_role', { keyPath: 'answer_id' })
+    // }
+    // if (!idb.objectStoreNames.contains('observation_type_trial_role')) {
+    //   idb.createObjectStore('observation_type_trial_role', { keyPath: 'observation_type_id' })
+    // }
+    // if (!idb.objectStoreNames.contains('trial_role_m2m')) {
+    //   idb.createObjectStore('trial_role_m2m', { keyPath: 'trial_observer_id' })
+    // }
+    // if (!idb.objectStoreNames.contains('user_role_session')) {
+    //   idb.createObjectStore('user_role_session', { keyPath: 'trial_user_id' })
+    // }
     if (!idb.objectStoreNames.contains('trial_role')) {
       let session = idb.createObjectStore('trial_role', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })
@@ -138,9 +138,9 @@ if (!('indexedDB' in window)) {
       let session = idb.createObjectStore('trial_user', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
-    if (!idb.objectStoreNames.contains('trial_manager')) {
-      idb.createObjectStore('trial_manager', { keyPath: 'trial_user_id' })
-    }
+    // if (!idb.objectStoreNames.contains('trial_manager')) {
+    //   idb.createObjectStore('trial_manager', { keyPath: 'trial_user_id' })
+    // }
     if (!idb.objectStoreNames.contains('trial_session')) {
       let session = idb.createObjectStore('trial_session', { keyPath: 'id' })
       session.createIndex("status", "status", { unique: false })
@@ -149,9 +149,9 @@ if (!('indexedDB' in window)) {
       let session = idb.createObjectStore('event', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })
     }
-    if (!idb.objectStoreNames.contains('trial_session_manager')) {
-      idb.createObjectStore('trial_session_manager', { keyPath: 'trial_user_id' })
-    }
+    // if (!idb.objectStoreNames.contains('trial_session_manager')) {
+    //   idb.createObjectStore('trial_session_manager', { keyPath: 'trial_user_id' })
+    // }
   }
 }
 
