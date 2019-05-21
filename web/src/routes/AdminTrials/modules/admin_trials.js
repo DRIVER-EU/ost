@@ -8,7 +8,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle, getHeadersFileDownload } from '../../../store/addons'
+import { getHeaders, errorHandle, getHeadersFileDownload, freeQueue } from '../../../store/addons'
 import fileDownload from 'react-file-download'
 import { toastr } from 'react-redux-toastr'
 
@@ -109,6 +109,7 @@ export const getMessages = (id, sort = '') => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`, getHeaders())
        .then((response) => {
+         freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
            let store = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
            for (let i = 0; i < response.data.data.length; i++) {
@@ -143,13 +144,26 @@ export const sendMessage = (message) => {
     return new Promise((resolve) => {
       axios.post(`http://${origin}/api/event`, message, getHeaders())
          .then((response) => {
-           // #TODO PWA
            dispatch(sendMessageAction(message))
            resolve()
          })
          .catch((error) => {
            if (error.message === 'Network Error') {
-             // #TODO PWA
+             toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+             if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+             window.indexedDB.open('driver', 1).onsuccess = (event) => {
+               let length = 0
+               event.target.result.transaction(['sendQueue'], 'readwrite')
+               .objectStore('sendQueue').getAll().onsuccess = e => {
+                 length = e.target.result.length
+                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                   id: length,
+                   type: 'post',
+                   address: `http://${origin}/api/event`,
+                   data: message
+                 })
+               }
+             }
            }
            errorHandle(error.response.status)
            resolve()
@@ -163,6 +177,7 @@ export const getObservation = (id, search) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
               for (let i = 0; i < response.data.length; i++) {
@@ -181,7 +196,8 @@ export const getObservation = (id, search) => {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
                 event.target.result.transaction(['answer'],
               'readonly').objectStore('answer').index('trialsession_id').getAll(id).onsuccess = (e) => {
-                dispatch(getObservationAction(e.target.result))
+                dispatch(getObservationAction(
+                  typeof e.target.result.length === 'number' ? e.target.result : [e.target.result]))
               }
               }
             }
@@ -197,12 +213,13 @@ export const getUsers = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/user?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['trial_user'], 'readwrite').objectStore('trial_user')
-              for (let i = 0; i < response.data.length; i++) {
-                store.get(response.data[i].id).onsuccess = x => {
+              for (let i = 0; i < response.data.data.length; i++) {
+                store.get(response.data.data[i].id).onsuccess = x => {
                   if (!x.target.result) {
-                    store.add(Object.assign(response.data[i], { trialsession_id: id }))
+                    store.add(Object.assign(response.data.data[i], { trialsession_id: id }))
                   }
                 }
               }
@@ -215,7 +232,7 @@ export const getUsers = (id) => {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
                 event.target.result.transaction(['trial_user'],
               'readonly').objectStore('trial_user').index('trialsession_id').getAll(id).onsuccess = (e) => {
-                dispatch(getObservationAction(e.target.result))
+                dispatch(getUsersAction({ total: e.target.result.length, data: e.target.result }))
               }
               }
             }
@@ -231,6 +248,7 @@ export const getRoles = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/role?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['trial_role'], 'readwrite').objectStore('trial_role')
               for (let i = 0; i < response.data.data.length; i++) {
@@ -265,6 +283,7 @@ export const getStages = (id) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/stages?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['trial_stage'], 'readwrite').objectStore('trial_stage')
               for (let i = 0; i < response.data.data.length; i++) {
@@ -299,12 +318,14 @@ export const setStage = (id, stageId) => {
     return new Promise((resolve) => {
       axios.put(`http://${origin}/api/trialsessions/${id}`, stageId, getHeaders())
           .then((response) => {
-            dispatch(setStageAction(response.data))
             toastr.success('Session settings', 'Stage was selected!', toastrOptions)
+            dispatch(setStageAction(response.data))
+
             resolve()
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
+              toastr.warning('Session settings', 'Error!', toastrOptions)
               // #TODO PWA
             } else {
               toastr.error('Session settings', 'Error!', toastrOptions)

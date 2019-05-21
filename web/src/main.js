@@ -94,6 +94,9 @@ if (!('indexedDB' in window)) {
     // if (!idb.objectStoreNames.contains('attachment')) {
     //   idb.createObjectStore('attachment', { keyPath: 'id' })
     // }
+    if (!idb.objectStoreNames.contains('sendQueue')) {
+      idb.createObjectStore('sendQueue', { keyPath: 'id' })
+    }
     if (!idb.objectStoreNames.contains('answer')) {
       let session = idb.createObjectStore('answer', { keyPath: 'id' })
       session.createIndex("trialsession_id", "trialsession_id", { unique: false })

@@ -55,6 +55,7 @@ export const logIn = (username, password) => {
           localStorage.setItem('driveruser', JSON.stringify(response.data))
           localStorage.setItem('driverrole', response.data.roles[0])
           localStorage.setItem('openTrial', false)
+          localStorage.setItem('online', true)
           toastr.success('Login', 'Login correct!', toastrOptions)
           dispatch(logInAction(response.data))
           resolve()
