@@ -39,10 +39,28 @@ export const freeQueue = () => {
       let queue = event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue')
       queue.getAll().onsuccess = (e) => {
         for (let i = 0; i < e.target.result.length; i++) {
-          axios[e.target.result[i].type](e.target.result[i].address, e.target.result[i].data,
-            e.target.result[i].headerType ? (e.target.result[i].headerType === 'refference'
-            ? getHeadersReferences() : e.target.result[i].headerType === 'file'
-            ? getHeadersFileDownload() : getHeadersASCI()) : getHeaders())
+          if (e.target.result[i].data) {
+            if (e.target.result[i].headerType) {
+              const data = new FormData()
+              let tempData = {}
+              for (let key in e.target.result[i].data) {
+                if (key !== 'attachments') {
+                  tempData[key] = e.target.result[i].data[key]
+                }
+              }
+              let json = JSON.stringify(tempData)
+              let blob = new Blob([json], { type: 'application/json' })
+              for (let i = 0; i < e.target.result[i].data.attachments.length; i++) {
+                data.append('attachments', e.target.result[i].data.attachments[i])
+              }
+              data.append('data', blob)
+              axios[e.target.result[i].type](e.target.result[i].address, data, getHeadersReferences())
+            } else {
+              axios[e.target.result[i].type](e.target.result[i].address, e.target.result[i].data, getHeaders())
+            }
+          } else {
+            axios[e.target.result[i].type](e.target.result[i].address, getHeaders())
+          }
         }
         queue.clear()
       }

@@ -8,7 +8,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
 import { toastr } from 'react-redux-toastr'
 
 const toastrOptions = {
@@ -79,6 +79,7 @@ export const getViewTrials = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
        .then((response) => {
+         freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
            let item
            let answers = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
@@ -137,6 +138,7 @@ export const getTrialSession = (trialsessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
        .then((response) => {
+         freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
            let store = event.target.result.transaction(['trial_session'],
             'readwrite').objectStore('trial_session').get(response.data.id).onsuccess = (x) => {
@@ -167,6 +169,7 @@ export const getTrials = () => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
+         freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
            let store = event.target.result.transaction(['trial_session'], 'readwrite').objectStore('trial_session')
            for (let i = 0; i < response.data.data.length; i++) {
@@ -210,13 +213,20 @@ export const removeAnswer = (id, comment) => {
       axios.delete(`http://${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
         .then(() => {
           toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
-          // #TODO PWA
           dispatch(removeAnswerAction())
           resolve()
         })
         .catch((error) => {
           if (error.message === 'Network Error') {
-            // #TODO PWA
+            toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+            if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+            window.indexedDB.open('driver', 1).onsuccess = event => {
+              event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                type: 'delete',
+                address: `http://${origin}/api/answers/${id}/remove?comment=${comment}`,
+                data: {}
+              })
+            }
           }
           errorHandle(error)
           resolve(error)
@@ -239,7 +249,15 @@ export const editComment = (id, comment) => {
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
-              // #TODO PWA
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'post',
+                  address: `http://${origin}/api/questions-answers/${id}/comment`,
+                  data: data
+                })
+              }
             } else {
               toastr.error('Comment', 'Error!', toastrOptions)
             }

@@ -8,7 +8,12 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
+import { toastr } from 'react-redux-toastr'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 export const GET_SCHEMA = 'GET_SCHEMA'
 export const SEND_OBSERVATION = 'SEND_OBSERVATION'
@@ -42,6 +47,7 @@ export const getSchemaView = (idObs) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
           .then((response) => {
+            freeQueue()
             let change = {
               name: response.data.name,
               description: response.data.description,
@@ -67,13 +73,20 @@ export const sendObservation = () => {
     return new Promise((resolve) => {
       axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
           .then((response) => {
-            // #TODO PWA
             dispatch(sendObservationAction(response.data))
             resolve()
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
-              // #TODO PWA
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'post',
+                  address: `http://${origin}/api/anonymous/observation`,
+                  data: {}
+                })
+              }
             }
             errorHandle(error)
             resolve()

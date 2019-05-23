@@ -8,7 +8,7 @@ if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
 
 export const GET_OBSERVATIONS = 'GET_OBSERVATIONS'
 // ------------------------------------
@@ -31,6 +31,7 @@ export const getObservations = (trialSessionId) => {
     return new Promise((resolve) => {
       axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
           .then((response) => {
+            freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
               let store = event.target.result.transaction(['observation_type'],
                 'readwrite').objectStore('observation_type')
