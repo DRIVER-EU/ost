@@ -117,8 +117,6 @@ export const sendObservation = (formData) => {
         // add each file to the form data and iteratively name them
         data.append('attachments', formData.attachments[i])
       }
-      console.warn('form data: ', formData)
-      console.warn('data: ', data)
 
      // data.append('attachments', formData.attachments)
       data.append('data', blob)
