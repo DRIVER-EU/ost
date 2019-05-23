@@ -117,6 +117,8 @@ export const sendObservation = (formData) => {
         // add each file to the form data and iteratively name them
         data.append('attachments', formData.attachments[i])
       }
+      console.warn('form data: ', formData)
+      console.warn('data: ', data)
 
      // data.append('attachments', formData.attachments)
       data.append('data', blob)
@@ -131,10 +133,11 @@ export const sendObservation = (formData) => {
               toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
               if (localStorage.getItem('online')) { localStorage.removeItem('online') }
               window.indexedDB.open('driver', 1).onsuccess = event => {
-                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                let store = event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue')
+                store.add({
                   type: 'post',
                   address: `http://${origin}/api/answers`,
-                  data: data,
+                  data: formData,
                   headerType: 'refference'
                 })
               }

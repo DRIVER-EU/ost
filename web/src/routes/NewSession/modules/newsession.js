@@ -44,7 +44,6 @@ export const newSession = (data, type) => {
       }
       axios.post(`http://${origin}/api/trialsessions/${url}`, data, getHeaders())
           .then((response) => {
-            // #TODO PWA
             if (type === 'email') {
               dispatch(newSessionAction(response.data))
             } else {
@@ -56,7 +55,15 @@ export const newSession = (data, type) => {
           })
           .catch((error) => {
             if (error.message === 'Network Error') {
-              // #TODO PWA
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'post',
+                  address: `http://${origin}/api/trialsessions/${url}`,
+                  data: data
+                })
+              }
             } else {
               browserHistory.push('/trial-manager')
               toastr.error('New Session', 'Error!', toastrOptions)
