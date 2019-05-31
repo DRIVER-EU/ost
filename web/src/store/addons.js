@@ -25,7 +25,7 @@ export const getHeadersReferences = () => {
 }
 
 export const errorHandle = (error) => {
-  if (error === 401) {
+  if (error.response.status === 401) {
     localStorage.clear()
     window.location.replace(window.location.origin)
   } else if (error.message === 'Network Error' && localStorage.getItem('online')) {

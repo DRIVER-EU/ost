@@ -55,7 +55,7 @@ class CoreLayout extends Component {
   // }
 
   updateIndicator () {
-    toastr.error('Observation form', 'Internet not available, please use paper forms', toastrOptions)
+    toastr.warning('Offline mode', 'Welcome to offline mode', toastrOptions)
   }
 
   render () {
@@ -72,8 +72,8 @@ class CoreLayout extends Component {
               render={({ online }) => (
                 <div style={{ display: 'none' }}>
                   {online ? ''
-                    : toastr.error('Observation form',
-                      'Internet not available, please use paper forms', toastrOptions) }
+                    : toastr.warning('Offline mode',
+                      'Welcome to offline mode', toastrOptions) }
                 </div>
               )}
             />
