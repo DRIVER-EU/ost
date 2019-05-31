@@ -18,8 +18,8 @@ const styles = {
 }
 
 class LoginPanelContent extends Component {
-  constructor (props) {
-    super(props)
+  constructor () {
+    super()
     this.state = {
       name: '',
       password: '',
