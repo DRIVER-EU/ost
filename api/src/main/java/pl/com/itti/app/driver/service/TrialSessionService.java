@@ -268,7 +268,7 @@ public class TrialSessionService {
         try {
             return authUserRepository.saveAndFlush(authUser);
         } catch (Exception e) {
-            throw new Exception("User " + authUser.getEmail() + " already exists!");
+            throw new Exception("User " + authUser.getEmail() + " already exists!: " + e.getMessage());
         }
     }
 
