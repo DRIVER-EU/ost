@@ -39,7 +39,6 @@ public class EmailService {
         message.setSubject("You have been invited to " + trialName);
 
         String msg = getMessage(authUser, password, userForm);
-        
 
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
         mimeBodyPart.setContent(msg, "text/html");
