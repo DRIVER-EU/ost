@@ -14,6 +14,7 @@ import co.perpixel.security.repository.AuthUserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.driver.model.core.RequestChangeOfTrialStage;
 import org.flywaydb.core.internal.util.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -322,6 +323,8 @@ public class TrialSessionService {
 
     @Scheduled(cron = "0/20 * * * * *")
     public void checkTrialStage() {
+        System.out.println("TestPackage: " + JSONObject.class.getPackage().toString());
+        System.out.println("TestPatch: " + JSONObject.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
         System.out.println("Receive Message from CheckTrialStage");
 
