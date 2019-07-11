@@ -92,6 +92,7 @@ configurations {
 
 configurations.all {
     exclude module: 'slf4j-log4j12'
+    resolutionStrategy.force 'org.json:json:${jsonVersion}'
 }
 
 clean {
