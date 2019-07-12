@@ -323,8 +323,6 @@ public class TrialSessionService {
 
     @Scheduled(cron = "0/20 * * * * *")
     public void checkTrialStage() {
-        System.out.println("TestPackage: " + JSONObject.class.getPackage().toString());
-        System.out.println("TestPatch: " + JSONObject.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
         System.out.println("Receive Message from CheckTrialStage");
 
