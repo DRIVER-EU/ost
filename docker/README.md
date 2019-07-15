@@ -29,11 +29,16 @@ Image with backend (Apache Tomcat service):
 Additional info:
 OST is searching for kafka broker on port 3501 and schema registry on port 3502 (this is configured inside ost_backend container: /opt/config/)
 Please note that the current version requires a manual restart of the backend server, since when the backend service starts, the DB isn't ready yet.
+
+Build project with:
 docker-compose up -d
+
+Wait about 2min and restart ost_backend container:
 docker ps | grep ost_backend
-# This will return the container id of ost_backend service
-# You typically only need the first 3 or 4 characters of the ID.
 docker restart [CONTAINER ID]
+This will return the container id of ost_backend service
+docker restart [CONTAINER ID]
+This will restart ost_backend container
 
 Using the OST
 Open a browser and visit the OST home page with 127.0.0.:84.
