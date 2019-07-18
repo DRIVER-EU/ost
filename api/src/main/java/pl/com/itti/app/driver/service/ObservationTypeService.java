@@ -1,9 +1,5 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.dto.DTO;
-import co.perpixel.exception.EntityNotFoundException;
-import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -16,6 +12,10 @@ import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecificat
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -130,7 +130,7 @@ public class ObservationTypeService {
     }
 
     private ObservationTypeDTO.SchemaItem getSchema(ObservationType observationType) {
-        return DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
+        return Dto.from(observationType, ObservationTypeDTO.SchemaItem.class);
     }
 
     private List<TrialRoleDTO.ListItem> getSchemaItemRoles(ObservationType observationType, long trialSessionId) {
@@ -143,7 +143,7 @@ public class ObservationTypeService {
                     .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
             List<TrialRole> roles = trialRoleRepository.findAll(getTrialRoleSpecifications(authUser, trialSession, observationType));
-            trialRoles = DTO.from(roles, TrialRoleDTO.ListItem.class);
+            trialRoles = Dto.from(roles, TrialRoleDTO.ListItem.class);
         }
 
         return trialRoles;

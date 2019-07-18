@@ -1,10 +1,5 @@
 package pl.com.itti.app.driver.web;
 
-import co.perpixel.annotation.web.FindAllGetMapping;
-import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,6 +9,9 @@ import pl.com.itti.app.driver.dto.AdminTrialStageDTO;
 import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.service.TrialStageService;
+import pl.com.itti.app.core.annotation.FindAllGetMapping;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.PageDto;
 
 @RestController
 @RequestMapping("api/stages")
@@ -24,9 +22,9 @@ public class TrialStageController {
 
 
     @FindAllGetMapping
-    private PageDTO<TrialStageDTO.ListItem> findByTrialId(
+    private PageDto<TrialStageDTO.ListItem> findByTrialId(
             @RequestParam(value = "trial_id") long trialId, Pageable pageable) {
-        return DTO.from(trialStageService.findByTrialId(trialId, pageable), TrialStageDTO.ListItem.class);
+        return Dto.from(trialStageService.findByTrialId(trialId, pageable), TrialStageDTO.ListItem.class);
     }
 
     @PostMapping("/admin/addNewTrialStage" )

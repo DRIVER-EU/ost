@@ -13,6 +13,8 @@ import pl.com.itti.app.driver.dto.AdminObservationTypeDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.service.ObservationTypeService;
+import pl.com.itti.app.core.annotation.FindAllGetMapping;
+import pl.com.itti.app.core.dto.Dto;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class ObservationTypeController {
 
     @FindAllGetMapping
     public List<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialsession_id") Long trialSessionId, Pageable pageable) {
-        return DTO.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.ListItem.class);
+        return Dto.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.ListItem.class);
     }
 
     @GetMapping("/form")

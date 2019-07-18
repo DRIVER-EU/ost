@@ -1,6 +1,5 @@
 package pl.com.itti.app.driver.model;
 
-import co.perpixel.db.model.PersistentObject;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 
 import javax.persistence.*;
 import java.io.Serializable;

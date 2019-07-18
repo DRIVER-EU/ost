@@ -1,9 +1,9 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.stereotype.Service;
 import pl.com.itti.app.driver.form.UserForm;
 import pl.com.itti.app.driver.util.EmailProperties;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import javax.mail.*;
 import javax.mail.internet.*;

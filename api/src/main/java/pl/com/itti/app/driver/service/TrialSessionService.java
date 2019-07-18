@@ -1,15 +1,6 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
-import co.perpixel.exception.EntityNotFoundException;
-import co.perpixel.security.model.AuthRole;
-import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.model.AuthUserPosition;
-import co.perpixel.security.repository.AuthRoleRepository;
-import co.perpixel.security.repository.AuthUnitRepository;
-import co.perpixel.security.repository.AuthUserPositionRepository;
-import co.perpixel.security.repository.AuthUserRepository;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import org.flywaydb.core.internal.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +27,16 @@ import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.PageDto;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthRole;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.core.security.security.model.AuthUserPosition;
+import pl.com.itti.app.core.security.security.repository.AuthRoleRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUnitRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUserPositionRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -115,14 +116,14 @@ public class TrialSessionService {
     }
 
     @Transactional(readOnly = true)
-    public PageDTO<TrialSessionDTO.ActiveListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
+    public PageDto<TrialSessionDTO.ActiveListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
 
         Page<TrialSession> trialSessions = trialSessionRepository.findAll(
                 getTrialSessionStatusSpecifications(authUser, sessionStatus),
                 pageable);
 
-        PageDTO<TrialSessionDTO.ActiveListItem> pageDTO = DTO.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
+        PageDto<TrialSessionDTO.ActiveListItem> pageDTO = Dto.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
         pageDTO.getData().forEach(d -> d.initHasAnswer = setInitAnswer(d, authUser));
         return pageDTO;
     }
@@ -239,7 +240,6 @@ public class TrialSessionService {
                         .filter(role -> role.getShortName().contains("ROLE_USER"))
                         .findFirst()
                         .orElse(null);
-
                 authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
                 if (isEmail) {
                     String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
