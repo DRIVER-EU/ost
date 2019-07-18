@@ -1,7 +1,5 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.dto.DTO;
-import co.perpixel.security.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -15,6 +13,8 @@ import pl.com.itti.app.driver.repository.EventRepository;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
 import pl.com.itti.app.driver.repository.specification.EventSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import java.util.*;
 
@@ -67,10 +67,10 @@ public class AnswerEventService {
     }
 
     private List<AnswerEventDTO.AnswerItem> mapAnswers(List<Answer> answers) {
-        return DTO.from(answers, AnswerEventDTO.AnswerItem.class);
+        return Dto.from(answers, AnswerEventDTO.AnswerItem.class);
     }
 
     private List<AnswerEventDTO.EventItem> mapEvents(List<Event> events) {
-        return DTO.from(events, AnswerEventDTO.EventItem.class);
+        return Dto.from(events, AnswerEventDTO.EventItem.class);
     }
 }

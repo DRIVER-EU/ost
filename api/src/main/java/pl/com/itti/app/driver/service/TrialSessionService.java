@@ -1,20 +1,9 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
-import co.perpixel.exception.EntityNotFoundException;
-import co.perpixel.security.model.AuthRole;
-import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.model.AuthUserPosition;
-import co.perpixel.security.repository.AuthRoleRepository;
-import co.perpixel.security.repository.AuthUnitRepository;
-import co.perpixel.security.repository.AuthUserPositionRepository;
-import co.perpixel.security.repository.AuthUserRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.driver.model.core.RequestChangeOfTrialStage;
 import org.flywaydb.core.internal.util.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -25,30 +14,39 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.form.UserForm;
 import pl.com.itti.app.driver.model.*;
-import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.model.enums.AuthRoleType;
+import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.ManagementRoleType;
+import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.PageDto;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthRole;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.core.security.security.model.AuthUserPosition;
+import pl.com.itti.app.core.security.security.repository.AuthRoleRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUnitRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUserPositionRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
-import static pl.com.itti.app.driver.util.TrialStage.*;
+import static pl.com.itti.app.driver.util.TrialStage.getRequestChangeOfTrialStage;
 
 @Service
 @Transactional
@@ -120,14 +118,14 @@ public class TrialSessionService {
     }
 
     @Transactional(readOnly = true)
-    public PageDTO<TrialSessionDTO.ActiveListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
+    public PageDto<TrialSessionDTO.ActiveListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
 
         Page<TrialSession> trialSessions = trialSessionRepository.findAll(
                 getTrialSessionStatusSpecifications(authUser, sessionStatus),
                 pageable);
 
-        PageDTO<TrialSessionDTO.ActiveListItem> pageDTO = DTO.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
+        PageDto<TrialSessionDTO.ActiveListItem> pageDTO = Dto.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
         pageDTO.getData().forEach(d -> d.initHasAnswer = setInitAnswer(d, authUser));
         return pageDTO;
     }
@@ -170,7 +168,6 @@ public class TrialSessionService {
                         .filter(role -> role.getShortName().contains("ROLE_USER"))
                         .findFirst()
                         .orElse(null);
-
                 authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
                 if (isEmail) {
                     String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
@@ -256,7 +253,8 @@ public class TrialSessionService {
         authUser.setLogin(name + lastName);
         authUser.setLastName(lastName);
         authUser.setPassword(bCryptPasswordEncoder.encode(password));
-        authUser.setCreatedAt(OffsetDateTime.now());
+        //early was OffsetDateTime.now()
+        authUser.setCreatedAt(ZonedDateTime.now());
 
         AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
                 .filter(position -> position.getName().contains("User"))

@@ -1,18 +1,18 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.db.model.PersistentObject;
-import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.core.dto.EntityDto;
+import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class TrialSessionDTO {
 
-    public static class MinimalItem implements EntityDTO<TrialSession> {
+    public static class MinimalItem implements EntityDto<TrialSession> {
 
         public long id;
         public SessionStatus status;

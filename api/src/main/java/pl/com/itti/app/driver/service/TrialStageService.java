@@ -1,6 +1,5 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +10,7 @@ import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.repository.TrialStageRepository;
 import pl.com.itti.app.driver.repository.specification.TrialStageSpecification;
 import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import java.util.HashSet;
 import java.util.Set;

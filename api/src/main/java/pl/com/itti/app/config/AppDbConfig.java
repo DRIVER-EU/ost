@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EntityScan(basePackages = {"pl.com.itti.driver.app.model"})
-@EnableJpaRepositories(basePackages = {"pl.com.itti.driver.app.repository"})
+@EntityScan(basePackages = {"pl.com.itti.app.core.persistence.db.model",
+        "pl.com.itti.app.core.security.security.model",
+        "pl.com.itti.driver.app.model"})
+@EnableJpaRepositories(basePackages = {"pl.com.itti.app.core.security.security.repository",
+        "pl.com.itti.driver.app.repository"})
 @EnableTransactionManagement
 public class AppDbConfig {
 }
