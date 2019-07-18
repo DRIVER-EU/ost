@@ -1,21 +1,21 @@
-INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "meta_created_at", "meta_deleted", "activated", "meta_uuid")
+INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'Alice1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
-        'Alice', 'Zandecki', 'alice.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE, 1);
-INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "meta_created_at", "meta_deleted", "activated", "meta_uuid")
+        'Alice', 'Zandecki', 'alice.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
+INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'Mayer1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
-        'Mayer', 'Zandecki', 'mayer.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE, 2);
-INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "meta_created_at", "meta_deleted", "activated", "meta_uuid")
+        'Mayer', 'Zandecki', 'mayer.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
+INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'John1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
-        'John', 'Zandecki', 'john.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE, 3);
-INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "meta_created_at", "meta_deleted", "activated", "meta_uuid")
+        'John', 'Zandecki', 'john.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
+INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'Doe1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
-        'Doe', 'Zandecki', 'doe.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE, 4);
-INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "meta_created_at", "meta_deleted", "activated", "meta_uuid")
+        'Doe', 'Zandecki', 'doe.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
+INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'User1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
-        'User', 'Zandecki', 'user.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE, 5);
-INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "meta_created_at", "meta_deleted", "activated", "meta_uuid")
+        'User', 'Zandecki', 'user.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
+INSERT INTO public.auth_user ("id", "login", "password", "first_name", "last_name", "email", "created_at", "deleted", "activated")
     VALUES (nextval('public.auth_user_seq'), 'Observer1', '$2a$06$toZrZNp15elBurQefVYgsO..XzqFZbf3sDjYpsGaeKFFCbjrzSbtW',
-        'Observer', 'Zandecki', 'observer.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE, 6);
+        'Observer', 'Zandecki', 'observer.zandecki@perpixel.co', CURRENT_TIMESTAMP, FALSE, TRUE);
 
 
 INSERT INTO public.auth_user_m2m_roles ("auth_user_id", "auth_role_id")

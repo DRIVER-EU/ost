@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import pl.com.itti.app.core.annotation.IsAuthenticated;
 import pl.com.itti.app.core.security.security.model.AuthUser;
 
-import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Optional;
 
 public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
@@ -37,5 +37,6 @@ public interface AuthUserRepository extends JpaRepository<AuthUser, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update AuthUser au set au.lastLogin = :lastLogin " +
             "where au.id = :id")
-    void updateLastLogin(@Param("id") Long id, @Param("lastLogin") ZonedDateTime lastLogin);
+    void updateLastLogin(@Param("id") Long id, @Param("lastLogin") Calendar lastLogin);
+
 }

@@ -1,38 +1,49 @@
 package pl.com.itti.app.core.persistence.db.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 import java.io.Serializable;
-import java.util.UUID;
 
-@Data
-@EqualsAndHashCode
-@ToString
 @MappedSuperclass
 public abstract class PersistentObject
         implements Serializable {
 
-    public static final String SEQUENCE_GENERATOR = "DefaultSeqGen";
-
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DefaultSeqGen")
+    public Long id;
 
-    @Column(name = "meta_uuid", length = 36, nullable = false, updatable = false, unique = true, columnDefinition = "varchar(36) default ''")
-    private String uuid = UUID.randomUUID().toString();
+    public Long getId() {
+        return id;
+    }
 
-    @Version
-    @Column(name = "meta_lock", columnDefinition = "bigint NOT NULL DEFAULT 0", nullable = false)
-    private long lock = 0L;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersistentObject that = (PersistentObject) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "PersistentObject{" +
+                "id=" + id +
+                '}';
+    }
 }
+

@@ -1,6 +1,5 @@
 package pl.com.itti.app.core.security.security.config;
 
-
 import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;

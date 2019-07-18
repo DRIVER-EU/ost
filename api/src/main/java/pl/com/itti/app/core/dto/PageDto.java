@@ -1,16 +1,26 @@
 package pl.com.itti.app.core.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-public class PageDto<T extends EntityDto> {
+public class PageDto<T_Dto extends EntityDto> {
 
-    public long total;
+    private long total;
 
-    public List<T> data;
+    private List<T_Dto> data;
 
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public List<T_Dto> getData() {
+        return data;
+    }
+
+    public void setData(List<T_Dto> data) {
+        this.data = data;
+    }
 }

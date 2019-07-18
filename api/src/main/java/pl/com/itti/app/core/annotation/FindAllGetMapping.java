@@ -51,7 +51,6 @@ public @interface FindAllGetMapping {
 
     /**
      * Alias for {@link RequestMapping#consumes}.
-     *
      * @since 4.3.5
      */
     @AliasFor(annotation = RequestMapping.class)

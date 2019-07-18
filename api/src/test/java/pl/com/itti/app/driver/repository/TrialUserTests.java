@@ -1,6 +1,5 @@
 package pl.com.itti.app.driver.repository;
 
-import co.perpixel.security.repository.AuthUserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
 
