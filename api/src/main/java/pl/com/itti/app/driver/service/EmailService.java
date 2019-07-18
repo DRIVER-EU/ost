@@ -1,13 +1,23 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.stereotype.Service;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.form.UserForm;
 import pl.com.itti.app.driver.util.EmailProperties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import java.util.List;
+import javax.mail.Address;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 
 @Service

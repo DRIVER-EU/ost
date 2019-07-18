@@ -1,9 +1,5 @@
 package pl.com.itti.app.driver.web;
 
-import co.perpixel.annotation.web.FindAllGetMapping;
-import co.perpixel.annotation.web.PutMapping;
-import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +8,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import pl.com.itti.app.core.annotation.FindAllGetMapping;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.PageDto;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
@@ -42,16 +50,16 @@ public class TrialSessionController {
 
     @GetMapping("/{trialsession_id:\\d+}")
     public TrialSessionDTO.ListItem findOneForTrialSessionManager(@PathVariable(value = "trialsession_id") long answerId) {
-        return DTO.from(trialSessionService.findOneByManager(answerId), TrialSessionDTO.ListItem.class);
+        return Dto.from(trialSessionService.findOneByManager(answerId), TrialSessionDTO.ListItem.class);
     }
 
     @FindAllGetMapping
-    public PageDTO<TrialSessionDTO.ListItem> findAllForTrialSessionManager(Pageable pageable) {
-        return DTO.from(trialSessionService.findAllByManager(pageable), TrialSessionDTO.ListItem.class);
+    public PageDto<TrialSessionDTO.ListItem> findAllForTrialSessionManager(Pageable pageable) {
+        return Dto.from(trialSessionService.findAllByManager(pageable), TrialSessionDTO.ListItem.class);
     }
 
     @GetMapping("/active")
-    private PageDTO<TrialSessionDTO.ActiveListItem> findActive(Pageable pageable) {
+    private PageDto<TrialSessionDTO.ActiveListItem> findActive(Pageable pageable) {
         return trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable);
     }
 
@@ -68,7 +76,7 @@ public class TrialSessionController {
     @PutMapping
     private TrialSessionDTO.FullItem updateLastTrialStage(@PathVariable(value = "id") Long trialSessionId,
                                                           @RequestBody @Validated TrialStageDTO.MinimalItem minimalItem) {
-        return DTO.from(trialSessionService.updateLastTrialStage(trialSessionId, minimalItem.id), TrialSessionDTO.FullItem.class);
+        return Dto.from(trialSessionService.updateLastTrialStage(trialSessionId, minimalItem.id), TrialSessionDTO.FullItem.class);
     }
 
     @PostMapping("createNewSessionEmail")

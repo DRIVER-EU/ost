@@ -1,10 +1,10 @@
 package pl.com.itti.app.driver.web;
 
-import co.perpixel.annotation.web.FindAllGetMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.com.itti.app.core.annotation.FindAllGetMapping;
 import pl.com.itti.app.driver.dto.AnswerEventDTO;
 import pl.com.itti.app.driver.service.AnswerEventService;
 

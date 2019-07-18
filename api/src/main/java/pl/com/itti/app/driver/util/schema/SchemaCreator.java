@@ -1,6 +1,5 @@
 package pl.com.itti.app.driver.util.schema;
 
-import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -8,7 +7,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.collections.CollectionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.driver.model.AnswerTrialRole;
+import pl.com.itti.app.driver.model.Attachment;
+import pl.com.itti.app.driver.model.Question;
+import pl.com.itti.app.driver.model.TrialRole;
+import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 import pl.com.itti.app.driver.util.SchemaCreatorProperties;
 

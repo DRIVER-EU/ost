@@ -1,7 +1,5 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.exception.EntityNotFoundException;
-import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.lucene.analysis.Analyzer;
@@ -29,19 +27,43 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.dto.AnswerDTO;
-import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.driver.model.Answer;
+import pl.com.itti.app.driver.model.AnswerTrialRole;
+import pl.com.itti.app.driver.model.AnswerTrialRoleId;
+import pl.com.itti.app.driver.model.Attachment;
+import pl.com.itti.app.driver.model.ObservationType;
+import pl.com.itti.app.driver.model.Question;
+import pl.com.itti.app.driver.model.TrialRole;
+import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.AttachmentType;
-import pl.com.itti.app.driver.repository.*;
+import pl.com.itti.app.driver.repository.AnswerRepository;
+import pl.com.itti.app.driver.repository.AnswerTrialRoleRepository;
+import pl.com.itti.app.driver.repository.ObservationTypeRepository;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
+import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
-import pl.com.itti.app.driver.util.*;
+import pl.com.itti.app.driver.util.AnswerProperties;
+import pl.com.itti.app.driver.util.CSVUtils;
+import pl.com.itti.app.driver.util.InternalServerException;
+import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

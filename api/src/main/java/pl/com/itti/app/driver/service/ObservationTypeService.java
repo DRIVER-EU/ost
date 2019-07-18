@@ -1,23 +1,41 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.dto.DTO;
-import co.perpixel.exception.EntityNotFoundException;
-import co.perpixel.security.model.AuthUser;
-import co.perpixel.security.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.dto.*;
-import pl.com.itti.app.driver.model.*;
-import pl.com.itti.app.driver.repository.*;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
+import pl.com.itti.app.driver.dto.AdminObservationTypeDTO;
+import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
+import pl.com.itti.app.driver.dto.ObservationTypeDTO;
+import pl.com.itti.app.driver.dto.TrialRoleDTO;
+import pl.com.itti.app.driver.model.Answer;
+import pl.com.itti.app.driver.model.ObservationType;
+import pl.com.itti.app.driver.model.ObservationTypeTrialRole;
+import pl.com.itti.app.driver.model.Trial;
+import pl.com.itti.app.driver.model.TrialRole;
+import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.repository.ObservationTypeRepository;
+import pl.com.itti.app.driver.repository.ObservationTypeRoleRepository;
+import pl.com.itti.app.driver.repository.TrialRepository;
+import pl.com.itti.app.driver.repository.TrialRoleRepository;
+import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.TrialStageRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
 import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -130,7 +148,7 @@ public class ObservationTypeService {
     }
 
     private ObservationTypeDTO.SchemaItem getSchema(ObservationType observationType) {
-        return DTO.from(observationType, ObservationTypeDTO.SchemaItem.class);
+        return Dto.from(observationType, ObservationTypeDTO.SchemaItem.class);
     }
 
     private List<TrialRoleDTO.ListItem> getSchemaItemRoles(ObservationType observationType, long trialSessionId) {
@@ -143,7 +161,7 @@ public class ObservationTypeService {
                     .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
             List<TrialRole> roles = trialRoleRepository.findAll(getTrialRoleSpecifications(authUser, trialSession, observationType));
-            trialRoles = DTO.from(roles, TrialRoleDTO.ListItem.class);
+            trialRoles = Dto.from(roles, TrialRoleDTO.ListItem.class);
         }
 
         return trialRoles;

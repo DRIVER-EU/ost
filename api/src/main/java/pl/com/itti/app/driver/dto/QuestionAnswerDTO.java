@@ -1,8 +1,8 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.com.itti.app.core.dto.EntityDto;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.util.InternalServerException;
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 public final class QuestionAnswerDTO {
 
-    public static class MinimalItem implements EntityDTO<Answer> {
+    public static class MinimalItem implements EntityDto<Answer> {
 
         public long answerId;
         public String name;

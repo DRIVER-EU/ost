@@ -1,8 +1,13 @@
 package pl.com.itti.app.driver.repository.specification;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.data.jpa.domain.Specification;
-import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.driver.model.ObservationType;
+import pl.com.itti.app.driver.model.ObservationTypeTrialRole;
+import pl.com.itti.app.driver.model.TrialRole;
+import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialUser;
+import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import javax.persistence.criteria.Join;

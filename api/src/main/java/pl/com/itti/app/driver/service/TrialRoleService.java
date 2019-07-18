@@ -1,12 +1,12 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;

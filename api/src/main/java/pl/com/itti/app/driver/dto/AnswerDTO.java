@@ -1,11 +1,16 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.DTO;
-import co.perpixel.dto.EntityDTO;
-import co.perpixel.dto.FormDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.EntityDto;
+import pl.com.itti.app.core.dto.FormDto;
+import pl.com.itti.app.driver.model.Answer;
+import pl.com.itti.app.driver.model.AnswerTrialRole;
+import pl.com.itti.app.driver.model.ObservationType;
+import pl.com.itti.app.driver.model.ObservationTypeTrialRole;
+import pl.com.itti.app.driver.model.TrialRole;
+import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.util.InternalServerException;
 
 import javax.validation.constraints.NotNull;
@@ -18,7 +23,7 @@ import java.util.stream.Collectors;
 
 public final class AnswerDTO {
 
-    public static class MinimalItem implements EntityDTO<Answer> {
+    public static class MinimalItem implements EntityDto<Answer> {
 
         public long id;
         public ZonedDateTime sentSimulationTime;
@@ -54,8 +59,8 @@ public final class AnswerDTO {
             } catch (IOException ioe) {
                 throw new InternalServerException("Error in json form", ioe);
             }
-            this.attachments = DTO.from(answer.getAttachments(), AttachmentDTO.Item.class);
-            this.trialRoles = DTO.from(
+            this.attachments = Dto.from(answer.getAttachments(), AttachmentDTO.Item.class);
+            this.trialRoles = Dto.from(
                     answer.getAnswerTrialRoles().stream().map(AnswerTrialRole::getTrialRole).collect(Collectors.toList()),
                     TrialRoleDTO.ListItem.class
             );
@@ -72,7 +77,7 @@ public final class AnswerDTO {
         @Override
         public void toDto(Answer answer) {
             super.toDto(answer);
-            this.user = DTO.from(answer.getTrialUser(), TrialUserDTO.ListItem.class);
+            this.user = Dto.from(answer.getTrialUser(), TrialUserDTO.ListItem.class);
 
             List<TrialRole> trialRoles = answer.getObservationType().getObservationTypeTrialRoles().stream()
                     .map(ObservationTypeTrialRole::getTrialRole)
@@ -81,7 +86,7 @@ public final class AnswerDTO {
                     .map(UserRoleSession::getTrialRole)
                     .filter(trialRoles::contains)
                     .findFirst();
-            trialRole.ifPresent(trialRole1 -> this.roleName = DTO.from(trialRole1, TrialRoleDTO.ListItem.class).name);
+            trialRole.ifPresent(trialRole1 -> this.roleName = Dto.from(trialRole1, TrialRoleDTO.ListItem.class).name);
 
             ObservationType observationType = answer.getObservationType();
             this.observationTypeName = observationType.getName();
@@ -89,7 +94,7 @@ public final class AnswerDTO {
         }
     }
 
-    public static class Form implements FormDTO {
+    public static class Form implements FormDto {
 
         @NotNull
         public Long observationTypeId;

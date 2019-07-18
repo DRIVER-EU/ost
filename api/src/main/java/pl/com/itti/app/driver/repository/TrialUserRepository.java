@@ -1,8 +1,8 @@
 package pl.com.itti.app.driver.repository;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.model.TrialUser;
 
 import java.util.Optional;

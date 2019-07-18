@@ -1,10 +1,10 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
 import pl.com.itti.app.driver.dto.AttachmentDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Attachment;

@@ -1,15 +1,20 @@
 package pl.com.itti.app.driver.web;
 
-import co.perpixel.annotation.web.FindAllGetMapping;
-import co.perpixel.dto.DTO;
-import co.perpixel.dto.PageDTO;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import pl.com.itti.app.core.annotation.FindAllGetMapping;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.PageDto;
 import pl.com.itti.app.driver.dto.AdminTrialStageDTO;
 import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.model.TrialStage;
@@ -24,9 +29,9 @@ public class TrialStageController {
 
 
     @FindAllGetMapping
-    private PageDTO<TrialStageDTO.ListItem> findByTrialId(
+    private PageDto<TrialStageDTO.ListItem> findByTrialId(
             @RequestParam(value = "trial_id") long trialId, Pageable pageable) {
-        return DTO.from(trialStageService.findByTrialId(trialId, pageable), TrialStageDTO.ListItem.class);
+        return Dto.from(trialStageService.findByTrialId(trialId, pageable), TrialStageDTO.ListItem.class);
     }
 
     @PostMapping("/admin/addNewTrialStage" )
