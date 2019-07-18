@@ -45,6 +45,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
+import static pl.com.itti.app.driver.util.TrialStage.getRequestChangeOfTrialStage;
 
 @Service
 @Transactional

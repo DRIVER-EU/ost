@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 
-import java.time.ZonedDateTime;
+import java.util.Calendar;
 
 @Component
 public class AuthSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
@@ -20,6 +20,6 @@ public class AuthSuccessListener implements ApplicationListener<AuthenticationSu
     public void onApplicationEvent(final AuthenticationSuccessEvent event) {
         // TODO this shouldn't be handled by the custom @Query, instead disable AuditorHandler (but, problems with parameters)
         authUserRepository.findOneByLogin(event.getAuthentication().getName())
-                .ifPresent(authUser -> authUserRepository.updateLastLogin(authUser.getId(), ZonedDateTime.now()));
+                .ifPresent(authUser -> authUserRepository.updateLastLogin(authUser.getId(), Calendar.getInstance()));
     }
 }
