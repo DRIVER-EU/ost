@@ -14,6 +14,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.core.dto.Dto;
+import pl.com.itti.app.core.dto.PageDto;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthRole;
+import pl.com.itti.app.core.security.security.model.AuthUser;
+import pl.com.itti.app.core.security.security.model.AuthUserPosition;
+import pl.com.itti.app.core.security.security.repository.AuthRoleRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUnitRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUserPositionRepository;
+import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.form.UserForm;
@@ -27,19 +37,9 @@ import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
-import pl.com.itti.app.core.dto.Dto;
-import pl.com.itti.app.core.dto.PageDto;
-import pl.com.itti.app.core.exception.EntityNotFoundException;
-import pl.com.itti.app.core.security.security.model.AuthRole;
-import pl.com.itti.app.core.security.security.model.AuthUser;
-import pl.com.itti.app.core.security.security.model.AuthUserPosition;
-import pl.com.itti.app.core.security.security.repository.AuthRoleRepository;
-import pl.com.itti.app.core.security.security.repository.AuthUnitRepository;
-import pl.com.itti.app.core.security.security.repository.AuthUserPositionRepository;
-import pl.com.itti.app.core.security.security.repository.AuthUserRepository;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -253,8 +253,7 @@ public class TrialSessionService {
         authUser.setLogin(name + lastName);
         authUser.setLastName(lastName);
         authUser.setPassword(bCryptPasswordEncoder.encode(password));
-        //early was OffsetDateTime.now()
-        authUser.setCreatedAt(ZonedDateTime.now());
+        authUser.setCreatedAt(OffsetDateTime.now());
 
         AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
                 .filter(position -> position.getName().contains("User"))

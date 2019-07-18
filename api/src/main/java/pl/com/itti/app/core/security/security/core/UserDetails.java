@@ -102,7 +102,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private static class AuthorityComparator implements Comparator<GrantedAuthority>, Serializable {
 
         private static final long serialVersionUID = 1L;
-        
+
         public int compare(GrantedAuthority g1, GrantedAuthority g2) {
             // Neither should ever be null as each entry is checked
             // before adding it to the set. If the authority is null,

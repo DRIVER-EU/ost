@@ -1,9 +1,5 @@
 package pl.com.itti.app.core.security.auditing;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -14,12 +10,8 @@ import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditingObject extends PersistentObject
@@ -29,20 +21,49 @@ public abstract class AuditingObject extends PersistentObject
 
     @CreatedBy
     @ManyToOne
-    @JoinColumn(name = "meta_created_by_id", nullable = false)
+    @JoinColumn(nullable = false)
     private AuthUser createdBy;
 
     @CreatedDate
-    @Column(name = "meta_created_at", nullable = false)
-    private ZonedDateTime createdAt;
+    @Column(nullable = false)
+    private OffsetDateTime createdAt;
 
     @LastModifiedBy
     @ManyToOne
-    @JoinColumn(name = "meta_modified_by_id")
     private AuthUser modifiedBy;
 
     @LastModifiedDate
-    @Column(name = "meta_modified_at")
-    private ZonedDateTime modifiedAt;
+    private OffsetDateTime modifiedAt;
 
+    public AuthUser getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(AuthUser createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public AuthUser getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(AuthUser modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public OffsetDateTime getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(OffsetDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
 }

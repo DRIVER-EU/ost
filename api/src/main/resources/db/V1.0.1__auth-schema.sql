@@ -42,9 +42,6 @@ CREATE TABLE public.auth_permission
   short_name character varying(50) NOT NULL,
   long_name character varying(160),
   description text,
-  "position" bigint NOT NULL DEFAULT 0,
-  meta_uuid character varying(36) NOT NULL UNIQUE,
-  meta_lock bigint NOT NULL DEFAULT 0,
   CONSTRAINT auth_permission_pkey PRIMARY KEY (id),
   CONSTRAINT uk_6x8jajgulmk3m553fpi14krfj UNIQUE (short_name)
 );
@@ -63,9 +60,6 @@ CREATE TABLE public.auth_role
   short_name character varying(50) NOT NULL,
   long_name character varying(160),
   description text,
-  "position" bigint NOT NULL DEFAULT 0,
-  meta_uuid character varying(36) NOT NULL UNIQUE,
-  meta_lock bigint NOT NULL DEFAULT 0,
   CONSTRAINT auth_role_pkey PRIMARY KEY (id),
   CONSTRAINT uk_4h8u6nq6s510llrujaqdbjp7e UNIQUE (short_name)
 );
@@ -96,13 +90,11 @@ CREATE TABLE public.auth_unit
   id bigint NOT NULL,
   short_name character varying(50) NOT NULL,
   long_name character varying(160) NOT NULL,
-  meta_uuid character varying(36) NOT NULL UNIQUE,
-  meta_lock bigint NOT NULL DEFAULT 0,
-  meta_created_at timestamp without time zone NOT NULL,
-  meta_created_by_id bigint NOT NULL,
-  meta_modified_at timestamp without time zone,
-  meta_modified_by_id bigint,
-  meta_deleted boolean NOT NULL DEFAULT FALSE,
+  created_at timestamp without time zone NOT NULL,
+  created_by_id bigint NOT NULL,
+  modified_at timestamp without time zone,
+  modified_by_id bigint,
+  deleted boolean NOT NULL,
   CONSTRAINT auth_unit_pkey PRIMARY KEY (id),
   CONSTRAINT uk_c06uyo2vs37t0y0gooiydr8vd UNIQUE (short_name)
 );
@@ -119,9 +111,7 @@ CREATE TABLE public.auth_user_position
 (
   id bigint NOT NULL,
   name character varying(250) NOT NULL,
-  "position" bigint NOT NULL DEFAULT 0,
-  meta_uuid character varying(36) NOT NULL UNIQUE,
-  meta_lock bigint NOT NULL DEFAULT 0,
+  "position" bigint NOT NULL,
   CONSTRAINT auth_user_position_pkey PRIMARY KEY (id),
   CONSTRAINT uk_gmwue1ua8tlrsue8wp6jm7nru UNIQUE (name)
 );
@@ -145,17 +135,14 @@ CREATE TABLE public.auth_user
   email character varying(160),
   contact text,
   last_login timestamp without time zone,
+  created_at timestamp without time zone,
+  created_by_id bigint,
+  modified_at timestamp without time zone,
+  modified_by_id bigint,
+  deleted boolean NOT NULL,
   activated boolean NOT NULL,
   position_id bigint,
   unit_id bigint,
-  meta_uuid character varying(36) NOT NULL UNIQUE,
-  meta_lock bigint NOT NULL DEFAULT 0,
-  meta_created_at timestamp without time zone NOT NULL,
-  meta_created_by_id bigint,
-  meta_modified_at timestamp without time zone,
-  meta_modified_by_id bigint,
-  meta_deleted boolean NOT NULL DEFAULT FALSE,
-  created_at timestamp without time zone,
   CONSTRAINT auth_user_pkey PRIMARY KEY (id),
   CONSTRAINT fk80m8klja3v5sg2nl438yorgsa FOREIGN KEY (position_id)
       REFERENCES public.auth_user_position (id) MATCH SIMPLE
@@ -163,10 +150,10 @@ CREATE TABLE public.auth_user
   CONSTRAINT fk44dijt69v3yqhv330svs6b1dc FOREIGN KEY (unit_id)
       REFERENCES public.auth_unit (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk8oatpiog6o8mgn6b8w5tenecj FOREIGN KEY (meta_created_by_id)
+  CONSTRAINT fk8oatpiog6o8mgn6b8w5tenecj FOREIGN KEY (created_by_id)
       REFERENCES public.auth_user (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fkgehx7era5rowq3s7cbnqnjc7l FOREIGN KEY (meta_modified_by_id)
+  CONSTRAINT fkgehx7era5rowq3s7cbnqnjc7l FOREIGN KEY (modified_by_id)
       REFERENCES public.auth_user (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT uk_g0m5h8gjfv1tjfo7jcqgcd46r UNIQUE (login),
@@ -192,10 +179,10 @@ CREATE TABLE public.auth_user_m2m_roles
 
 ALTER TABLE auth_unit
     ADD CONSTRAINT FKn063keevxoyb0uwwg4ddf5heo
-    FOREIGN KEY (meta_created_by_id)
+    FOREIGN KEY (created_by_id)
     REFERENCES auth_user;
 
 ALTER TABLE auth_unit
     ADD CONSTRAINT FKhj2nf3pvhg2nhqhajkw6uop4v
-    FOREIGN KEY (meta_modified_by_id)
+    FOREIGN KEY (modified_by_id)
     REFERENCES auth_user;
