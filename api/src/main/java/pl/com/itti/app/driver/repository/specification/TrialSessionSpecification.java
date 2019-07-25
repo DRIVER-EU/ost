@@ -1,9 +1,9 @@
 package pl.com.itti.app.driver.repository.specification;
 
-import co.perpixel.security.model.AuthUser;
 import org.springframework.data.jpa.domain.Specification;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
