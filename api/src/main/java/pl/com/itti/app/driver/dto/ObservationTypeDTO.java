@@ -1,11 +1,11 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.db.model.PersistentObject;
-import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.databind.JsonNode;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
+import pl.com.itti.app.core.dto.EntityDto;
+import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public final class ObservationTypeDTO {
 
-    public static class MinimalItem implements EntityDTO<ObservationType> {
+    public static class MinimalItem implements EntityDto<ObservationType> {
 
         public long id;
 

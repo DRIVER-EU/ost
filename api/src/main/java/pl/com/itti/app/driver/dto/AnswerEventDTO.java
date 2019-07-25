@@ -1,8 +1,8 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.Answer;
 import pl.com.itti.app.driver.model.Event;
+import pl.com.itti.app.core.dto.EntityDto;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,7 +24,7 @@ public final class AnswerEventDTO {
         public String type;
     }
 
-    public static class AnswerItem extends Item implements EntityDTO<Answer> {
+    public static class AnswerItem extends Item implements EntityDto<Answer> {
 
         public String comment;
 
@@ -41,7 +41,7 @@ public final class AnswerEventDTO {
         }
     }
 
-    public static class EventItem extends Item implements EntityDTO<Event> {
+    public static class EventItem extends Item implements EntityDto<Event> {
 
         @Override
         public void toDto(Event event) {
