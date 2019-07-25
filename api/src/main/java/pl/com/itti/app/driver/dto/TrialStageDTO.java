@@ -1,13 +1,13 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.core.dto.EntityDto;
 
 import java.time.LocalDateTime;
 
 public final class TrialStageDTO {
 
-    public static class MinimalItem implements EntityDTO<TrialStage> {
+    public static class MinimalItem implements EntityDto<TrialStage> {
 
         public long id;
 

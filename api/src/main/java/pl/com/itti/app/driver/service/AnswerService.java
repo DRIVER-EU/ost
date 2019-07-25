@@ -1,7 +1,5 @@
 package pl.com.itti.app.driver.service;
 
-import co.perpixel.exception.EntityNotFoundException;
-import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.lucene.analysis.Analyzer;
@@ -39,6 +37,8 @@ import pl.com.itti.app.driver.util.CSVUtils;
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,7 +48,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
-import static pl.com.itti.app.driver.util.SimulationTime.*;
+import static pl.com.itti.app.driver.util.SimulationTime.getTrialTime;
 
 @Service
 @Transactional
