@@ -4,7 +4,7 @@ import createStore from './store/createStore'
 import AppContainer from './containers/AppContainer'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import { green500, green300, orange500, grey900 } from 'material-ui/styles/colors'
+import { green300 } from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 require('es6-promise').polyfill()
 injectTapEventPlugin()
@@ -80,6 +80,18 @@ if (!Array.prototype.includes) {
 // ========================================================
 const initialState = window.__INITIAL_STATE__
 const store = createStore(initialState)
+
+// ========================================================
+// Service worker set up
+// ========================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('./store/cashSite.js')
+      .then(reg => console.log('Service Worker: Registered (Pages)'))
+      .catch(err => console.log(`Service Worker: Error: ${err}`))
+  })
+}
 
 // ========================================================
 // IndexedDB Instantiation
