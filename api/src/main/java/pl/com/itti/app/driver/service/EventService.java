@@ -1,5 +1,7 @@
 package pl.com.itti.app.driver.service;
 
+import co.perpixel.exception.EntityNotFoundException;
+import co.perpixel.security.model.AuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +17,6 @@ import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.TrialUserRepository;
 import pl.com.itti.app.driver.util.InvalidDataException;
-import pl.com.itti.app.core.exception.EntityNotFoundException;
-import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import java.time.LocalDateTime;
 

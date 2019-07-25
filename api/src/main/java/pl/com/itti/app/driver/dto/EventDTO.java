@@ -1,9 +1,9 @@
 package pl.com.itti.app.driver.dto;
 
+import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.Event;
 import pl.com.itti.app.driver.model.TrialUser;
 import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.core.dto.EntityDto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public final class EventDTO {
 
-    public static class MinimalItem implements EntityDto<Event> {
+    public static class MinimalItem implements EntityDTO<Event> {
 
         public long id;
 

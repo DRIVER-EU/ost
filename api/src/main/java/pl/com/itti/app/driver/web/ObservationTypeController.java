@@ -1,5 +1,7 @@
 package pl.com.itti.app.driver.web;
 
+import co.perpixel.annotation.web.FindAllGetMapping;
+import co.perpixel.dto.DTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.service.ObservationTypeService;
-import pl.com.itti.app.core.annotation.FindAllGetMapping;
-import pl.com.itti.app.core.dto.Dto;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class ObservationTypeController {
 
     @FindAllGetMapping
     public List<ObservationTypeDTO.ListItem> findAll(@RequestParam("trialsession_id") Long trialSessionId, Pageable pageable) {
-        return Dto.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.ListItem.class);
+        return DTO.from(observationTypeService.find(trialSessionId), ObservationTypeDTO.ListItem.class);
     }
 
     @GetMapping("/form")
