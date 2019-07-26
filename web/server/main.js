@@ -38,7 +38,7 @@ if (project.env === 'development') {
   app.use(express.static(project.paths.public()))
 
   app.use('../src/main.js', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'public', 'service-worker.js'))
+    res.sendFile(path.resolve(__dirname, 'public', 'main.js'))
   })
 
   // This rewrites all routes requests to the root /index.html file
