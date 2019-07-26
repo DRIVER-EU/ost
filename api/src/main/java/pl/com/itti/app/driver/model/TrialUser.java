@@ -1,7 +1,5 @@
 package pl.com.itti.app.driver.model;
 
-import co.perpixel.db.model.PersistentObject;
-import co.perpixel.security.model.AuthUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import pl.com.itti.app.driver.model.enums.Languages;
+import pl.com.itti.app.core.persistence.db.model.PersistentObject;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import javax.persistence.*;
 import java.io.Serializable;
