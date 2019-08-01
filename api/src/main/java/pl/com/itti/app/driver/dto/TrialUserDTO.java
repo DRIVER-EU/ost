@@ -1,11 +1,11 @@
 package pl.com.itti.app.driver.dto;
 
+import co.perpixel.dto.EntityDTO;
 import pl.com.itti.app.driver.model.TrialUser;
-import pl.com.itti.app.core.dto.EntityDto;
 
 public final class TrialUserDTO {
 
-    public static class ListItem implements EntityDto<TrialUser> {
+    public static class ListItem implements EntityDTO<TrialUser> {
 
         public long id;
         public String firstName;

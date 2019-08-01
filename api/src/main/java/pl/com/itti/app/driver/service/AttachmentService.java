@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.service;
 
+import co.perpixel.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,6 @@ import pl.com.itti.app.driver.repository.AttachmentRepository;
 import pl.com.itti.app.driver.util.FileProperties;
 import pl.com.itti.app.driver.util.FileUtils;
 import pl.com.itti.app.driver.util.InternalServerException;
-import pl.com.itti.app.core.exception.EntityNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
