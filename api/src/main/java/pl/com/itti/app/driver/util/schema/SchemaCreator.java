@@ -1,5 +1,6 @@
 package pl.com.itti.app.driver.util.schema;
 
+import co.perpixel.security.model.AuthUser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -10,7 +11,6 @@ import org.json.JSONObject;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 import pl.com.itti.app.driver.util.SchemaCreatorProperties;
-import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import java.io.IOException;
 import java.util.Comparator;
