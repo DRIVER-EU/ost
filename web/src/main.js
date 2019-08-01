@@ -86,10 +86,9 @@ const store = createStore(initialState)
 // ========================================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('./store/cashSite.js')
-      .then(reg => console.log('Service Worker: Registered (Pages)'))
-      .catch(err => console.log(`Service Worker: Error: ${err}`))
+    navigator.serviceWorker.register('./store/cashSite.js')
+    .then(() => console.log('Service worker registered'))
+    .catch(error => console.error('Service worker error: ', error))
   })
 }
 

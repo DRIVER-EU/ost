@@ -1,20 +1,15 @@
-const cacheName = '1'
+const cacheName = 'v1'
 
-// Call Install Event
-self.addEventListener('install', e => {
-  console.log('Service Worker: Installed')
+self.addEventListener('install', () => {
+  console.log('Service worker installed')
 })
 
-// Call Activate Event
-self.addEventListener('activate', e => {
-  console.log('Service Worker: Activated')
-  // Remove unwanted caches
-  e.waitUntil(
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cache => {
           if (cache !== cacheName) {
-            console.log('Service Worker: Clearing Old Cache')
             return caches.delete(cache)
           }
         })
@@ -23,21 +18,17 @@ self.addEventListener('activate', e => {
   )
 })
 
-// Call Fetch Event
-self.addEventListener('fetch', e => {
-  console.log('Service Worker: Fetching')
-  e.respondWith(
-    fetch(e.request)
-      .then(res => {
-        // Make copy/clone of response
-        const resClone = res.clone()
-        // Open cahce
-        caches.open(cacheName).then(cache => {
-          // Add response to cache
-          cache.put(e.request, resClone)
-        })
-        return res
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    fetch(event.request)
+    .then(response => {
+      const responseClone = response.clone()
+      caches.open(cacheName)
+      .then(cashe => {
+        cashe.put(event.request, responseClone)
       })
-      .catch(err => caches.match(e.request).then(res => res))
+      return response
+    })
+    .catch(() => caches.match(event.request).then(response => response))
   )
 })
