@@ -77,7 +77,7 @@ export const actions = {
 export const getViewTrials = (trialsessionId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
+      axios.get(`https://${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -136,7 +136,7 @@ export const getViewTrials = (trialsessionId) => {
 export const getTrialSession = (trialsessionId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
+      axios.get(`https://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -167,7 +167,7 @@ export const getTrialSession = (trialsessionId) => {
 export const getTrials = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
+      axios.get(`https://${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -210,7 +210,7 @@ export const clearTrialList = () => {
 export const removeAnswer = (id, comment) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.delete(`http://${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
+      axios.delete(`https://${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
         .then(() => {
           toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
           dispatch(removeAnswerAction())
@@ -223,7 +223,7 @@ export const removeAnswer = (id, comment) => {
             window.indexedDB.open('driver', 1).onsuccess = event => {
               event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                 type: 'delete',
-                address: `http://${origin}/api/answers/${id}/remove?comment=${comment}`,
+                address: `https://${origin}/api/answers/${id}/remove?comment=${comment}`,
                 data: {}
               })
             }
@@ -240,7 +240,7 @@ export const editComment = (id, comment) => {
     return new Promise((resolve) => {
       const data = new FormData()
       data.append('comment', comment)
-      axios.post(`http://${origin}/api/questions-answers/${id}/comment`, data, getHeaders())
+      axios.post(`https://${origin}/api/questions-answers/${id}/comment`, data, getHeaders())
           .then((response) => {
             // #TODO PWA
             dispatch(editCommentAction(response.data))
@@ -254,7 +254,7 @@ export const editComment = (id, comment) => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'post',
-                  address: `http://${origin}/api/questions-answers/${id}/comment`,
+                  address: `https://${origin}/api/questions-answers/${id}/comment`,
                   data: data
                 })
               }
