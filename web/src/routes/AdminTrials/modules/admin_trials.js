@@ -107,7 +107,8 @@ export const actions = {
 export const getMessages = (id, sort = '') => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`, getHeaders())
+      axios.get(`https://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`,
+      getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
