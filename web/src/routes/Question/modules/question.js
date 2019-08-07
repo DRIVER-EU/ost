@@ -45,7 +45,7 @@ export const actions = {
 export const getSchemaView = (idObs) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
+      axios.get(`https://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
           .then((response) => {
             freeQueue()
             let change = {
@@ -71,7 +71,7 @@ export const getSchemaView = (idObs) => {
 export const sendObservation = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`http://${origin}/api/anonymous/observation`, getHeaders())
+      axios.post(`https://${origin}/api/anonymous/observation`, getHeaders())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             resolve()
@@ -83,7 +83,7 @@ export const sendObservation = () => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'post',
-                  address: `http://${origin}/api/anonymous/observation`,
+                  address: `https://${origin}/api/anonymous/observation`,
                   data: {}
                 })
               }

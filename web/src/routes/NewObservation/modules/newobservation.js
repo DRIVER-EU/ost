@@ -64,7 +64,7 @@ export const getSchema = (idObs, idSession) => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(
-        `http://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
+        `https://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
         getHeaders())
           .then((response) => {
             freeQueue()
@@ -120,7 +120,7 @@ export const sendObservation = (formData) => {
 
      // data.append('attachments', formData.attachments)
       data.append('data', blob)
-      axios.post(`http://${origin}/api/answers`, data, getHeadersReferences())
+      axios.post(`https://${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             toastr.success('Observation form', 'Observation was send!', toastrOptions)
@@ -134,7 +134,7 @@ export const sendObservation = (formData) => {
                 let store = event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue')
                 store.add({
                   type: 'post',
-                  address: `http://${origin}/api/answers`,
+                  address: `https://${origin}/api/answers`,
                   data: formData,
                   headerType: 'refference'
                 })
@@ -154,7 +154,7 @@ export const sendObservation = (formData) => {
 export const downloadFile = (id, name) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/attachments/${id}`, getHeadersASCI())
+      axios.get(`https://${origin}/api/attachments/${id}`, getHeadersASCI())
      .then((response) => {
        fileDownload(response.data, name)
        resolve()
@@ -170,7 +170,7 @@ export const downloadFile = (id, name) => {
 export const getTrialTime = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trial-time`, getHeaders())
+      axios.get(`https://${origin}/api/trial-time`, getHeaders())
       .then((response) => {
         freeQueue()
         localStorage.setItem('trial-time', response.data)

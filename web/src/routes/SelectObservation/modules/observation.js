@@ -29,7 +29,7 @@ export const actions = {
 export const getObservations = (trialSessionId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
+      axios.get(`https://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
           .then((response) => {
             freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = (event) => {

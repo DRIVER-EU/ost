@@ -37,7 +37,7 @@ export const actions = {
 export const getTrialManager = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsessions?size=1000`, getHeaders())
+      axios.get(`https://${origin}/api/trialsessions?size=1000`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -72,7 +72,7 @@ export const getTrialManager = () => {
 export const getListOfTrials = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsessions/trials`, getHeaders())
+      axios.get(`https://${origin}/api/trialsessions/trials`, getHeaders())
        .then((response) => {
          freeQueue()
          localStorage.setItem('listOfTrials', JSON.stringify(response.data))

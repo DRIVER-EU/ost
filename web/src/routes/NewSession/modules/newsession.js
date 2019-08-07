@@ -42,7 +42,7 @@ export const newSession = (data, type) => {
       } else {
         url = 'createNewSessionFile'
       }
-      axios.post(`http://${origin}/api/trialsessions/${url}`, data, getHeaders())
+      axios.post(`https://${origin}/api/trialsessions/${url}`, data, getHeaders())
           .then((response) => {
             if (type === 'email') {
               dispatch(newSessionAction(response.data))
@@ -60,7 +60,7 @@ export const newSession = (data, type) => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'post',
-                  address: `http://${origin}/api/trialsessions/${url}`,
+                  address: `https://${origin}/api/trialsessions/${url}`,
                   data: data
                 })
               }
