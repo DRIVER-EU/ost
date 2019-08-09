@@ -43,5 +43,7 @@ Using the OST
 Open a browser and visit the OST home page with 127.0.0.1:84.
 
 DO NOT use localhost:84, as this will not work - the GUI then tries to connect to an internal service running at ITTI, which is not accessible.
+OST NEEDS to work on SSL certificate.
+DO NOT use Google Chrome browser as this is not operate self-signed certificate.
 
-To login, use the following credentials: admin19/adminpass
+To login, use following credentials: admin19/adminpass
