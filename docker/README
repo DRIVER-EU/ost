@@ -22,28 +22,28 @@ Image with backend (Apache Tomcat service):
 itti_api
     image: drivereu/ost-app:itti_backend
     environment:
-      KAFKA_BROKER_URL: broker:9092 <-- backend needs to have mapping to testbed broker on internal port 9092
-    depends_on:
+    - SERVER_NAME=itti <-- it is needed to create self-signed certificate, you can specify there IP or DNS of your machine
+    links:
     - itti_db <-- backend is using Postgres to store data and services
     ports:
     - "EXTERNAL_PORT:8080" <-- e.g 8084
     restart: always
 
 Additional info:
-OST is searching for kafka broker on port 3501 and schema registry on port 3502. 
-This is configured inside ost_backend container in: /opt/config/). If you want to change kafka/schema_registry ip:port run:
-docker exec -it [CONTAINER_API_NAME] bash
-cd /opt/config
-Edit consumer.properties, producer.properties files
+1.OST is searching for kafka broker on port 3501 and schema registry on port 3502. 
+    This is configured inside ost_backend container in: /opt/config/). If you want to change kafka/schema_registry ip:port run:
+    docker exec -it [CONTAINER_API_NAME] bash
+    cd /opt/config
+    Edit consumer.properties, producer.properties files
+2. If you want you can declare SERVER_NAME environment for itti_api in docker-compose, e.g:
+    `environment:
+    - SERVER_NAME=IP_ADDR or DNS`
+    It is used in creating self-signed certificate for your IP or DNS.
+3. DO NOT use localhost:84, as this will not work - the GUI then tries to connect to an internal service running at ITTI, which is not accessible.
+4. OST NEEDS to work on SSL certificate.
+5. DO NOT use Google Chrome browser as this is not operate self-signed certificate.
+6. To login, use following credentials: admin19/adminpass
 
 Build project with:
 docker-compose up -d
-
-Using the OST
-Open a browser and visit the OST home page with 127.0.0.1:84.
-
-DO NOT use localhost:84, as this will not work - the GUI then tries to connect to an internal service running at ITTI, which is not accessible.
-OST NEEDS to work on SSL certificate.
-DO NOT use Google Chrome browser as this is not operate self-signed certificate.
-
-To login, use following credentials: admin19/adminpass
+Open browser and visit the OST home page with (e.g locally) 127.0.0.1:PORT.
