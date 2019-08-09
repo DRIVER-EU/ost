@@ -30,12 +30,18 @@ itti_api
     restart: always
 
 Additional info:
-OST is searching for kafka broker on port 3501 and schema registry on port 3502 (this is configured inside ost_backend container: /opt/config/)
+OST is searching for kafka broker on port 3501 and schema registry on port 3502. 
+This is configured inside ost_backend container in: /opt/config/). If you want to change kafka/schema_registry ip:port run:
+docker exec -it [CONTAINER_API_NAME] bash
+cd /opt/config
+Edit consumer.properties, producer.properties files
 
 Build project with:
 docker-compose up -d
 
 Using the OST
 Open a browser and visit the OST home page with 127.0.0.1:84.
+
 DO NOT use localhost:84, as this will not work - the GUI then tries to connect to an internal service running at ITTI, which is not accessible.
+
 To login, use the following credentials: admin19/adminpass
