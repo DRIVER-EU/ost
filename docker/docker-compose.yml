@@ -130,7 +130,7 @@ services:
   itti_web:
     image: drivereu/ost-app:itti_frontend
     links:
-    - api
+    - itti_api
     ports:
     - "84:80"
     - "443:443"
