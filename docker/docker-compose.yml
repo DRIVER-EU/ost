@@ -133,6 +133,7 @@ services:
     - api
     ports:
     - "84:80"
+    - "443:443"
     restart: always
 
   itti_api:
