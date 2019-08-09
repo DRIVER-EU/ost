@@ -39,11 +39,11 @@ Additional info:
     `environment:
     - SERVER_NAME=IP_ADDR or DNS`
     It is used in creating self-signed certificate for your IP or DNS.
-3. DO NOT use localhost:84, as this will not work - the GUI then tries to connect to an internal service running at ITTI, which is not accessible.
+3. DO NOT start OST on localhost, as this will not work - the GUI then tries to connect to an internal service running at ITTI, which is not accessible. Use 127.0.0.1:PORT or IP_ADDR of your machine
 4. OST NEEDS to work on SSL certificate.
 5. DO NOT use Google Chrome browser as this is not operate self-signed certificate.
 6. To login, use following credentials: admin19/adminpass
 
 Build project with:
 docker-compose up -d
-Open browser and visit the OST home page with (e.g locally) 127.0.0.1:PORT.
+Open browser and visit the OST home page with 127.0.0.1:PORT or YOUR_IP_ADDR:PORT
