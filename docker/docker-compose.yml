@@ -119,7 +119,7 @@ services:
       SCHEMA_REGISTRY_URL: http://schema_registry:3502
       AUTO_REGISTER_SCHEMAS: 'true'
 
-  db: 
+  itti_db: 
     image: drivereu/ost-app:ost_database
     ports:
     - "5437:5432"
@@ -127,20 +127,20 @@ services:
     - ost-database:/var/lib/postgresql/data
     restart: always
 
-  web:
-    image: drivereu/ost-app:ost_frontend
+  itti_web:
+    image: drivereu/ost-app:itti_frontend
     links:
     - api
     ports:
     - "84:80"
     restart: always
 
-  api:
-    image: drivereu/ost-app:ost_backend
+  itti_api:
+    image: drivereu/ost-app:itti_backend
     environment:
       KAFKA_BROKER_URL: broker:9092
-    depends_on:
-    - db
+    links:
+    - itti_db
     ports:
     - "8084:8080"
     restart: always
