@@ -13,7 +13,7 @@ Image with frontend and nginx configuration:
 itti_web
     image: drivereu/ost-app:itti_frontend
     links:
-    - api <-- needs to be connected to OST backend (Apache Tomcat service)
+    - itti_api <-- needs to be connected to OST backend (Apache Tomcat service)
     ports:
     - "EXTERNAL_PORT:80" <-- e.g 84
     restart: always
@@ -24,7 +24,7 @@ itti_api
     environment:
       KAFKA_BROKER_URL: broker:9092 <-- backend needs to have mapping to testbed broker on internal port 9092
     depends_on:
-    - db <-- backend is using Postgres to store data and services
+    - itti_db <-- backend is using Postgres to store data and services
     ports:
     - "EXTERNAL_PORT:8080" <-- e.g 8084
     restart: always
