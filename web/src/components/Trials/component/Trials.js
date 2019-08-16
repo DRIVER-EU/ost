@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import './Trials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
-import { browserHistory } from 'react-router'
+
 import Spinner from 'react-spinkit'
 
 class Trials extends Component {
@@ -38,13 +38,13 @@ class Trials extends Component {
       this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
       if (!JSON.parse(localStorage.getItem('openTrial')) && nextProps.listOfTrials.data.length !== 0) {
         localStorage.setItem('openTrial', true)
-        browserHistory.push(`/trials/${nextProps.listOfTrials.data[0].id}/select-observation`)
+        window.location = `/#/trials/${nextProps.listOfTrials.data[0].id}/select-observation`
       }
     }
   }
 
   viewTrial (id) {
-    browserHistory.push(`/trials/${id}`)
+    window.location = `/#/trials/${id}`
   }
 
   getShortDesc (str) {

@@ -19,8 +19,7 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('fetch', event => {
-  if (event.request.url.indexOf('/api/') === -1) {
-    event.respondWith(
+  event.respondWith(
     fetch(event.request)
     .then(response => {
       const responseClone = response.clone()
@@ -32,5 +31,4 @@ self.addEventListener('fetch', event => {
     })
     .catch(() => caches.match(event.request).then(response => response))
   )
-  }
 })

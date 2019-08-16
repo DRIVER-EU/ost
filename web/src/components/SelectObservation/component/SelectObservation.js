@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './SelectObservation.scss'
-import { browserHistory } from 'react-router'
+
 import { RaisedButton, FontIcon } from 'material-ui'
 import { List, ListItem } from 'material-ui/List'
 import _ from 'lodash'
@@ -91,11 +91,11 @@ class SelectObservation extends Component {
   }
 
   newObservation (id) {
-    browserHistory.push(`/trials/${this.props.params.id}/new-observation/${id}`)
+    window.location = `/#/trials/${this.props.params.id}/new-observation/${id}`
   }
 
   back () {
-    browserHistory.push(`/trials/${this.props.params.id}`)
+    window.location = `/#/trials/${this.props.params.id}`
   }
 
   render () {
