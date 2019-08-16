@@ -9,7 +9,7 @@ import './NewSessionComponent.scss'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import PropTypes from 'prop-types'
 import MenuItem from 'material-ui/MenuItem'
-import { browserHistory } from 'react-router'
+
 import ReactTooltip from 'react-tooltip'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -76,7 +76,7 @@ class NewSessionComponent extends Component {
         () => this.createUserItem())
     }
     if (nextProps.session && nextProps.session !== this.props.session) {
-      browserHistory.push(`/trial-manager`)
+      window.location = `/#/trial-manager`
     }
   }
 
@@ -135,7 +135,7 @@ class NewSessionComponent extends Component {
   }
 
   back = () => {
-    browserHistory.push(`/trial-manager`)
+    window.location = `/#/trial-manager`
   }
 
   handleChangeEmail (object, e) {

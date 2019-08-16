@@ -11,7 +11,6 @@ import axios from 'axios'
 export const LOG_IN = 'LOG_IN'
 export const LOG_OUT = 'LOG_OUT'
 import { toastr } from 'react-redux-toastr'
-import { browserHistory } from 'react-router'
 
 const getHeaders = () => {
   let token = localStorage.getItem('drivertoken')
@@ -87,7 +86,7 @@ export const logOut = () => {
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
           resolve()
-          browserHistory.push('/')
+          window.location = '/#/'
         })
         .catch((error) => {
           if (error.message === 'Network Error') {

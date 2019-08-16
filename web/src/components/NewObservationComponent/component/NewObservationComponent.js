@@ -10,7 +10,7 @@ import _ from 'lodash'
 import Slider from './Slider'
 import radio from './Radio'
 import Form from 'react-jsonschema-form-mui'
-import { browserHistory } from 'react-router'
+
 import Spinner from 'react-spinkit'
 import FontIcon from 'material-ui/FontIcon'
 import DropzoneComponent from 'react-dropzone-component'
@@ -194,7 +194,7 @@ class NewObservationComponent extends Component {
       }
     }
     if (nextProps.observation && nextProps.observation !== this.props.observation) {
-      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+      window.location = `/#/trials/${this.props.params.id}/select-observation`
     }
   }
 
@@ -346,7 +346,7 @@ class NewObservationComponent extends Component {
   }
 
   back () {
-    browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+    window.location = `/#/trials/${this.props.params.id}/select-observation`
   }
 
   // handleDescription (value) {

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import './Login.scss'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
-import { browserHistory } from 'react-router'
 
 const styles = {
   checkbox: {
@@ -64,18 +63,18 @@ class LoginPanelContent extends Component {
   componentWillMount () {
     let role = localStorage.getItem('driverrole')
     if (this.props.isLoggedIn && role === 'ROLE_ADMIN') {
-      browserHistory.push('/trial-manager')
+      window.location = '/#/trial-manager'
     } else if (this.props.isLoggedIn && role === 'ROLE_USER') {
-      browserHistory.push('/trials')
+      window.location = '/#/trials'
     }
   }
 
   componentWillReceiveProps (nextProps) {
     let role = localStorage.getItem('driverrole')
     if (nextProps.isLoggedIn && role === 'ROLE_ADMIN') {
-      browserHistory.push('/trial-manager')
+      window.location = '/#/trial-manager'
     } else if (nextProps.isLoggedIn && role === 'ROLE_USER') {
-      browserHistory.push('/trials')
+      window.location = '/#/trials'
     }
   }
 

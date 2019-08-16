@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import './TrialManager.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import RaisedButton from 'material-ui/RaisedButton'
-import { browserHistory } from 'react-router'
+
 import Spinner from 'react-spinkit'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
@@ -56,7 +56,7 @@ class TrialManager extends Component {
   }
 
   viewTrial (object) {
-    browserHistory.push(`trial-manager/${object.trialId}/admin-trials/${object.id}`)
+    window.location = `trial-manager/${object.trialId}/admin-trials/${object.id}`
   }
 
   getShortDesc (str) {
@@ -82,7 +82,7 @@ class TrialManager extends Component {
 
   newSession = () => {
     if (this.state.trialId) {
-      browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
+      window.location = `trial-manager/${this.state.trialId}/newsession`
     }
   }
 
