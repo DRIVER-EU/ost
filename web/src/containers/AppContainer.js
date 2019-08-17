@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Router } from 'react-router'
+import { browserHistory, Router } from 'react-router'
 import { Provider } from 'react-redux'
-import createHashHistory from 'history/lib/createHashHistory'
 import ReduxToastr from 'react-redux-toastr'
 
 class AppContainer extends Component {
@@ -13,13 +12,11 @@ class AppContainer extends Component {
 
   render () {
     const { routes, store } = this.props
-    let history = createHashHistory({
 
-    })
     return (
       <Provider store={store}>
         <div style={{ height: '100%' }}>
-          <Router history={history} children={routes} />
+          <Router history={browserHistory} children={routes} />
           <ReduxToastr
             timeOut={4000}
             newestOnTop={false}

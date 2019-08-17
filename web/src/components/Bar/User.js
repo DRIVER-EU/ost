@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-
+import { browserHistory } from 'react-router'
 import { logIn, logOut } from '../../routes/Login/modules/login'
 import { DropDownMenu, MenuItem } from 'material-ui'
 import './User.scss'
@@ -21,9 +21,9 @@ class UserComponent extends Component {
       this.props.logOut()
     } else if (value === 2) {
       if (this.props.role === 'ROLE_ADMIN') {
-        window.location = '/#/trial-manager'
+        browserHistory.push('/trial-manager')
       } else {
-        window.location = '/#/trials'
+        browserHistory.push('/trials')
       }
     }
   }

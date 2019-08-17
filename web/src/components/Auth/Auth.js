@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { browserHistory } from 'react-router'
 import PropTypes from 'prop-types'
 
 class Auth extends Component {
@@ -30,21 +30,21 @@ class Auth extends Component {
 
   componentWillMount () {
     this.props.checkLogin()
-    // browserHistory.listen(location => {
-    //   if (location.pathname !== '/') {
-    //     if (!this.props.isLoggedIn && !this.isPublicLocation()) {
-    //       window.location.replace('/')
-    //     }
-    //   }
-    // })
+    browserHistory.listen(location => {
+      if (location.pathname !== '/') {
+        if (!this.props.isLoggedIn && !this.isPublicLocation()) {
+          window.location.replace('/')
+        }
+      }
+    })
     if (!this.props.isLoggedIn && !this.isPublicLocation()) {
-      window.location = '/#/'
+      browserHistory.push('/')
     }
   }
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.isLoggedIn && !this.isPublicLocation()) {
-      window.location = '/#/'
+      browserHistory.push('/')
     }
   }
 
