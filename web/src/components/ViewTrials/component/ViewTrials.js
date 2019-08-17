@@ -4,7 +4,7 @@ import DateComponent from '../../DateComponent/DateComponent'
 import './ViewTrials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import { RaisedButton, FontIcon } from 'material-ui'
-
+import { browserHistory } from 'react-router'
 // import FloatingActionButton from 'material-ui/FloatingActionButton'
 // import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
@@ -104,11 +104,11 @@ class ViewTrials extends Component {
   }
 
   viewEvent (id) {
-    window.location = `/#/trials/${this.props.params.id}/question/${id}`
+    browserHistory.push(`/trials/${this.props.params.id}/question/${id}`)
   }
 
   newObservation () {
-    window.location = `/#/trials/${this.props.params.id}/select-observation`
+    browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
   }
 
   handleFindObservation () {
