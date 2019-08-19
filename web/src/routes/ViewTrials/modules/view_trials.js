@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'dev.itti.com.pl:8009'
+  origin = 'localhost:8090'
 } else {
   origin = window.location.host
 }
@@ -118,11 +118,25 @@ export const getViewTrials = (trialsessionId) => {
              'readonly').objectStore('event').index('trialsession_id')
              answers.getAll(trialsessionId).onsuccess = e1 => {
                result = Array.concat(result, e1.target.result)
-               if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+               if (!check) { check = true } else {
+                 let d = result.sort(function (a, b) {
+                  // Turn your strings into dates, and then subtract them
+                  // to get a value that is either negative, positive, or zero.
+                   return new Date(b.time) - new Date(a.time)
+                 })
+                 dispatch(getViewTrialsAction(d))
+               }
              }
              events.getAll(trialsessionId).onsuccess = e2 => {
                result = Array.concat(result, e2.target.result)
-               if (!check) { check = true } else { dispatch(getViewTrialsAction(result)) }
+               if (!check) { check = true } else {
+                 let d = result.sort(function (a, b) {
+                  // Turn your strings into dates, and then subtract them
+                  // to get a value that is either negative, positive, or zero.
+                   return new Date(b.time) - new Date(a.time)
+                 })
+                 dispatch(getViewTrialsAction(d))
+               }
              }
            }
          }

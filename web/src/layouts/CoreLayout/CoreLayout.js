@@ -33,6 +33,19 @@ class CoreLayout extends Component {
     user: PropTypes.object
   }
 
+  componentWillMount () {
+  // ========================================================
+// Service worker set up
+// ========================================================
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/cashSite.js', { scope: '/' })
+      .then(() => console.log('Service worker registered'))
+      .catch(error => console.error('Service worker error: ', error))
+      })
+    }
+  }
+
   // componentDidMount () {
   //   this.interval = setInterval(() => {
   //     window.navigator.onLine && (this.checkMod = true)

@@ -81,16 +81,6 @@ if (!Array.prototype.includes) {
 const initialState = window.__INITIAL_STATE__
 const store = createStore(initialState)
 
-// ========================================================
-// Service worker set up
-// ========================================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/cashSite.js')
-    .then(() => console.log('Service worker registered'))
-    .catch(error => console.error('Service worker error: ', error))
-  })
-}
 
 // ========================================================
 // IndexedDB Instantiation
@@ -118,6 +108,10 @@ if (!('indexedDB' in window)) {
       session.createIndex("observationtype_id", "observationtype_id", { unique: false })
       session.createIndex("trialsession_id, observationtype_id", ["trialsession_id", "observationtype_id"], { unique: false })
     }
+    if (!idb.objectStoreNames.contains('observation_answer')) {
+      let session = idb.createObjectStore('observation_answer', { keyPath: 'id' })
+      session.createIndex("answerId", "answerId", { unique: false })
+     }
     // questions are bugged in backend
     // if (!idb.objectStoreNames.contains('question')) {
     //   idb.createObjectStore('question', { keyPath: 'id' })
