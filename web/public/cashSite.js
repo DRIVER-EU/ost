@@ -3,11 +3,13 @@ const cacheName = 'v1'
 var prefetchedURLs = [
   '/',
   '/vendor.js',
-  '/app.js'
+  '/app.js',
+  '/version.txt',
+  '/images/driver-logo.png',
+  '/images/driver-mini-logo.png'
 ]
-const l = console.log
 self.addEventListener('install', function (event) {
-  l('install evt')
+  console.log('install sw')
   event.waitUntil(
         caches.open(cacheName).then((cache) => {
           return Promise.all(prefetchedURLs.map((url) => {
@@ -17,17 +19,17 @@ self.addEventListener('install', function (event) {
             })
           }))
         }).catch((err) => {
-          l(err)
+          console.log(err)
         })
     )
   self.addEventListener('fetch', (e) => {
-    if (e.request.url.indexOf('/api/') === -1) {
+    if (e.request.url.indexOf('/api/') === -1 && e.request.url.indexOf('webpack') === -1) {
       e.respondWith(
         caches.match(e.request)
-            .then(function (response) {
-              if (response) {
-                console.log('[ServiceWorker] Found in Cache', e.request.url, response)
-                return response
+            .then(function (responseData) {
+              if (responseData && e.request.url.indexOf('version.txt') === -1) {
+                console.log('[ServiceWorker] Found in Cache', e.request.url, responseData)
+                return responseData
               }
               var requestClone = e.request.clone()
               return fetch(requestClone)
@@ -45,6 +47,10 @@ self.addEventListener('install', function (event) {
                       return response
                     })
                     .catch(function (err) {
+                      if (e.request.url.indexOf('version.txt') > -1) {
+                        console.log('[ServiceWorker] Found in Cache', e.request.url)
+                        return caches.match(e.request.url)
+                      }
                       console.log('[ServiceWorker] Error Fetching & Caching New Data', err)
                       return caches.match('/')
                     })

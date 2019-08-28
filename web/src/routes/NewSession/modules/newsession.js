@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'localhost:8090'
+  origin = 'testbed-ost.itti.com.pl'
 } else {
   origin = window.location.host
 }

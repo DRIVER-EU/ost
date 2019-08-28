@@ -23,7 +23,8 @@ class CoreLayout extends Component {
   constructor (props) {
     super()
     this.state = {
-      role: ''
+      role: '',
+      version: ''
     }
   }
 
@@ -34,19 +35,10 @@ class CoreLayout extends Component {
   }
 
   componentWillMount () {
-  // ========================================================
-// Service worker set up
-// ========================================================
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/cashSite.js', { scope: '/' })
-      .then(() => console.log('Service worker registered'))
-      .catch(error => console.error('Service worker error: ', error))
-      })
-    }
-  }
+    fetch('/version.txt')
+    .then(response => response.text())
+      .then(data => this.setState({ version: data }))
 
-  // componentDidMount () {
   //   this.interval = setInterval(() => {
   //     window.navigator.onLine && (this.checkMod = true)
   //     if (!window.navigator.onLine && this.checkMod) {
@@ -54,7 +46,7 @@ class CoreLayout extends Component {
   //       this.checkMod = false
   //     }
   //   }, 1000)
-  // }
+  }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user &&
@@ -91,6 +83,7 @@ class CoreLayout extends Component {
               )}
             />
             {this.props.children}
+            <div className={'version'}>v.{this.state.version}</div>
           </div>
         </div>
       </div>

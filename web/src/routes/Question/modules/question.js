@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'localhost:8090'
+  origin = 'testbed-ost.itti.com.pl'
 } else {
   origin = window.location.host
 }
@@ -17,6 +17,7 @@ const toastrOptions = {
 
 export const GET_SCHEMA = 'GET_SCHEMA'
 export const SEND_OBSERVATION = 'SEND_OBSERVATION'
+export const RESET_OBSERVATION_QUESTION = 'RESET_OBSERVATION_QUESTION'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -35,9 +36,17 @@ export const sendObservationAction = (data = null) => {
   }
 }
 
+export const resetObservationAction = (data = null) => {
+  return {
+    type: RESET_OBSERVATION_QUESTION,
+    data: data
+  }
+}
+
 export const actions = {
   getSchemaAction,
-  sendObservation
+  sendObservation,
+  resetObservation
 }
 
 // backend errors: The requested resource cannot be converted to DTO
@@ -130,6 +139,12 @@ export const sendObservation = () => {
   }
 }
 
+export const resetObservation = () => {
+  return (dispatch) => {
+    dispatch(resetObservationAction({}))
+  }
+}
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -144,6 +159,12 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       observation: action.data
+    }
+  },
+  [RESET_OBSERVATION_QUESTION]: (state, action) => {
+    return {
+      ...state,
+      observationForm: action.data
     }
   }
 }

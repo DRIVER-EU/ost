@@ -7,6 +7,7 @@ class DateComponent extends Component {
     this.state = {
       time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }
+    this.interval = null
   }
 
   static propTypes = {
@@ -23,7 +24,7 @@ class DateComponent extends Component {
         time
       })
     } else {
-      let interval = setInterval(() => {
+      this.interval = setInterval(() => {
         let time = this.state.time
         if (!this.props.trialTime) {
           time = moment(new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
@@ -32,14 +33,13 @@ class DateComponent extends Component {
           this.props.handleChangeTrialTime(time)
         }
         this.setState({
-          interval,
           time })
       }, 1000)
     }
   }
 
   componentWillUnmount () {
-    clearInterval(this.state.interval)
+    clearInterval(this.interval)
   }
 
   render () {

@@ -81,6 +81,16 @@ if (!Array.prototype.includes) {
 const initialState = window.__INITIAL_STATE__
 const store = createStore(initialState)
 
+// ========================================================
+// Service worker set up
+// ========================================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/cashSite.js', { scope: '/' })
+  .then(() => console.log('Service worker registered'))
+  .catch(error => console.error('Service worker error: ', error))
+  })
+}
 
 // ========================================================
 // IndexedDB Instantiation
