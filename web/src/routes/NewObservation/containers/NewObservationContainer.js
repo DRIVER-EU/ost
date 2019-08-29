@@ -1,11 +1,12 @@
 import { connect } from 'react-redux'
 import NewObservation from '../components/NewObservation'
-import { getSchema, sendObservation, getTrialTime } from './../modules/newobservation'
+import { getSchema, sendObservation, getTrialTime, resetObservation } from './../modules/newobservation'
 
 const mapDispatchToProps = {
   getSchema,
   sendObservation,
-  getTrialTime
+  getTrialTime,
+  resetObservation
 }
 
 const mapStateToProps = (state) => ({

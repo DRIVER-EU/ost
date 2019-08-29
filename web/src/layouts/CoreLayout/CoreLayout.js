@@ -23,7 +23,8 @@ class CoreLayout extends Component {
   constructor (props) {
     super()
     this.state = {
-      role: ''
+      role: '',
+      version: ''
     }
   }
 
@@ -33,7 +34,11 @@ class CoreLayout extends Component {
     user: PropTypes.object
   }
 
-  // componentDidMount () {
+  componentWillMount () {
+    fetch('/version.txt')
+    .then(response => response.text())
+      .then(data => this.setState({ version: data }))
+
   //   this.interval = setInterval(() => {
   //     window.navigator.onLine && (this.checkMod = true)
   //     if (!window.navigator.onLine && this.checkMod) {
@@ -41,7 +46,7 @@ class CoreLayout extends Component {
   //       this.checkMod = false
   //     }
   //   }, 1000)
-  // }
+  }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user &&
@@ -78,6 +83,7 @@ class CoreLayout extends Component {
               )}
             />
             {this.props.children}
+            <div className={'version'}>v.{this.state.version}</div>
           </div>
         </div>
       </div>

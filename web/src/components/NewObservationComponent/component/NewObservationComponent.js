@@ -80,7 +80,8 @@ class NewObservationComponent extends Component {
     closeModal: PropTypes.func,
     observation: PropTypes.any,
     getTrialTime: PropTypes.func,
-    trialTime: PropTypes.any
+    trialTime: PropTypes.any,
+    resetObservation: PropTypes.func
   }
 
   downloadFile (id, name) {
@@ -92,7 +93,9 @@ class NewObservationComponent extends Component {
       time: time
     })
   }
-
+  componentWillUnmount () {
+    this.props.resetObservation()
+  }
   componentWillMount () {
     window.onkeypress = function (e) {
       if (e.charCode === 13) {

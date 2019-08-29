@@ -13,7 +13,8 @@ class QuestionView extends Component {
     observationForm: PropTypes.any,
     params: PropTypes.any,
     downloadFile: PropTypes.func,
-    getTrialTime: PropTypes.func
+    getTrialTime: PropTypes.func,
+    resetObservation: PropTypes.func
   }
 
   render () {
@@ -25,7 +26,8 @@ class QuestionView extends Component {
           observationForm={this.props.observationForm}
           mode={'view'}
           params={this.props.params}
-          downloadFile={this.props.downloadFile} />
+          downloadFile={this.props.downloadFile}
+          resetObservation={this.props.resetObservation} />
       </div>
     )
   }
