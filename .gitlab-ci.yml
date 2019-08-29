@@ -184,7 +184,7 @@ develop:web:package:
   dependencies:
   - develop:web:build
   script:
-  - cd web/dist; echo "$CI_PIPELINE_ID}" > version.txt; tar zcvf "dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz" *
+  - cd web/dist; echo "1.0.$CI_PIPELINE_ID" > version.txt; tar zcvf "dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz" *
   artifacts:
     when: on_success
     expire_in: 1 week
