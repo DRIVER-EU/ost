@@ -59,23 +59,23 @@ develop:api:build:
     paths:
     - api/build/
 
-develop:api:analyze:
-  stage: analyze
-  only:
-  - develop
-  tags:
-  - default-api
-  <<: *cache_api_def
-  image: openjdk:8
-  services:
-  - postgres:9.6-alpine
-  variables:
-    POSTGRES_DB: itti_driver
-    POSTGRES_USER: itti_driver
-    POSTGRES_PASSWORD: APEKxySwg4Ku9yxz
-    SPRING_PROFILES_ACTIVE: integration
-  script:
-  - cd api ; ./gradlew -g $CI_PROJECT_DIR/cache/gradle clean test sonarqube -i
+# develop:api:analyze:
+#   stage: analyze
+#   only:
+#   - develop
+#   tags:
+#   - default-api
+#   <<: *cache_api_def
+#   image: openjdk:8
+#   services:
+#   - postgres:9.6-alpine
+#   variables:
+#     POSTGRES_DB: itti_driver
+#     POSTGRES_USER: itti_driver
+#     POSTGRES_PASSWORD: APEKxySwg4Ku9yxz
+#     SPRING_PROFILES_ACTIVE: integration
+#   script:
+#   - cd api ; ./gradlew -g $CI_PROJECT_DIR/cache/gradle clean test sonarqube -i
 
 develop:api:package:
   stage: package
@@ -160,19 +160,19 @@ develop:web:build:
     paths:
     - web/dist/
 
-develop:web:analyze:
-  stage: analyze
-  only:
-  - develop
-  tags:
-  - default-web
-  image: openjdk:8-alpine
-  before_script:
-  - apk add --no-cache  curl grep sed unzip
-  - mkdir -p $CI_PROJECT_DIR/cache/sonar ; cd $CI_PROJECT_DIR/cache/sonar ; curl --insecure -o ./sonarscanner.zip -L http://central.maven.org/maven2/org/sonarsource/scanner/cli/sonar-scanner-cli/3.0.3.778/sonar-scanner-cli-3.0.3.778.zip && unzip sonarscanner.zip && rm sonarscanner.zip
-  - echo "sonar.host.url=$SONAR_HOST_URL" > $CI_PROJECT_DIR/cache/sonar/sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
-  script:
-  - cd $CI_PROJECT_DIR/web ; $CI_PROJECT_DIR/cache/sonar/sonar-scanner-*/bin/sonar-scanner
+# develop:web:analyze:
+#   stage: analyze
+#   only:
+#   - develop
+#   tags:
+#   - default-web
+#   image: openjdk:8-alpine
+#   before_script:
+#   - apk add --no-cache  curl grep sed unzip
+#   - mkdir -p $CI_PROJECT_DIR/cache/sonar ; cd $CI_PROJECT_DIR/cache/sonar ; curl --insecure -o ./sonarscanner.zip -L http://central.maven.org/maven2/org/sonarsource/scanner/cli/sonar-scanner-cli/3.0.3.778/sonar-scanner-cli-3.0.3.778.zip && unzip sonarscanner.zip && rm sonarscanner.zip
+#   - echo "sonar.host.url=$SONAR_HOST_URL" > $CI_PROJECT_DIR/cache/sonar/sonar-scanner-3.0.3.778/conf/sonar-scanner.properties
+#   script:
+#   - cd $CI_PROJECT_DIR/web ; $CI_PROJECT_DIR/cache/sonar/sonar-scanner-*/bin/sonar-scanner
 
 develop:web:package:
   stage: package
