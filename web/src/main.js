@@ -75,6 +75,13 @@ if (!Array.prototype.includes) {
     return false
   }
 }
+
+window.addEventListener('beforeunload', (event) => {
+  event.preventDefault() // standard solution
+  window.confirm("Do you really want to leave?")
+  event.returnValue = '' // for chrome
+})
+
 // ========================================================
 // Store Instantiation
 // ========================================================
