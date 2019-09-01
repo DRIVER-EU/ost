@@ -19,7 +19,8 @@ class SelectObservation extends Component {
     this.state = {
       listOfObservations: null,
       viewTrials: null,
-      isLoading: true
+      isLoading: true,
+      checkedAnswersIDBA: []
     }
   }
 
@@ -60,13 +61,34 @@ class SelectObservation extends Component {
       this.setState({ viewTrials: nextProps.viewTrials })
     }
     if (this.props.viewTrials && this.props.listOfObservations) {
-      // eslint
+      this.state.listOfObservations && this.state.listOfObservations.map((object) => {
+        this.checkAnswersIDBAsync(object)
+      })
     }
     if (this.state.viewTrials && this.state.listOfObservations) {
       this.setState({ isLoading: false })
     }
   }
-
+  checkAnswersIDBAsync (object) {
+    let check = false
+    window.indexedDB.open('driver', 1).onsuccess = event => {
+      let queue = event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue')
+      queue.getAll().onsuccess = (e) => {
+        for (let i = 0; i < e.target.result.length; i++) {
+          if (e.target.result[i].data) {
+            check = parseInt(e.target.result[i].data.observationTypeId) === object.id
+          }
+        }
+        if (check) {
+          let checkedAnswersIDBA = [ ...this.state.checkedAnswersIDBA ]
+          if (!_.find(this.state.checkedAnswersIDBA, { id: object.id })) {
+            checkedAnswersIDBA.push({ id: object.id })
+            this.setState({ checkedAnswersIDBA })
+          }
+        }
+      }
+    }
+  }
   checkAnswers (answersList) {
     const { viewTrials } = this.state
     let isCheck = false
@@ -127,7 +149,8 @@ class SelectObservation extends Component {
                   {this.state.listOfObservations && this.state.listOfObservations.map((object) => (
                     <ListItem
                       key={object.id}
-                      style={this.checkAnswers(object.answersId)
+                      style={this.checkAnswers(object.answersId) ||
+                        _.find(this.state.checkedAnswersIDBA, { id: object.id })
                     ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                       : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
                       primaryText={object.name}
