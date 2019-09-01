@@ -83,22 +83,30 @@ export const getViewTrials = (trialsessionId) => {
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
            let item
            let answers = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
-           let events = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
-           for (let i = 0; i < response.data.length; i++) {
-             if (response.data[i] && response.data[i].type === 'ANSWER') {
-               item = answers.get(response.data[i].id)
-               item.onsuccess = (x) => {
-                 if (!x.target.result) {
-                   answers.add(Object.assign(response.data[i],
+           let delAns = answers.clear()
+           delAns.onsuccess = (x) => {
+             let events = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
+             let delEvn = events.clear()
+             delEvn.onsuccess = (x) => {
+               answers = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
+               events = event.target.result.transaction(['event'], 'readwrite').objectStore('event')
+               for (let i = 0; i < response.data.length; i++) {
+                 if (response.data[i] && response.data[i].type === 'ANSWER') {
+                   item = answers.get(response.data[i].id)
+                   item.onsuccess = (x) => {
+                     if (!x.target.result) {
+                       answers.add(Object.assign(response.data[i],
                   { trialsession_id: trialsessionId }))
-                 }
-               }
-             } else if (response.data[i] && response.data[i].type === 'EVENT') {
-               item = events.get(response.data[i].id)
-               item.onsuccess = (x) => {
-                 if (!x.target.result) {
-                   events.add(Object.assign(response.data[i],
+                     }
+                   }
+                 } else if (response.data[i] && response.data[i].type === 'EVENT') {
+                   item = events.get(response.data[i].id)
+                   item.onsuccess = (x) => {
+                     if (!x.target.result) {
+                       events.add(Object.assign(response.data[i],
                   { trialsession_id: trialsessionId }))
+                     }
+                   }
                  }
                }
              }
