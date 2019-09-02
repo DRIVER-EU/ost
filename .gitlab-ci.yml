@@ -106,7 +106,7 @@ develop:api:deploy:
   <<: *ssh_deploy_key_testing_def
   script: 
   - scp api/build/libs/dist_${CI_PROJECT_NAME}_api_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz perpixel@192.168.1.21:/home/perpixel/driver/dist
-  - ssh perpixel@192.168.1.21 "/home/perpixel/driver/bin/deploy-api.sh"
+  - ssh perpixel@192.168.1.21 "sudo /home/perpixel/driver/bin/deploy-api.sh"
   environment:
     name: testing
 
@@ -203,7 +203,7 @@ develop:web:deploy:
   <<: *ssh_deploy_key_testing_def
   script: 
   - scp web/dist/dist_${CI_PROJECT_NAME}_web_$(date +%Y-%m-%d)_${CI_PIPELINE_ID}.tar.gz perpixel@192.168.1.21:/home/perpixel/driver/dist
-  - ssh perpixel@192.168.1.21 "/home/perpixel/driver/bin/deploy-web.sh"
+  - ssh perpixel@192.168.1.21 "sudo /home/perpixel/driver/bin/deploy-web.sh"
   environment:
     name: testing
 
