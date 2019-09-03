@@ -23,7 +23,8 @@ self.addEventListener('install', function (event) {
         })
     )
   self.addEventListener('fetch', (e) => {
-    if (e.request.url.indexOf('/api/') === -1 && e.request.url.indexOf('webpack') === -1) {
+    if (e.request.method === 'GET' && e.request.url.indexOf('/api/') === -1 &&
+    e.request.url.indexOf('webpack') === -1) {
       e.respondWith(
         caches.match(e.request)
             .then(function (responseData) {
