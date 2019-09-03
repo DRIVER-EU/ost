@@ -85,7 +85,11 @@ export const getSchema = (idObs, idSession) => {
                   store.add(Object.assign(response.data,
                     { trialsession_id: idSession, observationtype_id: idObs }))
                 } else {
+                  let store = event.target.result.transaction(['observation_type'],
+                  'readwrite').objectStore('observation_type')
                   store.delete(response.data.id).onsuccess = () => {
+                    let store = event.target.result.transaction(['observation_type'],
+                'readwrite').objectStore('observation_type')
                     store.add(Object.assign(response.data,
                       { trialsession_id: idSession, observationtype_id: idObs }))
                   }
@@ -99,12 +103,14 @@ export const getSchema = (idObs, idSession) => {
             if (error.message === 'Network Error') {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
                 event.target.result.transaction(['observation_type'],
-                'readonly').objectStore('observation_type').index('trialsession_id, observationtype_id')
-                .get([idSession, idObs]).onsuccess = (e) => { dispatch(getSchemaAction(e.target.result)) }
+                'readonly').objectStore('observation_type').index('trialsession_id, observationtype_id').get([idSession,
+                  idObs]).onsuccess = (e) => {
+                    dispatch(getSchemaAction(e.target.result))
+                    errorHandle(error)
+                    resolve()
+                  }
               }
             }
-            errorHandle(error)
-            resolve()
           })
     })
   }

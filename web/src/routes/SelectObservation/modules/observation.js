@@ -35,15 +35,15 @@ export const getObservations = (trialSessionId) => {
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
               let store = event.target.result.transaction(['observation_type'],
                 'readwrite').objectStore('observation_type')
-              let del = store.clear()
-              del.onsuccess = (xevnt) => {
-                store = event.target.result.transaction(['observation_type'],
-                'readwrite').objectStore('observation_type')
-                for (let i = 0; i < response.data.length; i++) {
-                  store.add(Object.assign(response.data[i],
+              // let del = store.clear()
+              // del.onsuccess = (xevnt) => {
+              //   store = event.target.result.transaction(['observation_type'],
+              //   'readwrite').objectStore('observation_type')
+              for (let i = 0; i < response.data.length; i++) {
+                store.add(Object.assign(response.data[i],
                         { trialsession_id: trialSessionId }))
-                }
               }
+             // }
             }
             dispatch(getObservationsAction(response.data))
             resolve()
