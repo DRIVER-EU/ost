@@ -114,46 +114,6 @@ export const getSchema = (idObs, idSession) => {
   }
 }
 
-// export const getSchema = (idObs, idSession) => {
-//   return (dispatch) => {
-//     return new Promise((resolve) => {
-//       axios.get(
-//         `https://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
-//         getHeaders())
-//           .then((response) => {
-//             freeQueue()
-//             window.indexedDB.open('driver', 1).onsuccess = (event) => {
-//               let store = event.target.result.transaction(['observation_type'],
-//                 'readwrite').objectStore('observation_type')
-//               store.get(response.data.id).onsuccess = (x) => {
-//                 if (!x.target.result) {
-//                   store.add(Object.assign(response.data,
-//                     { trialsession_id: idSession, observationtype_id: idObs }))
-//                 } else {
-//                   store.delete(response.data.id).onsuccess = () => {
-//                     store.add(Object.assign(response.data,
-//                       { trialsession_id: idSession, observationtype_id: idObs }))
-//                   }
-//                 }
-//               }
-//             }
-//             dispatch(getSchemaAction(response.data))
-//             resolve()
-//           })
-//           .catch((error) => {
-//             if (error.message === 'Network Error') {
-//               window.indexedDB.open('driver', 1).onsuccess = (event) => {
-//                 event.target.result.transaction(['observation_type'],
-//                 'readonly').objectStore('observation_type').index('trialsession_id, observationtype_id')
-//                 .get([idSession, idObs]).onsuccess = (e) => { dispatch(getSchemaAction(e.target.result)) }
-//               }
-//             }
-//             errorHandle(error)
-//             resolve()
-//           })
-//     })
-//   }
-// }
 export const sendObservation = (formData) => {
   return (dispatch) => {
     return new Promise((resolve) => {
