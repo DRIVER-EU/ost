@@ -45,6 +45,13 @@ class SelectObservation extends Component {
     clearInterval(this.interval)
   }
 
+  removeTrialSessionIds (items) {
+    _.forEach(items, object => {
+      delete object.trialsession_id
+    })
+    return items
+  }
+
   componentWillReceiveProps (nextProps) {
     let listOfObsevationProps = [...nextProps.listOfObservations]
     let listOfObsevation = this.state.listOfObservations ? [...this.state.listOfObservations] : []
@@ -52,13 +59,13 @@ class SelectObservation extends Component {
       !_.isEqual(listOfObsevation.sort(), listOfObsevationProps.sort())) {
       this.setState({ listOfObservations: nextProps.listOfObservations })
     }
-    if (!_.isEqual(nextProps.viewTrials, this.state.viewTrials)) {
+    if (!_.isEqual(this.removeTrialSessionIds([...nextProps.viewTrials]), this.state.viewTrials)) {
       let newItem = _.differenceWith(nextProps.viewTrials, this.state.viewTrials, _.isEqual)
       if (this.state.viewTrials && this.state.viewTrials.length !== 0 &&
         newItem.length !== 0 && newItem[0].type === 'EVENT') {
         toastr.success('New Event', 'New Event received.', toastrOptions)
       }
-      this.setState({ viewTrials: nextProps.viewTrials })
+      this.setState({ viewTrials: _.cloneDeep(nextProps.viewTrials) })
     }
     if (this.props.viewTrials && this.props.listOfObservations) {
       this.state.listOfObservations && this.state.listOfObservations.map((object) => {
