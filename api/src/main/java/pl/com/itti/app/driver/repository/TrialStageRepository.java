@@ -13,6 +13,7 @@ public interface TrialStageRepository
         extends PagingAndSortingRepository<TrialStage, Long>, JpaSpecificationExecutor<TrialStage> {
     Optional<TrialStage> findById(long id);
     Optional<TrialStage> findByTrialIdAndName(long trialId, String name);
+    Optional<TrialStage> findByTrialIdAndTestBedStageId(long trialId, long testBedStageId);
 
     List<TrialStage> findAllByTrialId(long trialId);
     Page<TrialStage> findAllByTrialId(long trialId, Pageable pageable);

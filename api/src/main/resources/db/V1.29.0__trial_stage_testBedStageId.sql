@@ -1,0 +1,1 @@
+ALTER TABLE public.trial_stage ADD COLUMN test_bed_stage_id integer NOT NULL DEFAULT 1;

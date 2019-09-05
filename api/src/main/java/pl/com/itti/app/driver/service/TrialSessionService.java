@@ -331,14 +331,20 @@ public class TrialSessionService {
             long trialSessionId = requestChangeOfTrialStage.getOstTrialSessionId();
             long trialStageId = requestChangeOfTrialStage.getOstTrialStageId();
 
-            Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
-            Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndTrialId(trialSessionId, trialId);
+            Optional<TrialSession> trialSession = trialSessionRepository.findByStatus(SessionStatus.ACTIVE.name());
+            Trial trial;
 
-            if (trialStage.isPresent() && trialSession.isPresent()) {
-                trialSession.get().setLastTrialStage(trialStage.get());
-                trialSessionRepository.save(trialSession.get());
+            if (trialSession.isPresent()) {
+                trial = trialSession.get().getTrial();
+                Optional<TrialStage> trialStage = trialStageRepository.findByTrialIdAndTestBedStageId(trial.getId(), trialStageId);
+                if (trialStage.isPresent()) {
+                    trialSession.get().setLastTrialStage(trialStage.get());
+                    trialSessionRepository.save(trialSession.get());
+                } else {
+                    System.out.println("Trial Stage does not exist");
+                }
             } else {
-                System.out.println("Trial Stage or Trial Session does not exist");
+                System.out.println("Trial Status with ACTIVE status does not exist");
             }
 
             List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
