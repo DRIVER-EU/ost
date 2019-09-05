@@ -40,6 +40,7 @@ import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
+import javax.persistence.EnumType;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -331,7 +332,7 @@ public class TrialSessionService {
             long trialSessionId = requestChangeOfTrialStage.getOstTrialSessionId();
             long trialStageId = requestChangeOfTrialStage.getOstTrialStageId();
 
-            Optional<TrialSession> trialSession = trialSessionRepository.findByStatus(SessionStatus.ACTIVE.name());
+            Optional<TrialSession> trialSession = trialSessionRepository.findByStatus(SessionStatus.ACTIVE);
             Trial trial;
 
             if (trialSession.isPresent()) {
