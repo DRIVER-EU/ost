@@ -328,9 +328,9 @@ public class TrialSessionService {
         System.out.println("Receive Message from CheckTrialStage");
 
         if (requestChangeOfTrialStage != null) {
-            long trialId = requestChangeOfTrialStage.getOstTrialId();
-            long trialSessionId = requestChangeOfTrialStage.getOstTrialSessionId();
-            long trialStageId = requestChangeOfTrialStage.getOstTrialStageId();
+            long trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
+            long trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
+            long trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
 
             Optional<TrialSession> trialSession = trialSessionRepository.findByStatus(SessionStatus.ACTIVE);
             Trial trial;
@@ -350,14 +350,18 @@ public class TrialSessionService {
 
             List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
 
-            for (ObservationType observationType : listOfObservationType) {
-                Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
+            if (trialId == 0 || trialSessionId == 0 || trialStageId == 0) {
+                for (ObservationType observationType : listOfObservationType) {
+                    Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
 
-                if (trialSession.isPresent()) {
-                    System.out.println("SendToTestBed");
-                    answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
-                            .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
+                    if (trialSession.isPresent()) {
+                        System.out.println("SendToTestBed");
+                        answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
+                                .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
+                    }
                 }
+            } else {
+                System.out.println("TrialId or TrailSessionId or TrialStageId is empty!");
             }
         }
     }
