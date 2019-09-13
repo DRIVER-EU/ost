@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 
 import java.util.List;
@@ -56,7 +57,9 @@ public class TrialController {
         Hibernate.initialize(trialSessionList);
         JSONArray sessionSet = new JSONArray();
         trialSessionList.forEach(item -> {
-            sessionSet.put(item.getId());
+            if(item.getStatus()==SessionStatus.ACTIVE) {
+                sessionSet.put(item.getId());
+            }
         });
         trialJsonObj.put("sessionSet", sessionSet);
 

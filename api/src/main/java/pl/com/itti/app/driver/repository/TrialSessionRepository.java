@@ -14,4 +14,6 @@ public interface TrialSessionRepository
     Optional<TrialSession> findByIdAndTrialId(long id, long trialId);
 
     Optional<TrialSession> findByStatus(SessionStatus status);
+
+    Optional<TrialSession> findByIdAndStatus(long id, SessionStatus status);
 }
