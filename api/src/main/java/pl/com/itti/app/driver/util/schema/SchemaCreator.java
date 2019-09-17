@@ -115,7 +115,7 @@ public final class SchemaCreator {
 
         comment.put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
         comment.put(SchemaCreatorProperties.FIELD_CLASS_NAME, "comment-class");
-
+        comment.put(SchemaCreatorProperties.FIELD_WIDGET, "textarea");
         return comment;
     }
 
