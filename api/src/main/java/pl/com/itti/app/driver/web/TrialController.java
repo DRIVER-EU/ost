@@ -36,6 +36,7 @@ public class TrialController {
 
     @GetMapping("/ostTrialSessionId")
     public Integer timeElapsed() {
+
         return getOstTrialSessionId();
     }
 
@@ -46,7 +47,7 @@ public class TrialController {
 
 
     @GetMapping("/ostTrail")
-    public JSONObject sayPlainTextHello(@RequestParam(value = "trial_name") String trialName) {
+    public String sayPlainTextHello(@RequestParam(value = "trial_name") String trialName) {
         Trial trial = trialSessionService.getTrialByName(trialName);
 
         JSONObject trialJsonObj = new JSONObject();
@@ -61,7 +62,7 @@ public class TrialController {
                 sessionSet.put(item.getId());
             }
         });
-        trialJsonObj.put("sessionSet", sessionSet);
+        trialJsonObj.put("sessionIdSet", sessionSet);
 
         JSONArray stageSet = new JSONArray();
         List<TrialStage> trialStageList = trial.getTrialStages();
@@ -74,7 +75,7 @@ public class TrialController {
         });
         trialJsonObj.put("stageSet", stageSet);
 
-        return trialJsonObj;
+        return trialJsonObj.toString();
     }
 }
 

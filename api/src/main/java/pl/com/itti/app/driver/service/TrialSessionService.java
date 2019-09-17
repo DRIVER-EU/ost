@@ -288,8 +288,8 @@ public class TrialSessionService {
     }
 
     public Trial getTrialByName(String trialName) {
-        Optional<Trial> trial = trialRepository.findByName(trialName);
-        return trial.orElse(null);
+        Trial trial = trialRepository.findByName(trialName).get();
+        return trial;
     }
 
     public JsonNode newSessionValues(long trialId) {
