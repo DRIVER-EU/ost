@@ -327,9 +327,16 @@ public class TrialSessionService {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 
+    public void setMaualStageChange(long sessionId, boolean isManual){
+        TrialSession trialSession = trialSessionRepository.findById(sessionId).get();
+        if(trialSession==null)return;
+        trialSession.setIsManualStageChange(isManual);
+        trialSessionRepository.save(trialSession);
+    }
+
     private String setCurrentSessionStage(Optional<TrialSession> trialSession, long trialStageId){
 
-          if (trialSession.isPresent()) {
+          if (trialSession.isPresent() && !trialSession.get().getIsManualStageChange()) {
             Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
             if (trialStage.isPresent() && trialStage.get().getTrial().getId()==trialSession.get().getTrial().getId()) {
                 trialSession.get().setLastTrialStage(trialStage.get());
@@ -338,7 +345,7 @@ public class TrialSessionService {
                 System.out.println("Trial Stage does not exist");
             }
         } else {
-            System.out.println("Trial Status with ACTIVE status does not exist");
+            System.out.println("Trial session is in manual mode");
         }
 
         return null;

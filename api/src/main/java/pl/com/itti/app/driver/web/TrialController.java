@@ -58,7 +58,7 @@ public class TrialController {
         Hibernate.initialize(trialSessionList);
         JSONArray sessionSet = new JSONArray();
         trialSessionList.forEach(item -> {
-            if(item.getStatus()==SessionStatus.ACTIVE) {
+            if(item.getStatus()==SessionStatus.ACTIVE && !item.getIsManualStageChange()) {
                 sessionSet.put(item.getId());
             }
         });
