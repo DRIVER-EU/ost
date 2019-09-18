@@ -84,13 +84,13 @@ class SelectObservation extends Component {
         for (let i = 0; i < e.target.result.length; i++) {
           if (e.target.result[i].data) {
             check = parseInt(e.target.result[i].data.observationTypeId) === object.id
-          }
-        }
-        if (check) {
-          let checkedAnswersIDBA = [ ...this.state.checkedAnswersIDBA ]
-          if (!_.find(this.state.checkedAnswersIDBA, { id: object.id })) {
-            checkedAnswersIDBA.push({ id: object.id })
-            this.setState({ checkedAnswersIDBA })
+            if (check) {
+              let checkedAnswersIDBA = [ ...this.state.checkedAnswersIDBA ]
+              if (!_.find(this.state.checkedAnswersIDBA, { id: object.id })) {
+                checkedAnswersIDBA.push({ id: object.id })
+                this.setState({ checkedAnswersIDBA })
+              }
+            }
           }
         }
       }
@@ -100,18 +100,16 @@ class SelectObservation extends Component {
     const { viewTrials } = this.state
     let isCheck = false
     let listOfIds = []
-    if (answersList.length !== 0 && viewTrials.length !== 0) {
+    if (answersList && viewTrials.length !== 0) {
       if (viewTrials.length !== 0) {
         viewTrials.map((obj) => {
-          listOfIds.push(obj.id)
+          listOfIds.push(obj.observationTypeId)
         })
       }
       if (listOfIds && listOfIds.length !== 0 && answersList && answersList.length !== 0) {
-        for (let i = 0; i < answersList.length; i++) {
-          for (let j = 0; j < listOfIds.length; j++) {
-            if (listOfIds[j] === answersList[i]) {
-              isCheck = true
-            }
+        for (let j = 0; j < listOfIds.length; j++) {
+          if (listOfIds[j] === answersList) {
+            isCheck = true
           }
         }
       }
@@ -156,7 +154,7 @@ class SelectObservation extends Component {
                   {this.state.listOfObservations && this.state.listOfObservations.map((object) => (
                     <ListItem
                       key={object.id}
-                      style={this.checkAnswers(object.answersId) ||
+                      style={this.checkAnswers(object.id) ||
                         _.find(this.state.checkedAnswersIDBA, { id: object.id })
                     ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                       : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
