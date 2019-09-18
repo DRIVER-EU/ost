@@ -227,13 +227,13 @@ class ViewTrials extends Component {
                   <AccordionItem key={object.id} title={
                     <h3 className={'react-sanfona-item-title cursor-pointer' +
                       ((object.type !== 'EVENT') ? ' observation' : ' message')}>
-                      {object.name}
+                      {object.description}
                       <div className={'time'}>
                         {moment(object.time, 'YYYY-MM-DDThh:mmZ').format('DD/MM/YYYY kk:mm:ss')}
                       </div>
                     </h3>} expanded={false}>
                     <div>
-                      <p>{object.description}</p>
+                      <p>{object.name}</p>
                       { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton

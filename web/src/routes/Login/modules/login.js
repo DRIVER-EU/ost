@@ -77,12 +77,12 @@ export const logOut = () => {
     return new Promise((resolve) => {
       axios.get(`https://${origin}/api/auth/logout`, getHeaders())
         .then(() => {
-          window.indexedDB.open('driver', 1).onsuccess = (event) => {
-            for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
-              event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
-                .objectStore(event.target.result.objectStoreNames[i]).clear()
-            }
-          }
+          // window.indexedDB.open('driver', 1).onsuccess = (event) => {
+          //   for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
+          //     event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
+          //       .objectStore(event.target.result.objectStoreNames[i]).clear()
+          //   }
+          // }
           localStorage.clear()
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())

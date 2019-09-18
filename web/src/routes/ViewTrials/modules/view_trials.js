@@ -96,7 +96,7 @@ export const getViewTrials = (trialsessionId) => {
                    item.onsuccess = (x) => {
                      if (!x.target.result) {
                        answers.add(Object.assign(response.data[i],
-                  { trialsession_id: trialsessionId }))
+                  { trialsession_id: trialsessionId, observationTypeId: response.data[i].observationTypeId }))
                      }
                    }
                  } else if (response.data[i] && response.data[i].type === 'EVENT') {
