@@ -43,6 +43,9 @@ public class TrialSession extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private LocalDateTime startTime;
 
+    @Column(nullable = false)
+    private Boolean isManualStageChange;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SessionStatus status;
