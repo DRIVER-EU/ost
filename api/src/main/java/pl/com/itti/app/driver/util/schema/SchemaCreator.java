@@ -116,6 +116,8 @@ public final class SchemaCreator {
         comment.put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
         comment.put(SchemaCreatorProperties.FIELD_CLASS_NAME, "comment-class");
         comment.put(SchemaCreatorProperties.FIELD_WIDGET, "textarea");
+        ObjectNode options = MAPPER.createObjectNode();
+        comment.put(SchemaCreatorProperties.FIELD_OPTIONS, options.put("rows", 5));
         return comment;
     }
 
