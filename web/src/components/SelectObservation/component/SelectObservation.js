@@ -160,8 +160,8 @@ class SelectObservation extends Component {
                         _.find(this.state.checkedAnswersIDBA, { id: object.id })
                     ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                       : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
-                      primaryText={object.name}
-                      secondaryText={object.description}
+                      secondaryText={object.name}
+                      primaryText={object.description}
                       onClick={() => this.newObservation(object.id)}
                     />
                 ))}

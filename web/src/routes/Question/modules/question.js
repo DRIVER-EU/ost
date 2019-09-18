@@ -64,12 +64,12 @@ export const getSchemaView = (idObs) => {
                 if (!x.target.result) {
                   let d = parseInt(idObs)
                   store.add(Object.assign(response.data,
-                    { answerId: d, id: d }))
+                    { answerId: d, id: d, observationTypeId: response.data.observationTypeId }))
                 } else {
                   store.delete(response.data.answerId).onsuccess = () => {
                     let d = parseInt(idObs)
                     store.add(Object.assign(response.data,
-                      { answerId: d, id: d }))
+                      { answerId: d, id: d, observationTypeId: response.data.observationTypeId }))
                   }
                 }
               }
