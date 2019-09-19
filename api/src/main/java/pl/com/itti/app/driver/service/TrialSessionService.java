@@ -327,32 +327,47 @@ public class TrialSessionService {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 
-    public void setMaualStageChange(long sessionId, boolean isManual){
+    public String setMaualStageChange(long sessionId, boolean isManual){
         TrialSession trialSession = trialSessionRepository.findById(sessionId).get();
-        if(trialSession==null)return;
+        if(trialSession==null)return "no session found ";
         trialSession.setIsManualStageChange(isManual);
         trialSessionRepository.save(trialSession);
+        return "current stage in session " +trialSession.getId() + " is: " +trialSession.getLastTrialStage().getId() + "/"+trialSession.getLastTrialStage().getName()
+                + "  manual mode is " +isManual;
     }
 
-    private String setCurrentSessionStage(Optional<TrialSession> trialSession, long trialStageId){
+    private String setCurrentSessionStage(Optional<TrialSession> trialSession, long trialStageId) {
 
-          if (trialSession.isPresent() && !trialSession.get().getIsManualStageChange()) {
+        if (trialSession.isPresent() && trialSession.get().getIsManualStageChange() != null && !trialSession.get().getIsManualStageChange()) {
             Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
-            if (trialStage.isPresent() && trialStage.get().getTrial().getId()==trialSession.get().getTrial().getId()) {
+            if (trialStage.isPresent() && trialStage.get().getTrial().getId() == trialSession.get().getTrial().getId()) {
                 trialSession.get().setLastTrialStage(trialStage.get());
                 trialSessionRepository.save(trialSession.get());
+                System.out.println("TrialSession" +  trialSession.get().getId()+ " current stage is "+ trialSession.get().getLastTrialStage().getName());
+
+                return "TrialSession" +  trialSession.get().getId()+ " current stage is "+ trialSession.get().getLastTrialStage().getName();
             } else {
                 System.out.println("Trial Stage does not exist");
+                return "Trial Stage does not exist";
+
             }
         } else {
             System.out.println("Trial session is in manual mode");
+            return "Trial session is in manual mode";
         }
 
-        return null;
+    }
+
+    public void testSetCurrentSessionStage(){
+        System.out.println("@@@ START testSetCurrentSessionStage");
+        Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndStatus(199, SessionStatus.ACTIVE);
+
+        setCurrentSessionStage(trialSession, 51);
     }
 
     @Scheduled(cron = "0/20 * * * * *")
     public void checkTrialStage() {
+//        testSetCurrentSessionStage();
         RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
         System.out.println("Receive Message from CheckTrialStage");
 
