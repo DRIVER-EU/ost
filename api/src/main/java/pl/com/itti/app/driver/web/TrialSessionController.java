@@ -56,8 +56,8 @@ public class TrialSessionController {
     }
 
     @RequestMapping("/manual/{trialsession_id}/{is_manual}")
-    public void changeManualStageChange(@PathVariable long trialsession_id, @PathVariable boolean is_manual) {
-        trialSessionService.setMaualStageChange(trialsession_id, is_manual);
+    public String changeManualStageChange(@PathVariable long trialsession_id, @PathVariable boolean is_manual) {
+        return trialSessionService.setMaualStageChange(trialsession_id, is_manual);
     }
 
     @PutMapping

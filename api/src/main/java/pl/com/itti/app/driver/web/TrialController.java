@@ -49,30 +49,35 @@ public class TrialController {
     @GetMapping("/ostTrail")
     public String sayPlainTextHello(@RequestParam(value = "trial_name") String trialName) {
         Trial trial = trialSessionService.getTrialByName(trialName);
-
+        if(trial==null) return "no trial found";
         JSONObject trialJsonObj = new JSONObject();
         trialJsonObj.put("name", trial.getName());
         trialJsonObj.put("id", trial.getId());
 
         List<TrialSession> trialSessionList = trial.getTrialSessions();
-        Hibernate.initialize(trialSessionList);
         JSONArray sessionSet = new JSONArray();
-        trialSessionList.forEach(item -> {
-            if(item.getStatus()==SessionStatus.ACTIVE && !item.getIsManualStageChange()) {
-                sessionSet.put(item.getId());
-            }
-        });
+        if(trialSessionList!=null) {
+            Hibernate.initialize(trialSessionList);
+
+            trialSessionList.forEach(item -> {
+                if (item.getStatus() == SessionStatus.ACTIVE && item.getIsManualStageChange()!=null &&!item.getIsManualStageChange()) {
+                    sessionSet.put(item.getId());
+                }
+            });
+        }
         trialJsonObj.put("sessionIdSet", sessionSet);
 
         JSONArray stageSet = new JSONArray();
         List<TrialStage> trialStageList = trial.getTrialStages();
-        Hibernate.initialize(trialStageList);
-        trialStageList.forEach(item -> {
-            JSONObject stageJsonObj = new JSONObject();
-            stageJsonObj.put("id", item.getId());
-            stageJsonObj.put("name", item.getName());
-            stageSet.put(stageJsonObj);
-        });
+        if(trialStageList!=null) {
+            Hibernate.initialize(trialStageList);
+            trialStageList.forEach(item -> {
+                JSONObject stageJsonObj = new JSONObject();
+                stageJsonObj.put("id", item.getId());
+                stageJsonObj.put("name", item.getName());
+                stageSet.put(stageJsonObj);
+            });
+        }
         trialJsonObj.put("stageSet", stageSet);
 
         return trialJsonObj.toString();
