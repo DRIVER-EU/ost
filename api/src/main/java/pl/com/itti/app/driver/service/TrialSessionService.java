@@ -339,6 +339,7 @@ public class TrialSessionService {
     private String setCurrentSessionStage(Optional<TrialSession> trialSession, long trialStageId) {
 
         if (trialSession.isPresent() && trialSession.get().getIsManualStageChange() != null && !trialSession.get().getIsManualStageChange()) {
+            System.out.println("input: sessionId = " + trialSession.get().getId() +", trialStageId = "+trialStageId);
             Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
             if (trialStage.isPresent() && trialStage.get().getTrial().getId() == trialSession.get().getTrial().getId()) {
                 trialSession.get().setLastTrialStage(trialStage.get());
@@ -372,6 +373,7 @@ public class TrialSessionService {
         System.out.println("Receive Message from CheckTrialStage");
 
         if (requestChangeOfTrialStage != null) {
+            System.out.println("requestChangeOfTrialStage is not null");
             long trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
             long trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
             long trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
