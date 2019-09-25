@@ -17,6 +17,7 @@ public class SimulationTime {
 
     public static CISAdapter adapterInit(){
         CISAdapter.globalConfigPath = "/opt/config";
+//        CISAdapter.globalConfigPath = null;
         CISAdapter adapter = CISAdapter.getInstance();
         adapter.addCallback(new CallbackValue(), TopicConstants.TIMING_TOPIC);
         return adapter;
