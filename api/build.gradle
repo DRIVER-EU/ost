@@ -175,7 +175,7 @@ dependencies {
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
 
     // TestBed
-    compile("driver.eu:testbed-adapter:1.2.18")
+    compile("driver.eu:testbed-adapter:1.2.19")
 
     // ----------------------------------------
     // Test
