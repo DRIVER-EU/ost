@@ -14,7 +14,7 @@ public class TrialStage {
     private static RequestChangeOfTrialStage requestChangeOfTrialStage = null;
 
     public static CISAdapter adapterInit(){
-        CISAdapter.globalConfigPath = "/opt/config/";
+        CISAdapter.globalConfigPath = "/opt/config";
         CISAdapter adapter = CISAdapter.getInstance();
         adapter.addCallback(new CallbackValue(), TopicConstants.TRIAL_STATE_CHANGE_TOPIC);
         return adapter;
