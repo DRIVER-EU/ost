@@ -22,8 +22,8 @@ public final class SchemaCreator {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final ObjectNode COMMENT_SCHEMA = MAPPER.createObjectNode()
-            .put("title", "Comment")
-            .put("description", "If you have chosen \"Strongly agree\" or \"Not applicable\" please justify your answer here")
+            .put("title", "Please add justification here")
+            .put("description", "")
             .put("type", "string");
 
     public static ObjectNode createSchemaForm(List<Question> questions, boolean disabled) throws IOException {
@@ -115,7 +115,9 @@ public final class SchemaCreator {
 
         comment.put(SchemaCreatorProperties.FIELD_DISABLED, disabled);
         comment.put(SchemaCreatorProperties.FIELD_CLASS_NAME, "comment-class");
-
+        comment.put(SchemaCreatorProperties.FIELD_WIDGET, "textarea");
+        ObjectNode options = MAPPER.createObjectNode();
+        comment.put(SchemaCreatorProperties.FIELD_OPTIONS, options.put("rows", 5));
         return comment;
     }
 

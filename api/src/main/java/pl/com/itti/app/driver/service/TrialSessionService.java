@@ -14,6 +14,7 @@ import co.perpixel.security.repository.AuthUserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import eu.driver.model.core.RequestChangeOfTrialStage;
 import org.flywaydb.core.internal.util.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,7 @@ import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
+import javax.persistence.EnumType;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -268,7 +270,7 @@ public class TrialSessionService {
         try {
             return authUserRepository.saveAndFlush(authUser);
         } catch (Exception e) {
-            throw new Exception("User " + authUser.getEmail() + " already exists!");
+            throw new Exception("User " + authUser.getEmail() + " already exists!: " + e.getMessage());
         }
     }
 
@@ -283,6 +285,11 @@ public class TrialSessionService {
         }
 
         return trialNames;
+    }
+
+    public Trial getTrialByName(String trialName) {
+        Trial trial = trialRepository.findByName(trialName).get();
+        return trial;
     }
 
     public JsonNode newSessionValues(long trialId) {
@@ -320,37 +327,76 @@ public class TrialSessionService {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 
+    public String setMaualStageChange(long sessionId, boolean isManual){
+        TrialSession trialSession = trialSessionRepository.findById(sessionId).get();
+        if(trialSession==null)return "no session found ";
+        trialSession.setIsManualStageChange(isManual);
+        trialSessionRepository.save(trialSession);
+        return "current stage in session " +trialSession.getId() + " is: " +trialSession.getLastTrialStage().getId() + "/"+trialSession.getLastTrialStage().getName()
+                + "  manual mode is " +isManual;
+    }
+
+    private String setCurrentSessionStage(Optional<TrialSession> trialSession, long trialStageId) {
+
+        if (trialSession.isPresent() && trialSession.get().getIsManualStageChange() != null && !trialSession.get().getIsManualStageChange()) {
+            System.out.println("input: sessionId = " + trialSession.get().getId() +", trialStageId = "+trialStageId);
+            Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
+            if (trialStage.isPresent() && trialStage.get().getTrial().getId() == trialSession.get().getTrial().getId()) {
+                trialSession.get().setLastTrialStage(trialStage.get());
+                trialSessionRepository.save(trialSession.get());
+                System.out.println("TrialSession" +  trialSession.get().getId()+ " current stage is "+ trialSession.get().getLastTrialStage().getName());
+
+                return "TrialSession" +  trialSession.get().getId()+ " current stage is "+ trialSession.get().getLastTrialStage().getName();
+            } else {
+                System.out.println("Trial Stage does not exist");
+                return "Trial Stage does not exist";
+
+            }
+        } else {
+            System.out.println("Trial session is in manual mode");
+            return "Trial session is in manual mode";
+        }
+
+    }
+
+    public void testSetCurrentSessionStage(){
+        System.out.println("@@@ START testSetCurrentSessionStage");
+        Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndStatus(199, SessionStatus.ACTIVE);
+
+        setCurrentSessionStage(trialSession, 51);
+    }
+
     @Scheduled(cron = "0/20 * * * * *")
     public void checkTrialStage() {
+//        testSetCurrentSessionStage();
         RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
         System.out.println("Receive Message from CheckTrialStage");
 
         if (requestChangeOfTrialStage != null) {
-            long trialId = requestChangeOfTrialStage.getOstTrialId();
-            long trialSessionId = requestChangeOfTrialStage.getOstTrialSessionId();
-            long trialStageId = requestChangeOfTrialStage.getOstTrialStageId();
+            System.out.println("requestChangeOfTrialStage is not null");
+            long trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
+            long trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
+            long trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
+            Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndStatus(trialSessionId, SessionStatus.ACTIVE);
 
-            Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
-            Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndTrialId(trialSessionId, trialId);
-
-            if (trialStage.isPresent() && trialSession.isPresent()) {
-                trialSession.get().setLastTrialStage(trialStage.get());
-                trialSessionRepository.save(trialSession.get());
-            } else {
-                System.out.println("Trial Stage or Trial Session does not exist");
-            }
+            setCurrentSessionStage(trialSession, trialStageId);
 
             List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
 
-            for (ObservationType observationType : listOfObservationType) {
-                Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
+            if (trialId == 0 || trialSessionId == 0 || trialStageId == 0) {
+                for (ObservationType observationType : listOfObservationType) {
+                    Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
 
-                if (trialSession.isPresent()) {
-                    System.out.println("SendToTestBed");
-                    answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
-                            .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
+                    if (trialSession.isPresent()) {
+                        System.out.println("SendToTestBed");
+                        answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
+                                .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
+                    }
                 }
+            } else {
+                System.out.println("TrialId or TrailSessionId or TrialStageId is empty!");
             }
         }
     }
+
 }

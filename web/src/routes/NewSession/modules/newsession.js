@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'dev.itti.com.pl:8009'
+  origin = 'testbed-ost.itti.com.pl'
 } else {
   origin = window.location.host
 }
@@ -42,7 +42,7 @@ export const newSession = (data, type) => {
       } else {
         url = 'createNewSessionFile'
       }
-      axios.post(`http://${origin}/api/trialsessions/${url}`, data, getHeaders())
+      axios.post(`https://${origin}/api/trialsessions/${url}`, data, getHeaders())
           .then((response) => {
             if (type === 'email') {
               dispatch(newSessionAction(response.data))
@@ -54,9 +54,21 @@ export const newSession = (data, type) => {
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              toastr.warning('Offline mode', 'Message will be send later', toastrOptions)
+              if (localStorage.getItem('online')) { localStorage.removeItem('online') }
+              window.indexedDB.open('driver', 1).onsuccess = event => {
+                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
+                  type: 'post',
+                  address: `https://${origin}/api/trialsessions/${url}`,
+                  data: data
+                })
+              }
+            } else {
+              browserHistory.push('/trial-manager')
+              toastr.error('New Session', 'Error!', toastrOptions)
+            }
             errorHandle(error)
-            browserHistory.push('/trial-manager')
-            toastr.error('New Session', 'Error!', toastrOptions)
             resolve()
           })
     })

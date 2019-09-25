@@ -101,7 +101,7 @@ public class AnswerService {
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
                         .sentSimulationTime(LocalDateTime.now())
-                        .trialTime(getTrialTime())
+                        .trialTime(Optional.ofNullable(getTrialTime()).orElse(LocalDateTime.now()))
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -235,9 +235,11 @@ public class AnswerService {
                 AnswerProperties.ATTACHMENT_URI,
                 AnswerProperties.ATTACHMENT_DESCRIPTION,
                 AnswerProperties.DELETE_COMMENT,
-                AnswerProperties.PRIMARY_COMMENT);
+                AnswerProperties.PRIMARY_COMMENT,
+                AnswerProperties.REMOVAL_REASON,
+                AnswerProperties.OVERALL_COMMENT);
 
-        CSVUtils.writeLine(writer, title);
+        CSVUtils.writeLine(writer, title, ';');
         List<Answer> answers = answerRepository.findAllByTrialSessionId(trialSessionId);
 
         for (Answer answer : answers) {
@@ -268,7 +270,7 @@ public class AnswerService {
                         Optional.ofNullable(answer.getDeleteComment()).orElse(""),
                         answer.getComment());
 
-                CSVUtils.writeLine(writer, value, ',', ' ');
+                CSVUtils.writeLine(writer, value, ';', ' ');
             } while (questionIterator.hasNext());
         }
     }

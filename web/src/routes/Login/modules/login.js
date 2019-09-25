@@ -3,7 +3,7 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'dev.itti.com.pl:8009'
+  origin = 'testbed-ost.itti.com.pl'
 } else {
   origin = window.location.host
 }
@@ -49,18 +49,23 @@ export const logIn = (username, password) => {
   const hash = new Buffer(username + `:` + password).toString('base64')
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
+      axios.get(`https://${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
         .then((response) => {
           localStorage.setItem('drivertoken', response.headers['x-auth-token'])
           localStorage.setItem('driveruser', JSON.stringify(response.data))
           localStorage.setItem('driverrole', response.data.roles[0])
           localStorage.setItem('openTrial', false)
+          localStorage.setItem('online', true)
           toastr.success('Login', 'Login correct!', toastrOptions)
           dispatch(logInAction(response.data))
           resolve()
         })
         .catch((error) => {
-          toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
+          if (error.message === 'Network Error') {
+            toastr.error('Login', 'You cannot log in while being offline', toastrOptions)
+          } else {
+            toastr.error('Login', 'Wrong login or password. Try again', toastrOptions)
+          }
           resolve()
         })
     })
@@ -70,19 +75,26 @@ export const logIn = (username, password) => {
 export const logOut = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/auth/logout`, getHeaders())
-        .then((response) => {
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          localStorage.removeItem('openTrial')
+      axios.get(`https://${origin}/api/auth/logout`, getHeaders())
+        .then(() => {
+          // window.indexedDB.open('driver', 1).onsuccess = (event) => {
+          //   for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
+          //     event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
+          //       .objectStore(event.target.result.objectStoreNames[i]).clear()
+          //   }
+          // }
+          localStorage.clear()
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
           resolve()
           browserHistory.push('/')
         })
         .catch((error) => {
-          toastr.error('Logout', 'Error!', toastrOptions)
+          if (error.message === 'Network Error') {
+            toastr.error('Login', 'You cannot log out while being offline', toastrOptions)
+          } else {
+            toastr.error('Logout', 'Error!', toastrOptions)
+          }
           resolve()
         })
     })
@@ -92,15 +104,15 @@ export const logOut = () => {
 export const checkLogin = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/trialsessions/active`, getHeaders())
-        .then((response) => {
+      axios.get(`https://${origin}/api/trialsessions/active`, getHeaders())
+        .then(() => {
           resolve()
         })
         .catch((error) => {
-          localStorage.removeItem('drivertoken')
-          localStorage.removeItem('driveruser')
-          localStorage.removeItem('driverrole')
-          dispatch(logOutAction())
+          if (error.message !== 'Network Error') {
+            localStorage.clear()
+            dispatch(logOutAction())
+          }
           resolve()
         })
     })

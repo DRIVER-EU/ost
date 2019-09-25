@@ -6,7 +6,7 @@ import UserComponent from '../../Bar/User'
 import './Menu.scss'
 
 class Menu extends Component {
-  constructor (props) {
+  constructor () {
     super()
     this.state = {}
   }
@@ -24,10 +24,12 @@ class Menu extends Component {
           style={{ backgroundColor: 'white', height: 74 }}
           iconElementLeft={
             <div style={{ display: 'flex' }}>
-              <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
-              <span className='driver-title'>
-                Observer Support Tool
-              </span>
+              <a href='/' style={{ display: 'flex', alignItems: 'center' }}>
+                <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
+                <span className='driver-title'>
+                  Observer Support Tool
+                </span>
+              </a>
             </div>
           }
           iconElementRight={

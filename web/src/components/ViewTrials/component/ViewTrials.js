@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import DateComponent from '../../DateComponent/DateComponent'
 import './ViewTrials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
-import RaisedButton from 'material-ui/RaisedButton'
+import { RaisedButton, FontIcon } from 'material-ui'
 import { browserHistory } from 'react-router'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ContentAdd from 'material-ui/svg-icons/content/add'
+// import FloatingActionButton from 'material-ui/FloatingActionButton'
+// import ContentAdd from 'material-ui/svg-icons/content/add'
 import moment from 'moment'
 import TextField from 'material-ui/TextField'
 import Dialog from 'material-ui/Dialog'
@@ -227,13 +227,13 @@ class ViewTrials extends Component {
                   <AccordionItem key={object.id} title={
                     <h3 className={'react-sanfona-item-title cursor-pointer' +
                       ((object.type !== 'EVENT') ? ' observation' : ' message')}>
-                      {object.name}
+                      {object.description}
                       <div className={'time'}>
                         {moment(object.time, 'YYYY-MM-DDThh:mmZ').format('DD/MM/YYYY kk:mm:ss')}
                       </div>
                     </h3>} expanded={false}>
                     <div>
-                      <p>{object.description}</p>
+                      <p>{object.name}</p>
                       { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
@@ -268,12 +268,17 @@ class ViewTrials extends Component {
                 )
               })}
             </Accordion>
-            <FloatingActionButton
+            <RaisedButton
+              style={{ float: 'right' }}
               className={'observation-add'}
-              onClick={this.newObservation.bind(this)}
-              secondary>
-              <ContentAdd />
-            </FloatingActionButton>
+              buttonStyle={{ width: '240px' }}
+              backgroundColor='#244C7B'
+              labelColor='#FCB636'
+              label='Back to questions'
+              secondary
+              icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
+                <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
+              onClick={this.newObservation.bind(this)} />
           </div>
           <SummaryOfObservationModal
             mode={'usermodal'}

@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import DateComponent from '../../DateComponent/DateComponent'
 import './NewObservationComponent.scss'
-import { Checkbox, RaisedButton, TextField } from 'material-ui'
+import { Checkbox, RaisedButton } from 'material-ui'
 import _ from 'lodash'
-import DateTimePicker from 'material-ui-datetimepicker'
-import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
-import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
+// import DateTimePicker from 'material-ui-datetimepicker'
+// import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+// import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from './Slider'
 import radio from './Radio'
 import Form from 'react-jsonschema-form-mui'
@@ -50,7 +50,8 @@ class NewObservationComponent extends Component {
         schema: {},
         uiSchema: {},
         roles: [],
-        formData: {}
+        formData: {},
+        timeTestBed: null
       },
       // coords1ErrorText: '',
       // coords2ErrorText: '',
@@ -62,11 +63,11 @@ class NewObservationComponent extends Component {
       listOfParticipants: [],
       dateTime: moment(new Date().getTime()).format('YYYY-MM-DD kk:mm:ss'),
       isLoading: false,
-      attachmentDescription: '',
+      // attachmentDescription: '',
       validParticipants: true,
       files: [],
       isShow: false,
-      trialTime: new Date()
+      time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
     }
   }
 
@@ -79,16 +80,26 @@ class NewObservationComponent extends Component {
     closeModal: PropTypes.func,
     observation: PropTypes.any,
     getTrialTime: PropTypes.func,
-    trialTime: PropTypes.number
+    trialTime: PropTypes.any,
+    resetObservation: PropTypes.func
   }
 
   downloadFile (id, name) {
     this.props.downloadFile(id, name)
   }
 
+  handleChangeTrialTime (time) {
+    this.setState({
+      time: time
+    })
+  }
+  componentWillUnmount () {
+    this.props.resetObservation()
+  }
   componentWillMount () {
     window.onkeypress = function (e) {
-      if (e.charCode === 13) {
+      console.log(e)
+      if (e.charCode === 13 && e.target.nodeName !== 'TEXTAREA') {
         e.preventDefault()
       }
     }
@@ -126,16 +137,14 @@ class NewObservationComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.trialTime && this.state.trialTime !== nextProps.trialTime) {
-      let change = { ...this.state }
-      change['trialTime'] = nextProps.trialTime
-      this.setState({ change })
-    }
     if (nextProps.observationForm && this.props.observationForm &&
       this.state.observationForm !== nextProps.observationForm) {
       let change = { ...this.state }
       if (nextProps.observationForm.hasOwnProperty('time') && nextProps.observationForm.time !== null) {
         change['dateTime'] = nextProps.observationForm.time
+      }
+      if (nextProps.observationForm.hasOwnProperty('trialTime') && nextProps.observationForm.trialTime !== null) {
+        change['observationForm']['timeTestBed'] = nextProps.observationForm.trialTime
       }
       if (nextProps.observationForm.hasOwnProperty('trialRoles') &&
         nextProps.observationForm.trialRoles.trial.length !== 0) {
@@ -177,9 +186,9 @@ class NewObservationComponent extends Component {
           change['attachmentCoordinatesAlt'] = coords[2].toString()
         }
       }
-      if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.descriptions) {
-        change['attachmentDescription'] = nextProps.observationForm.attachments.descriptions[0].data
-      }
+      // if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.descriptions) {
+      //   change['attachmentDescription'] = nextProps.observationForm.attachments.descriptions[0].data
+      // }
       if (nextProps.observationForm.attachments && nextProps.observationForm.attachments.files) {
         change['files'] = nextProps.observationForm.attachments.files
       }
@@ -225,11 +234,12 @@ class NewObservationComponent extends Component {
     }
     send['observationTypeId'] = this.props.params.id_observation
     send['trialSessionId'] = this.props.params.id
-    send['simulationTime'] = moment(this.state.dateTime, 'YYYY-MM-DD kk:mm:ss').format('YYYY-MM-DDTkk:mm:ssZ')
+    // send['timeTrial'] = this.state.time
+    send['simulationTime'] = moment(new Date()).format('YYYY-MM-DDTHH:mm:ssZ')
     send['fieldValue'] = ''
     send['formData'] = this.state.observationForm.formData
     send['trialRoleIds'] = tab
-    send['descriptions'] = [this.state.attachmentDescription]
+    send['descriptions'] = ['']
     send['coordinates'] = [
       { 'longitude': '',
         'latitude': '',
@@ -338,14 +348,20 @@ class NewObservationComponent extends Component {
     }
     return check
   }
-
+  backEvents () {
+    if (this.props.mode === 'new') {
+      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+    } else {
+      browserHistory.push(`/trials/${this.props.params.id}`)
+    }
+  }
   back () {
     browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
   }
 
-  handleDescription (value) {
-    this.setState({ attachmentDescription: value })
-  }
+  // handleDescription (value) {
+  //   this.setState({ attachmentDescription: value })
+  // }
 
   handleError () {
     toastr.error('Observation form', 'Error! Please, check all fields in form.', toastrOptions)
@@ -358,11 +374,7 @@ class NewObservationComponent extends Component {
   }
 
   componentDidMount () {
-    this.trialTimeId = setInterval(() => this.props.getTrialTime(), 10000)
-  }
-
-  componentWillUnmount () {
-    clearInterval(this.trialTimeId)
+    this.props.getTrialTime && this.props.getTrialTime()
   }
 
   componentDidUpdate (prevState, prevProps) {
@@ -414,8 +426,16 @@ class NewObservationComponent extends Component {
             {(!this.state.isLoading) &&
             <div>
               <div className='trials-header'>
-                <DateComponent />
-                <DateComponent trialTime={1517870340} />
+                <DateComponent
+                  desc={'Real Time: '}
+                  />
+                <DateComponent
+                  trialTime={this.state.observationForm.timeTestBed
+                    ? this.state.observationForm.timeTestBed : (this.props.trialTime
+                      ? this.props.trialTime : new Date())}
+                  desc={'Trial Time: '}
+                  handleChangeTrialTime={(time) => this.handleChangeTrialTime(time)}
+                  mode={this.props.mode} />
                 <div style={{ textAlign: 'center', borderBottom: '1px solid rgb(254, 185, 18)' }}>
                   {this.props.observationForm.name}
                   <RaisedButton
@@ -431,14 +451,14 @@ class NewObservationComponent extends Component {
               </div>
               <p className='title-obs'>{this.state.observationForm.name}</p>
               {this.state.isShow && <p className='desc-obs'>{this.state.observationForm.description}</p>}
-              <p className='point-obs'>When:</p>
+              {/* <p className='point-obs'>When:</p>
               <DateTimePicker
                 disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
                 onChange={this.setDate}
                 DatePicker={DatePickerDialog}
                 TimePicker={TimePickerDialog}
                 value={this.state.dateTime}
-                format='YYYY-MM-DD kk:mm' />
+                format='YYYY-MM-DD kk:mm' /> */}
               {this.state.observationForm.roles.length !== 0 && <div>
                 <p className='point-obs'>Who:</p>
                 {this.state.observationForm.roles.map((object, index) => (
@@ -472,13 +492,13 @@ class NewObservationComponent extends Component {
                 onSubmit={(value) => this.handleOnSubmit(value)}
                 onChange={(value) => this.changeObservation(value)}>
                 <div>
-                  <p className='point-obs'>Attachments:</p>
+                  {/* <p className='point-obs'>Attachments:</p>
                   <p>Description:</p>
                   <TextField style={{ width:'100%' }}
                     value={this.state.attachmentDescription}
                     onChange={(event, value) => { this.handleDescription(value) }}
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'}
-                    />
+                    /> */}
                   {/* <p className={'coords-title'}>Coordinates:</p>
                   <TextField value={this.state.attachmentCoordinatesLong}
                     style={{ marginRight:'20px', width: '150px' }}
@@ -531,7 +551,7 @@ class NewObservationComponent extends Component {
                       labelColor='#FCB636'
                       label='Back'
                       secondary
-                      onClick={this.back.bind(this)}
+                      onClick={this.backEvents.bind(this)}
                   />
                   </div>
                 }

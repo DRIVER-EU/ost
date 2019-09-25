@@ -9,7 +9,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   listOfTrialsManager: state.trialManager.listOfTrialsManager,
-  listOfTrials: state.trialManager.listOfTrials
+  listOfTrials: state.trialManager.listOfTrials2
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TrialManager)

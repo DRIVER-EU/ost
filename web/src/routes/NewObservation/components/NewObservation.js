@@ -15,7 +15,9 @@ class NewObservation extends Component {
     observation: PropTypes.any,
     params: PropTypes.any,
     downloadFile: PropTypes.func,
-    getTrialTime: PropTypes.func
+    getTrialTime: PropTypes.func,
+    trialTime: PropTypes.any,
+    resetObservation: PropTypes.func
   }
 
   render () {
@@ -24,12 +26,14 @@ class NewObservation extends Component {
         <NewObservationComponent
           getSchema={this.props.getSchema}
           getTrialTime={this.props.getTrialTime}
+          trialTime={this.props.trialTime}
           observationForm={this.props.observationForm}
           sendObservation={this.props.sendObservation}
           observation={this.props.observation}
           mode={'new'}
           params={this.props.params}
-          downloadFile={this.props.downloadFile} />
+          downloadFile={this.props.downloadFile}
+          resetObservation={this.props.resetObservation} />
       </div>
     )
   }

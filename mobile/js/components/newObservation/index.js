@@ -58,7 +58,7 @@ class NewObservation extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>New Observation</Title>
+            <Title>New entry</Title>
           </Body>
           <Right />
         </Header>

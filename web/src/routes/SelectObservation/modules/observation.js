@@ -3,12 +3,12 @@
 // ------------------------------------
 export let origin = window.location.hostname
 if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'dev.itti.com.pl:8009'
+  origin = 'testbed-ost.itti.com.pl'
 } else {
   origin = window.location.host
 }
 import axios from 'axios'
-import { getHeaders, errorHandle } from '../../../store/addons'
+import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
 
 export const GET_OBSERVATIONS = 'GET_OBSERVATIONS'
 // ------------------------------------
@@ -29,12 +29,34 @@ export const actions = {
 export const getObservations = (trialSessionId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`http://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
+      axios.get(`https://${origin}/api/observationtypes?trialsession_id=${trialSessionId}`, getHeaders())
           .then((response) => {
+            freeQueue()
+            window.indexedDB.open('driver', 1).onsuccess = (event) => {
+              let store = event.target.result.transaction(['observation_type'],
+                'readwrite').objectStore('observation_type')
+              // let del = store.clear()
+              // del.onsuccess = (xevnt) => {
+              //   store = event.target.result.transaction(['observation_type'],
+              //   'readwrite').objectStore('observation_type')
+              for (let i = 0; i < response.data.length; i++) {
+                store.add(Object.assign(response.data[i],
+                        { trialsession_id: trialSessionId }))
+              }
+             // }
+            }
             dispatch(getObservationsAction(response.data))
             resolve()
           })
           .catch((error) => {
+            if (error.message === 'Network Error') {
+              window.indexedDB.open('driver', 1).onsuccess = (event) => {
+                event.target.result.transaction(['observation_type'], 'readonly').objectStore('observation_type')
+                .index('trialsession_id').getAll(trialSessionId).onsuccess = e1 => {
+                  dispatch(getObservationsAction(e1.target.result))
+                }
+              }
+            }
             errorHandle(error)
             resolve()
           })

@@ -12,7 +12,9 @@ class QuestionView extends Component {
     getSchemaView: PropTypes.func,
     observationForm: PropTypes.any,
     params: PropTypes.any,
-    downloadFile: PropTypes.func
+    downloadFile: PropTypes.func,
+    getTrialTime: PropTypes.func,
+    resetObservation: PropTypes.func
   }
 
   render () {
@@ -20,10 +22,12 @@ class QuestionView extends Component {
       <div className='background-home'>
         <NewObservationComponent
           getSchema={this.props.getSchemaView}
+          getTrialTime={this.props.getTrialTime}
           observationForm={this.props.observationForm}
           mode={'view'}
           params={this.props.params}
-          downloadFile={this.props.downloadFile} />
+          downloadFile={this.props.downloadFile}
+          resetObservation={this.props.resetObservation} />
       </div>
     )
   }

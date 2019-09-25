@@ -19,11 +19,13 @@ public final class QuestionAnswerDTO {
         public String name;
         public String description;
         public String time;
+        public String trialTime;
 
         @Override
         public void toDto(Answer answer) {
             this.answerId = answer.getId();
             this.time = answer.getSimulationTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            this.trialTime = answer.getTrialTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
             ObservationType observationType = answer.getObservationType();
             this.name = observationType.getName();

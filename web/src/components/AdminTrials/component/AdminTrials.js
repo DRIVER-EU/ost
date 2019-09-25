@@ -169,7 +169,7 @@ class AdminTrials extends Component {
     if (nextProps.stagesList && nextProps.stagesList !== this.props.stagesList) {
       this.setState({ stagesList: nextProps.stagesList.data })
     }
-    if (nextProps.observation && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
+    if (nextProps.observation.length && !_.isEqual(nextProps.observation, this.state.changeDataTable)) {
       let sortedList = _.orderBy(nextProps.observation, ['sentSimulationTime'], ['asc'])
       let dateMax = (new Date(_.maxBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime())
       let dateMin = new Date(_.minBy(sortedList, 'sentSimulationTime').sentSimulationTime).getTime()
@@ -546,7 +546,8 @@ class AdminTrials extends Component {
                         {this.state.changeDataTable.map((row, index) => (
                           <TableRow key={index} selectable={false} style={{ whiteSpace: 'inherit' }}>
                             <TableRowColumn>
-                              {moment(row.sentSimulationTime, 'YYYY-MM-DDTHH:mm Z').format('DD/MM/YYYY HH:mm')}
+                              {moment(row.sentSimulationTime,
+                                'YYYY-MM-DDTHH:mm:ssZ').format('DD/MM/YYYY HH:mm:ss')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {`${row.user.firstName} ${row.user.lastName}`}
@@ -775,7 +776,7 @@ class AdminTrials extends Component {
                         {this.state.messages.map((row, index) => (
                           <TableRow key={index} selectable={false}>
                             <TableRowColumn>
-                              {moment(row.eventTime, 'YYYY-MM-DDTHH:mm').format('DD/MM/YYYY hh:mm')}
+                              {moment(row.eventTime, 'YYYY-MM-DDTHH:mm:ssZ').format('DD/MM/YYYY hh:mm:ss')}
                             </TableRowColumn>
                             <TableRowColumn>
                               {row.trialUserId !== null &&

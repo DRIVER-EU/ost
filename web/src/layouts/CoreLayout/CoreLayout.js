@@ -5,6 +5,12 @@ import './CoreLayout.scss'
 import '../../styles/core.scss'
 import { connect } from 'react-redux'
 import Auth from 'components/Auth'
+import { toastr } from 'react-redux-toastr'
+import { Detector } from 'react-detect-offline'
+
+const toastrOptions = {
+  timeOut: 3000
+}
 
 const styles = {
   menubox: {
@@ -17,7 +23,8 @@ class CoreLayout extends Component {
   constructor (props) {
     super()
     this.state = {
-      role: ''
+      role: '',
+      version: ''
     }
   }
 
@@ -27,11 +34,33 @@ class CoreLayout extends Component {
     user: PropTypes.object
   }
 
+  componentWillMount () {
+    fetch('/version.txt')
+    .then(response => response.text())
+      .then(data => this.setState({ version: data }))
+
+  //   this.interval = setInterval(() => {
+  //     window.navigator.onLine && (this.checkMod = true)
+  //     if (!window.navigator.onLine && this.checkMod) {
+  //       this.updateIndicator()
+  //       this.checkMod = false
+  //     }
+  //   }, 1000)
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.user && nextProps.user !== this.props.user &&
       nextProps.user.roles[0] !== this.state.role) {
       this.setState({ role: nextProps.user.roles[0] })
     }
+  }
+
+  // componentWillUnmount () {
+  //   clearInterval(this.interval)
+  // }
+
+  updateIndicator () {
+    toastr.warning('Offline mode', 'Welcome to offline mode', toastrOptions)
   }
 
   render () {
@@ -44,7 +73,17 @@ class CoreLayout extends Component {
             <Menu role={this.state.role} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
+            <Detector
+              render={({ online }) => (
+                <div style={{ display: 'none' }}>
+                  {online ? ''
+                    : toastr.warning('Offline mode',
+                      'Welcome to offline mode', toastrOptions) }
+                </div>
+              )}
+            />
             {this.props.children}
+            <div className={'version'}>v.{this.state.version}</div>
           </div>
         </div>
       </div>
