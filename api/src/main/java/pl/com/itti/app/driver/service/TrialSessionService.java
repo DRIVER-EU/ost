@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
+//import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
 import static pl.com.itti.app.driver.util.TrialStage.*;
 
 @Service
@@ -322,48 +322,48 @@ public class TrialSessionService {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 
-    @Scheduled(cron = "0/20 * * * * *")
-    public void checkTrialStage() {
-        RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
-        System.out.println("Receive Message from CheckTrialStage");
-
-        if (requestChangeOfTrialStage != null) {
-            long trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
-            long trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
-            long trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
-
-            Optional<TrialSession> trialSession = trialSessionRepository.findByStatus(SessionStatus.ACTIVE);
-            Trial trial;
-
-            if (trialSession.isPresent()) {
-                trial = trialSession.get().getTrial();
-                Optional<TrialStage> trialStage = trialStageRepository.findByTrialIdAndTestBedStageId(trial.getId(), trialStageId);
-                if (trialStage.isPresent()) {
-                    trialSession.get().setLastTrialStage(trialStage.get());
-                    trialSessionRepository.save(trialSession.get());
-                } else {
-                    System.out.println("Trial Stage does not exist");
-                }
-            } else {
-                System.out.println("Trial Status with ACTIVE status does not exist");
-            }
-
-            List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
-
-            if (trialId == 0 || trialSessionId == 0 || trialStageId == 0) {
-                for (ObservationType observationType : listOfObservationType) {
-                    Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
-
-                    if (trialSession.isPresent()) {
-                        System.out.println("SendToTestBed");
-                        answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
-                                .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
-                    }
-                }
-            } else {
-                System.out.println("TrialId or TrailSessionId or TrialStageId is empty!");
-            }
-        }
-    }
+//    @Scheduled(cron = "0/20 * * * * *")
+//    public void checkTrialStage() {
+//        RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
+//        System.out.println("Receive Message from CheckTrialStage");
+//
+//        if (requestChangeOfTrialStage != null) {
+//            long trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
+//            long trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
+//            long trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
+//
+//            Optional<TrialSession> trialSession = trialSessionRepository.findByStatus(SessionStatus.ACTIVE);
+//            Trial trial;
+//
+//            if (trialSession.isPresent()) {
+//                trial = trialSession.get().getTrial();
+//                Optional<TrialStage> trialStage = trialStageRepository.findByTrialIdAndTestBedStageId(trial.getId(), trialStageId);
+//                if (trialStage.isPresent()) {
+//                    trialSession.get().setLastTrialStage(trialStage.get());
+//                    trialSessionRepository.save(trialSession.get());
+//                } else {
+//                    System.out.println("Trial Stage does not exist");
+//                }
+//            } else {
+//                System.out.println("Trial Status with ACTIVE status does not exist");
+//            }
+//
+//            List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
+//
+//            if (trialId == 0 || trialSessionId == 0 || trialStageId == 0) {
+//                for (ObservationType observationType : listOfObservationType) {
+//                    Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
+//
+//                    if (trialSession.isPresent()) {
+//                        System.out.println("SendToTestBed");
+//                        answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
+//                                .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
+//                    }
+//                }
+//            } else {
+//                System.out.println("TrialId or TrailSessionId or TrialStageId is empty!");
+//            }
+//        }
+//    }
 
 }

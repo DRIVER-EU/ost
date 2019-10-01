@@ -34,10 +34,7 @@ import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.AttachmentType;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
-import pl.com.itti.app.driver.util.AnswerProperties;
-import pl.com.itti.app.driver.util.CSVUtils;
-import pl.com.itti.app.driver.util.InternalServerException;
-import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.driver.util.*;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.FileWriter;
@@ -47,12 +44,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
+//import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
 import static pl.com.itti.app.driver.util.SimulationTime.*;
 
 @Service
 @Transactional
 public class AnswerService {
+
+    @Autowired
+    BrokerUtil brokerUtil;
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -112,7 +112,9 @@ public class AnswerService {
         }
         answer.setAttachments(assignAttachments(form, files, answer));
 
-        sendToTestBed(answer, observationType, trialSession);
+        brokerUtil.sendAnswerToTestBed(answer);
+
+//        sendToTestBed(answer, observationType, trialSession);
 
         return answerRepository.save(answer);
     }
