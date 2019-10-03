@@ -272,6 +272,11 @@ public class TrialSessionService {
         return trialNames;
     }
 
+    public Trial getTrialByName(String trialName) {
+        Trial trial = trialRepository.findByName(trialName).get();
+        return trial;
+    }
+
     public JsonNode newSessionValues(long trialId) {
         List<TrialStage> trialStages = trialStageRepository.findAllByTrialId(trialId);
         List<TrialRole> trialRoles = trialRoleRepository.findAllByTrialId(trialId);

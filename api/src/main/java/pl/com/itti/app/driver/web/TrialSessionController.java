@@ -55,6 +55,11 @@ public class TrialSessionController {
         trialSessionService.changeStatus(trialSessionId, status);
     }
 
+    @RequestMapping("/manual/{trialsession_id}/{is_manual}")
+    public String changeManualStageChange(@PathVariable long trialsession_id, @PathVariable boolean is_manual) {
+        return trialSessionService.setMaualStageChange(trialsession_id, is_manual);
+    }
+
     @PutMapping
     private TrialSessionDTO.FullItem updateLastTrialStage(@PathVariable(value = "id") Long trialSessionId,
                                                           @RequestBody @Validated TrialStageDTO.MinimalItem minimalItem) {
