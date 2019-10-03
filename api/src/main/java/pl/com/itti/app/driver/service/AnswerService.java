@@ -34,10 +34,7 @@ import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.AttachmentType;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.AnswerSpecification;
-import pl.com.itti.app.driver.util.AnswerProperties;
-import pl.com.itti.app.driver.util.CSVUtils;
-import pl.com.itti.app.driver.util.InternalServerException;
-import pl.com.itti.app.driver.util.RepositoryUtils;
+import pl.com.itti.app.driver.util.*;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import java.io.FileWriter;
@@ -47,12 +44,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
-import static pl.com.itti.app.driver.util.SimulationTime.*;
-
 @Service
 @Transactional
 public class AnswerService {
+
+    @Autowired
+    BrokerUtil brokerUtil;
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -78,8 +75,6 @@ public class AnswerService {
     @Autowired
     private TrialUserService trialUserService;
 
-    @Autowired
-    private AttachmentRepository attachmentRepository;
 
     public Answer createAnswer(AnswerDTO.Form form, MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
@@ -101,7 +96,7 @@ public class AnswerService {
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
                         .sentSimulationTime(LocalDateTime.now())
-                        .trialTime(Optional.ofNullable(getTrialTime()).orElse(LocalDateTime.now()))
+                        .trialTime(Optional.ofNullable(BrokerUtil.getTrialTime()).orElse(LocalDateTime.now()))
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -112,7 +107,7 @@ public class AnswerService {
         }
         answer.setAttachments(assignAttachments(form, files, answer));
 
-        sendToTestBed(answer, observationType, trialSession);
+        brokerUtil.sendAnswerToTestBed(answer);
 
         return answerRepository.save(answer);
     }

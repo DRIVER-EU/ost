@@ -10,17 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.com.itti.app.driver.model.Trial;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialStage;
-import pl.com.itti.app.driver.model.enums.SessionStatus;
-import pl.com.itti.app.driver.service.TrialSessionService;
-
-import java.util.List;
-
-import static pl.com.itti.app.driver.util.TrialStage.getOstTrialId;
-import static pl.com.itti.app.driver.util.TrialStage.getOstTrialSessionId;
-import static pl.com.itti.app.driver.util.TrialStage.getOstTrialStageId;
+import pl.com.itti.app.driver.util.BrokerUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -30,19 +20,18 @@ public class TrialController {
     TrialSessionService trialSessionService;
 
     @GetMapping("/ostTrialId")
-    public Integer ostTrialId() {
-        return getOstTrialId();
+    public Long ostTrialId() {
+        return BrokerUtil.trialId;
     }
 
     @GetMapping("/ostTrialSessionId")
-    public Integer timeElapsed() {
-
-        return getOstTrialSessionId();
+    public Long timeElapsed() {
+        return BrokerUtil.trialSessionId;
     }
 
     @GetMapping("/ostTrialStageId")
-    public Integer ostTrialStageId() {
-        return getOstTrialStageId();
+    public Long ostTrialStageId(){
+        return BrokerUtil.trialStageId;
     }
 
 

@@ -10,22 +10,17 @@ import co.perpixel.security.repository.AuthRoleRepository;
 import co.perpixel.security.repository.AuthUnitRepository;
 import co.perpixel.security.repository.AuthUserPositionRepository;
 import co.perpixel.security.repository.AuthUserRepository;
-
 import com.fasterxml.jackson.databind.JsonNode;
-import eu.driver.model.core.RequestChangeOfTrialStage;
 import org.flywaydb.core.internal.util.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.form.UserForm;
@@ -39,8 +34,6 @@ import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification
 import pl.com.itti.app.driver.util.InternalServerException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
-
-import javax.persistence.EnumType;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -48,8 +41,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static pl.com.itti.app.driver.util.SendToTestBed.sendToTestBed;
-import static pl.com.itti.app.driver.util.TrialStage.*;
 
 @Service
 @Transactional
@@ -63,12 +54,6 @@ public class TrialSessionService {
 
     @Autowired
     private TrialUserService trialUserService;
-
-    @Autowired
-    private ObservationTypeService observationTypeService;
-
-    @Autowired
-    private ObservationTypeRepository observationTypeRepository;
 
     @Autowired
     private AnswerService answerService;
@@ -204,7 +189,7 @@ public class TrialSessionService {
         trialSessionManagerRepository.save(trialSessionManager);
 
         for (UserForm userForm : newSessionForm.getUsers()) {
-            for(String role : userForm.getRole()) {
+            for (String role : userForm.getRole()) {
                 UserRoleSession userRoleSession = UserRoleSession.builder().trialUser(users.get(userForm.getEmail()))
                         .trialRole(trialRoleRepository.findFirstByTrialIdAndName(newSessionForm.getTrialId(), role).get())
                         .trialSession(trialSession)
@@ -325,78 +310,6 @@ public class TrialSessionService {
 
     private Boolean setInitAnswer(TrialSessionDTO.ActiveListItem activeListItem, AuthUser authUser) {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
-    }
-
-    public String setMaualStageChange(long sessionId, boolean isManual){
-        TrialSession trialSession = trialSessionRepository.findById(sessionId).get();
-        if(trialSession==null)return "no session found ";
-        trialSession.setIsManualStageChange(isManual);
-        trialSessionRepository.save(trialSession);
-        return "current stage in session " +trialSession.getId() + " is: " +trialSession.getLastTrialStage().getId() + "/"+trialSession.getLastTrialStage().getName()
-                + "  manual mode is " +isManual;
-    }
-
-    private String setCurrentSessionStage(Optional<TrialSession> trialSession, long trialStageId) {
-
-        if (trialSession.isPresent() && trialSession.get().getIsManualStageChange() != null && !trialSession.get().getIsManualStageChange()) {
-            System.out.println("input: sessionId = " + trialSession.get().getId() +", trialStageId = "+trialStageId);
-            Optional<TrialStage> trialStage = trialStageRepository.findById(trialStageId);
-            if (trialStage.isPresent() && trialStage.get().getTrial().getId() == trialSession.get().getTrial().getId()) {
-                trialSession.get().setLastTrialStage(trialStage.get());
-                trialSessionRepository.save(trialSession.get());
-                System.out.println("TrialSession" +  trialSession.get().getId()+ " current stage is "+ trialSession.get().getLastTrialStage().getName());
-
-                return "TrialSession" +  trialSession.get().getId()+ " current stage is "+ trialSession.get().getLastTrialStage().getName();
-            } else {
-                System.out.println("Trial Stage does not exist");
-                return "Trial Stage does not exist";
-
-            }
-        } else {
-            System.out.println("Trial session is in manual mode");
-            return "Trial session is in manual mode";
-        }
-
-    }
-
-    public void testSetCurrentSessionStage(){
-        System.out.println("@@@ START testSetCurrentSessionStage");
-        Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndStatus(199, SessionStatus.ACTIVE);
-
-        setCurrentSessionStage(trialSession, 51);
-    }
-
-    @Scheduled(cron = "0/20 * * * * *")
-    public void checkTrialStage() {
-//        testSetCurrentSessionStage();
-        RequestChangeOfTrialStage requestChangeOfTrialStage = getRequestChangeOfTrialStage();
-        System.out.println("Receive Message from CheckTrialStage");
-
-        if (requestChangeOfTrialStage != null) {
-            System.out.println("requestChangeOfTrialStage is not null");
-            long trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
-            long trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
-            long trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
-            Optional<TrialSession> trialSession = trialSessionRepository.findByIdAndStatus(trialSessionId, SessionStatus.ACTIVE);
-
-            setCurrentSessionStage(trialSession, trialStageId);
-
-            List<ObservationType> listOfObservationType = observationTypeRepository.findAllByTrialIdAndTrialStageId(trialId, trialStageId);
-
-            if (trialId == 0 || trialSessionId == 0 || trialStageId == 0) {
-                for (ObservationType observationType : listOfObservationType) {
-                    Optional<TrialSession> newTrialSession = trialSessionRepository.findById(trialSessionId);
-
-                    if (trialSession.isPresent()) {
-                        System.out.println("SendToTestBed");
-                        answerRepository.findAllByTrialSessionIdAndObservationTypeId(trialSessionId, observationType.getId())
-                                .forEach(answer -> sendToTestBed(answer, observationType, newTrialSession.get()));
-                    }
-                }
-            } else {
-                System.out.println("TrialId or TrailSessionId or TrialStageId is empty!");
-            }
-        }
     }
 
 }
