@@ -312,4 +312,13 @@ public class TrialSessionService {
         return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 
+    public String setManualStageChange(long sessionId, boolean isManual){
+        TrialSession trialSession = trialSessionRepository.findById(sessionId).get();
+        if(trialSession==null)return "no session found ";
+        trialSession.setIsManualStageChange(isManual);
+        trialSessionRepository.save(trialSession);
+        return "current stage in session " +trialSession.getId() + " is: " +trialSession.getLastTrialStage().getId() + "/"+trialSession.getLastTrialStage().getName()
+                + "  manual mode is " +isManual;
+    }
+
 }

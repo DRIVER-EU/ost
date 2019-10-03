@@ -41,9 +41,8 @@ public class TrialController {
         return BrokerUtil.trialStageId;
     }
 
-
     @GetMapping("/ostTrail")
-    public String sayPlainTextHello(@RequestParam(value = "trial_name") String trialName) {
+    public String getActiveSessionsAndStagesByTrialName(@RequestParam(value = "trial_name") String trialName) {
         Trial trial = trialSessionService.getTrialByName(trialName);
         if(trial==null) return "no trial found";
         JSONObject trialJsonObj = new JSONObject();
