@@ -4,8 +4,7 @@ import eu.driver.adapter.constants.TopicConstants;
 import eu.driver.adapter.core.CISAdapter;
 import eu.driver.adapter.core.producer.GenericProducer;
 import eu.driver.api.IAdaptorCallback;
-import eu.driver.model.core.ObserverToolAnswer;
-import eu.driver.model.core.RequestChangeOfTrialStage;
+import eu.driver.model.core.*;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericRecordBuilder;
@@ -14,6 +13,7 @@ import org.apache.avro.specific.SpecificData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.driver.model.Question;
 import pl.com.itti.app.driver.model.enums.AnswerType;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
@@ -21,7 +21,7 @@ import pl.com.itti.app.driver.repository.TrialStageRepository;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
 
 import javax.annotation.PostConstruct;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -39,9 +39,13 @@ public class BrokerUtil {
     private static RequestChangeOfTrialStage requestChangeOfTrialStage = null;
     static TrialSessionRepository trialSessionRepositoryStatic;
     static TrialStageRepository trialStageRepositoryStatic;
-    static long trialId;
-    static long trialSessionId;
-    static long trialStageId;
+    public static long trialId;
+    public static long trialSessionId;
+    public static long trialStageId;
+    static Heartbeat heartbeat;
+    static AdminHeartbeat adminHeartbeat;
+    public static Timing timing;
+
 
     @Autowired
     TrialSessionRepository trialSessionRepository;
@@ -57,14 +61,69 @@ public class BrokerUtil {
     public void init() {
         trialSessionRepositoryStatic = trialSessionRepository;
         trialStageRepositoryStatic = trialStageRepository;
-        this.adapter = CISAdapter.getInstance();
+        this.adapter = CISAdapter.getNewInstance();
         this.answerProducer = adapter.createProducer(testBedTopicEnum.system_observer_tool_answer.name());
-        adapter.addCallback(new CallbackValue(), TopicConstants.TRIAL_STATE_CHANGE_TOPIC);
+        sendAnswerToTestBed(getTestAnswer());
+        adapter.addCallback(new CallbackValue_TRIAL_STATE_CHANGE_TOPIC(), TopicConstants.TRIAL_STATE_CHANGE_TOPIC);
+        adapter.addCallback(new CallbackValue_HEARTBEAT_TOPIC(), TopicConstants.HEARTBEAT_TOPIC);
+        adapter.addCallback(new CallbackValue_TIMING_TOPIC(), TopicConstants.TIMING_TOPIC);
+        adapter.addCallback(new CallbackValue_ADMIN_HEARTBEAT_TOPIC(), TopicConstants.ADMIN_HEARTBEAT_TOPIC);
+
+    }
+
+    public static LocalDateTime getTrialTime(){
+
+        if (timing != null) {
+            return Instant.ofEpochMilli(timing.getTrialTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+        }
+        return Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public static LocalTime getTimeElapsed(){
+
+        if (timing != null) {
+            return Instant.ofEpochMilli(timing.getTimeElapsed()).atZone(ZoneId.systemDefault()).toLocalTime();
+        }
+        return LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()).toLocalTime();
     }
 
 
     public void sendAnswer(GenericRecord formattedAnswer) {
         answerProducer.send(formattedAnswer);
+    }
+
+    private Answer getTestAnswer(){
+        Answer answer = new Answer();
+        answer.id=0l;
+        answer.setFieldValue("test fieldValue");
+        answer.setComment("test comment");
+        answer.setDeleteComment("test deleteComment");
+        answer.setTrialTime(LocalDateTime.now());
+        answer.setFormData("");
+        answer.setAttachments(new ArrayList<>());
+        answer.setSentSimulationTime(LocalDateTime.now());
+        answer.setSimulationTime(ZonedDateTime.now());
+        TrialSession trialSession = new TrialSession();
+        trialSession.setId(0l);
+        Trial trial = new Trial();
+        trial.setId(0l);
+        trialSession.setTrial(trial);
+        answer.setTrialSession(trialSession);
+        ObservationType observationType = new ObservationType();
+        observationType.setId(0l);
+        observationType.setName("test obserwationType");
+        observationType.setDescription("test obserwationType description");
+        observationType.setMultiplicity(false);
+        Question question = new Question();
+        question.setAnswerType(AnswerType.TEXT_FIELD);
+        question.setId(0l);
+        question.setName("test question");
+        question.setDescription("test question description");
+        List<Question> questionList = new ArrayList<>();
+        questionList.add(question);
+        observationType.setQuestions(questionList);
+        answer.setObservationType(observationType);
+        return answer;
     }
 
 
@@ -132,8 +191,53 @@ public class BrokerUtil {
         sendAnswer(formattedAnswer);
     }
 
-    public static class CallbackValue implements IAdaptorCallback {
-        public CallbackValue() {
+    public static class CallbackValue_TIMING_TOPIC implements IAdaptorCallback {
+        public CallbackValue_TIMING_TOPIC() {
+        }
+
+        public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
+            try {
+                timing = (eu.driver.model.core.Timing) SpecificData.get().deepCopy(eu.driver.model.core.Timing.SCHEMA$, receivedMessage);
+            } catch (Exception e) {
+                System.out.println("Error heartbeat receive message! " + e.getMessage());
+            }
+            System.out.println("timing receive message! " + timing.getTrialTime());
+        }
+    }
+
+
+    public static class CallbackValue_ADMIN_HEARTBEAT_TOPIC implements IAdaptorCallback {
+        public CallbackValue_ADMIN_HEARTBEAT_TOPIC() {
+        }
+
+        public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
+                try {
+                    adminHeartbeat = (eu.driver.model.core.AdminHeartbeat) SpecificData.get().deepCopy(eu.driver.model.core.AdminHeartbeat.SCHEMA$, receivedMessage);
+                } catch (Exception e) {
+                    System.out.println("Error adminHeartbeat receive message! " + e.getMessage());
+                }
+            System.out.println("adminHeartbeat receive message! " + adminHeartbeat.getId());
+        }
+    }
+
+
+    public static class CallbackValue_HEARTBEAT_TOPIC implements IAdaptorCallback {
+        public CallbackValue_HEARTBEAT_TOPIC() {
+        }
+
+        public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
+            try {
+                heartbeat = (eu.driver.model.core.Heartbeat) SpecificData.get().deepCopy(eu.driver.model.core.Heartbeat.SCHEMA$, receivedMessage);
+            } catch (Exception e) {
+                System.out.println("Error heartbeat receive message! " + e.getMessage());
+            }
+            System.out.println("heartbeat receive message! " + heartbeat.getId());
+        }
+    }
+
+
+    public static class CallbackValue_TRIAL_STATE_CHANGE_TOPIC implements IAdaptorCallback {
+        public CallbackValue_TRIAL_STATE_CHANGE_TOPIC() {
         }
 
         public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
