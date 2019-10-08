@@ -173,17 +173,20 @@ export const getObservation = (id, search) => {
       axios.get(`https://${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
           .then((response) => {
             freeQueue()
+            let data = response.data.sort(function (a, b) {
+              return new Date(b.sentSimulationTime) - new Date(a.sentSimulationTime)
+            })
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
-              for (let i = 0; i < response.data.length; i++) {
-                store.get(response.data[i].id).onsuccess = x => {
+              for (let i = 0; i < data.length; i++) {
+                store.get(data[i].id).onsuccess = x => {
                   if (!x.target.result) {
-                    store.add(Object.assign(response.data[i], { trialsession_id: id }))
+                    store.add(Object.assign(data[i], { trialsession_id: id }))
                   }
                 }
               }
             }
-            dispatch(getObservationAction(response.data))
+            dispatch(getObservationAction(data))
             resolve()
           })
           .catch((error) => {
@@ -191,8 +194,10 @@ export const getObservation = (id, search) => {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
                 event.target.result.transaction(['answer'],
               'readonly').objectStore('answer').index('trialsession_id').getAll(id).onsuccess = (e) => {
-                dispatch(getObservationAction(
-                  typeof e.target.result.length === 'number' ? e.target.result : [e.target.result]))
+                let data = typeof e.target.result.length === 'number' ? e.target.result.sort(function (a, b) {
+                  return new Date(b.sentSimulationTime) - new Date(a.sentSimulationTime)
+                }) : [e.target.result]
+                dispatch(getObservationAction(data))
               }
               }
             }

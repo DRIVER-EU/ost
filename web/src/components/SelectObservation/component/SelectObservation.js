@@ -38,6 +38,11 @@ class SelectObservation extends Component {
     this.interval = setInterval(() => {
       this.props.getViewTrials(this.props.params.id)
     }, 3000)
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      })
+    }, 5000)
   }
 
   componentWillUnmount () {
@@ -142,14 +147,15 @@ class SelectObservation extends Component {
               onClick={this.back.bind(this)}
           /><div style={{ clear: 'both' }} />
             <div className='trial-title'>
-              New entry
+            Questions
             </div>
             {this.state.isLoading ? <div className='spinner-box'>
               <div className={'spinner'}>
                 <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
               </div>
             </div>
-              : <div className='trials-header'>
+              : this.state.listOfObservations && this.state.listOfObservations.length
+              ? <div className='trials-header'>
                 <List style={{ width: '100%' }}>
                   {this.state.listOfObservations && this.state.listOfObservations.map((object) => (
                     <ListItem
@@ -164,7 +170,7 @@ class SelectObservation extends Component {
                     />
                 ))}
                 </List>
-              </div>
+              </div> : <div className={'no-sessions'}> No questions available</div>
             }
           </div>
         </div>
