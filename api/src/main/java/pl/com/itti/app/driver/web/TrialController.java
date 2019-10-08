@@ -10,7 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.com.itti.app.driver.model.Trial;
+import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.BrokerUtil;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -34,9 +41,8 @@ public class TrialController {
         return BrokerUtil.trialStageId;
     }
 
-
     @GetMapping("/ostTrail")
-    public String sayPlainTextHello(@RequestParam(value = "trial_name") String trialName) {
+    public String getActiveSessionsAndStagesByTrialName(@RequestParam(value = "trial_name") String trialName) {
         Trial trial = trialSessionService.getTrialByName(trialName);
         if(trial==null) return "no trial found";
         JSONObject trialJsonObj = new JSONObject();
