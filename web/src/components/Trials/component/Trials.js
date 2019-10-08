@@ -29,6 +29,11 @@ class Trials extends Component {
       interval: interval,
       isLoading: true
     })
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      })
+    }, 5000)
   }
 
   componentWillReceiveProps (nextProps) {
