@@ -63,15 +63,24 @@ public class BrokerUtil {
         trialStageRepositoryStatic = trialStageRepository;
         this.adapter = CISAdapter.getNewInstance();
         this.answerProducer = adapter.createProducer(testBedTopicEnum.system_observer_tool_answer.name());
-        sendAnswerToTestBed(getTestAnswer());
+
         adapter.addCallback(new CallbackValue_TRIAL_STATE_CHANGE_TOPIC(), TopicConstants.TRIAL_STATE_CHANGE_TOPIC);
         adapter.addCallback(new CallbackValue_HEARTBEAT_TOPIC(), TopicConstants.HEARTBEAT_TOPIC);
         adapter.addCallback(new CallbackValue_TIMING_TOPIC(), TopicConstants.TIMING_TOPIC);
         adapter.addCallback(new CallbackValue_ADMIN_HEARTBEAT_TOPIC(), TopicConstants.ADMIN_HEARTBEAT_TOPIC);
+//        test();
 
     }
 
-    public static LocalDateTime getTrialTime(){
+    public void test() {
+        sendAnswerToTestBed(getTestAnswer());
+        trialId = 9;
+        trialSessionId =199;
+        trialStageId=51;
+        setLastTrialStage();
+    }
+
+    public static LocalDateTime getTrialTime() {
 
         if (timing != null) {
             return Instant.ofEpochMilli(timing.getTrialTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
@@ -79,7 +88,7 @@ public class BrokerUtil {
         return Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public static LocalTime getTimeElapsed(){
+    public static LocalTime getTimeElapsed() {
 
         if (timing != null) {
             return Instant.ofEpochMilli(timing.getTimeElapsed()).atZone(ZoneId.systemDefault()).toLocalTime();
@@ -92,9 +101,9 @@ public class BrokerUtil {
         answerProducer.send(formattedAnswer);
     }
 
-    private Answer getTestAnswer(){
+    private Answer getTestAnswer() {
         Answer answer = new Answer();
-        answer.id=0l;
+        answer.id = 0l;
         answer.setFieldValue("test fieldValue");
         answer.setComment("test comment");
         answer.setDeleteComment("test deleteComment");
@@ -127,7 +136,7 @@ public class BrokerUtil {
     }
 
 
-    public void sendAnswerToTestBed(Answer answer){
+    public void sendAnswerToTestBed(Answer answer) {
 
         List<GenericRecord> questionArray = new ArrayList<>();
 
@@ -211,11 +220,11 @@ public class BrokerUtil {
         }
 
         public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
-                try {
-                    adminHeartbeat = (eu.driver.model.core.AdminHeartbeat) SpecificData.get().deepCopy(eu.driver.model.core.AdminHeartbeat.SCHEMA$, receivedMessage);
-                } catch (Exception e) {
-                    System.out.println("Error adminHeartbeat receive message! " + e.getMessage());
-                }
+            try {
+                adminHeartbeat = (eu.driver.model.core.AdminHeartbeat) SpecificData.get().deepCopy(eu.driver.model.core.AdminHeartbeat.SCHEMA$, receivedMessage);
+            } catch (Exception e) {
+                System.out.println("Error adminHeartbeat receive message! " + e.getMessage());
+            }
             System.out.println("adminHeartbeat receive message! " + adminHeartbeat.getId());
         }
     }
@@ -241,36 +250,59 @@ public class BrokerUtil {
         }
 
         public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
+            System.out.println("receive change stage message");
             if (receivedMessage.getSchema().getName().equalsIgnoreCase("RequestChangeOfTrialStage")) {
                 try {
                     requestChangeOfTrialStage = (eu.driver.model.core.RequestChangeOfTrialStage) SpecificData.get().deepCopy(eu.driver.model.core.RequestChangeOfTrialStage.SCHEMA$, receivedMessage);
                 } catch (Exception e) {
                     System.out.println("Error RequestChangeOfTrialStage receive message! " + e.getMessage());
                 }
+                System.out.println("change stage message");
                 if (requestChangeOfTrialStage != null) {
+                    System.out.println("change stage message: " + requestChangeOfTrialStage.toString());
                     trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
                     trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
                     trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
-
-                    Optional<TrialSession> trialSession = trialSessionRepositoryStatic.findByStatus(SessionStatus.ACTIVE);
-                    Trial trial;
-
-                    if (trialSession.isPresent()) {
-                        trial = trialSession.get().getTrial();
-                        Optional<pl.com.itti.app.driver.model.TrialStage> trialStage = trialStageRepositoryStatic.findByTrialIdAndTestBedStageId(trial.getId(), trialStageId);
-                        if (trialStage.isPresent()) {
-                            trialSession.get().setLastTrialStage(trialStage.get());
-                            trialSessionRepositoryStatic.save(trialSession.get());
-                        } else {
-                            System.out.println("Trial Stage does not exist");
-                        }
-                    } else {
-                        System.out.println("Trial Status with ACTIVE status does not exist");
-                    }
+setLastTrialStage();
+//                    Optional<TrialSession> trialSession = trialSessionRepositoryStatic.findByStatus(SessionStatus.ACTIVE);
+//                    Trial trial;
+//                    System.out.println("trialId= " + trialId + "   trialSessionId= " + trialSessionId + "   trialStageId= " + trialStageId);
+//                    if (trialSession.isPresent()) {
+//                        trial = trialSession.get().getTrial();
+//                        Optional<pl.com.itti.app.driver.model.TrialStage> trialStage = trialStageRepositoryStatic.findByTrialIdAndTestBedStageId(trial.getId(), trialStageId);
+//                        if (trialStage.isPresent()) {
+//                            trialSession.get().setLastTrialStage(trialStage.get());
+//                            trialSessionRepositoryStatic.save(trialSession.get());
+//                            System.out.println("Trial Stage changed to " + trialSession.get().getLastTrialStage());
+//                        } else {
+//                            System.out.println("Trial Stage does not exist");
+//                        }
+//                    } else {
+//                        System.out.println("Trial Status with ACTIVE status does not exist");
+//                    }
 
                 }
             }
         }
 
     }
+
+    public static void setLastTrialStage() {
+        System.out.println("trialId= " + trialId + "   trialSessionId= " + trialSessionId + "   trialStageId= " + trialStageId);
+        Optional<TrialSession> trialSession = trialSessionRepositoryStatic.findByIdAndStatus(trialSessionId, SessionStatus.ACTIVE);
+        if (trialSession.isPresent()) {
+          Trial  trial = trialSession.get().getTrial();
+            Optional<pl.com.itti.app.driver.model.TrialStage> trialStage = trialStageRepositoryStatic.findByIdAndTrialId(trialStageId, trial.getId());
+            if (trialStage.isPresent()) {
+                trialSession.get().setLastTrialStage(trialStage.get());
+                trialSessionRepositoryStatic.save(trialSession.get());
+                System.out.println("Trial Stage changed to " + trialSession.get().getLastTrialStage());
+            } else {
+                System.out.println("Trial Stage does not exist");
+            }
+        } else {
+            System.out.println("Trial Status with ACTIVE status does not exist");
+        }
+    }
+
 }
