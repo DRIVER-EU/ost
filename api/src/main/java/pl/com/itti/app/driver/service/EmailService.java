@@ -7,16 +7,30 @@ import pl.com.itti.app.driver.util.EmailProperties;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.util.List;
 import java.util.Properties;
 
 @Service
 public class EmailService {
 
-    public static void send(AuthUser authUser,
-                            String password,
-                            String trialName,
-                            UserForm userForm) throws MessagingException {
+    public static void sendNewSessionMail(AuthUser authUser,
+                                          String password,
+                                          String trialName,
+                                          UserForm userForm) throws MessagingException {
+        String subjectString = "You have been invited to " + trialName;
+        String messageString = getUserMailMessage(authUser, password, userForm);
+        sendMail(authUser.getEmail(), subjectString, messageString);
+    }
 
+    public static void sendMail(String addressList, String subjectString, String messageString
+    )  {
+        Address[] addresses;
+        try {
+            addresses = InternetAddress.parse(addressList);
+        } catch (AddressException e) {
+            e.printStackTrace();
+            return;
+        }
         Properties prop = new Properties();
         prop.put("mail.smtp.auth", true);
         prop.put("mail.smtp.starttls.enable", EmailProperties.TLS_ENABLE);
@@ -32,26 +46,23 @@ public class EmailService {
         });
 
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(EmailProperties.ADDRESS));
-
-        message.setRecipients(
-                Message.RecipientType.TO, InternetAddress.parse(authUser.getEmail()));
-        message.setSubject("You have been invited to " + trialName);
-
-        String msg = getMessage(authUser, password, userForm);
-
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        mimeBodyPart.setContent(msg, "text/html");
-
         Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(mimeBodyPart);
+        try {
+            message.setFrom(new InternetAddress(EmailProperties.ADDRESS));
+            message.setRecipients(Message.RecipientType.TO, addresses);
+            message.setSubject(subjectString);
+            mimeBodyPart.setContent(messageString, "text/html");
+            multipart.addBodyPart(mimeBodyPart);
+            message.setContent(multipart);
+            Transport.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
-        message.setContent(multipart);
-
-        Transport.send(message);
     }
 
-    private static String getMessage(AuthUser authUser, String password, UserForm userForm) {
+    private static String getUserMailMessage(AuthUser authUser, String password, UserForm userForm) {
 
         return "Login: " + authUser.getLogin() + "\n" +
                 "Password: " + password + "\n" +

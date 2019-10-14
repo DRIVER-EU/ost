@@ -160,7 +160,7 @@ public class TrialSessionService {
                 authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
                 if (isEmail) {
                     String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
-                    EmailService.send(authUser, password, trialName, user);
+                    EmailService.sendNewSessionMail(authUser, password, trialName, user);
                 } else {
                     emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), password));
                     longestEmail.replace(0, longestEmail.length(), authUser.getEmail().length() > longestEmail.length() ?

@@ -65,10 +65,10 @@ public class BrokerUtil {
         this.answerProducer = adapter.createProducer(testBedTopicEnum.system_observer_tool_answer.name());
 
         adapter.addCallback(new CallbackValue_TRIAL_STATE_CHANGE_TOPIC(), TopicConstants.TRIAL_STATE_CHANGE_TOPIC);
-        adapter.addCallback(new CallbackValue_HEARTBEAT_TOPIC(), TopicConstants.HEARTBEAT_TOPIC);
-        adapter.addCallback(new CallbackValue_TIMING_TOPIC(), TopicConstants.TIMING_TOPIC);
-        adapter.addCallback(new CallbackValue_ADMIN_HEARTBEAT_TOPIC(), TopicConstants.ADMIN_HEARTBEAT_TOPIC);
-//        test();
+//        adapter.addCallback(new CallbackValue_HEARTBEAT_TOPIC(), TopicConstants.HEARTBEAT_TOPIC);
+//        adapter.addCallback(new CallbackValue_TIMING_TOPIC(), TopicConstants.TIMING_TOPIC);
+//        adapter.addCallback(new CallbackValue_ADMIN_HEARTBEAT_TOPIC(), TopicConstants.ADMIN_HEARTBEAT_TOPIC);
+//        test();1,
 
     }
 
