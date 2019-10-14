@@ -14,6 +14,7 @@ public interface TrialStageRepository
     Optional<TrialStage> findById(long id);
     Optional<TrialStage> findByTrialIdAndName(long trialId, String name);
     Optional<TrialStage> findByTrialIdAndTestBedStageId(long trialId, long testBedStageId);
+    Optional<TrialStage> findByIdAndTrialId(long id, long trialId);
 
     List<TrialStage> findAllByTrialId(long trialId);
     Page<TrialStage> findAllByTrialId(long trialId, Pageable pageable);
