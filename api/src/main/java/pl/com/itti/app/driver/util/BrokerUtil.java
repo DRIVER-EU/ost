@@ -75,8 +75,8 @@ public class BrokerUtil {
     public void test() {
         sendAnswerToTestBed(getTestAnswer());
         trialId = 9;
-        trialSessionId =199;
-        trialStageId=51;
+        trialSessionId = 199;
+        trialStageId = 51;
         setLastTrialStage();
     }
 
@@ -263,24 +263,7 @@ public class BrokerUtil {
                     trialId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialId()).orElse(0);
                     trialSessionId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialSessionId()).orElse(0);
                     trialStageId = Optional.ofNullable(requestChangeOfTrialStage.getOstTrialStageId()).orElse(0);
-setLastTrialStage();
-//                    Optional<TrialSession> trialSession = trialSessionRepositoryStatic.findByStatus(SessionStatus.ACTIVE);
-//                    Trial trial;
-//                    System.out.println("trialId= " + trialId + "   trialSessionId= " + trialSessionId + "   trialStageId= " + trialStageId);
-//                    if (trialSession.isPresent()) {
-//                        trial = trialSession.get().getTrial();
-//                        Optional<pl.com.itti.app.driver.model.TrialStage> trialStage = trialStageRepositoryStatic.findByTrialIdAndTestBedStageId(trial.getId(), trialStageId);
-//                        if (trialStage.isPresent()) {
-//                            trialSession.get().setLastTrialStage(trialStage.get());
-//                            trialSessionRepositoryStatic.save(trialSession.get());
-//                            System.out.println("Trial Stage changed to " + trialSession.get().getLastTrialStage());
-//                        } else {
-//                            System.out.println("Trial Stage does not exist");
-//                        }
-//                    } else {
-//                        System.out.println("Trial Status with ACTIVE status does not exist");
-//                    }
-
+                    setLastTrialStage();
                 }
             }
         }
@@ -291,12 +274,12 @@ setLastTrialStage();
         System.out.println("trialId= " + trialId + "   trialSessionId= " + trialSessionId + "   trialStageId= " + trialStageId);
         Optional<TrialSession> trialSession = trialSessionRepositoryStatic.findByIdAndStatus(trialSessionId, SessionStatus.ACTIVE);
         if (trialSession.isPresent()) {
-          Trial  trial = trialSession.get().getTrial();
+            Trial trial = trialSession.get().getTrial();
             Optional<pl.com.itti.app.driver.model.TrialStage> trialStage = trialStageRepositoryStatic.findByIdAndTrialId(trialStageId, trial.getId());
             if (trialStage.isPresent()) {
                 trialSession.get().setLastTrialStage(trialStage.get());
                 trialSessionRepositoryStatic.save(trialSession.get());
-                System.out.println("Trial Stage changed to " + trialSession.get().getLastTrialStage());
+                System.out.println("Trial Stage changed to " + trialStage.get().getId());
             } else {
                 System.out.println("Trial Stage does not exist");
             }
