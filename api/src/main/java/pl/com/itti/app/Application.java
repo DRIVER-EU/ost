@@ -27,7 +27,7 @@ import java.util.TimeZone;
 @EnableScheduling
 public class Application {
 
-    public static String version = "00.0016a";
+    public static String version = "00.00.16b";
 
     public static void main(String[] args) {
         // TODO migrate to Hibernate 5.2 & setting timezone via properties
