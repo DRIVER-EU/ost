@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import pl.com.itti.app.driver.service.EmailService;
 import pl.com.itti.app.driver.util.CustomTimeDeserializer;
 import pl.com.itti.app.driver.util.CustomTimeSerializer;
 
@@ -26,11 +27,14 @@ import java.util.TimeZone;
 @EnableScheduling
 public class Application {
 
+    public static String version = "00.0016a";
+
     public static void main(String[] args) {
         // TODO migrate to Hibernate 5.2 & setting timezone via properties
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Locale.setDefault(new Locale("pl", "PL"));
         SpringApplication.run(Application.class, args);
+        EmailService.sendMail("robert.orczyk@itti.com.pl","Backend version: "+version + "  is running", " ");
     }
 
     @Bean
