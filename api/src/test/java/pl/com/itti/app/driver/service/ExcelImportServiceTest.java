@@ -11,9 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.com.itti.app.driver.dto.ImportExcelTriaPositionDTO;
-import pl.com.itti.app.driver.dto.ImportExcelTrialDTO;
-import pl.com.itti.app.driver.dto.ImportExcelTrialQuestionDTO;
+import pl.com.itti.app.driver.dto.*;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.repository.TrialRepository;
 
@@ -38,12 +36,13 @@ public class ExcelImportServiceTest {
     public void saveTrial() {
         // given
 
-        List<ImportExcelTrialQuestionDTO> importExcelTrialQuestionDTOList = new ArrayList<ImportExcelTrialQuestionDTO>();
-        importExcelTrialQuestionDTOList.add(ImportExcelTrialQuestionDTO.builder().position(1).description("description").build());
-        importExcelTrialQuestionDTOList.add(ImportExcelTrialQuestionDTO.builder().position(2).description("description").build());
+
+        List<ImportExcelTrialAnswerDTO> importExcelTrialQuestionDTOList  = new ArrayList<ImportExcelTrialAnswerDTO>();
+        importExcelTrialQuestionDTOList.add(ImportExcelTrialAnswerDTO.builder().position(1).description("description").build());
+        importExcelTrialQuestionDTOList.add(ImportExcelTrialAnswerDTO.builder().position(2).description("description").build());
 
 
-        ImportExcelTriaPositionDTO trailPosition = ImportExcelTriaPositionDTO.builder()
+        ImportExcelTrialPositionDTO trailPosition = ImportExcelTrialPositionDTO.builder()
                 .questionSetId(1L)
                 .stageName("Block1_Emergent_Groups_Telegram")
                 .roleName("CrowdTasker_Observer")
@@ -53,14 +52,17 @@ public class ExcelImportServiceTest {
                 .position(1)
                 .requiered(true)
                 .answerType("RADIO_BUTTON")
-                .Comments(1)
-                .excelAmsewrs(importExcelTrialQuestionDTOList)
+                .comments(1)
+                .excelAnsewrs(importExcelTrialQuestionDTOList)
                 .build();
 
-        List<ImportExcelTriaPositionDTO> positionList = new ArrayList<>();
+
+        List<ImportExcelTrialPositionDTO> positionList= new ArrayList<>();
+
         positionList.add(trailPosition);
 
-        ImportExcelTrialDTO trialDTO =  ImportExcelTrialDTO.builder().TrialName("Trial Austria").trialPositions(positionList).build();
+
+        ImportExcelTrialDTO trialDTO =  ImportExcelTrialDTO.builder().trialName("Trial Austria").trialPositions(positionList).build();
 
         // when
         Trial trail = excelImportService.saveTrial(trialDTO);

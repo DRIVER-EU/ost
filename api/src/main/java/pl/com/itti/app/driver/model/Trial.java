@@ -42,6 +42,9 @@ public class Trial extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private boolean isDefined;
 
+    @Column(name = "IS_ARCHIVED", nullable = true, columnDefinition = "boolean default false")
+    private Boolean isArchived;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
     @JoinColumn(name = "init_id")

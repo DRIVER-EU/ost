@@ -1,7 +1,6 @@
 package pl.com.itti.app.driver.dto;
 
 import lombok.*;
-import pl.com.itti.app.driver.model.enums.AnswerType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public final class ImportExcelTrialDTO {
-    String TrialName;
-    List<ImportExcelTriaPositionDTO> trialPositions =  new ArrayList<>();
+    String trialName;
+    @Builder.Default
+    List<ImportExcelTrialPositionDTO> trialPositions =  new ArrayList<>();
 }
