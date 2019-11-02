@@ -102,7 +102,7 @@
     "imports-loader": "^0.7.0",
     "ip": "^1.1.2",
     "json-loader": "^0.5.4",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "material-ui": "^0.17.4",
     "material-ui-datetimepicker": "^1.0.7",
     "moment": "^2.18.1",
