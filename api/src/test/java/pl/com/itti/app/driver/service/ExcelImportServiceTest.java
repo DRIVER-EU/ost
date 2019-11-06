@@ -50,10 +50,10 @@ public class ExcelImportServiceTest {
                 .description("description ")
                 .dimension("CM")
                 .position(1)
-                .requiered(true)
+                .required(true)
                 .answerType("RADIO_BUTTON")
                 .comments(1)
-                .excelAnsewrs(importExcelTrialQuestionDTOList)
+                .excelAnswers(importExcelTrialQuestionDTOList)
                 .build();
 
 

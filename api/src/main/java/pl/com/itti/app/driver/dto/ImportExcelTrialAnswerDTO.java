@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public final class ImportExcelTrialAnswerDTO {
-  Integer position;
-  String description;
+  private Integer position;
+  private String description;
 }

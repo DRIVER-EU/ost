@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public final class ImportExcelTrialDTO {
-    String trialName;
+    private String trialName;
     @Builder.Default
-    List<ImportExcelTrialPositionDTO> trialPositions =  new ArrayList<>();
+    private List<ImportExcelTrialPositionDTO> trialPositions =  new ArrayList<>();
 }

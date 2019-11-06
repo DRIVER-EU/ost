@@ -29,6 +29,10 @@ public class ExcelImportException extends RuntimeException {
         super(message, e);
     }
 
+    public ExcelImportException(String message) {
+        super(message);
+    }
+
     public ExcelImportException(String message, List<String> errorList) {
         super(message);
         logIt(errorList);

@@ -13,15 +13,16 @@ import pl.com.itti.app.driver.model.enums.RoleType;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.util.ExcelImportException;
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+
 public class ExcelImportService {
     //TODO JKW where to find it ?
     public static final long TEST_BED_STAGE_ID = 1L;
@@ -42,12 +43,13 @@ public class ExcelImportService {
     @Autowired
     ObservationTypeRoleRepository observationTypeRoleRepository;
 
+    @Transactional
     public Trial saveTrial(ImportExcelTrialDTO importExcelTrialDTO) {
 
-        archiveTrailsWithTheSameNameIfTheyAlreadyExists(importExcelTrialDTO);
+        archiveTrailsWithTheSameNameIfTheyAlreadyExists(importExcelTrialDTO.getTrialName());
         Trial trial = createNewTrial(importExcelTrialDTO);
 
-        addStagesToTrial(importExcelTrialDTO, trial);
+
 
         for (ImportExcelTrialPositionDTO trailPosition : importExcelTrialDTO.getTrialPositions()) {
             ObservationType observationType = createObservationType(trial, trailPosition);
@@ -61,14 +63,12 @@ public class ExcelImportService {
 
     private TrialStage getTrialStage(Trial trial, ImportExcelTrialPositionDTO trailPosition) {
         Optional<TrialStage> stage = trialStageRepository.findByTrialIdAndName(trial.getId(), trailPosition.getStageName());
-        if (!stage.isPresent()) {
-            throw new ExcelImportException("Trail can not be connected to the stage - stage missing", trailPosition);
-        }
+        stage.orElseThrow(() -> new ExcelImportException("Trail can not be connected to the stage - stage missing", trailPosition));
         return stage.get();
     }
 
     private void addQuestionsToObservationType(ImportExcelTrialPositionDTO trailPosition, ObservationType observationType) {
-        for (ImportExcelTrialAnswerDTO excelQuestion : trailPosition.getExcelAnsewrs()) {
+        for (ImportExcelTrialAnswerDTO excelQuestion : trailPosition.getExcelAnswers()) {
             Question question = Question.builder()
                     .observationType(observationType)
                     .answerType(AnswerType.valueOf(trailPosition.getAnswerType()))
@@ -97,32 +97,24 @@ public class ExcelImportService {
         observationType = observationTypeRepository.save(observationType);
         return observationType;
     }
-    private void archiveTrailsWithTheSameNameIfTheyAlreadyExists(ImportExcelTrialDTO importExcelTrialDTO) {
-        try{
-            Optional<Trial> trial = trialRepository.findByName(importExcelTrialDTO.getTrialName());
-            if( trial.isPresent())
-            {
-                trial.get().setName( getNewTrailNameForReplacedTrail(trial));
-                trial.get().setIsArchived(true);
-                trialRepository.save( trial.get());
-            }
-        }
-        catch (Exception e)
-        {
-            throw new ExcelImportException("Exception while renaming the old trial", e);
-        }
 
+    private void archiveTrailsWithTheSameNameIfTheyAlreadyExists(String trialName) {
+
+        Optional<Trial> trial = trialRepository.findByName(trialName);
+        if(trial.isPresent()) {
+            trial.get().setName(getNewTrailNameForReplacedTrail(trial.get().getName()));
+            trial.get().setIsArchived(true);
+            trialRepository.save(trial.get());
+        }
     }
 
-    private String getNewTrailNameForReplacedTrail(Optional<Trial> trial) {
+    private String getNewTrailNameForReplacedTrail(String trialName) {
 
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        System.out.println(formatter.format(date));
-
-        int takeNoMoreThen20 = Math.min(trial.get().getName().length(), 20);
-        String newTrailName = trial.get().getName().substring(0, takeNoMoreThen20) + " archived @" + formatter.format(date);
+        DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
+                .withZone(ZoneId.systemDefault());
+        String currentDateAndTime = DATE_TIME_FORMATTER.format(Instant.now());
+        int takeNoMoreThen20 = Math.min(trialName.length(), 20);
+        String newTrailName = String.format("%s archived @ %s",trialName.substring(0, takeNoMoreThen20) ,currentDateAndTime);
 
         //Trail name at DB is 50 char long
         int takeNoMoreThan50 = Math.min(newTrailName.length(), 50);
@@ -138,14 +130,14 @@ public class ExcelImportService {
                 .name(importExcelTrialDTO.getTrialName())
                 .isDefined(true)
                 .build();
-
         trial = trialRepository.save(trial);
+        addStagesToTrial(importExcelTrialDTO, trial);
         return trial;
     }
 
     private ObservationTypeTrialRole createObservationTypeTrialRole(ObservationType observationType, Trial trial, ImportExcelTrialPositionDTO trailExcelPosition) {
 
-        TrialRole trialRole = getTrialRoleIfNotExistCreateIt( trial, trailExcelPosition);
+        TrialRole trialRole = getTrialRoleIfNotExistCreateIt(trial, trailExcelPosition);
         ObservationTypeTrialRole observationTypeTrialRole = ObservationTypeTrialRole.builder()
                 .trialRole(trialRole)
                 .observationType(observationType)
@@ -159,24 +151,24 @@ public class ExcelImportService {
     private TrialRole getTrialRoleIfNotExistCreateIt(Trial trial, ImportExcelTrialPositionDTO trailPosition) {
 
         Optional<TrialRole> trialRole = trialRoleRepository.findFirstByTrialIdAndName(trial.id, trailPosition.getRoleName());
-        if(trialRole.isPresent())
-        {
+        if (trialRole.isPresent()) {
             return trialRole.get();
-        }
-        else
-        {
-            TrialRole  newTrailRole = TrialRole.builder()
+        } else {
+            TrialRole newTrailRole = TrialRole.builder()
                     .trial(trial)
                     .name(trailPosition.getRoleName())
                     //TODO JKW where to find the info in the excel file ?
                     .roleType(RoleType.PARTICIPANT)
                     .build();
-            return(trialRoleRepository.save(newTrailRole));
+            return trialRoleRepository.save(newTrailRole);
         }
     }
 
-    private  List<TrialStage> addStagesToTrial(ImportExcelTrialDTO importExcelTrialDTO, Trial trial) {
-        List<String> uniqueStages = importExcelTrialDTO.getTrialPositions().stream().map(ImportExcelTrialPositionDTO::getStageName).distinct().collect(Collectors.toList());
+    private void addStagesToTrial(ImportExcelTrialDTO importExcelTrialDTO, Trial trial) {
+
+        List<String> uniqueStages = importExcelTrialDTO.getTrialPositions().stream().map(ImportExcelTrialPositionDTO::getStageName)
+                .distinct().collect(Collectors.toList());
+
         for (String stageName : uniqueStages) {
             Optional<TrialStage> trialStage = trialStageRepository.findByTrialIdAndName(trial.id, stageName);
             if (!trialStage.isPresent()) {
@@ -189,6 +181,6 @@ public class ExcelImportService {
                 trial.getTrialStages().add(newTrialStage);
             }
         }
-        return trialStageRepository.findAllByTrialId(trial.id);
+        ;
     }
 }

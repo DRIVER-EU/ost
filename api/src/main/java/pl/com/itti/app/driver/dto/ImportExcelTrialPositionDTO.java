@@ -10,18 +10,18 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public final class ImportExcelTrialPositionDTO {
-  Long questionSetId;
-  String stageName;
-  String roleName;
-  String question;
-  String description;
-  String dimension;
-  int position;
-  Boolean requiered;
-  String answerType;
-  int comments;
-  String jsonSchema;
+  private Long questionSetId;
+  private String stageName;
+  private String roleName;
+  private String question;
+  private String description;
+  private String dimension;
+  private int position;
+  private Boolean required;
+  private String answerType;
+  private int comments;
+  private String jsonSchema;
   @Builder.Default
-  List<ImportExcelTrialAnswerDTO> excelAnsewrs = new ArrayList<>();
+  private List<ImportExcelTrialAnswerDTO> excelAnswers = new ArrayList<>();
 
 }
