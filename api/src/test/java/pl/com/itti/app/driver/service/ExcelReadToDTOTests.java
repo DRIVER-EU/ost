@@ -84,7 +84,14 @@ public class ExcelReadToDTOTests {
         ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
 
         // then
-        Assert.assertEquals("{\"title\":\"How much would you agree with the statement that you have experience and knowledge regarding volunteer management?\",\"description\":\"\",\"type\":\"string\",\"enum\":\"[Strongly agree, Agree, Neutral, Disagree, Strongly disagree, Not applicable]\"}",
+        Assert.assertEquals("{\"title\":\"How much would you agree with the statement that you " +
+                        "have experience and knowledge regarding volunteer management?\",\"description\":\"\",\"type\":\"string\"," +
+                        "\"enum\":[\"Strongly agree\",\"Agree\",\"Neutral\",\"Disagree\",\"Strongly disagree\",\"Not applicable\"]}",
                 importExcelTrialDTO.getTrialPositions().get(1).getJsonSchema());
+        Assert.assertEquals("{\"title\":\"Can you observe, the S2-S3 is using the information received by the DLR.\",\"description\":\"\"," +
+                        "\"type\":\"boolean\"}",
+                importExcelTrialDTO.getTrialPositions().get(51).getJsonSchema());
+        Assert.assertEquals("{\"title\":\"Comments (optional)\",\"description\":\"\",\"type\":\"string\"}",
+                importExcelTrialDTO.getTrialPositions().get(297).getJsonSchema());
     }
 }
