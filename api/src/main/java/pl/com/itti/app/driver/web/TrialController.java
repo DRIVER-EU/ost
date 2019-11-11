@@ -4,19 +4,18 @@ import org.hibernate.Hibernate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
+import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.driver.service.ObservationTypeService;
 import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.BrokerUtil;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -25,6 +24,15 @@ public class TrialController {
 
     @Autowired
     TrialSessionService trialSessionService;
+
+    @Autowired
+    ObservationTypeService observationTypeService;
+
+    //TODO JKW adjust the name
+    @PostMapping("/ostAllQuestionsForMobile")
+    public List<ObservationTypeDTO.SchemaItem> ostAllQuestionsForMobile(HttpServletResponse response, @RequestBody ObservationTypeCriteriaDTO observationTypeCriteriaDTO) {
+        return observationTypeService.generateSchemaList(observationTypeCriteriaDTO);
+    }
 
     @GetMapping("/ostTrialId")
     public Long ostTrialId() {

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.dto.TrialRoleDTO;
 import pl.com.itti.app.driver.model.Answer;
@@ -40,6 +41,34 @@ public class ObservationTypeService {
 
     @Autowired
     private TrialRoleRepository trialRoleRepository;
+
+    @Transactional(readOnly = true)
+    public List<ObservationTypeDTO.SchemaItem> generateSchemaList(ObservationTypeCriteriaDTO observationTypeCriteriaDTO) {
+        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
+                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+
+        TrialSession trialSession = trialSessionRepository.findById(observationTypeCriteriaDTO.getTrialSessionId())
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeCriteriaDTO.getTrialSessionId()));
+
+        List<ObservationType> observationTypesList = observationTypeRepository
+                .findAllByTrialIdAndTrialStageIdAndObservationTypeTrialRolesOOrderByPosition(
+                        observationTypeCriteriaDTO.getTrialId(), observationTypeCriteriaDTO.getTrialStageId(), observationTypeCriteriaDTO.getTrialRoleId());
+//TODO JKW clean code - stream
+//         observationTypes.stream()
+//                .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))
+//                .collect(Collectors.toList());
+
+        List<ObservationTypeDTO.SchemaItem> generatedSchemaList = new ArrayList<>();
+        for (ObservationType observationType : observationTypesList) {
+            ObservationTypeDTO.SchemaItem schemaItem = getSchema(observationType);
+
+            schemaItem.roles = getSchemaItemRoles(observationType, observationTypeCriteriaDTO.getTrialSessionId());
+            generatedSchemaList.add(schemaItem);
+        }
+
+
+        return generatedSchemaList;
+    }
 
     @Transactional(readOnly = true)
     public List<ObservationType> find(Long trialSessionId) {

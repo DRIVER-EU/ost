@@ -12,4 +12,6 @@ public interface ObservationTypeRepository
     Optional<ObservationType> findById(Long observationTypeId);
 
     List<ObservationType> findAllByTrialIdAndTrialStageId(Long trialId, Long trialStageId);
+
+    List<ObservationType> findAllByTrialIdAndTrialStageIdAndObservationTypeTrialRolesOOrderByPosition(Long trialId, Long trialStageId, Long trialRoleId);
 }
