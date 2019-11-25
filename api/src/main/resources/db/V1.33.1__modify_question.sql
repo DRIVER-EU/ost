@@ -1,0 +1,1 @@
+ALTER TABLE public.question ALTER COLUMN name TYPE TEXT;

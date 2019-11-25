@@ -33,7 +33,7 @@ public class Question extends PersistentObject implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Enumerated(EnumType.STRING)
