@@ -128,10 +128,6 @@ dependencies {
     compile("org.springframework.security:spring-security-data")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
-    //Apache POI Excel-parse
-    compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
-    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.0'
-
     // Flyway
     compile 'org.flywaydb:flyway-core'
 
