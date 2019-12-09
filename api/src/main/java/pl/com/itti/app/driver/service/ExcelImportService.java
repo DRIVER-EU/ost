@@ -49,8 +49,6 @@ public class ExcelImportService {
         archiveTrailsWithTheSameNameIfTheyAlreadyExists(importExcelTrialDTO.getTrialName());
         Trial trial = createNewTrial(importExcelTrialDTO);
 
-
-
         for (ImportExcelTrialPositionDTO trailPosition : importExcelTrialDTO.getTrialPositions()) {
             ObservationType observationType = createObservationType(trial, trailPosition);
             createObservationTypeTrialRole(observationType, trial, trailPosition);
@@ -68,23 +66,31 @@ public class ExcelImportService {
     }
 
     private void addQuestionsToObservationType(ImportExcelTrialPositionDTO trailPosition, ObservationType observationType) {
-        for (ImportExcelTrialAnswerDTO excelQuestion : trailPosition.getExcelAnswers()) {
+//        for (ImportExcelTrialAnswerDTO excelQuestion : trailPosition.getExcelAnswers()) {
             Question question = Question.builder()
                     .observationType(observationType)
+                    .description(trailPosition.getDescription())
+                    .name(trailPosition.getQuestion())
+                    //TODO: exception for non existant ENUM
                     .answerType(AnswerType.valueOf(trailPosition.getAnswerType()))
-                    .commented(false)
-                    .description(excelQuestion.getDescription())
                     .jsonSchema(trailPosition.getJsonSchema())
-                    .name(excelQuestion.getDescription())
-                    .position(excelQuestion.getPosition())
+                    .commented(returnBooleanValueFromGivenInt(trailPosition.getComments()))
+                    .position(trailPosition.getPosition())
                     .build();
             question = questionRepository.save(question);
             observationType.getQuestions().add(question);
 
-        }
+//        }
         observationTypeRepository.save(observationType);
     }
 
+    private boolean returnBooleanValueFromGivenInt(int intValue) {
+        if(intValue==0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
     private ObservationType createObservationType(Trial trial, ImportExcelTrialPositionDTO trailPosition) {
         TrialStage stage = getTrialStage(trial, trailPosition);
         ObservationType observationType = ObservationType.builder()

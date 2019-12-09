@@ -29,8 +29,10 @@ public class TrialController {
     ObservationTypeService observationTypeService;
 
     //TODO JKW adjust the name
-    @PostMapping("/ostAllQuestionsForMobile")
-    public List<ObservationTypeDTO.SchemaItem> ostAllQuestionsForMobile(HttpServletResponse response, @RequestBody ObservationTypeCriteriaDTO observationTypeCriteriaDTO) {
+    @ResponseBody
+    @GetMapping("/ostAllQuestionsForMobile")
+    public List<ObservationTypeDTO.SchemaItem> ostAllQuestionsForMobile(@RequestParam Long trialId, Long trialStageId, Long trialRoleId, Long trialSessionId) {
+        ObservationTypeCriteriaDTO observationTypeCriteriaDTO = new ObservationTypeCriteriaDTO(trialId, trialStageId, trialRoleId, trialSessionId);
         return observationTypeService.generateSchemaList(observationTypeCriteriaDTO);
     }
 

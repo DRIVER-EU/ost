@@ -36,6 +36,7 @@ public class ExcelReadToDtoService {
   public static final int REQUIRED = 8;
   public static final int ANSWER_TYPE = 9;
   public static final int COMMENTS = 10;
+  public static final int MAX_NUMBER_OF_ANSWERS = 10;
 
   @Autowired
   ExcelImportService excelImportService;
@@ -73,7 +74,7 @@ public class ExcelReadToDtoService {
 
     }
     if (errorList.size() > 0) {
-      throw new ExcelImportException("Excel failed wit the content validation", errorList);
+      throw new ExcelImportException("Excel failed with the content validation", errorList);
     }
     return errorList;
   }
@@ -137,7 +138,7 @@ public class ExcelReadToDtoService {
     int position = 1;
     try {
       for (Cell cell : row) {
-        if (cell.getColumnIndex() <= 10) {
+        if (cell.getColumnIndex() <= MAX_NUMBER_OF_ANSWERS) {
           continue;
         }
         String cellValue = cell.getRichStringCellValue().getString().trim();
