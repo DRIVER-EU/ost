@@ -72,6 +72,6 @@ public class ExcelImportServiceTest {
         Assert.assertEquals("Trial Austria",trialFromRepository.get().getName());
         Assert.assertEquals(1,trialFromRepository.get().getTrialStages().size());
         Assert.assertEquals("Block1_Emergent_Groups_Telegram",trialFromRepository.get().getTrialStages().get(0).getName());
-        Assert.assertEquals(2,trialFromRepository.get().getObservationTypes().get(0).getQuestions().size());
+        Assert.assertEquals(1,trialFromRepository.get().getObservationTypes().get(0).getQuestions().size());
     }
 }

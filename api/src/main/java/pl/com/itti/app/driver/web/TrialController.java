@@ -10,12 +10,14 @@ import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.driver.repository.TrialRepository;
 import pl.com.itti.app.driver.service.ObservationTypeService;
+import pl.com.itti.app.driver.service.TrialService;
 import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.BrokerUtil;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -26,7 +28,13 @@ public class TrialController {
     TrialSessionService trialSessionService;
 
     @Autowired
+    TrialService trialService;
+
+    @Autowired
     ObservationTypeService observationTypeService;
+
+    @Autowired
+    TrialRepository trialRepository;
 
     //TODO JKW adjust the name
     @ResponseBody
@@ -49,6 +57,44 @@ public class TrialController {
     @GetMapping("/ostTrialStageId")
     public Long ostTrialStageId(){
         return BrokerUtil.trialStageId;
+    }
+
+    @GetMapping("/admin/ostTrialsAll")
+    public String getAllTrials() {
+        Iterable<Trial> allTrials = trialService.getAllTrials();
+        JSONObject resultJsonObj = new JSONObject();
+        JSONArray trialSet = new JSONArray();
+
+        allTrials.forEach(item -> {
+                JSONObject trialJsonObj = new JSONObject();
+                trialJsonObj.put("id", item.getId());
+                trialJsonObj.put("name", item.getName());
+                trialSet.put(trialJsonObj);
+         });
+        resultJsonObj.put("trialsSet", trialSet);
+
+        return resultJsonObj.toString();
+    }
+
+    @PostMapping("/admin/addNewTrial")
+    public String addNewTrial(String trialName) {
+        Trial trial = Trial.builder()
+                .description(trialName)
+                .languageVersion(Languages.ENGLISH)
+                .name(trialName)
+                .isDefined(true)
+                .isArchived(false)
+                .build();
+        trialRepository.save(trial);
+        return trial.toString();
+    }
+
+    @PostMapping("/admin/updateTrial")
+    public String updateTrial(Long trialId ) {
+        Trial trial = trialService.getTrialById(trialId);
+        trial.setName("Trial Update");
+        trialRepository.save(trial);
+        return trial.toString();
     }
 
     @GetMapping("/ostTrail")
