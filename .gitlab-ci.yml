@@ -124,6 +124,7 @@ merge-check:api:build:
   image: openjdk:8
   services:
   - postgres:9.6-alpine
+    alias: ost_db
   variables:
     POSTGRES_DB: itti_driver
     POSTGRES_USER: itti_driver
