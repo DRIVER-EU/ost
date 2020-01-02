@@ -109,7 +109,6 @@ public class ReadExcelController {
             }
         }
 
-//TODO JKW fix here it is a bug
         ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(jsonAnswer.toString());
 
         return responseEntity;

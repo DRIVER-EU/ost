@@ -11,6 +11,7 @@ import org.apache.avro.generic.GenericRecordBuilder;
 import org.apache.avro.generic.IndexedRecord;
 import org.apache.avro.specific.SpecificData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.Question;
@@ -53,12 +54,16 @@ public class BrokerUtil {
     @Autowired
     TrialStageRepository trialStageRepository;
 
+    @Value("${driver.is_testbed_on}")
+    private boolean is_testbed_on;
+
     CISAdapter adapter;
     GenericProducer answerProducer;
 
 
     @PostConstruct
     public void init() {
+        if (!is_testbed_on) return;
         trialSessionRepositoryStatic = trialSessionRepository;
         trialStageRepositoryStatic = trialStageRepository;
         this.adapter = CISAdapter.getNewInstance();
@@ -98,6 +103,7 @@ public class BrokerUtil {
 
 
     public void sendAnswer(GenericRecord formattedAnswer) {
+        if (!is_testbed_on) return;
         answerProducer.send(formattedAnswer);
     }
 
@@ -137,7 +143,7 @@ public class BrokerUtil {
 
 
     public void sendAnswerToTestBed(Answer answer) {
-
+        if (!is_testbed_on) return;
         List<GenericRecord> questionArray = new ArrayList<>();
 
         for (Question question : answer.getObservationType().getQuestions()) {
