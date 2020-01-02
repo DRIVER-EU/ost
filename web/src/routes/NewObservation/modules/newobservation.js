@@ -1,12 +1,8 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export let origin = window.location.hostname
-if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'testbed-ost.itti.com.pl'
-} else {
-  origin = window.location.host
-}
+
+import { origin } from './../../../config/Api'
 import axios from 'axios'
 import { getHeaders, getHeadersASCI, getHeadersReferences, errorHandle, freeQueue } from '../../../store/addons'
 import fileDownload from 'react-file-download'
@@ -73,7 +69,7 @@ export const getSchema = (idObs, idSession) => {
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(
-        `https://${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
+        `${origin}/api/observationtypes/form?observationtype_id=${idObs}&trialsession_id=${idSession}`,
         getHeaders())
           .then((response) => {
             freeQueue()
@@ -135,7 +131,7 @@ export const sendObservation = (formData) => {
 
      // data.append('attachments', formData.attachments)
       data.append('data', blob)
-      axios.post(`https://${origin}/api/answers`, data, getHeadersReferences())
+      axios.post(`${origin}/api/answers`, data, getHeadersReferences())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             toastr.success('Observation form', 'Observation was send!', toastrOptions)
@@ -149,7 +145,7 @@ export const sendObservation = (formData) => {
                 let store = event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue')
                 store.add({
                   type: 'post',
-                  address: `https://${origin}/api/answers`,
+                  address: `${origin}/api/answers`,
                   data: formData,
                   headerType: 'refference'
                 })
@@ -169,7 +165,7 @@ export const sendObservation = (formData) => {
 export const downloadFile = (id, name) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/attachments/${id}`, getHeadersASCI())
+      axios.get(`${origin}/api/attachments/${id}`, getHeadersASCI())
      .then((response) => {
        fileDownload(response.data, name)
        resolve()
@@ -185,7 +181,7 @@ export const downloadFile = (id, name) => {
 export const getTrialTime = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/trial-time`, getHeaders())
+      axios.get(`${origin}/api/trial-time`, getHeaders())
       .then((response) => {
         freeQueue()
         localStorage.setItem('trial-time', response.data)

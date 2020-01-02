@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import Auth from 'components/Auth'
 import { toastr } from 'react-redux-toastr'
 import { Detector } from 'react-detect-offline'
+import * as actionLayout from './layout-action'
 
 const toastrOptions = {
   timeOut: 3000
@@ -31,33 +32,33 @@ class CoreLayout extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
     isLoggedIn: PropTypes.any,
-    user: PropTypes.object
+    user: PropTypes.object,
+    borderInfo: PropTypes.any
   }
 
   componentWillMount () {
+    this.getTrialsInfo(this.props)
+    this.getBorderInfo(this.props)
     fetch('/version.txt')
     .then(response => response.text())
       .then(data => this.setState({ version: data }))
-
-  //   this.interval = setInterval(() => {
-  //     window.navigator.onLine && (this.checkMod = true)
-  //     if (!window.navigator.onLine && this.checkMod) {
-  //       this.updateIndicator()
-  //       this.checkMod = false
-  //     }
-  //   }, 1000)
   }
 
+  getTrialsInfo = (props) => {
+    props.getTrialInfo(props.user)
+  }
+
+  getBorderInfo = (props) => {
+    props.getBorderInfo(props.user)
+  }
   componentWillReceiveProps (nextProps) {
+    this.getTrialsInfo(nextProps)
+
     if (nextProps.user && nextProps.user !== this.props.user &&
       nextProps.user.roles[0] !== this.state.role) {
       this.setState({ role: nextProps.user.roles[0] })
     }
   }
-
-  // componentWillUnmount () {
-  //   clearInterval(this.interval)
-  // }
 
   updateIndicator () {
     toastr.warning('Offline mode', 'Welcome to offline mode', toastrOptions)
@@ -83,7 +84,11 @@ class CoreLayout extends Component {
               )}
             />
             {this.props.children}
-            <div className={'version'}>v.{this.state.version}</div>
+            <div className={'version'}>
+              <div className='trial-info__wrapper'>
+                <p className='trial-info__text'>{this.props.borderInfo}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,12 +96,11 @@ class CoreLayout extends Component {
   }
 }
 
-const mapDispatchToProps = {
-}
-
 const mapStateToProps = (state) => ({
   isLoggedIn: state.login.isLoggedIn,
-  user: state.login.user
+  user: state.login.user,
+  trial: state.layout.trial,
+  borderInfo: state.layout.borderInfo
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CoreLayout)
+export default connect(mapStateToProps, actionLayout)(CoreLayout)

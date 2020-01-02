@@ -1,12 +1,8 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export let origin = window.location.hostname
-if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'testbed-ost.itti.com.pl'
-} else {
-  origin = window.location.host
-}
+
+import { origin } from './../../../config/Api'
 import axios from 'axios'
 import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
 
@@ -29,7 +25,7 @@ export const actions = {
 export const getTrials = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/trialsessions/active`, getHeaders())
+      axios.get(`${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {

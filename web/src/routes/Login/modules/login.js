@@ -1,12 +1,8 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export let origin = window.location.hostname
-if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'testbed-ost.itti.com.pl'
-} else {
-  origin = window.location.host
-}
+import { origin } from './../../../config/Api'
+
 import axios from 'axios'
 export const LOG_IN = 'LOG_IN'
 export const LOG_OUT = 'LOG_OUT'
@@ -49,7 +45,7 @@ export const logIn = (username, password) => {
   const hash = new Buffer(username + `:` + password).toString('base64')
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
+      axios.get(`${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
         .then((response) => {
           localStorage.setItem('drivertoken', response.headers['x-auth-token'])
           localStorage.setItem('driveruser', JSON.stringify(response.data))
@@ -75,14 +71,14 @@ export const logIn = (username, password) => {
 export const logOut = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/auth/logout`, getHeaders())
+      axios.get(`${origin}/api/auth/logout`, getHeaders())
         .then(() => {
-          // window.indexedDB.open('driver', 1).onsuccess = (event) => {
-          //   for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
-          //     event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
-          //       .objectStore(event.target.result.objectStoreNames[i]).clear()
-          //   }
-          // }
+          window.indexedDB.open('driver', 1).onsuccess = (event) => {
+            for (let i = 0; i < event.target.result.objectStoreNames.length; i++) {
+              event.target.result.transaction(event.target.result.objectStoreNames[i], 'readwrite')
+                .objectStore(event.target.result.objectStoreNames[i]).clear()
+            }
+          }
           localStorage.clear()
           toastr.success('Logout', 'Logout correct!', toastrOptions)
           dispatch(logOutAction())
@@ -104,7 +100,7 @@ export const logOut = () => {
 export const checkLogin = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/trialsessions/active`, getHeaders())
+      axios.get(`${origin}/api/trialsessions/active`, getHeaders())
         .then(() => {
           resolve()
         })

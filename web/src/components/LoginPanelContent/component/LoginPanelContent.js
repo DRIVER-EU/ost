@@ -18,6 +18,7 @@ const styles = {
 }
 
 class LoginPanelContent extends Component {
+
   constructor () {
     super()
     this.state = {
@@ -64,7 +65,7 @@ class LoginPanelContent extends Component {
   componentWillMount () {
     let role = localStorage.getItem('driverrole')
     if (this.props.isLoggedIn && role === 'ROLE_ADMIN') {
-      browserHistory.push('/trial-manager')
+      browserHistory.push('/admin-home')
     } else if (this.props.isLoggedIn && role === 'ROLE_USER') {
       browserHistory.push('/trials')
     }
@@ -73,7 +74,7 @@ class LoginPanelContent extends Component {
   componentWillReceiveProps (nextProps) {
     let role = localStorage.getItem('driverrole')
     if (nextProps.isLoggedIn && role === 'ROLE_ADMIN') {
-      browserHistory.push('/trial-manager')
+      browserHistory.push('/admin-home')
     } else if (nextProps.isLoggedIn && role === 'ROLE_USER') {
       browserHistory.push('/trials')
     }

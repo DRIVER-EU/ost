@@ -15,3 +15,16 @@
         border-radius: 5px;
     }
 }
+.version {
+     &__text {
+         margin: 0;
+     }
+     .trial-info {
+         &__wrapper {
+             margin-left: 10px;
+         }
+         &__text {
+             margin: 0;
+         }
+     }
+}

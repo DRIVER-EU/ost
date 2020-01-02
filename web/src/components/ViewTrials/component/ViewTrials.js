@@ -134,7 +134,7 @@ class ViewTrials extends Component {
   }
 
   handleClose = () => {
-    this.setState({ open: false, answerRemove: '' })
+    this.setState({ open: false })
   }
 
   handleRemoveAnswer () {
@@ -227,13 +227,13 @@ class ViewTrials extends Component {
                   <AccordionItem key={object.id} title={
                     <h3 className={'react-sanfona-item-title cursor-pointer' +
                       ((object.type !== 'EVENT') ? ' observation' : ' message')}>
-                      {object.description}
+                      {object.name}
                       <div className={'time'}>
                         {moment(object.time, 'YYYY-MM-DDThh:mmZ').format('DD/MM/YYYY kk:mm:ss')}
                       </div>
                     </h3>} expanded={false}>
                     <div>
-                      <p>{object.name}</p>
+                      <p>{object.description}</p>
                       { object.type !== 'EVENT' &&
                       <div style={{ display: 'table', margin: '0 auto' }}>
                         <RaisedButton
