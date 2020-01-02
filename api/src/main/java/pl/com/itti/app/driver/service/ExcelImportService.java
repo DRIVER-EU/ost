@@ -3,7 +3,6 @@ package pl.com.itti.app.driver.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.dto.ImportExcelTrialAnswerDTO;
 import pl.com.itti.app.driver.dto.ImportExcelTrialDTO;
 import pl.com.itti.app.driver.dto.ImportExcelTrialPositionDTO;
 import pl.com.itti.app.driver.model.*;
@@ -151,6 +150,7 @@ public class ExcelImportService {
 
         observationTypeTrialRole = observationTypeRoleRepository.save(observationTypeTrialRole);
         observationType.getObservationTypeTrialRoles().add(observationTypeTrialRole);
+
         return observationTypeTrialRole;
     }
 
@@ -166,6 +166,7 @@ public class ExcelImportService {
                     //TODO JKW where to find the info in the excel file ?
                     .roleType(RoleType.PARTICIPANT)
                     .build();
+            trial.getTrialRoles().add(newTrailRole);
             return trialRoleRepository.save(newTrailRole);
         }
     }

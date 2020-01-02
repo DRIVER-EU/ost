@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +51,7 @@ public class ExcelReadToDtoService {
     return importExcelTrialDTO;
   }
 
-  public List<String> validateImportedContent(ImportExcelTrialDTO importExcelTrialDTO) {
+  public JSONArray validateImportedContent(ImportExcelTrialDTO importExcelTrialDTO) {
 
     List<String> errorList = new ArrayList<>();
     if (importExcelTrialDTO.getTrialName().isEmpty()) {
@@ -73,10 +74,18 @@ public class ExcelReadToDtoService {
       //TODO JKW discuss further constraints
 
     }
-    if (errorList.size() > 0) {
-      throw new ExcelImportException("Excel failed with the content validation", errorList);
+    if (errorList.size() == 0)
+    {
+      return null;
     }
-    return errorList;
+    JSONArray jsonErrorList = new JSONArray();
+
+    errorList.forEach(error -> {
+      jsonErrorList.put(error);
+    });
+
+
+    return jsonErrorList;
   }
 
   private ImportExcelTrialDTO convertExcelToDto(Sheet sheet) {
