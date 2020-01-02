@@ -9,6 +9,7 @@ import AdminTrials from './AdminTrials'
 import SelectObservationComponent from './SelectObservation'
 import NewObservation from './NewObservation'
 import TrialManager from './TrialManager'
+import AdminHome from './AdminHome'
 import NewSession from './NewSession'
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -21,6 +22,7 @@ export const createRoutes = (store) => ({
   childRoutes : [
     Trials(store),
     LoginRoute(store),
+    AdminHome(store),
     TrialManager(store),
     {
       path: 'trial-manager',

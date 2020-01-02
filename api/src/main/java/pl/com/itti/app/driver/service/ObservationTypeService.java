@@ -9,13 +9,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.dto.TrialRoleDTO;
-import pl.com.itti.app.driver.model.Answer;
-import pl.com.itti.app.driver.model.ObservationType;
-import pl.com.itti.app.driver.model.TrialRole;
-import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.repository.ObservationTypeRepository;
+import pl.com.itti.app.driver.repository.ObservationTypeRoleRepository;
 import pl.com.itti.app.driver.repository.TrialRoleRepository;
 import pl.com.itti.app.driver.repository.TrialSessionRepository;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
@@ -24,6 +23,7 @@ import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -36,10 +36,53 @@ public class ObservationTypeService {
     private ObservationTypeRepository observationTypeRepository;
 
     @Autowired
+    ObservationTypeRoleRepository observationTypeRoleRepository;
+
+    @Autowired
     private TrialSessionRepository trialSessionRepository;
 
     @Autowired
     private TrialRoleRepository trialRoleRepository;
+
+    @Transactional(readOnly = true)
+    public List<ObservationTypeDTO.SchemaItem> generateSchemaList(ObservationTypeCriteriaDTO observationTypeCriteriaDTO) {
+//        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
+//                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+//
+//        TrialSession trialSession = trialSessionRepository.findById(observationTypeCriteriaDTO.getTrialSessionId())
+//                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, observationTypeCriteriaDTO.getTrialSessionId()));
+
+
+        List<ObservationType> observationTypesList = observationTypeRepository
+                .findAllByTrialIdAndTrialStageIdOrderByPosition(
+                        observationTypeCriteriaDTO.getTrialId(), observationTypeCriteriaDTO.getTrialStageId());
+
+//TODO JKW clean code - stream
+//         observationTypes.stream()
+//                .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))
+//                .collect(Collectors.toList());
+//        Optional<TrialRole> role = trialRoleRepository.findById(observationTypeCriteriaDTO.getTrialRoleId());
+//        List<ObservationType> list = observationTypesList.stream()
+//                .filter(x -> x.getObservationTypeTrialRoles().contains(ObservationTypeTrialRole.builder().observationType(x).trialRole(role.get()).build()))
+//                .collect(Collectors.toList());
+//        list.contains(null);
+
+        List<ObservationTypeDTO.SchemaItem> generatedSchemaList = new ArrayList<>();
+        for (ObservationType observationType : observationTypesList) {
+
+                for( ObservationTypeTrialRole observationTypeTrialRoles:observationType.getObservationTypeTrialRoles())
+                {
+                    if(observationTypeTrialRoles.getTrialRole()!= null && observationTypeCriteriaDTO.getTrialRoleId().equals(observationTypeTrialRoles.getTrialRole().getId()))
+                    {
+                        ObservationTypeDTO.SchemaItem schemaItem = getSchema(observationType);
+
+                        schemaItem.roles = getSchemaItemRoles(observationType, observationTypeCriteriaDTO.getTrialSessionId());
+                        generatedSchemaList.add(schemaItem);
+                    }
+                }
+        }
+        return generatedSchemaList;
+    }
 
     @Transactional(readOnly = true)
     public List<ObservationType> find(Long trialSessionId) {

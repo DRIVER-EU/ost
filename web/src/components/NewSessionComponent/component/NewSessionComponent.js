@@ -178,40 +178,33 @@ class NewSessionComponent extends Component {
   }
 
   onDrop (file) {
-    if (file[0] && file[0].size > 0) {
+    if (file) {
       let reader = new FileReader()
-      reader.onloadend = (event) => {
+      reader.onload = () => {
         this.setState({
-          listOfemails: event.target.result.split(/\r\n|\n/) },
-          () => {
-            let items = [ ...this.state.userItems ]
-            let lastItem = _.last(items)
-            let id = 0
-            this.state.listOfemails.map(value => {
-              if (items.length === 0) {
-                items.push({
-                  id: id,
-                  email: value,
-                  role: []
-                })
-              } else if (items[0].email === '') {
-                items[0].email = value
-              } else {
-                lastItem = _.last(items)
-                id = lastItem.id + 1
-                items.push({
-                  id: id,
-                  email: value,
-                  role: []
-                })
-              }
-            })
-            this.setState({ userItems: items })
-          }
+          listOfemails: reader.result.split(`\n`) },
+          () => this.onDrop(null)
         )
       }
-      file[0] && reader.readAsText(file[0], 'UTF-8')
+      reader.readAsText(file[0])
     }
+    let items = [ ...this.state.userItems ]
+    let lastItem = _.last(items)
+    let id = 0
+    this.state.listOfemails.map(value => {
+      if (items[0].email === '') {
+        items[0].email = value
+      } else {
+        lastItem = _.last(items)
+        id = lastItem.id + 1
+        items.push({
+          id: id,
+          email: value,
+          role: []
+        })
+      }
+    })
+    this.setState({ userItems: items })
   }
 
   handleCloseModal = () => {
@@ -330,7 +323,7 @@ class NewSessionComponent extends Component {
             </div>
             <h3 style={{ marginTop: 50, marginBottom: 28, marginRight: 10, display: 'inline-block' }}>Users:</h3>
             <Dropzone
-              accept={'text/*,'}
+              accept='text/plain, .txt'
               className='btn-dropzone'
               onDrop={this.onDrop.bind(this)}>
               Import E-mails

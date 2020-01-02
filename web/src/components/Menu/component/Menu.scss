@@ -1,8 +1,8 @@
 .route--active {
-  background-color: #00497E!important;
-  color: #FDB913!important;
+  background-color: #00497e !important;
+  color: #fdb913 !important;
 }
-.menu{
+.menu {
   font-size: 11pt;
 }
 .driver-title {
@@ -11,6 +11,16 @@
   margin-left: 5px;
   font-size: 18px;
 }
+.menu__info {
+  .version__text {
+    margin: 0 0 0 20px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: rgb(40, 40, 41);
+  }
+}
+
 @media only screen and (max-width: 520px) {
   .driver-title {
     display: none;

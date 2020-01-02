@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { RadioButtonGroup, RadioButton } from 'material-ui'
+
 export const Radio = (props) => {
   return (
     <RadioButtonGroup name='shipSpeed' defaultSelected={props.value}
@@ -9,7 +10,6 @@ export const Radio = (props) => {
 >
       {props.options.enumOptions.map(object => {
         return (<RadioButton
-          inputStyle={{ width: '40px' }}
           value={object.value}
           label={object.label}
           disabled={props.disabled}

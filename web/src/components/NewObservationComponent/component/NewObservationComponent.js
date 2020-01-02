@@ -98,8 +98,7 @@ class NewObservationComponent extends Component {
   }
   componentWillMount () {
     window.onkeypress = function (e) {
-      console.log(e)
-      if (e.charCode === 13 && e.target.nodeName !== 'TEXTAREA') {
+      if (e.charCode === 13) {
         e.preventDefault()
       }
     }
@@ -348,13 +347,7 @@ class NewObservationComponent extends Component {
     }
     return check
   }
-  backEvents () {
-    if (this.props.mode === 'new') {
-      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
-    } else {
-      browserHistory.push(`/trials/${this.props.params.id}`)
-    }
-  }
+
   back () {
     browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
   }
@@ -551,7 +544,7 @@ class NewObservationComponent extends Component {
                       labelColor='#FCB636'
                       label='Back'
                       secondary
-                      onClick={this.backEvents.bind(this)}
+                      onClick={this.back.bind(this)}
                   />
                   </div>
                 }

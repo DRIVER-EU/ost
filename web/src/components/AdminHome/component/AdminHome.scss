@@ -1,0 +1,17 @@
+.home-container {
+  justify-content: center;
+ width: 800px;
+ margin: 0 auto;
+ padding-top: 2%;
+  .buttons-container{
+    display: flex;
+    justify-content: space-between;
+  }
+  .image-container {
+    width: 100%;
+    padding-top: 50px;
+    img{
+      width: 100%;
+    }
+  }
+}

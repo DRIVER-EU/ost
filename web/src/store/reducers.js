@@ -7,6 +7,7 @@ import newObservationReducer from '../routes/NewObservation/modules/newobservati
 import Question from '../routes/Question/modules/question'
 import adminTrialsReducer from '../routes/AdminTrials/modules/admin_trials'
 import viewTrialsReducer from '../routes/ViewTrials/modules/view_trials'
+import layoutReducer from '../layouts/CoreLayout/layout-reducer'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -18,6 +19,7 @@ export const makeRootReducer = (asyncReducers) => {
     question: Question,
     adminTrials: adminTrialsReducer,
     viewTrials: viewTrialsReducer,
+    layout: layoutReducer,
     ...asyncReducers
   })
 }

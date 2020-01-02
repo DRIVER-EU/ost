@@ -4,16 +4,17 @@ import org.hibernate.Hibernate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
+import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
+import pl.com.itti.app.driver.repository.TrialRepository;
+import pl.com.itti.app.driver.service.ObservationTypeService;
+import pl.com.itti.app.driver.service.TrialService;
 import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.BrokerUtil;
 
@@ -25,6 +26,23 @@ public class TrialController {
 
     @Autowired
     TrialSessionService trialSessionService;
+
+    @Autowired
+    TrialService trialService;
+
+    @Autowired
+    ObservationTypeService observationTypeService;
+
+    @Autowired
+    TrialRepository trialRepository;
+
+    //TODO JKW adjust the name
+    @ResponseBody
+    @GetMapping("/ostAllQuestionsForMobile")
+    public List<ObservationTypeDTO.SchemaItem> ostAllQuestionsForMobile(@RequestParam Long trialId, Long trialStageId, Long trialRoleId, Long trialSessionId) {
+        ObservationTypeCriteriaDTO observationTypeCriteriaDTO = new ObservationTypeCriteriaDTO(trialId, trialStageId, trialRoleId, trialSessionId);
+        return observationTypeService.generateSchemaList(observationTypeCriteriaDTO);
+    }
 
     @GetMapping("/ostTrialId")
     public Long ostTrialId() {
@@ -39,6 +57,44 @@ public class TrialController {
     @GetMapping("/ostTrialStageId")
     public Long ostTrialStageId(){
         return BrokerUtil.trialStageId;
+    }
+
+    @GetMapping("/admin/ostTrialsAll")
+    public String getAllTrials() {
+        Iterable<Trial> allTrials = trialService.getAllTrials();
+        JSONObject resultJsonObj = new JSONObject();
+        JSONArray trialSet = new JSONArray();
+
+        allTrials.forEach(item -> {
+                JSONObject trialJsonObj = new JSONObject();
+                trialJsonObj.put("id", item.getId());
+                trialJsonObj.put("name", item.getName());
+                trialSet.put(trialJsonObj);
+         });
+        resultJsonObj.put("trialsSet", trialSet);
+
+        return resultJsonObj.toString();
+    }
+
+    @PostMapping("/admin/addNewTrial")
+    public String addNewTrial(String trialName) {
+        Trial trial = Trial.builder()
+                .description(trialName)
+                .languageVersion(Languages.ENGLISH)
+                .name(trialName)
+                .isDefined(true)
+                .isArchived(false)
+                .build();
+        trialRepository.save(trial);
+        return trial.toString();
+    }
+
+    @PostMapping("/admin/updateTrial")
+    public String updateTrial(Long trialId ) {
+        Trial trial = trialService.getTrialById(trialId);
+        trial.setName("Trial Update");
+        trialRepository.save(trial);
+        return trial.toString();
     }
 
     @GetMapping("/ostTrail")

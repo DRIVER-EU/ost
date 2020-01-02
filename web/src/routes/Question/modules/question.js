@@ -1,12 +1,8 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export let origin = window.location.hostname
-if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'testbed-ost.itti.com.pl'
-} else {
-  origin = window.location.host
-}
+
+import { origin } from './../../../config/Api'
 import axios from 'axios'
 import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
 import { toastr } from 'react-redux-toastr'
@@ -54,7 +50,7 @@ export const actions = {
 export const getSchemaView = (idObs) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
+      axios.get(`${origin}/api/questions-answers?answer_id=${idObs}`, getHeaders())
           .then((response) => {
             freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -64,12 +60,12 @@ export const getSchemaView = (idObs) => {
                 if (!x.target.result) {
                   let d = parseInt(idObs)
                   store.add(Object.assign(response.data,
-                    { answerId: d, id: d, observationTypeId: response.data.observationTypeId }))
+                    { answerId: d, id: d }))
                 } else {
                   store.delete(response.data.answerId).onsuccess = () => {
                     let d = parseInt(idObs)
                     store.add(Object.assign(response.data,
-                      { answerId: d, id: d, observationTypeId: response.data.observationTypeId }))
+                      { answerId: d, id: d }))
                   }
                 }
               }
@@ -115,7 +111,7 @@ export const getSchemaView = (idObs) => {
 export const sendObservation = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`https://${origin}/api/anonymous/observation`, getHeaders())
+      axios.post(`${origin}/api/anonymous/observation`, getHeaders())
           .then((response) => {
             dispatch(sendObservationAction(response.data))
             resolve()
@@ -127,7 +123,7 @@ export const sendObservation = () => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'post',
-                  address: `https://${origin}/api/anonymous/observation`,
+                  address: `${origin}/api/anonymous/observation`,
                   data: {}
                 })
               }

@@ -38,11 +38,6 @@ class SelectObservation extends Component {
     this.interval = setInterval(() => {
       this.props.getViewTrials(this.props.params.id)
     }, 3000)
-    setTimeout(() => {
-      this.setState({
-        isLoading: false
-      })
-    }, 5000)
   }
 
   componentWillUnmount () {
@@ -89,13 +84,13 @@ class SelectObservation extends Component {
         for (let i = 0; i < e.target.result.length; i++) {
           if (e.target.result[i].data) {
             check = parseInt(e.target.result[i].data.observationTypeId) === object.id
-            if (check) {
-              let checkedAnswersIDBA = [ ...this.state.checkedAnswersIDBA ]
-              if (!_.find(this.state.checkedAnswersIDBA, { id: object.id })) {
-                checkedAnswersIDBA.push({ id: object.id })
-                this.setState({ checkedAnswersIDBA })
-              }
-            }
+          }
+        }
+        if (check) {
+          let checkedAnswersIDBA = [ ...this.state.checkedAnswersIDBA ]
+          if (!_.find(this.state.checkedAnswersIDBA, { id: object.id })) {
+            checkedAnswersIDBA.push({ id: object.id })
+            this.setState({ checkedAnswersIDBA })
           }
         }
       }
@@ -105,16 +100,18 @@ class SelectObservation extends Component {
     const { viewTrials } = this.state
     let isCheck = false
     let listOfIds = []
-    if (answersList && viewTrials.length !== 0) {
+    if (answersList.length !== 0 && viewTrials.length !== 0) {
       if (viewTrials.length !== 0) {
         viewTrials.map((obj) => {
-          listOfIds.push(obj.observationTypeId)
+          listOfIds.push(obj.id)
         })
       }
       if (listOfIds && listOfIds.length !== 0 && answersList && answersList.length !== 0) {
-        for (let j = 0; j < listOfIds.length; j++) {
-          if (listOfIds[j] === answersList) {
-            isCheck = true
+        for (let i = 0; i < answersList.length; i++) {
+          for (let j = 0; j < listOfIds.length; j++) {
+            if (listOfIds[j] === answersList[i]) {
+              isCheck = true
+            }
           }
         }
       }
@@ -147,30 +144,29 @@ class SelectObservation extends Component {
               onClick={this.back.bind(this)}
           /><div style={{ clear: 'both' }} />
             <div className='trial-title'>
-            Questions
+              New entry
             </div>
             {this.state.isLoading ? <div className='spinner-box'>
               <div className={'spinner'}>
                 <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
               </div>
             </div>
-              : this.state.listOfObservations && this.state.listOfObservations.length
-              ? <div className='trials-header'>
+              : <div className='trials-header'>
                 <List style={{ width: '100%' }}>
                   {this.state.listOfObservations && this.state.listOfObservations.map((object) => (
                     <ListItem
                       key={object.id}
-                      style={this.checkAnswers(object.id) ||
+                      style={this.checkAnswers(object.answersId) ||
                         _.find(this.state.checkedAnswersIDBA, { id: object.id })
                     ? { border: '1px solid #feb912', backgroundColor: '#1f497e12' }
                       : { border: '1px solid #feb912', backgroundColor: '#feb91221' }}
-                      secondaryText={object.name}
-                      primaryText={object.description}
+                      primaryText={object.name}
+                      secondaryText={object.description}
                       onClick={() => this.newObservation(object.id)}
                     />
                 ))}
                 </List>
-              </div> : <div className={'no-sessions'}> No questions available</div>
+              </div>
             }
           </div>
         </div>

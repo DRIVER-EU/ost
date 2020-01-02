@@ -1,12 +1,8 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export let origin = window.location.hostname
-if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'testbed-ost.itti.com.pl'
-} else {
-  origin = window.location.host
-}
+
+import { origin } from './../../../config/Api'
 import axios from 'axios'
 import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
 import { toastr } from 'react-redux-toastr'
@@ -77,7 +73,7 @@ export const actions = {
 export const getViewTrials = (trialsessionId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
+      axios.get(`${origin}/api/answers-events?trialsession_id=${trialsessionId}`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -96,7 +92,7 @@ export const getViewTrials = (trialsessionId) => {
                    item.onsuccess = (x) => {
                      if (!x.target.result) {
                        answers.add(Object.assign(response.data[i],
-                  { trialsession_id: trialsessionId, observationTypeId: response.data[i].observationTypeId }))
+                  { trialsession_id: trialsessionId }))
                      }
                    }
                  } else if (response.data[i] && response.data[i].type === 'EVENT') {
@@ -158,7 +154,7 @@ export const getViewTrials = (trialsessionId) => {
 export const getTrialSession = (trialsessionId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
+      axios.get(`${origin}/api/trialsessions/${trialsessionId}`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -189,7 +185,7 @@ export const getTrialSession = (trialsessionId) => {
 export const getTrials = () => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/trialsessions/active`, getHeaders())
+      axios.get(`${origin}/api/trialsessions/active`, getHeaders())
        .then((response) => {
          freeQueue()
          window.indexedDB.open('driver', 1).onsuccess = (event) => {
@@ -232,7 +228,7 @@ export const clearTrialList = () => {
 export const removeAnswer = (id, comment) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.delete(`https://${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
+      axios.delete(`${origin}/api/answers/${id}/remove?comment=${comment}`, getHeaders())
         .then(() => {
           toastr.success('Remove answer', 'Action removing answer or event has been successful!', toastrOptions)
           dispatch(removeAnswerAction())
@@ -245,7 +241,7 @@ export const removeAnswer = (id, comment) => {
             window.indexedDB.open('driver', 1).onsuccess = event => {
               event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                 type: 'delete',
-                address: `https://${origin}/api/answers/${id}/remove?comment=${comment}`,
+                address: `${origin}/api/answers/${id}/remove?comment=${comment}`,
                 data: {}
               })
             }
@@ -262,7 +258,7 @@ export const editComment = (id, comment) => {
     return new Promise((resolve) => {
       const data = new FormData()
       data.append('comment', comment)
-      axios.post(`https://${origin}/api/questions-answers/${id}/comment`, data, getHeaders())
+      axios.post(`${origin}/api/questions-answers/${id}/comment`, data, getHeaders())
           .then((response) => {
             // #TODO PWA
             dispatch(editCommentAction(response.data))
@@ -276,7 +272,7 @@ export const editComment = (id, comment) => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'post',
-                  address: `https://${origin}/api/questions-answers/${id}/comment`,
+                  address: `${origin}/api/questions-answers/${id}/comment`,
                   data: data
                 })
               }

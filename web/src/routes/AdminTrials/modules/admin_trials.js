@@ -1,12 +1,9 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export let origin = window.location.hostname
-if (origin === 'localhost' || origin === 'dev.itti.com.pl') {
-  origin = 'testbed-ost.itti.com.pl'
-} else {
-  origin = window.location.host
-}
+
+import { origin } from './../../../config/Api'
+
 import axios from 'axios'
 import { getHeaders, errorHandle, getHeadersFileDownload, freeQueue } from '../../../store/addons'
 import fileDownload from 'react-file-download'
@@ -107,7 +104,7 @@ export const actions = {
 export const getMessages = (id, sort = '') => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`,
+      axios.get(`${origin}/api/event/search?trialsession_id=${id}&sort=${sort.type},${sort.order}`,
       getHeaders())
        .then((response) => {
          freeQueue()
@@ -143,7 +140,7 @@ export const getMessages = (id, sort = '') => {
 export const sendMessage = (message) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`https://${origin}/api/event`, message, getHeaders())
+      axios.post(`${origin}/api/event`, message, getHeaders())
          .then((response) => {
            dispatch(sendMessageAction(message))
            resolve()
@@ -155,7 +152,7 @@ export const sendMessage = (message) => {
              window.indexedDB.open('driver', 1).onsuccess = event => {
                event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                  type: 'post',
-                 address: `https://${origin}/api/event`,
+                 address: `${origin}/api/event`,
                  data: message
                })
              }
@@ -170,23 +167,20 @@ export const sendMessage = (message) => {
 export const getObservation = (id, search) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
+      axios.get(`${origin}/api/answers?trialsession_id=${id}&search=${search}`, getHeaders())
           .then((response) => {
             freeQueue()
-            let data = response.data.sort(function (a, b) {
-              return new Date(b.sentSimulationTime) - new Date(a.sentSimulationTime)
-            })
             window.indexedDB.open('driver', 1).onsuccess = event => {
               let store = event.target.result.transaction(['answer'], 'readwrite').objectStore('answer')
-              for (let i = 0; i < data.length; i++) {
-                store.get(data[i].id).onsuccess = x => {
+              for (let i = 0; i < response.data.length; i++) {
+                store.get(response.data[i].id).onsuccess = x => {
                   if (!x.target.result) {
-                    store.add(Object.assign(data[i], { trialsession_id: id }))
+                    store.add(Object.assign(response.data[i], { trialsession_id: id }))
                   }
                 }
               }
             }
-            dispatch(getObservationAction(data))
+            dispatch(getObservationAction(response.data))
             resolve()
           })
           .catch((error) => {
@@ -194,10 +188,8 @@ export const getObservation = (id, search) => {
               window.indexedDB.open('driver', 1).onsuccess = (event) => {
                 event.target.result.transaction(['answer'],
               'readonly').objectStore('answer').index('trialsession_id').getAll(id).onsuccess = (e) => {
-                let data = typeof e.target.result.length === 'number' ? e.target.result.sort(function (a, b) {
-                  return new Date(b.sentSimulationTime) - new Date(a.sentSimulationTime)
-                }) : [e.target.result]
-                dispatch(getObservationAction(data))
+                dispatch(getObservationAction(
+                  typeof e.target.result.length === 'number' ? e.target.result : [e.target.result]))
               }
               }
             }
@@ -211,7 +203,7 @@ export const getObservation = (id, search) => {
 export const getUsers = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/user?trialsession_id=${id}&size=1000`, getHeaders())
+      axios.get(`${origin}/api/user?trialsession_id=${id}&size=1000`, getHeaders())
           .then((response) => {
             freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
@@ -246,7 +238,7 @@ export const getUsers = (id) => {
 export const getRoles = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/role?trial_id=${id}&size=1000`, getHeaders())
+      axios.get(`${origin}/api/role?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
             freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
@@ -281,7 +273,7 @@ export const getRoles = (id) => {
 export const getStages = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/stages?trial_id=${id}&size=1000`, getHeaders())
+      axios.get(`${origin}/api/stages?trial_id=${id}&size=1000`, getHeaders())
           .then((response) => {
             freeQueue()
             window.indexedDB.open('driver', 1).onsuccess = event => {
@@ -316,7 +308,7 @@ export const getStages = (id) => {
 export const setStage = (id, stageId) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.put(`https://${origin}/api/trialsessions/${id}`, stageId, getHeaders())
+      axios.put(`${origin}/api/trialsessions/${id}`, stageId, getHeaders())
           .then((response) => {
             toastr.success('Session settings', 'Stage was selected!', toastrOptions)
             dispatch(setStageAction(response.data))
@@ -330,7 +322,7 @@ export const setStage = (id, stageId) => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'put',
-                  address: `https://${origin}/api/trialsessions/${id}`,
+                  address: `${origin}/api/trialsessions/${id}`,
                   data: stageId
                 })
               }
@@ -349,7 +341,7 @@ export const setStage = (id, stageId) => {
 export const exportToCSV = (id) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`https://${origin}/api/answers/csv-file?trialsession_id=${id}`, getHeadersFileDownload())
+      axios.get(`${origin}/api/answers/csv-file?trialsession_id=${id}`, getHeadersFileDownload())
         .then((response) => {
           toastr.success('Export to CSV', 'Export has been successful!', toastrOptions)
           fileDownload(response.data, 'summaryOfObservations.csv')
@@ -366,7 +358,7 @@ export const exportToCSV = (id) => {
 export const setStatus = (id, statusName) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.put(`https://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`, {}, getHeaders())
+      axios.put(`${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`, {}, getHeaders())
           .then((response) => {
             dispatch(setStatusAction(response.data))
             toastr.success('Session settings', 'Status was changed!', toastrOptions)
@@ -379,7 +371,7 @@ export const setStatus = (id, statusName) => {
               window.indexedDB.open('driver', 1).onsuccess = event => {
                 event.target.result.transaction(['sendQueue'], 'readwrite').objectStore('sendQueue').add({
                   type: 'put',
-                  address: `https://${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`,
+                  address: `${origin}/api/trialsessions/${id}/changeStatus?status=${statusName}`,
                   data: {}
                 })
               }

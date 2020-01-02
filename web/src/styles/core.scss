@@ -564,10 +564,8 @@ span.cursor-pointer {
   position: relative;
   height: 15px;
   text-align: center;
-  display: block;
+  display: flex;
+  justify-content: center;
   color: gray;
   font-size: 11px;
-}
-textarea {
-  resize: none;
 }
