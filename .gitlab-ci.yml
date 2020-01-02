@@ -123,7 +123,8 @@ merge-check:api:build:
   <<: *cache_api_def
   image: openjdk:8
   services:
-  - postgres:9.6-alpine
+  - name: postgres:9.6-alpine
+    alias: ost_db
   variables:
     POSTGRES_DB: itti_driver
     POSTGRES_USER: itti_driver
