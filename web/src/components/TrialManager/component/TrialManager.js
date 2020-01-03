@@ -1,21 +1,15 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import "./TrialManager.scss";
-import RaisedButton from "material-ui/RaisedButton";
-import { browserHistory } from "react-router";
-import Spinner from "react-spinkit";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import ContentAdd from "material-ui/svg-icons/content/add";
-import FlatButton from "material-ui/FlatButton";
-import Dialog from "material-ui/Dialog";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import './TrialManager.scss'
+import RaisedButton from 'material-ui/RaisedButton'
+import { browserHistory } from 'react-router'
+import Spinner from 'react-spinkit'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
 
 class TrialManager extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
       listOfTrialsManager: [],
       listOfTrials: [],
@@ -23,23 +17,22 @@ class TrialManager extends Component {
       openModal: false,
       trialId: null,
       selectedTrial: null
-    };
+    }
   }
 
   static propTypes = {
     getTrialManager: PropTypes.func,
     listOfTrialsManager: PropTypes.object,
     getListOfTrials: PropTypes.func,
-    importFile: PropTypes.func,
     listOfTrials: PropTypes.object
   };
 
-  componentWillMount() {
-    this.props.getTrialManager();
-    this.setState({ isLoading: true });
+  componentWillMount () {
+    this.props.getTrialManager()
+    this.setState({ isLoading: true })
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (
       nextProps.listOfTrialsManager.trialsSet &&
       nextProps.listOfTrialsManager.trialsSet !==
@@ -50,68 +43,67 @@ class TrialManager extends Component {
       this.setState({
         listOfTrialsManager: nextProps.listOfTrialsManager.trialsSet,
         isLoading: false
-      });
+      })
     }
     if (
       nextProps.listOfTrials &&
       nextProps.listOfTrials !== this.props.listOfTrials
     ) {
-      let listOfTrials = [];
+      let listOfTrials = []
       for (let key in nextProps.listOfTrials) {
-        listOfTrials.push({ id: key, name: nextProps.listOfTrials[key] });
+        listOfTrials.push({ id: key, name: nextProps.listOfTrials[key] })
       }
-      this.setState({ listOfTrials });
+      this.setState({ listOfTrials })
     }
   }
 
-  viewTrial() {
-    if(this.state.selectedTrial) {
+  viewTrial () {
+    if (this.state.selectedTrial) {
       browserHistory.push(
         `trial-manager/${this.state.selectedTrial.id}/admin-trials/${this.state.selectedTrial.id}`
-      );
+      )
     }
-
   }
 
-  getShortDesc(str) {
-    let desc = str.split(/[.|!|?]\s/);
+  getShortDesc (str) {
+    let desc = str.split(/[.|!|?]\s/)
     if (desc[1]) {
-      return desc[0] + ". " + desc[1];
+      return desc[0] + '. ' + desc[1]
     } else {
-      return desc[0];
+      return desc[0]
     }
   }
 
   handleOpen = () => {
-    this.props.getListOfTrials();
+    this.props.getListOfTrials()
     this.setState({
       trialId: null,
       openModal: true
-    });
+    })
   };
 
   handleClose = () => {
-    this.setState({ openModal: false });
+    this.setState({ openModal: false })
   };
 
   newSession = () => {
     if (this.state.trialId) {
-      browserHistory.push(`trial-manager/${this.state.trialId}/newsession`);
+      browserHistory.push(`trial-manager/${this.state.trialId}/newsession`)
     }
   };
 
   importFileAction = (el, props) => {
-    const data = new FormData();
-    data.append("multipartFile", el.target.files[0]);
-    props.importFile(data);
+    const data = new FormData()
+    data.append('multipartFile', el.target.files[0])
+    props.importFile(data)
   };
-  handleChangeDropDown(stateName, event, index, value) {
-    let change = { ...this.state };
-    change[stateName] = value;
-    this.setState(change);
+  handleChangeDropDown (stateName, event, index, value) {
+    let change = { ...this.state }
+    change[stateName] = value
+    this.setState(change)
   }
 
-  render() {
+  render () {
     // const actions = [
     //   <FlatButton label="Cancel" primary onTouchTap={this.handleClose} />,
     //   <FlatButton
@@ -123,84 +115,85 @@ class TrialManager extends Component {
     // ];
     const columns = [
       {
-        Header: "Trials",
+        Header: 'Trials',
         columns: [
           {
-            Header: "Id",
-            accessor: "id",
-            width: 100,
+            Header: 'Id',
+            accessor: 'id',
+            width: 100
           },
           {
-            Header: "Name",
-            accessor: "name"
+            Header: 'Name',
+            accessor: 'name'
           }
         ]
       }
-    ];
+    ]
     return (
-      <div className="main-container">
-        <div className="pages-box">
-          <div className="trials-container">
-            <div className="trials-header">
-              <div className={"trial-select"}>Trial List</div>
+      <div className='main-container'>
+        <div className='pages-box'>
+          <div className='trials-container'>
+            <div className='trials-header'>
+              <div className={'trial-select'}>Trial List</div>
             </div>
-            <div className="trials-btn">
+            <div className='trials-btn'>
               <input
-                id="file"
-                type="file"
-                name="file"
+                id='file'
+                type='file'
+                name='file'
                 ref={ref => (this.upload = ref)}
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 onChange={el => this.importFileAction(el, this.props)}
               />
               <RaisedButton
-                buttonStyle={{ width: "200px" }}
-                backgroundColor="#244C7B"
-                labelColor="#FCB636"
-                label="Import Trials"
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='Import Trials'
                 onClick={e => this.upload.click()}
-                type="Button"
+                type='Button'
               />
             </div>
             {this.state.isLoading && (
-              <div className="spinner-box">
-                <div className={"spinner"}>
+              <div className='spinner-box'>
+                <div className={'spinner'}>
                   <Spinner
-                    fadeIn="none"
-                    className={"spin-item"}
-                    color={"#fdb913"}
-                    name="ball-spin-fade-loader"
+                    fadeIn='none'
+                    className={'spin-item'}
+                    color={'#fdb913'}
+                    name='ball-spin-fade-loader'
                   />
                 </div>
               </div>
             )}
             {!this.state.isLoading &&
               this.state.listOfTrialsManager.length === 0 && (
-                <div className={"no-sessions"}>No trial sessions available</div>
+                <div className={'no-sessions'}>No trial sessions available</div>
               )}
             {this.state.listOfTrialsManager.length > 0 && (
               <ReactTable
                 data={this.state.listOfTrialsManager}
                 columns={columns}
-                multiSort={true}
+                multiSort
                 showPagination={false}
                 minRows={0}
                 getTdProps={(state, rowInfo) => {
                   if (rowInfo && rowInfo.row) {
-                  return {
-                    onClick: (e) => {
-                      this.setState({
-                        selectedTrial: rowInfo.original
-                      })
-                    },
-                    style: {
-                      background: this.state.selectedTrial ? rowInfo.original.id ===  this.state.selectedTrial.id ? '#e5e5e5' : '' : '',
-                      cursor: 'pointer'
+                    return {
+                      onClick: (e) => {
+                        this.setState({
+                          selectedTrial: rowInfo.original
+                        })
+                      },
+                      style: {
+                        background: this.state.selectedTrial ? rowInfo.original.id ===
+                          this.state.selectedTrial.id ? '#e5e5e5' : '' : '',
+                        cursor: 'pointer'
+                      }
                     }
+                  } else {
+                    return {}
                   }
-                } else {
-                  return{}
-                }
                 }}
               />
             )}
@@ -211,21 +204,21 @@ class TrialManager extends Component {
               secondary>
               <ContentAdd />
             </FloatingActionButton> */}
-            <div className="action-btns">
+            <div className='action-btns'>
               <RaisedButton
-                buttonStyle={{ width: "200px" }}
-                backgroundColor="#244C7B"
-                labelColor="#FCB636"
-                label="+ New"
-                type="Button"
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='+ New'
+                type='Button'
               />
               <RaisedButton
-                buttonStyle={{ width: "200px" }}
-                backgroundColor={this.state.selectedTrial ? "#FCB636" : "#ccc"}
-                labelColor="#fff"
-                label="Edit"
-                type="Button"
-                disabled={this.state.selectedTrial ? false : true}
+                buttonStyle={{ width: '200px' }}
+                backgroundColor={this.state.selectedTrial ? '#FCB636' : '#ccc'}
+                labelColor='#fff'
+                label='Edit'
+                type='Button'
+                disabled={!this.state.selectedTrial}
                 onClick={this.viewTrial.bind(this)}
               />
             </div>
@@ -275,8 +268,8 @@ class TrialManager extends Component {
           </div>
         </Dialog> */}
       </div>
-    );
+    )
   }
 }
 
-export default TrialManager;
+export default TrialManager
