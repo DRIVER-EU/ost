@@ -1,0 +1,1 @@
+ALTER TABLE public.trial DROP COLUMN  is_manual_stage_change;
