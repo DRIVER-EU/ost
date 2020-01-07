@@ -126,7 +126,8 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.session:spring-session'
     compile("org.springframework.security:spring-security-data")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    compile("org.springframework.boot:spring-boot-starter-tomcat")
+//    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     //Apache POI Excel-parse
     compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
