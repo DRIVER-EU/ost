@@ -1,1 +1,1 @@
-ALTER TABLE public.trial_session DROP COLUMN  is_manual_stage_change;
+ALTER TABLE public.trial DROP COLUMN  is_manual_stage_change;
