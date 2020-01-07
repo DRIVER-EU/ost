@@ -1,1 +1,0 @@
-ALTER TABLE public.trial_session DROP COLUMN  is_manual_stage_change;
