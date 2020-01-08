@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +47,7 @@ public class ReadExcelController {
 
     @GetMapping("/importOld")
     public Trial readExcelAndReturnDTOEndpoint(@RequestParam int sheetNoToRead, @RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
-        ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
+        ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO(multipartFile);
         Trial savedTrial = excelImportService.saveTrial(excelDTO);
         return savedTrial;
     }
@@ -74,16 +75,20 @@ public class ReadExcelController {
         return responseEntity;
     }
 
-    @PostMapping("/import")
-    public ResponseEntity readExcelAndReturnResponce(@RequestParam int sheetNoToRead, @RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
-        ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
-        JSONArray validationWarningList = excelReadToDtoService.validateImportedContent(excelDTO);
-
-        JSONObject jsonAnswer = new JSONObject();
+    @PutMapping("/import")
+    public ResponseEntity readExcelAndReturnResponce(@RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
+         JSONObject jsonAnswer = new JSONObject();
+         String step= "";
 
         {
             try {
+                step = " @Reading the excel file";
+                ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO(multipartFile);
+                step = " @Validating  the excel file";
+                JSONArray validationWarningList = excelReadToDtoService.validateImportedContent(excelDTO);
+                step = " @Saving  the excel file";
                 Trial savedTrial = excelImportService.saveTrial(excelDTO);
+                step = " @Creating response";
                 jsonAnswer.put("id",savedTrial.getId().toString());
                 jsonAnswer.put("name",savedTrial.getName());
                 jsonAnswer.put("description",savedTrial.getDescription());
@@ -94,19 +99,20 @@ public class ReadExcelController {
 
                 jsonAnswer.put("status",HttpStatus.CREATED);
                 jsonAnswer.put("errors",new JSONArray());
+                if(validationWarningList.length()>0) {
+                    jsonAnswer.put("warnings",validationWarningList);
+                }
             }
             catch (Exception e)
             {
                 JSONArray serverErrorList = new JSONArray();
                 JSONObject serverError = new JSONObject();
-                serverError.put("serviceError", "Errors in service...." + e.getMessage());
+                serverError.put("serviceError", "Errors in service."+ step + " " + e.getMessage());
                 serverErrorList.put(serverError);
                 jsonAnswer.put("status",HttpStatus.BAD_REQUEST);
                 jsonAnswer.put("errors",serverErrorList);
             }
-            if(validationWarningList.length()>0) {
-                jsonAnswer.put("warnings",validationWarningList);
-            }
+
         }
 
         ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(jsonAnswer.toString());
@@ -156,7 +162,7 @@ public class ReadExcelController {
 
     @GetMapping("/import-validate")
     public ImportExcelTrialDTO convertToDTO(@RequestParam int sheetNoToRead, MultipartFile multipartFile) throws IOException {
-        ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
+        ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO( multipartFile);
         excelReadToDtoService.validateImportedContent(excelDTO);
         return excelDTO;
     }

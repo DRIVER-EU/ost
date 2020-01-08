@@ -122,12 +122,12 @@ export const getListOfTrials = () => {
 }
 
 // Once backend is fixed
-const realPath = '/import?sheetNoToRead=4'
+const realPath = '/import'
 export const importFile = formData => {
   return dispatch => {
     return new Promise(resolve => {
       axios
-        .post(`${origin}${realPath}`, formData, getHeadersReferences())
+        .put(`${origin}${realPath}`, formData, getHeadersReferences())
         .then(response => {
           window.indexedDB.open('driver', 1).onsuccess = event => {
             var { data } = response
