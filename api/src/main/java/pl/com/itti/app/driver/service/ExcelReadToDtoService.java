@@ -43,9 +43,14 @@ public class ExcelReadToDtoService {
   ExcelImportService excelImportService;
 
 
-  public ImportExcelTrialDTO readExcelAndReturnDTO(int sheetNoToRead, MultipartFile multipartFile) throws IOException {
+  public ImportExcelTrialDTO readExcelAndReturnDTO(MultipartFile multipartFile) throws IOException {
     Workbook workbook = new XSSFWorkbook(multipartFile.getInputStream());
-    Sheet sheet = workbook.getSheetAt(sheetNoToRead);
+    Sheet sheet = workbook.getSheet("Questions");
+    if(sheet==null)
+    {
+      throw new ReadingToDTOExcelException("Excel file doesn't contain the sheet named Questions");
+    }
+   // Sheet sheet = workbook.getSheetAt(sheetNoToRead);
     ImportExcelTrialDTO importExcelTrialDTO = convertExcelToDto(sheet);
     workbook.close();
     return importExcelTrialDTO;
