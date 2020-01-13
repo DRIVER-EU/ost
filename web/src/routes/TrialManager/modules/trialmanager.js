@@ -122,7 +122,7 @@ export const getListOfTrials = () => {
 }
 
 // Once backend is fixed
-const realPath = '/import'
+const realPath = '/api/import'
 export const importFile = formData => {
   return dispatch => {
     return new Promise(resolve => {
