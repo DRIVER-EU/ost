@@ -24,6 +24,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/api")
 public class ReadExcelController {
 
     public static final int QUESTION_SET_ID = 0;
