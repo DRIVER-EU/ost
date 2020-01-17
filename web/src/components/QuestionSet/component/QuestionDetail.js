@@ -53,11 +53,20 @@ class QuestionDetail extends Component {
     if (this.state.selectedQuestionDetail) {
       let trialId = this.props.trialId
       let stageId = this.props.stageId
-      let questionId = this.state.selectedQuestion.id
+      let questionId = this.props.questionId
+      let questionDetailId = this.state.selectedQuestionDetail.id
       browserHistory.push(
-        `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}/question-detail`
+        `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}/question-detail/${questionDetailId}`
       )
     }
+  }
+  newQuestionDetail () {
+    let trialId = this.props.trialId
+    let stageId = this.props.stageId
+    let questionId = this.props.questionId
+    browserHistory.push(
+      `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}/new-question-detail`
+    )
   }
 
   componentWillReceiveProps (nextProps) {
@@ -232,6 +241,7 @@ class QuestionDetail extends Component {
                     labelColor='#FCB636'
                     label='+ New'
                     type='Button'
+                    onClick={this.newQuestionDetail.bind(this)}
                   />
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
