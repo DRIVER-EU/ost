@@ -5,13 +5,18 @@ import co.perpixel.annotation.web.PutMapping;
 import co.perpixel.dto.DTO;
 import co.perpixel.dto.PageDTO;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
+import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.UserFileProperties;
@@ -99,5 +104,81 @@ public class TrialSessionController {
     @PostMapping("newSessionValues")
     public JsonNode newSessionValues(@RequestParam(value = "trial_id") long trialId) {
         return trialSessionService.newSessionValues(trialId);
+    }
+
+    @GetMapping("/admin/getFullTrialSession")
+    public ResponseEntity getTrialSession(@RequestParam(value = "id") long id) {
+        try{
+            TrialSessionDTO.AdminEditItem adminTrialSessionDTO = new TrialSessionDTO.AdminEditItem();
+            TrialSession trialSession = trialSessionService.findById(id);
+            adminTrialSessionDTO.toDto(trialSession);
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialSessionDTO);
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+
+    }
+
+    @PostMapping("/admin/addNewTrialSession" )
+    public ResponseEntity addNewTrialSession(@RequestBody TrialSessionDTO.AdminEditItem adminTrialSessionDTO) {
+
+        try{
+            TrialSession trialSeesion = trialSessionService.insert(adminTrialSessionDTO);
+            adminTrialSessionDTO.toDto(trialSeesion);
+
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialSessionDTO);
+        return responseEntity;
+    }
+
+
+
+    @DeleteMapping("/admin/deleteTrialSession")
+    public ResponseEntity deleteTrial(@RequestParam(value = "id") long id) {
+        try {
+            trialSessionService.delete(id);
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body("Trial Session id =" + id + " is deleted");
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+    }
+
+    @PutMapping("/admin/updateTrialSession")
+    public ResponseEntity updateTrial(@RequestBody TrialSessionDTO.AdminEditItem  adminTrialSessionDTO) {
+        try {
+            TrialSession trialSession = trialSessionService.update(adminTrialSessionDTO);
+            adminTrialSessionDTO.toDto(trialSession);
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialSessionDTO);
+        return responseEntity;
+    }
+
+    private ResponseEntity getResponseEntity(Exception e) {
+        JSONObject jsonAnswer = new JSONObject();
+        JSONArray serverErrorList = new JSONArray();
+        JSONObject serverError = new JSONObject();
+        serverError.put("serviceError", "Errors in service." + e.getMessage());
+        serverErrorList.put(serverError);
+        jsonAnswer.put("status", HttpStatus.BAD_REQUEST);
+        jsonAnswer.put("errors", serverErrorList);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonAnswer.toString());
     }
 }

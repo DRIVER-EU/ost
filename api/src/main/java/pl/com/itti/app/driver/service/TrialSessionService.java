@@ -95,6 +95,12 @@ public class TrialSessionService {
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
     }
 
+    @Transactional()
+    public TrialSession findById(long trialSessionId) {
+
+        return trialSessionRepository.findById(trialSessionId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
+    }
     @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
@@ -138,6 +144,48 @@ public class TrialSessionService {
             session.setStatus(sessionStatus);
             trialSessionRepository.save(session);
         });
+    }
+
+    public void delete(long trialSessionId) {
+        Optional<TrialSession> trialSession = trialSessionRepository.findById(trialSessionId);
+        if(!trialSession.isPresent()) {
+            throw new EntityNotFoundException(TrialStage.class, trialSessionId);
+        }
+        trialSessionRepository.delete(trialSessionId);
+    }
+
+    public TrialSession update(TrialSessionDTO.AdminEditItem sessionDTO) {
+        TrialSession trialSession = trialSessionRepository.findById(sessionDTO.id)
+                .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, sessionDTO.id));
+
+        if(sessionDTO.lastTrialStageId !=0 ) {
+            TrialStage trialStage = trialStageRepository.findById(sessionDTO.lastTrialStageId)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, sessionDTO.getLastTrialStageId()));
+
+            trialSession.setLastTrialStage(trialStage);
+        }
+        trialSession.setStatus(sessionDTO.status);
+        return trialSessionRepository.save(trialSession);
+    }
+
+    public TrialSession insert(TrialSessionDTO.AdminEditItem sessionDTO) {
+
+        TrialStage trialStage =null;
+        if(sessionDTO.lastTrialStageId !=0 ) {
+             trialStage = trialStageRepository.findById(sessionDTO.lastTrialStageId)
+                    .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, sessionDTO.getLastTrialStageId()));
+        }
+        Trial trial = trialRepository.findById(sessionDTO.trialId)
+                .orElseThrow(() -> new EntityNotFoundException(Trial.class, sessionDTO.trialId));
+
+        TrialSession trialSession = TrialSession.builder().trial(trial)
+                .startTime(LocalDateTime.now())
+                .status(SessionStatus.ACTIVE)
+                .pausedTime(LocalDateTime.now())
+                .lastTrialStage(trialStage)
+                .build();
+
+        return trialSessionRepository.save(trialSession);
     }
 
     public List<String> createNewSession(NewSessionForm newSessionForm, boolean isEmail) {
@@ -274,6 +322,11 @@ public class TrialSessionService {
 
     public Trial getTrialByName(String trialName) {
         Trial trial = trialRepository.findByName(trialName).get();
+        return trial;
+    }
+
+    public Trial getTrialById(long id) {
+        Trial trial = trialRepository.findById(id).get();
         return trial;
     }
 

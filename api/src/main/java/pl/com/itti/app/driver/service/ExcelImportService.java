@@ -134,6 +134,7 @@ public class ExcelImportService {
                 .languageVersion(Languages.ENGLISH)
                 .name(importExcelTrialDTO.getTrialName())
                 .isDefined(true)
+                .isArchived(false)
                 .build();
         trial = trialRepository.save(trial);
         addStagesToTrial(importExcelTrialDTO, trial);
