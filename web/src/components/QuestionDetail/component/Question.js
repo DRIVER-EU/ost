@@ -68,8 +68,9 @@ class Question extends Component {
       let stageId = this.props.stageId
       let questionId = this.props.questionId
       let questionDetailId = this.state.selectedQuestionDetail.id
+      let path = `${trialId}/stage/${stageId}/question/${questionId}/question-detail/${questionDetailId}`
       browserHistory.push(
-        `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}/question-detail/${questionDetailId}`
+        `/trial-manager/trial-detail/${path}`
       )
     }
   }
