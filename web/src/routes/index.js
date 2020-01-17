@@ -11,15 +11,21 @@ import NewObservation from './NewObservation'
 import TrialManager from './TrialManager'
 import AdminHome from './AdminHome'
 import NewSession from './NewSession'
+import StageDetail from './StageDetail'
+import TrialDetail from './TrialDetail'
+import NewTrial from './NewTrial'
+import NewStage from './NewStage'
+import QuestionSet from './QuestionSet'
+import NewQuestionSet from './NewQuestionSet'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
 
-export const createRoutes = (store) => ({
-  path        : '/',
-  component   : CoreLayout,
-  indexRoute  : Home,
-  childRoutes : [
+export const createRoutes = store => ({
+  path: '/',
+  component: CoreLayout,
+  indexRoute: Home,
+  childRoutes: [
     Trials(store),
     LoginRoute(store),
     AdminHome(store),
@@ -28,7 +34,18 @@ export const createRoutes = (store) => ({
       path: 'trial-manager',
       childRoutes: [
         NewSession(store),
-        AdminTrials(store)
+        AdminTrials(store),
+        NewTrial(store),
+        TrialDetail(store),
+        {
+          path: 'trial-detail',
+          childRoutes: [
+            StageDetail(store),
+            NewStage(store),
+            QuestionSet(store),
+            NewQuestionSet(store)
+          ]
+        }
       ]
     },
     {

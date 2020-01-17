@@ -7,7 +7,13 @@ import newObservationReducer from '../routes/NewObservation/modules/newobservati
 import Question from '../routes/Question/modules/question'
 import adminTrialsReducer from '../routes/AdminTrials/modules/admin_trials'
 import viewTrialsReducer from '../routes/ViewTrials/modules/view_trials'
+import stageDetailReducer from '../routes/StageDetail/modules/stagedetail'
 import layoutReducer from '../layouts/CoreLayout/layout-reducer'
+import trialReducer from '../routes/TrialDetail/modules/trialdetail'
+import newTrialReducer from '../routes/NewTrial/modules/newtrial'
+import newStageDetailReducer from '../routes/NewStage/modules/newstage'
+import newQuestionDetailReducer from '../routes/NewQuestionSet/modules/newquestion'
+import questionDetailReducer from '../routes/QuestionSet/modules/questiondetail'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -20,6 +26,12 @@ export const makeRootReducer = (asyncReducers) => {
     adminTrials: adminTrialsReducer,
     viewTrials: viewTrialsReducer,
     layout: layoutReducer,
+    stageDetail: stageDetailReducer,
+    trialDetail: trialReducer,
+    newTrialDetail: newTrialReducer,
+    newStageDetail: newStageDetailReducer,
+    newQuestion: newQuestionDetailReducer,
+    questionDetail: questionDetailReducer,
     ...asyncReducers
   })
 }

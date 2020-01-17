@@ -3,6 +3,7 @@
 // ------------------------------------
 
 import { origin } from './../../../config/Api'
+import { toastr } from 'react-redux-toastr'
 import axios from 'axios'
 import {
   getHeaders,
@@ -19,8 +20,8 @@ export const ADD_TRIAL = 'ADD_TRIAL'
 // ------------------------------------
 export const addTrial = (data = null) => {
   return {
-    type:ADD_TRIAL,
-    data:data
+    type: ADD_TRIAL,
+    data: data
   }
 }
 
@@ -55,16 +56,22 @@ export const getTrialManager = () => {
             let store = event.target.result
               .transaction(['trial_session'], 'readwrite')
               .objectStore('trial_session')
-            for (let i = 0; i < response.data.trialsSet.length; i++) {
-              store.get(response.data.trialsSet[i].id).onsuccess = x => {
+            var mappedResponse = response.data.map(x => ({
+              id: x.trialId,
+              name: x.trialName,
+              description: x.trialDescription,
+              archived:x.archived
+            }))
+            for (let i = 0; i < mappedResponse.length; i++) {
+              store.get(response.data[i].trialId).onsuccess = x => {
                 if (!x.target.result) {
-                  store.add(response.data.trialsSet[i])
+                  store.add(mappedResponse[i])
                 }
               }
             }
+            dispatch(getTrialManagerAction(mappedResponse))
+            resolve()
           }
-          dispatch(getTrialManagerAction(response.data))
-          resolve()
         })
         .catch(error => {
           if (error.message === 'Network Error') {
@@ -122,27 +129,28 @@ export const getListOfTrials = () => {
 }
 
 // Once backend is fixed
-const realPath = '/api/import'
+const realPath = 'import'
 export const importFile = formData => {
   return dispatch => {
     return new Promise(resolve => {
       axios
-        .put(`${origin}${realPath}`, formData, getHeadersReferences())
+        .put(`${origin}/api/${realPath}`, formData, getHeadersReferences())
         .then(response => {
           window.indexedDB.open('driver', 1).onsuccess = event => {
             var { data } = response
-            var newTrial = { id:data.id, name:data.name }
-
+            var newTrial = { id: data.id, name: data.name }
             event.target.result
               .transaction(['trial_session'], 'readwrite')
               .objectStore('trial_session')
               .put(newTrial).onsuccess = e => {
+                toastr.success('Import', 'Import sucessful!')
                 dispatch(addTrial(newTrial))
               }
           }
           resolve()
         })
         .catch(error => {
+          toastr.error('Import', 'Import failed!')
           errorHandle(error)
           resolve()
         })
@@ -157,7 +165,10 @@ const ACTION_HANDLERS = {
   [GET_TRIALMANAGER]: (state, action) => {
     return {
       ...state,
-      listOfTrialsManager: action.data
+      listOfTrialsManager: {
+        ...state.listOfTrialsManager,
+        trialsSet: action.data
+      }
     }
   },
   [GET_LIST_OF_TRIALS]: (state, action) => {
@@ -166,7 +177,7 @@ const ACTION_HANDLERS = {
       listOfTrials2: action.data
     }
   },
-  [ADD_TRIAL]:(state, action) => {
+  [ADD_TRIAL]: (state, action) => {
     return {
       ...state,
       listOfTrialsManager: {
