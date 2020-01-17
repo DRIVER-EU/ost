@@ -187,6 +187,9 @@ dependencies {
     // TestBed
     compile("driver.eu:testbed-adapter:1.2.24")
 
+    // Keycloak
+    compile("org.keycloak:keycloak-authz-client:${KEYCLOAK_VERSION}")
+
     // ----------------------------------------
     // Test
     // ----------------------------------------
