@@ -9,21 +9,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
-import pl.com.itti.app.driver.dto.ObservationTypeDTO;
-import pl.com.itti.app.driver.dto.TrialRoleDTO;
+import pl.com.itti.app.driver.dto.*;
 import pl.com.itti.app.driver.model.*;
-import pl.com.itti.app.driver.repository.ObservationTypeRepository;
-import pl.com.itti.app.driver.repository.ObservationTypeRoleRepository;
-import pl.com.itti.app.driver.repository.TrialRoleRepository;
-import pl.com.itti.app.driver.repository.TrialSessionRepository;
+import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.ObservationTypeSpecification;
 import pl.com.itti.app.driver.repository.specification.TrialRoleSpecification;
+import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -43,6 +38,12 @@ public class ObservationTypeService {
 
     @Autowired
     private TrialRoleRepository trialRoleRepository;
+
+    @Autowired
+    private TrialStageRepository trialStageRepository;
+
+    @Autowired
+    private TrialRepository trialRepository;
 
     @Transactional(readOnly = true)
     public List<ObservationTypeDTO.SchemaItem> generateSchemaList(ObservationTypeCriteriaDTO observationTypeCriteriaDTO) {
@@ -163,5 +164,64 @@ public class ObservationTypeService {
         conditions.add(TrialRoleSpecification.findByObserver(authUser, trialSession, observationType));
         conditions.add(TrialRoleSpecification.trialSession(trialSession));
         return RepositoryUtils.concatenate(conditions);
+    }
+
+
+    @Transactional
+    public void delete(long id) {
+        ObservationType observationType  = observationTypeRepository.findById(id)
+                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, id));
+        observationTypeRepository.delete(observationType);
+    }
+
+    @Transactional
+    public ObservationType update(AdminObservationTypeDTO.FullItem adminObservationTypeDTO) {
+
+        if (adminObservationTypeDTO.getId() == 0) {
+            throw new InvalidDataException("No questionSet Id was given");
+        }
+        ObservationType observationType = observationTypeRepository.findById(adminObservationTypeDTO.getId())
+                .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, adminObservationTypeDTO.getId()));
+
+        observationType.setName(adminObservationTypeDTO.getName());
+        observationType.setDescription(adminObservationTypeDTO.getDescription());
+        observationType.setPosition(adminObservationTypeDTO.getPosition());
+
+        return observationTypeRepository.save(observationType);
+    }
+
+    @Transactional
+    public ObservationType insert(AdminObservationTypeDTO.FullItem adminObservationTypeDTO) {
+        if (adminObservationTypeDTO.getTrailId() == 0) {
+            new InvalidDataException("Data Error missing trial Id type in request ");
+        }
+        if (adminObservationTypeDTO.getTrailStageId() == 0) {
+            new InvalidDataException("Data Error missing trial stage Id type in request ");
+        }
+
+        Trial trial = trialRepository.findById(adminObservationTypeDTO.getTrailId())
+                .orElseThrow(() -> new EntityNotFoundException(Trial.class, adminObservationTypeDTO.getTrailId()));
+        TrialStage trialStage = trialStageRepository.findById(adminObservationTypeDTO.getTrailId())
+                .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, adminObservationTypeDTO.getTrailStageId()));
+
+
+        ObservationType observationType = ObservationType.builder()
+                .trial(trial)
+                .trialStage(trialStage)
+                .name(adminObservationTypeDTO.getName())
+                .description(adminObservationTypeDTO.getDescription())
+                .multiplicity(adminObservationTypeDTO.isMultiplicity())
+                .position(adminObservationTypeDTO.getPosition())
+                .build();
+
+        return observationTypeRepository.save(observationType);
+
+    }
+
+    @Transactional
+    public ObservationType getFullObservationType(Long id) {
+        ObservationType observationType = observationTypeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, id));
+        return observationType;
     }
 }

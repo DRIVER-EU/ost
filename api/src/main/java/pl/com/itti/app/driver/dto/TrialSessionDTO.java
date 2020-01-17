@@ -2,12 +2,13 @@ package pl.com.itti.app.driver.dto;
 
 import co.perpixel.db.model.PersistentObject;
 import co.perpixel.dto.EntityDTO;
-import pl.com.itti.app.driver.model.ObservationType;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialStage;
+import lombok.Data;
+import pl.com.itti.app.driver.model.*;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class TrialSessionDTO {
@@ -23,8 +24,39 @@ public class TrialSessionDTO {
             this.status = trialSession.getStatus();
         }
     }
+    @Data
+    public static class AdminEditItem extends MinimalItem {
 
-    public static class ListItem extends MinimalItem {
+        public long trialId;
+        public String trialName;
+        public String trialDescription;
+        public long lastTrialStageId;
+        public List<TrialStageDTO.ListItem> stages= new ArrayList<>();
+        public List<AdminUserRoleDTO.ListItem> userRoles= new ArrayList<>();
+        public List<SessionStatus> statuses= SessionStatus.getStatuses();
+
+        public void toDto(TrialSession trialSession) {
+            super.toDto(trialSession);
+            this.trialId = trialSession.getTrial().getId();
+            this.trialName = trialSession.getTrial().getName();
+            this.trialDescription = trialSession.getTrial().getDescription();
+            this.lastTrialStageId = trialSession.getLastTrialStage().getId();
+            for (TrialStage trialStage:  trialSession.getLastTrialStage().getTrial().getTrialStages()) {
+                TrialStageDTO.ListItem trialStageDTO =  new TrialStageDTO.ListItem();
+                trialStageDTO.toDto(trialStage);
+                stages.add(trialStageDTO);
+            }
+            for (UserRoleSession userRoleSession:  trialSession.getUserRoleSessions()) {
+
+                AdminUserRoleDTO.ListItem adminUserRoleDTO =  new AdminUserRoleDTO.ListItem();
+                adminUserRoleDTO.toDto(userRoleSession);
+                userRoles.add(adminUserRoleDTO);
+            }
+
+        }
+    }
+
+   public static class ListItem extends MinimalItem {
 
         public long trialId;
         public String trialName;

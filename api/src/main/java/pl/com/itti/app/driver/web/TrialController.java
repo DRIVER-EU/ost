@@ -1,23 +1,21 @@
 package pl.com.itti.app.driver.web;
 
-import org.hibernate.Hibernate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.com.itti.app.driver.dto.AdminTrialDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeCriteriaDTO;
 import pl.com.itti.app.driver.dto.ObservationTypeDTO;
 import pl.com.itti.app.driver.model.Trial;
-import pl.com.itti.app.driver.model.TrialSession;
-import pl.com.itti.app.driver.model.TrialStage;
-import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.driver.model.enums.SessionStatus;
-import pl.com.itti.app.driver.repository.TrialRepository;
 import pl.com.itti.app.driver.service.ObservationTypeService;
 import pl.com.itti.app.driver.service.TrialService;
 import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.BrokerUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,9 +30,6 @@ public class TrialController {
 
     @Autowired
     ObservationTypeService observationTypeService;
-
-    @Autowired
-    TrialRepository trialRepository;
 
     //TODO JKW adjust the name
     @ResponseBody
@@ -59,79 +54,129 @@ public class TrialController {
         return BrokerUtil.trialStageId;
     }
 
+    @GetMapping("/admin/ostTrials")
+    public ResponseEntity getTrial(@RequestParam(value = "id") long id) {
+        try{
+            Trial trial = trialSessionService.getTrialById(id);
+            AdminTrialDTO.FullItem adminTrialDTO = new AdminTrialDTO.FullItem();
+            adminTrialDTO.toDto(trial);
+
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialDTO);
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+
+    }
+
     @GetMapping("/admin/ostTrialsAll")
-    public String getAllTrials() {
-        Iterable<Trial> allTrials = trialService.getAllTrials();
-        JSONObject resultJsonObj = new JSONObject();
-        JSONArray trialSet = new JSONArray();
+    public ResponseEntity getAllTrials() {
+        try{
+            List<AdminTrialDTO.ListItem> listOfTrails = new ArrayList<>();
+            Iterable<Trial> allTrials = trialService.getAllTrials();
 
-        allTrials.forEach(item -> {
-                JSONObject trialJsonObj = new JSONObject();
-                trialJsonObj.put("id", item.getId());
-                trialJsonObj.put("name", item.getName());
-                trialSet.put(trialJsonObj);
-         });
-        resultJsonObj.put("trialsSet", trialSet);
-
-        return resultJsonObj.toString();
-    }
-
-    @PostMapping("/admin/addNewTrial")
-    public String addNewTrial(String trialName) {
-        Trial trial = Trial.builder()
-                .description(trialName)
-                .languageVersion(Languages.ENGLISH)
-                .name(trialName)
-                .isDefined(true)
-                .isArchived(false)
-                .build();
-        trialRepository.save(trial);
-        return trial.toString();
-    }
-
-    @PostMapping("/admin/updateTrial")
-    public String updateTrial(Long trialId ) {
-        Trial trial = trialService.getTrialById(trialId);
-        trial.setName("Trial Update");
-        trialRepository.save(trial);
-        return trial.toString();
-    }
-
-    @GetMapping("/ostTrail")
-    public String getActiveSessionsAndStagesByTrialName(@RequestParam(value = "trial_name") String trialName) {
-        Trial trial = trialSessionService.getTrialByName(trialName);
-        if(trial==null) return "no trial found";
-        JSONObject trialJsonObj = new JSONObject();
-        trialJsonObj.put("name", trial.getName());
-        trialJsonObj.put("id", trial.getId());
-
-        List<TrialSession> trialSessionList = trial.getTrialSessions();
-        JSONArray sessionSet = new JSONArray();
-        if(trialSessionList!=null) {
-            Hibernate.initialize(trialSessionList);
-
-            trialSessionList.forEach(item -> {
-                if (item.getStatus() == SessionStatus.ACTIVE && item.getIsManualStageChange()!=null &&!item.getIsManualStageChange()) {
-                    sessionSet.put(item.getId());
-                }
+            allTrials.forEach(item -> {
+                AdminTrialDTO.ListItem adminTrialDTO = new AdminTrialDTO.ListItem();
+                adminTrialDTO.toDto(item);
+                listOfTrails.add(adminTrialDTO);
             });
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(listOfTrails);
+            return responseEntity;
         }
-        trialJsonObj.put("sessionIdSet", sessionSet);
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
 
-        JSONArray stageSet = new JSONArray();
-        List<TrialStage> trialStageList = trial.getTrialStages();
-        if(trialStageList!=null) {
-            Hibernate.initialize(trialStageList);
-            trialStageList.forEach(item -> {
-                JSONObject stageJsonObj = new JSONObject();
-                stageJsonObj.put("id", item.getId());
-                stageJsonObj.put("name", item.getName());
-                stageSet.put(stageJsonObj);
+    }
+    @GetMapping("/admin/ostTrialsFullAll")
+    public ResponseEntity getAllFullTrials() {
+        try{
+            List<AdminTrialDTO.FullItem> listOfTrails = new ArrayList<>();
+            Iterable<Trial> allTrials = trialService.getAllTrials();
+
+            allTrials.forEach(item -> {
+                AdminTrialDTO.FullItem adminTrialDTO = new AdminTrialDTO.FullItem();
+                adminTrialDTO.toDto(item);
+                listOfTrails.add(adminTrialDTO);
             });
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(listOfTrails);
+            return responseEntity;
         }
-        trialJsonObj.put("stageSet", stageSet);
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
 
-        return trialJsonObj.toString();
+    }
+
+    @PostMapping("/admin/addNewTrial" )
+    public ResponseEntity addNewTrial(@RequestBody AdminTrialDTO.ListItem adminTrialDTO) {
+
+        try{
+        Trial trial = trialService.insert(adminTrialDTO);
+        adminTrialDTO.toDto(trial);
+
+    }
+     catch (Exception e)
+    {
+        ResponseEntity responseEntity = getResponseEntity(e);
+        return responseEntity;
+    }
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialDTO);
+        return responseEntity;
+    }
+
+
+
+    @DeleteMapping("/admin/deleteTrial")
+    public ResponseEntity deleteTrial(@RequestParam(value = "id") long id) {
+
+
+        try {
+            Trial trial = trialService.delete(id);
+            AdminTrialDTO.ListItem adminTrialDTO = new AdminTrialDTO.ListItem();
+            adminTrialDTO.toDto(trial);
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialDTO);
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+
+    }
+
+    @PutMapping("/admin/updateTrial")
+    public ResponseEntity updateTrial(@RequestBody AdminTrialDTO.ListItem adminTrialDTO) {
+     try {
+         Trial trial = trialService.update(adminTrialDTO);
+         adminTrialDTO.toDto(trial);
+     }
+         catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialDTO);
+        return responseEntity;
+    }
+
+    private ResponseEntity getResponseEntity(Exception e) {
+        JSONObject jsonAnswer = new JSONObject();
+        JSONArray serverErrorList = new JSONArray();
+        JSONObject serverError = new JSONObject();
+        serverError.put("serviceError", "Errors in service." + e.getMessage());
+        serverErrorList.put(serverError);
+        jsonAnswer.put("status", HttpStatus.BAD_REQUEST);
+        jsonAnswer.put("errors", serverErrorList);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonAnswer.toString());
     }
 }
 
