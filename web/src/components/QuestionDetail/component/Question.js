@@ -8,8 +8,11 @@ import { browserHistory } from 'react-router'
 import RaisedButton from 'material-ui/RaisedButton'
 import 'react-table/react-table.css'
 import './QuestionDetail.scss'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+import Checkbox from 'material-ui/Checkbox'
 
-class QuestionDetail extends Component {
+class Question extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -20,7 +23,18 @@ class QuestionDetail extends Component {
       questionsDetailList: this.props.questionsDetailList,
       selectedQuestionDetail: null,
       withUsers: this.props.withUsers,
-      multiplicity: this.props.multiplicity
+      multiplicity: this.props.multiplicity,
+      answerType: [
+        { value: 'CHECKBOX', text: 'checkbox' },
+        { value: 'RADIO_BUTTON', text: 'radio button' },
+        { value: 'SLIDER', text: 'slider' },
+        { value: 'TEXT_FIELD', text: 'text field' },
+        { value: 'BOX_LIST', text: 'box list' },
+        { value: 'RADIO_LINE', text: 'radio line' }
+      ],
+      selectedAnswerType: 'CHECKBOX',
+      commented: true,
+      required: true
     }
   }
   static propTypes = {
@@ -42,7 +56,6 @@ class QuestionDetail extends Component {
     withUsers: PropTypes.bool,
     multiplicity: PropTypes.bool,
     getQuestion: PropTypes.func
-
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -60,15 +73,13 @@ class QuestionDetail extends Component {
       )
     }
   }
-  newQuestionDetail () {
-    let trialId = this.props.trialId
-    let stageId = this.props.stageId
-    let questionId = this.props.questionId
-    browserHistory.push(
-      `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}/new-question-detail`
-    )
+  handleChange = (event, index, value) =>
+    this.setState({ selectedAnswerType: value });
+  updateCheck (name) {
+    this.setState({
+      [name]: !this.state[name]
+    })
   }
-
   componentWillReceiveProps (nextProps) {
     this.setState({
       questionName: nextProps.questionName,
@@ -95,7 +106,7 @@ class QuestionDetail extends Component {
   render () {
     const columns = [
       {
-        Header: 'Question',
+        Header: 'Option',
         columns: [
           {
             Header: 'Id',
@@ -103,16 +114,12 @@ class QuestionDetail extends Component {
             width: 100
           },
           {
-            Header: 'Name',
-            accessor: 'name'
+            Header: 'Value',
+            accessor: 'value'
           },
           {
             Header: 'Position',
             accessor: 'position'
-          },
-          {
-            Header: 'Type',
-            accessor: 'type'
           }
         ]
       }
@@ -122,7 +129,7 @@ class QuestionDetail extends Component {
         <div className='pages-box'>
           <div className='stage-container'>
             <div className='stage__header'>
-              <h1 className='header__text'>Question Set</h1>
+              <h1 className='header__text'>Question</h1>
               <div>
                 <a
                   className='header__link'
@@ -180,28 +187,66 @@ class QuestionDetail extends Component {
                 )}
               </div>
             </div>
-            <div className='stageDetail__info'>
-              <div className='info__item'>
-                <TextField
-                  type='description'
-                  onChange={this.handleChangeInput.bind(this, 'description')}
-                  value={this.state.description}
-                  floatingLabelText='Description'
-                  fullWidth
-                  multiLine
-                  rowsMax={8}
+            <TextField
+              type='description'
+              onChange={this.handleChangeInput.bind(this, 'description')}
+              value={this.state.description}
+              floatingLabelText='Description'
+              fullWidth
+              multiLine
+              rowsMax={8}
+            />
+            <div>
+              <SelectField
+                floatingLabelText='Answer type'
+                value={this.state.selectedAnswerType}
+                onChange={this.handleChange}
+              >
+                <MenuItem
+                  value={this.state.answerType[0].value}
+                  primaryText={this.state.answerType[0].text}
                 />
-              </div>
-              <div>
-                <TextField
-                  type='position'
-                  onChange={this.handleChangeInput.bind(this, 'position')}
-                  value={this.state.position}
-                  floatingLabelText='Position'
-                  fullWidth
+                <MenuItem
+                  value={this.state.answerType[1].value}
+                  primaryText={this.state.answerType[1].text}
                 />
-              </div>
+                <MenuItem
+                  value={this.state.answerType[2].value}
+                  primaryText={this.state.answerType[2].text}
+                />
+                <MenuItem
+                  value={this.state.answerType[3].value}
+                  primaryText={this.state.answerType[3].text}
+                />
+                <MenuItem
+                  value={this.state.answerType[4].value}
+                  primaryText={this.state.answerType[4].text}
+                />
+                <MenuItem
+                  value={this.state.answerType[5].value}
+                  primaryText={this.state.answerType[5].text}
+                />
+              </SelectField>
             </div>
+            <div className='position__field'>
+              <TextField
+                type='position'
+                onChange={this.handleChangeInput.bind(this, 'position')}
+                value={this.state.position}
+                floatingLabelText='Question position'
+                fullWidth
+                />
+            </div>
+            <Checkbox
+              label='Commented'
+              checked={this.state.commented}
+              onCheck={this.updateCheck.bind(this, 'commented')}
+            />
+            <Checkbox
+              label='Required'
+              checked={this.state.required}
+              onCheck={this.updateCheck.bind(this, 'required')}
+            />
             <div className='table__wrapper'>
               <ReactTable
                 data={this.state.questionsDetailList}
@@ -241,7 +286,6 @@ class QuestionDetail extends Component {
                     labelColor='#FCB636'
                     label='+ New'
                     type='Button'
-                    onClick={this.newQuestionDetail.bind(this)}
                   />
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
@@ -263,4 +307,4 @@ class QuestionDetail extends Component {
     )
   }
 }
-export default QuestionDetail
+export default Question

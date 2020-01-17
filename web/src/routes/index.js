@@ -17,6 +17,8 @@ import NewTrial from './NewTrial'
 import NewStage from './NewStage'
 import QuestionSet from './QuestionSet'
 import NewQuestionSet from './NewQuestionSet'
+import QuestionDetail from './QuestionDetail'
+import NewQuestion from './NewQuestion'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -43,7 +45,9 @@ export const createRoutes = store => ({
             StageDetail(store),
             NewStage(store),
             QuestionSet(store),
-            NewQuestionSet(store)
+            NewQuestionSet(store),
+            QuestionDetail(store),
+            NewQuestion(store)
           ]
         }
       ]
