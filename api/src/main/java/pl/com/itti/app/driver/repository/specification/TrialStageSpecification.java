@@ -1,7 +1,12 @@
 package pl.com.itti.app.driver.repository.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import pl.com.itti.app.driver.model.*;
+import pl.com.itti.app.driver.model.Trial;
+import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.TrialSession_;
+import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.TrialStage_;
+import pl.com.itti.app.driver.model.Trial_;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;

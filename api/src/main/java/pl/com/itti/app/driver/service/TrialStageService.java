@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
 import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.dto.AdminTrialStageDTO;
 import pl.com.itti.app.driver.model.Trial;

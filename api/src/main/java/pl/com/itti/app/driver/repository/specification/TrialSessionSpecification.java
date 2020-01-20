@@ -4,8 +4,12 @@ import org.springframework.data.jpa.domain.Specification;
 import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialSessionManager;
+import pl.com.itti.app.driver.model.TrialSessionManager_;
+import pl.com.itti.app.driver.model.TrialSession_;
 import pl.com.itti.app.driver.model.TrialUser;
+import pl.com.itti.app.driver.model.TrialUser_;
 import pl.com.itti.app.driver.model.UserRoleSession;
+import pl.com.itti.app.driver.model.UserRoleSession_;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 
 import javax.persistence.criteria.Join;

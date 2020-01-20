@@ -1,8 +1,8 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import pl.com.itti.app.core.dto.EntityDto;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialSession;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AdminTrialDTO  {
     @Data
-    public static class ListItem implements EntityDTO<Trial>{
+    public static class ListItem implements EntityDto<Trial> {
 
         @JsonFormat
         private long trialId;

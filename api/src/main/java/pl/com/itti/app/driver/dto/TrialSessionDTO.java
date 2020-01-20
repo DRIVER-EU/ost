@@ -1,10 +1,12 @@
 package pl.com.itti.app.driver.dto;
 
+import lombok.Data;
 import pl.com.itti.app.core.dto.EntityDto;
 import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 
 import java.time.LocalDateTime;

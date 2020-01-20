@@ -1,8 +1,8 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import pl.com.itti.app.core.dto.EntityDto;
 import pl.com.itti.app.driver.model.ObservationType;
 import pl.com.itti.app.driver.model.Question;
 
@@ -12,13 +12,14 @@ import java.util.List;
 @Data
 public class AdminObservationTypeDTO {
     @Data
-    public static class ListItem implements EntityDTO<ObservationType> {
+    public static class ListItem implements EntityDto<ObservationType> {
         @JsonFormat
         private long id;
         @JsonFormat
         private String name;
         @JsonFormat
         private String description;
+
         @Override
         public void toDto(ObservationType observationType) {
             this.id = observationType.getId();
