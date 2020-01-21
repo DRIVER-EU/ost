@@ -14,8 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.com.itti.app.driver.dto.ImportExcelTrialAnswerDTO;
 import pl.com.itti.app.driver.dto.ImportExcelTrialDTO;
 import pl.com.itti.app.driver.dto.ImportExcelTrialPositionDTO;
-import pl.com.itti.app.driver.util.ExcelImportException;
-import pl.com.itti.app.driver.util.ReadingToDTOExcelException;
+import pl.com.itti.app.driver.model.enums.AnswerType;
+import pl.com.itti.app.driver.model.enums.ErrorLevel;
+import pl.com.itti.app.driver.util.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,56 +49,54 @@ public class ExcelReadToDtoService {
     Sheet sheet = workbook.getSheet("Questions");
     if(sheet==null)
     {
-      throw new ReadingToDTOExcelException("Excel file doesn't contain the sheet named Questions");
+      throw new ReadingToDTOExcelException("Excel file doesn't contain the sheet named Questions", ErrorLevel.FATAL);
     }
-   // Sheet sheet = workbook.getSheetAt(sheetNoToRead);
     ImportExcelTrialDTO importExcelTrialDTO = convertExcelToDto(sheet);
     workbook.close();
     return importExcelTrialDTO;
   }
 
-  public JSONArray validateImportedContent(ImportExcelTrialDTO importExcelTrialDTO) {
+  public ApiJsonAnswer validateImportedContent(ImportExcelTrialDTO importExcelTrialDTO) {
+    ApiJsonAnswer apiJsonAnswer = new ApiJsonAnswer();
 
-    List<String> errorList = new ArrayList<>();
+    //Warnings
+    List<ApiValidationWarning> apiValidationWarnings = new ArrayList<>();
     if (importExcelTrialDTO.getTrialName().isEmpty()) {
-      errorList.add("Trial name is not defined");
+      apiValidationWarnings.add(new ApiValidationWarning("Trial name is not defined", ErrorLevel.WARN));
     }
 
     if (importExcelTrialDTO.getTrialPositions().size() == 0) {
-      errorList.add("Trail contains no questions");
+      apiValidationWarnings.add(new ApiValidationWarning("Trail contains no questions", ErrorLevel.WARN));
     }
 
     for (ImportExcelTrialPositionDTO importExcelTrialPositionDTO : importExcelTrialDTO.getTrialPositions()) {
       if (importExcelTrialPositionDTO.getStageName().isEmpty()) {
-        errorList.add("Empty stage name at question setId = " + importExcelTrialPositionDTO.getQuestionSetId());
+        apiValidationWarnings.add(new ApiValidationWarning("Empty stage name at question setId = " + importExcelTrialPositionDTO.getQuestionSetId(), ErrorLevel.WARN));
       }
 
-      if (importExcelTrialPositionDTO.getExcelAnswers().size() == 0) {
-        errorList.add("Answers not defined question setId = " + importExcelTrialPositionDTO.getQuestionSetId());
+      if (importExcelTrialPositionDTO.getExcelAnswers().size() == 0 && importExcelTrialPositionDTO.getRequired() == Boolean.TRUE) {
+        apiValidationWarnings.add(new ApiValidationWarning("Answers not defined question setId = " + importExcelTrialPositionDTO.getQuestionSetId(), ErrorLevel.WARN));
       }
+
+      //Errors
+//      List<ApiValidationError> apiValidationErrors = new ArrayList<>();
+//      if (true) {
+//        apiValidationErrors.add(new ApiValidationError("Test Error", ErrorLevel.FATAL));
+//      }
 
       //TODO JKW discuss further constraints
-
+      apiJsonAnswer.setWarnings(apiValidationWarnings);
+//      apiJsonAnswer.setErrors(apiValidationErrors);
     }
-    if (errorList.size() == 0)
-    {
-      return null;
-    }
-    JSONArray jsonErrorList = new JSONArray();
 
-    errorList.forEach(error -> {
-      jsonErrorList.put(error);
-    });
-
-
-    return jsonErrorList;
+    return apiJsonAnswer;
   }
 
   private ImportExcelTrialDTO convertExcelToDto(Sheet sheet) {
 
     String trialName = sheet.getRow(1).getCell(TRIAL_NAME).getRichStringCellValue().toString();
     if (trialName.trim().isEmpty()) {
-      throw new ReadingToDTOExcelException("The trial name can not be empty or null - 2nd row 2 column");
+      throw new ReadingToDTOExcelException("The trial name can not be empty or null - 2nd row 2 column", ErrorLevel.FATAL);
     }
     ImportExcelTrialDTO importExcelTrialDTO = ImportExcelTrialDTO.builder()
             .trialName(trialName)
@@ -137,7 +136,6 @@ public class ExcelReadToDtoService {
     } catch (Exception e) {
       throw new ExcelImportException("Invalid data Type inside Excel document - please check data-types of Excel Colums", row, e);
     }
-
   }
 
   private boolean getBooleanValueFromInt(double doubleValue) {

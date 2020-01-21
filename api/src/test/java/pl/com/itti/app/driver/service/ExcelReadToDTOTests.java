@@ -39,7 +39,7 @@ public class ExcelReadToDTOTests {
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
         // when
-        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
+        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO( multipartFile);
 
         // then
         Assert.assertEquals("Trial Austria", importExcelTrialDTO.getTrialName());
@@ -53,7 +53,7 @@ public class ExcelReadToDTOTests {
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
         // when
-        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
+        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO( multipartFile);
 
         // then
         Assert.assertEquals("RADIO_BUTTON", importExcelTrialDTO.getTrialPositions().get(1).getAnswerType());
@@ -67,7 +67,7 @@ public class ExcelReadToDTOTests {
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
         // when
-        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
+        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO( multipartFile);
 
         // then
         Assert.assertEquals(406, importExcelTrialDTO.getTrialPositions().size());
@@ -81,7 +81,7 @@ public class ExcelReadToDTOTests {
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
         // when
-        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO(sheetNoToRead, multipartFile);
+        ImportExcelTrialDTO importExcelTrialDTO = readExcelController.readExcelAndReturnDTO( multipartFile);
 
         // then
         Assert.assertEquals("{\"title\":\"How much would you agree with the statement that you " +

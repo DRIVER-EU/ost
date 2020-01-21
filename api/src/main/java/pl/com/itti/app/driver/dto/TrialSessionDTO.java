@@ -31,9 +31,12 @@ public class TrialSessionDTO {
         public String trialName;
         public String trialDescription;
         public long lastTrialStageId;
-        public List<TrialStageDTO.ListItem> stages= new ArrayList<>();
+        public String lastTrialStageName;
+        public List<AdminTrialStageDTO.ListItem> stages= new ArrayList<>();
         public List<AdminUserRoleDTO.ListItem> userRoles= new ArrayList<>();
+        public List<TrialUserDTO.AdminEditItem> trialUsers= new ArrayList<>();
         public List<SessionStatus> statuses= SessionStatus.getStatuses();
+
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
@@ -41,8 +44,9 @@ public class TrialSessionDTO {
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
             this.lastTrialStageId = trialSession.getLastTrialStage().getId();
+            lastTrialStageName = trialSession.getLastTrialStage().getName();
             for (TrialStage trialStage:  trialSession.getLastTrialStage().getTrial().getTrialStages()) {
-                TrialStageDTO.ListItem trialStageDTO =  new TrialStageDTO.ListItem();
+                AdminTrialStageDTO.ListItem trialStageDTO =  new AdminTrialStageDTO.ListItem();
                 trialStageDTO.toDto(trialStage);
                 stages.add(trialStageDTO);
             }
@@ -51,6 +55,13 @@ public class TrialSessionDTO {
                 AdminUserRoleDTO.ListItem adminUserRoleDTO =  new AdminUserRoleDTO.ListItem();
                 adminUserRoleDTO.toDto(userRoleSession);
                 userRoles.add(adminUserRoleDTO);
+            }
+
+            for (UserRoleSession userRoleSession:  trialSession.getUserRoleSessions()) {
+
+                TrialUserDTO.AdminEditItem trialUserDTO =  new TrialUserDTO.AdminEditItem();
+                trialUserDTO.toDto(userRoleSession.getTrialUser());
+                trialUsers.add(trialUserDTO);
             }
 
         }
