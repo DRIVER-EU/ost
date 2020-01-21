@@ -2,7 +2,10 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <springProfile name="development">
-        <logger name="eu.fp7.driver.ost" level="DEBUG" additivity="false">
+        <logger name="co.perpixel" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="pl.com.itti" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
         <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
@@ -20,7 +23,11 @@
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
-        <logger name="eu.fp7.driver.ost" level="DEBUG" additivity="false">
+        <logger name="co.perpixel" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </logger>
+        <logger name="pl.com.itti" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
@@ -33,7 +40,10 @@
         <logger name="org.flywaydb" level="INFO" additivity="false">
             <appender-ref ref="FILE"/>
         </logger>
-        <logger name="eu.fp7.driver.ost" level="WARN" additivity="false">
+        <logger name="co.perpixel" level="WARN" additivity="false">
+            <appender-ref ref="FILE"/>
+        </logger>
+        <logger name="pl.com.itti" level="WARN" additivity="false">
             <appender-ref ref="FILE"/>
         </logger>
         <root level="WARN">
