@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router'
 import Spinner from 'react-spinkit'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-
+import ErrorsModal from '../../ErrorsModal/component/ErrorsModal'
 class TrialManager extends Component {
   constructor (props) {
     super(props)
@@ -16,7 +16,12 @@ class TrialManager extends Component {
       isLoading: false,
       openModal: false,
       trialId: null,
-      selectedTrial: null
+      selectedTrial: null,
+      errorsModal: {
+        show: false,
+        warnings: [],
+        errors: []
+      }
     }
   }
 
@@ -25,6 +30,15 @@ class TrialManager extends Component {
     listOfTrialsManager: PropTypes.object,
     getListOfTrials: PropTypes.func,
     listOfTrials: PropTypes.object
+  };
+
+  handleCloseModal = () => {
+    this.setState({
+      errorsModal: {
+        ...this.state.errorsModal,
+        show: false
+      }
+    })
   };
 
   componentWillMount () {
@@ -105,7 +119,17 @@ class TrialManager extends Component {
   importFileAction = (el, props) => {
     const data = new FormData()
     data.append('multipartFile', el.target.files[0])
-    props.importFile(data)
+    this.setState({ isLoading: true })
+    props.importFile(data).then(x => {
+      this.setState({
+        errorsModal: {
+          errors: x.errors.map(y => y.message),
+          warnings: x.warnings.map(y => y.message),
+          show: x.errors.length !== 0 || x.warnings.length !== 0
+        },
+        isLoading: false
+      })
+    })
   };
   handleChangeDropDown (stateName, event, index, value) {
     let change = { ...this.state }
@@ -156,20 +180,21 @@ class TrialManager extends Component {
               />
             </div>
             {this.state.isLoading && (
-            <div className='spinner-box'>
-              <div className={'spinner'}>
-                <Spinner
-                  fadeIn='none'
-                  className={'spin-item'}
-                  color={'#fdb913'}
-                  name='ball-spin-fade-loader'
+              <div className='spinner-box'>
+                <div className={'spinner'}>
+                  <Spinner
+                    fadeIn='none'
+                    className={'spin-item'}
+                    color={'#fdb913'}
+                    name='ball-spin-fade-loader'
                   />
+                </div>
               </div>
-            </div>
             )}
-            {!this.state.isLoading && this.state.listOfTrialsManager.length === 0 && (
-              <div className={'no-sessions'}>No trial sessions available</div>
-            )}
+            {!this.state.isLoading &&
+              this.state.listOfTrialsManager.length === 0 && (
+                <div className={'no-sessions'}>No trial sessions available</div>
+              )}
             {this.state.listOfTrialsManager.length > 0 && (
               <ReactTable
                 data={this.state.listOfTrialsManager}
@@ -229,6 +254,12 @@ class TrialManager extends Component {
                 type='Button'
                 disabled={!this.state.selectedTrial}
                 onClick={this.viewTrial.bind(this)}
+              />
+              <ErrorsModal
+                show={this.state.errorsModal.show}
+                handleCloseModal={this.handleCloseModal}
+                warnings={this.state.errorsModal.warnings}
+                errors={this.state.errorsModal.errors}
               />
             </div>
           </div>

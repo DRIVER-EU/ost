@@ -4,6 +4,10 @@
   .info__btn {
     margin: 20px 0;
   }
+  .info__item {
+    flex: 3;
+    margin-right: 50px;
+  }
 }
 .stage-container {
   width: 100%;
@@ -29,6 +33,7 @@
     .header__link {
       text-decoration: underline;
       font-size: 16px;
+      margin: 0 10px;
     }
   }
   .table__wrapper {
@@ -45,6 +50,10 @@
       margin: 0 20px;
     }
   }
+  .download__btn {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 .ReactTable {
   .rt-thead.-headerGroups {
@@ -52,6 +61,6 @@
   }
   .rt-tbody {
     overflow-y: auto;
-    max-height: 30vh;
+    max-height: 25vh;
   }
 }

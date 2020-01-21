@@ -9,20 +9,22 @@ class NewQuestionView extends Component {
   }
 
   static propTypes = {
-    getQuestion: PropTypes.func,
-    getStageById: PropTypes.func,
+    addNewQuestionDetail: PropTypes.func,
     getTrialDetail: PropTypes.func,
+    getStageById: PropTypes.func,
     trialName: PropTypes.string,
     stageName: PropTypes.string,
     params: PropTypes.object,
     questionName: PropTypes.string,
-    questionsDetailList: PropTypes.array,
+    option: PropTypes.array,
     description: PropTypes.string,
     position: PropTypes.any,
-    multiplicity: PropTypes.bool,
-    withUsers: PropTypes.bool,
-    updateQuestion: PropTypes.func,
-    removeQuestion: PropTypes.func
+    required: PropTypes.bool,
+    commented: PropTypes.bool,
+    answerType: PropTypes.string,
+    questionDetailId: PropTypes.any,
+    questionSetName: PropTypes.any,
+    getQuestion: PropTypes.func
   }
 
   render () {
@@ -30,9 +32,7 @@ class NewQuestionView extends Component {
       <div className='background-home'>
         <Question
           new
-          getQuestion={this.props.getQuestion}
-          updateQuestion={this.props.updateQuestion}
-          removeQuestion={this.props.removeQuestion}
+          addNewQuestion={this.props.addNewQuestionDetail}
           getStageById={this.props.getStageById}
           getTrialDetail={this.props.getTrialDetail}
           trialName={this.props.trialName}
@@ -40,12 +40,16 @@ class NewQuestionView extends Component {
           trialId={this.props.params.id_trial}
           stageId={this.props.params.id_stage}
           questionName={this.props.questionName}
-          questionsDetailList={this.props.questionsDetailList}
+          option={this.props.option}
           questionId={this.props.params.id_question}
+          questionDetailId={this.props.questionDetailId}
           description={this.props.description}
           position={this.props.position}
-          multiplicity={this.props.multiplicity}
-          withUsers={this.props.withUsers}
+          required={this.props.required}
+          commented={this.props.commented}
+          answerType={this.props.answerType}
+          questionSetName={this.props.questionSetName}
+          getQuestionSet={this.props.getQuestion}
         />
       </div>
     )

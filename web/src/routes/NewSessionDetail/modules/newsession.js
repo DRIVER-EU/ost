@@ -6,25 +6,29 @@ import { origin } from './../../../config/Api'
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../../store/addons'
 
-export const ADD_NEW_QUESTION_DETAIL = 'ADD_NEW_QUESTION_DETAIL'
+export const ADD_NEW_SESSION = 'ADD_NEW_SESSION'
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export const addNewQuestionAction = (data = null) => {
+export const addNewSessionAction = (data = null) => {
   return {
-    type: ADD_NEW_QUESTION_DETAIL,
+    type: ADD_NEW_SESSION,
     data: data
   }
 }
 
-export const addNewQuestionDetail = (question) => {
+export const addNewSession = session => {
   return dispatch => {
     return new Promise(resolve => {
       axios
-        .post(`${origin}/api/questions/admin/addNewQuestion`, question, getHeaders())
+        .post(
+          `${origin}/api/trialsessions/admin/addNewTrialSession`,
+          session,
+          getHeaders()
+        )
         .then(response => {
-          dispatch(addNewQuestionAction(response.data))
+          dispatch(addNewSessionAction(response.data))
           resolve()
         })
         .catch(error => {
@@ -39,16 +43,16 @@ export const addNewQuestionDetail = (question) => {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ADD_NEW_QUESTION_DETAIL]: (state, action) => {
+  [ADD_NEW_SESSION]: (state, action) => {
     return {
       ...state,
       id: action.data.id,
-      questionName: action.data.name,
-      description: action.data.description,
-      position: action.data.position,
-      answerType: action.data.answerType,
-      questions: action.data.questions,
-      commented: action.data.commented
+      sessionName: action.data.name,
+      status: action.data.status,
+      stageId: action.data.lastTrialStageId,
+      stageName: action.data.lastTrialStageName,
+      stages: action.data.stages,
+      userRoles: action.data.userRoles
     }
   }
 }
@@ -56,14 +60,16 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  id: 0,
-  questionName: '',
-  option: [],
-  required: false,
-  commented: false
+  id: '',
+  sessionName: '',
+  status: 'ACTIVE',
+  stageId: 1,
+  stageName: '',
+  stages: [],
+  userRoles: []
 }
 
-export default function newQuestionReducer (state = initialState, action) {
+export default function newSessionDetailReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

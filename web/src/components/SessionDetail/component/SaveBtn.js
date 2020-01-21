@@ -14,17 +14,13 @@ class SaveBtn extends Component {
     }
   }
   static propTypes = {
-    updateQuestion: PropTypes.func,
-    addNewQuestion: PropTypes.func,
-    questionName: PropTypes.string,
+    updateSession: PropTypes.func,
+    addNewSession: PropTypes.func,
     trialId: PropTypes.any,
-    stageId: PropTypes.any,
-    questionDetailId: PropTypes.any,
+    sessionId: PropTypes.any,
     new: PropTypes.bool,
-    description: PropTypes.string,
-    position: PropTypes.any,
-    commented: PropTypes.bool,
-    answerType: PropTypes.string
+    status: PropTypes.string,
+    stageId: PropTypes.any
   }
   handleOpenDialog (name) {
     let change = {}
@@ -38,31 +34,22 @@ class SaveBtn extends Component {
     this.setState(change)
   }
 
-  async dialogAccepted (question) {
+  async dialogAccepted (session) {
     if (!this.state.new) {
-      this.props.updateQuestion(question)
+      this.props.updateSession(session)
       this.handleCloseDialog('openSaveDialog')
     } else {
-      await this.props.addNewQuestion(question)
-      let questionId = this.props.questionId
-      let stageId = this.props.stageId
-      let trialId = this.props.trialId
-      let questionDetailId = this.props.questionDetailId
-      let path = `/trial-manager/trial-detail/${trialId}/stage`
-      browserHistory.push(`${path}/${stageId}/question/${questionId}/question-detail/${questionDetailId}`)
+      await this.props.addNewSession(session)
+      browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}/session/${this.props.sessionId}`)
     }
   };
 
   render () {
-    let question = {
-      id: this.props.questionDetailId || 0,
-      name: this.props.questionName,
-      description: this.props.description,
-      commented: this.props.commented,
-      position: parseInt(this.props.position),
-      answerType: this.props.answerType,
-      observationTypeId: 1
-
+    let session = {
+      id: this.props.sessionId,
+      trialId: this.props.trialId,
+      status: this.props.status,
+      lastTrialStageId: this.props.stageId
     }
     const actionsSaveDialog = [
       <FlatButton
@@ -75,7 +62,7 @@ class SaveBtn extends Component {
         labelColor='#fff'
         label='Yes'
         type='Button'
-        onClick={this.dialogAccepted.bind(this, question)}
+        onClick={this.dialogAccepted.bind(this, session)}
       />
     ]
     return (

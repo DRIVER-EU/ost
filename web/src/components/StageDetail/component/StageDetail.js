@@ -147,6 +147,7 @@ class StageDetail extends Component {
                 columns={columns}
                 multiSort
                 showPagination={false}
+                defaultPageSize={500}
                 minRows={0}
                 getTdProps={(state, rowInfo) => {
                   if (rowInfo && rowInfo.row) {

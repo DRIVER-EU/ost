@@ -63,7 +63,7 @@ class TabsWithTable extends Component {
       },
       {
         Header: 'Actual Stage Name',
-        accessor: 'actualStageName'
+        accessor: 'lastTrialStage'
       },
       {
         Header: 'Manual',
@@ -85,6 +85,7 @@ class TabsWithTable extends Component {
                 multiSort
                 showPagination={false}
                 minRows={0}
+                defaultPageSize={500}
                 getTdProps={(state, rowInfo) => {
                   if (rowInfo && rowInfo.row) {
                     return {
@@ -116,6 +117,7 @@ class TabsWithTable extends Component {
                 data={this.props.stageList}
                 columns={columns}
                 multiSort
+                defaultPageSize={500}
                 showPagination={false}
                 minRows={0}
                 getTdProps={(state, rowInfo) => {
@@ -149,6 +151,7 @@ class TabsWithTable extends Component {
                 data={this.props.roleList}
                 columns={columns}
                 multiSort
+                defaultPageSize={500}
                 showPagination={false}
                 minRows={0}
                 getTdProps={(state, rowInfo) => {
