@@ -14,6 +14,9 @@ import newTrialReducer from '../routes/NewTrial/modules/newtrial'
 import newStageDetailReducer from '../routes/NewStage/modules/newstage'
 import newQuestionDetailReducer from '../routes/NewQuestionSet/modules/newquestion'
 import questionDetailReducer from '../routes/QuestionSet/modules/questiondetail'
+import newQuestionReducer from '../routes/NewQuestion/modules/newquestion'
+import questionReducer from '../routes/QuestionDetail/modules/question'
+import sessionDetailReducer from '../routes/SessionDetail/modules/sessiondetail'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -31,7 +34,10 @@ export const makeRootReducer = (asyncReducers) => {
     newTrialDetail: newTrialReducer,
     newStageDetail: newStageDetailReducer,
     newQuestion: newQuestionDetailReducer,
-    questionDetail: questionDetailReducer,
+    questionSet: questionDetailReducer,
+    newQuestionDetail: newQuestionReducer,
+    questionDetail: questionReducer,
+    sessionDetail: sessionDetailReducer,
     ...asyncReducers
   })
 }

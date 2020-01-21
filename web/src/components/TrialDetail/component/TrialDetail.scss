@@ -53,6 +53,16 @@
       }
     }
   }
+  
+}
+.ReactTable {
+  .rt-thead.-headerGroups {
+    font-size: 22px;
+  }
+  .rt-tbody {
+    overflow-y: auto;
+    max-height: 30vh;
+  }
 }
 .custom__dialog {
   & > div {

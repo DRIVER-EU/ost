@@ -19,6 +19,19 @@ public final class TrialUserDTO {
         }
     }
 
+    public static class AdminEditItem extends ListItem {
+
+        public String email;
+        public String login;
+
+        @Override
+        public void toDto(TrialUser trialUser) {
+            super.toDto(trialUser);
+            this.email = trialUser.getAuthUser().getEmail();
+            this.login = trialUser.getAuthUser().getLogin();
+        }
+    }
+
     private TrialUserDTO() {
         throw new AssertionError();
     }

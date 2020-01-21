@@ -55,9 +55,9 @@ class QuestionDetail extends Component {
       let stageId = this.props.stageId
       let questionId = this.props.questionId
       let questionDetailId = this.state.selectedQuestionDetail.id
-      let path = `${trialId}/stage/${stageId}/question/${questionId}/question-detail/${questionDetailId}`
+      let path = `/trial-manager/trial-detail/${trialId}/stage/${stageId}`
       browserHistory.push(
-        `/trial-manager/trial-detail/${path}`
+        `${path}/question/${questionId}/question-detail/${questionDetailId}`
       )
     }
   }
@@ -210,6 +210,7 @@ class QuestionDetail extends Component {
                 multiSort
                 showPagination={false}
                 minRows={0}
+                defaultPageSize={500}
                 getTdProps={(state, rowInfo) => {
                   if (rowInfo && rowInfo.row) {
                     return {
@@ -219,7 +220,7 @@ class QuestionDetail extends Component {
                         })
                       },
                       onDoubleClick: e => {
-                        this.viewQuestion()
+                        this.viewQuestionDetail()
                       },
                       style: {
                         background: this.state.selectedQuestionDetail

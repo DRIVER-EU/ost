@@ -11,17 +11,17 @@ class RemoveBtn extends Component {
     this.state = {
       openRemoveDialog: false,
       openRemoveInfoDialog: false,
-      stageId: this.props.stageId
+      sessionId: this.props.sessionId,
+      removeSession: this.props.openRemoveInfoDialog
     }
   }
 
   static propTypes={
-    stageId: PropTypes.any,
-    removeQuestion: PropTypes.func,
-    option: PropTypes.array,
+    sessionId: PropTypes.any,
+    removeSession: PropTypes.func,
+    userRoles: PropTypes.array,
     trialId: PropTypes.any,
-    questionId: PropTypes.any,
-    questionDetailId: PropTypes.any
+    openRemoveInfoDialog: PropTypes.bool
   }
   handleOpenDialog (name) {
     let change = {}
@@ -36,11 +36,15 @@ class RemoveBtn extends Component {
   }
   async removeQuestion () {
     if (
-      this.props.option.length === 0
+      this.props.userRoles.length === 0
     ) {
-      await this.props.removeQuestion(this.props.questionDetailId)
-      let questionPath = `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}}`
-      browserHistory.push(`${questionPath}/question/${this.props.questionId}`)
+      await this.props.removeSession(this.props.sessionId)
+      if (this.state.removeSession) {
+        this.handleCloseDialog('openRemoveDialog')
+        this.handleOpenDialog('openRemoveInfoDialog')
+      } else {
+        browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)
+      }
     } else {
       this.handleCloseDialog('openRemoveDialog')
       this.handleOpenDialog('openRemoveInfoDialog')
@@ -81,7 +85,7 @@ class RemoveBtn extends Component {
           onClick={this.handleOpenDialog.bind(this, 'openRemoveDialog')}
         />
         <Dialog
-          title='Do you want to remove question detail?'
+          title='Do you want to remove question set?'
           actions={actionsRemoveDialog}
           modal={false}
           contentClassName='custom__dialog'
@@ -89,7 +93,7 @@ class RemoveBtn extends Component {
           onRequestClose={this.handleCloseDialog.bind(this, 'openRemoveDialog')}
         />
         <Dialog
-          title='System cannot remove this question detail due to existing option to this question detail.'
+          title='System cannot remove this session due to existing dependent objects to this session.'
           actions={actionsRemoveInfoDialog}
           modal={false}
           contentClassName='custom__dialog'

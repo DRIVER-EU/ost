@@ -70,7 +70,6 @@ public class ExcelImportService {
                     .observationType(observationType)
                     .description(trailPosition.getDescription())
                     .name(trailPosition.getQuestion())
-                    //TODO: exception for non existant ENUM
                     .answerType(AnswerType.valueOf(trailPosition.getAnswerType()))
                     .jsonSchema(trailPosition.getJsonSchema())
                     .commented(returnBooleanValueFromGivenInt(trailPosition.getComments()))

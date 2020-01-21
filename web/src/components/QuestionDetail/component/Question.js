@@ -16,14 +16,14 @@ class Question extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      questionId: '',
+      questionDetailId: '',
       questionName: this.props.questionName,
       description: this.props.description,
       position: this.props.position,
-      questionsDetailList: this.props.questionsDetailList,
-      selectedQuestionDetail: null,
-      withUsers: this.props.withUsers,
-      multiplicity: this.props.multiplicity,
+      option: this.props.option,
+      selectedOption: null,
+      commented: this.props.commented,
+      required: this.props.required,
       answerType: [
         { value: 'CHECKBOX', text: 'checkbox' },
         { value: 'RADIO_BUTTON', text: 'radio button' },
@@ -32,9 +32,7 @@ class Question extends Component {
         { value: 'BOX_LIST', text: 'box list' },
         { value: 'RADIO_LINE', text: 'radio line' }
       ],
-      selectedAnswerType: 'CHECKBOX',
-      commented: true,
-      required: true
+      selectedAnswerType: this.props.answerType || 'CHECKBOX'
     }
   }
   static propTypes = {
@@ -49,28 +47,32 @@ class Question extends Component {
     getTrialDetail: PropTypes.func,
     getStageById: PropTypes.func,
     questionId: PropTypes.any,
-    questionsDetailList: PropTypes.array,
+    option: PropTypes.array,
     questionName: PropTypes.string,
     description: PropTypes.string,
     position: PropTypes.any,
-    withUsers: PropTypes.bool,
-    multiplicity: PropTypes.bool,
-    getQuestion: PropTypes.func
+    required: PropTypes.bool,
+    commented: PropTypes.bool,
+    getQuestion: PropTypes.func,
+    answerType: PropTypes.string,
+    questionDetailId: PropTypes.any,
+    questionSetName: PropTypes.string,
+    getQuestionSet: PropTypes.func
   };
   handleChangeInput (name, e) {
     let change = {}
     change[name] = e.target.value
     this.setState(change)
   }
-  viewQuestionDetail () {
+  viewOption () {
     if (this.state.selectedQuestionDetail) {
       let trialId = this.props.trialId
       let stageId = this.props.stageId
       let questionId = this.props.questionId
-      let questionDetailId = this.state.selectedQuestionDetail.id
-      let path = `${trialId}/stage/${stageId}/question/${questionId}/question-detail/${questionDetailId}`
+      let questionDetailId = this.props.questionDetailId
+      let questionPath = `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}`
       browserHistory.push(
-        `/trial-manager/trial-detail/${path}`
+        `${questionPath}/question-detail/${questionDetailId}`
       )
     }
   }
@@ -84,12 +86,13 @@ class Question extends Component {
   componentWillReceiveProps (nextProps) {
     this.setState({
       questionName: nextProps.questionName,
-      questionsDetailList: nextProps.questionsDetailList,
-      questionId: nextProps.questionId,
+      questionDetailId: nextProps.questionDetailId,
       description: nextProps.description,
       position: nextProps.position,
-      withUsers: nextProps.withUsers,
-      multiplicity: nextProps.multiplicity
+      required: nextProps.required,
+      commented: nextProps.commented,
+      selectedAnswerType: nextProps.answerType,
+      option: this.props.option
     })
   }
 
@@ -101,7 +104,10 @@ class Question extends Component {
       this.props.getStageById(this.props.stageId)
     }
     if (this.props.getQuestion) {
-      this.props.getQuestion(this.props.questionId)
+      this.props.getQuestion(this.props.questionDetailId)
+    }
+    if (this.props.getQuestionSet) {
+      this.props.getQuestionSet(this.props.questionId)
     }
   }
   render () {
@@ -125,6 +131,10 @@ class Question extends Component {
         ]
       }
     ]
+    let trialId = this.props.trialId
+    let stageId = this.props.stageId
+    let questionId = this.props.questionId
+    let questionPath = `/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}`
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -144,13 +154,19 @@ class Question extends Component {
                 >
                   {this.props.stageName}
                 </a>
+                <a
+                  className='header__link'
+                  href={questionPath}
+                >
+                  {this.props.questionSetName}
+                </a>
               </div>
             </div>
             <div className='stageDetail__info'>
               <div className='info__container'>
                 <TextField
                   type='id'
-                  value={this.state.questionId}
+                  value={this.props.questionDetailId}
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
@@ -169,21 +185,24 @@ class Question extends Component {
                   trialId={this.props.trialId}
                   stageId={this.props.stageId}
                   questionName={this.state.questionName}
-                  questionId={this.state.questionId}
+                  questionDetailId={this.props.questionDetailId}
                   description={this.state.description}
                   position={this.state.position}
                   updateQuestion={this.props.updateQuestion}
                   addNewQuestion={this.props.addNewQuestion}
-                  withUsers={this.state.withUsers}
-                  multiplicity={this.state.multiplicity}
+                  commented={this.state.commented}
+                  required={this.state.required}
+                  answerType={this.state.selectedAnswerType}
+                  questionId={this.props.questionId}
                 />
                 {!this.props.new && (
                   <RemoveBtn
-                    questionsList={this.state.questionsDetailList}
+                    option={this.state.option || []}
                     removeQuestion={this.props.removeQuestion}
                     stageId={this.props.stageId}
                     trialId={this.props.trialId}
-                    questionId={this.state.questionId}
+                    questionId={this.props.questionId}
+                    questionDetailId={this.props.questionDetailId}
                   />
                 )}
               </div>
@@ -250,7 +269,7 @@ class Question extends Component {
             />
             <div className='table__wrapper'>
               <ReactTable
-                data={this.state.questionsDetailList}
+                data={this.state.option}
                 columns={columns}
                 multiSort
                 showPagination={false}
@@ -291,13 +310,13 @@ class Question extends Component {
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
                     backgroundColor={
-                      this.state.selectedQuestionDetail ? '#FCB636' : '#ccc'
+                      this.state.selectedOption ? '#FCB636' : '#ccc'
                     }
                     labelColor='#fff'
                     label='Edit'
                     type='Button'
-                    disabled={!this.state.selectedQuestionDetail}
-                    onClick={this.viewQuestionDetail.bind(this)}
+                    disabled={!this.state.selectedOption}
+                    onClick={this.viewOption.bind(this)}
                   />
                 </div>
               )}

@@ -1,54 +1,64 @@
 .stageDetail__info {
-    display: flex;
-    justify-content: space-between;
-    .info__btn {
-      margin: 20px 0;
-    }
-    .info__item {
-        flex: 3;
-        margin-right: 50px;
-    }
+  display: flex;
+  justify-content: space-between;
+  .info__btn {
+    margin: 20px 0;
   }
-  .stage-container {
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #fff;
-    overflow-y: auto;
-  
-    .stage__header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  .info__item {
+    flex: 3;
+    margin-right: 50px;
+  }
+}
+.stage-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow-y: auto;
+
+  .stage__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #282829;
+    font-weight: normal;
+    font-size: 20px;
+    .header__text {
+      font-size: 20px;
       color: #282829;
       font-weight: normal;
-      font-size: 20px;
-      .header__text {
-        font-size: 20px;
-        color: #282829;
-        font-weight: normal;
-        margin-bottom: 30px;
-      }
-      .header__link {
-        text-decoration: underline;
-        font-size: 16px;
-        margin: 0 10px;
-      }
+      margin-bottom: 30px;
     }
-    .table__wrapper {
-      margin-top: 50px;
-      .rt-td {
-        text-align: center;
-      }
+    .header__link {
+      text-decoration: underline;
+      font-size: 16px;
+      margin: 0 10px;
     }
-    .action-btns {
-      margin-top: 50px;
-      display: flex;
-      justify-content: center;
-      div {
-        margin: 0 20px;
-      }
+  }
+  .table__wrapper {
+    margin-top: 50px;
+    .rt-td {
+      text-align: center;
+    }
+  }
+  .action-btns {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    div {
+      margin: 0 20px;
     }
   }
   
+}
+.ReactTable {
+  .rt-thead.-headerGroups {
+    font-size: 22px;
+  }
+  .rt-tbody {
+    overflow-y: auto;
+    max-height: 30vh;
+  }
+}
+

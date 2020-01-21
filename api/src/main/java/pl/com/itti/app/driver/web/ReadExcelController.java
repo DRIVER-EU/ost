@@ -12,8 +12,10 @@ import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.TrialSession;
 import pl.com.itti.app.driver.model.TrialStage;
+import pl.com.itti.app.driver.model.enums.ErrorLevel;
 import pl.com.itti.app.driver.service.ExcelImportService;
 import pl.com.itti.app.driver.service.ExcelReadToDtoService;
+import pl.com.itti.app.driver.util.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,108 +55,76 @@ public class ReadExcelController {
     public ResponseEntity readExcelAndReturnResponceMock(@RequestParam int sheetNoToRead) throws IOException {
 
         JSONObject jsonAnswer = new JSONObject();
-
         {
-
-
                 jsonAnswer.put("id","1");
                 jsonAnswer.put("name","Name - Mock");
                 jsonAnswer.put("description","description");
                 jsonAnswer.put("status",HttpStatus.CREATED);
                 jsonAnswer.put("errors",new JSONArray());
-
-
         }
-
-
         ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(jsonAnswer.toString());
 
         return responseEntity;
     }
 
     @PutMapping("/import")
-    public ResponseEntity readExcelAndReturnResponce(@RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
-         JSONObject jsonAnswer = new JSONObject();
-         String step= "";
+    public ResponseEntity readExcelAndReturnResponse(@RequestParam("multipartFile") MultipartFile multipartFile) throws IOException {
 
+         String step= "";
+        ApiJsonAnswer apiJsonAnswer = new ApiJsonAnswer();
         {
             try {
                 step = " @Reading the excel file";
                 ImportExcelTrialDTO excelDTO = excelReadToDtoService.readExcelAndReturnDTO(multipartFile);
                 step = " @Validating  the excel file";
-                JSONArray validationWarningList = excelReadToDtoService.validateImportedContent(excelDTO);
+                apiJsonAnswer = excelReadToDtoService.validateImportedContent(excelDTO);
                 step = " @Saving  the excel file";
                 Trial savedTrial = excelImportService.saveTrial(excelDTO);
                 step = " @Creating response";
-                jsonAnswer.put("id",savedTrial.getId().toString());
-                jsonAnswer.put("name",savedTrial.getName());
-                jsonAnswer.put("description",savedTrial.getDescription());
 
-                jsonAnswer.put("stages", getJSONTrailArray(savedTrial.getTrialStages()));
-                jsonAnswer.put("sessions",getJSONSessionArray(savedTrial.getTrialSessions()));
-                jsonAnswer.put("roles",getJSONTRolesArray(savedTrial.getTrialRoles()));
+                apiJsonAnswer.setId(savedTrial.getId());
+                apiJsonAnswer.setName(savedTrial.getName());
+                apiJsonAnswer.setDescription(savedTrial.getDescription());
 
-                jsonAnswer.put("status",HttpStatus.CREATED);
-                jsonAnswer.put("errors",new JSONArray());
-                if(validationWarningList.length()>0) {
-                    jsonAnswer.put("warnings",validationWarningList);
+                if(apiJsonAnswer.getErrors().size() == 0)
+                {
+                    apiJsonAnswer.setStatus(HttpStatus.CREATED);
                 }
+                else
+                {
+                    apiJsonAnswer.setStatus(HttpStatus.EXPECTATION_FAILED);
+                    throw new  ReadingToDTOExcelException("Validation errors occured", ErrorLevel.ERROR);
+                }
+
             }
+            catch (ReadingToDTOExcelException readingToDTOExcelException)
+            {
+                ApiValidationError apiValidationError = readingToDTOExcelException.getApiValidationError();
+                apiValidationError.setMessage(step + " " +apiValidationError.getMessage());
+                apiJsonAnswer.getErrors().add(apiValidationError);
+                apiJsonAnswer.setStatus(HttpStatus.EXPECTATION_FAILED);
+            }
+            catch (ExcelImportException excelImportException)
+            {
+                for (ApiValidationError error : excelImportException.getApiValidationError())
+                {
+                    apiJsonAnswer.getErrors().add(error);
+                }
+
+                apiJsonAnswer.setStatus(HttpStatus.EXPECTATION_FAILED);
+            }
+
             catch (Exception e)
             {
-                JSONArray serverErrorList = new JSONArray();
-                JSONObject serverError = new JSONObject();
-                serverError.put("serviceError", "Errors in service."+ step + " " + e.getMessage());
-                serverErrorList.put(serverError);
-                jsonAnswer.put("status",HttpStatus.BAD_REQUEST);
-                jsonAnswer.put("errors",serverErrorList);
+                ApiValidationError apiError = new ApiValidationError();
+                apiError.setMessage("Errors in service."+ step + " " + e.getMessage());
+                apiJsonAnswer.getErrors().add(apiError);
+                apiJsonAnswer.setStatus(HttpStatus.BAD_REQUEST);
             }
-
         }
 
-        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(jsonAnswer.toString());
-
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(apiJsonAnswer);
         return responseEntity;
-    }
-
-    private JSONArray getJSONTRolesArray(List<TrialRole> trialRoles) {
-        JSONArray jsonRoleslList = new JSONArray();
-        trialRoles.forEach(trialRole -> {
-            JSONObject jsonAnswer = new JSONObject();
-            jsonAnswer.put("id",trialRole.id);
-            jsonAnswer.put("name",trialRole.getName());
-
-            jsonRoleslList.put(jsonAnswer);
-        });
-        return jsonRoleslList;
-    }
-    private JSONArray getJSONSessionArray(List<TrialSession> trialSessions) {
-        JSONArray jsonSessionList = new JSONArray();
-        //TODO JKW delete it just for tests
-
-        JSONObject jsonAnswerMock = new JSONObject();
-        jsonAnswerMock.put("id",0);
-        jsonAnswerMock.put("name","Mock for session");
-        jsonSessionList.put(jsonAnswerMock);
-
-        trialSessions.forEach(trialSession -> {
-            JSONObject jsonAnswer = new JSONObject();
-            jsonAnswer.put("id",trialSession.id);
-            jsonAnswer.put("name",trialSession.id);
-            jsonSessionList.put(jsonAnswer);
-        });
-        return jsonSessionList;
-    }
-    private JSONArray getJSONTrailArray(List<TrialStage> trialStages) {
-        JSONArray jsonTrialStagesList = new JSONArray();
-
-        trialStages.forEach(trialStage -> {
-            JSONObject jsonAnswer = new JSONObject();
-            jsonAnswer.put("id",trialStage.id);
-            jsonAnswer.put("name",trialStage.getName());
-            jsonTrialStagesList.put(jsonAnswer);
-        });
-        return jsonTrialStagesList;
     }
 
     @GetMapping("/import-validate")

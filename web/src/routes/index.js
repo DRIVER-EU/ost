@@ -19,6 +19,8 @@ import QuestionSet from './QuestionSet'
 import NewQuestionSet from './NewQuestionSet'
 import QuestionDetail from './QuestionDetail'
 import NewQuestion from './NewQuestion'
+import SessionDetail from './SessionDetail'
+import NewSessionDetail from './NewSessionDetail'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -44,6 +46,8 @@ export const createRoutes = store => ({
           childRoutes: [
             StageDetail(store),
             NewStage(store),
+            SessionDetail(store),
+            NewSessionDetail(store),
             QuestionSet(store),
             NewQuestionSet(store),
             QuestionDetail(store),

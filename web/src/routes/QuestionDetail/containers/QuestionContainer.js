@@ -1,26 +1,33 @@
 import { connect } from 'react-redux'
 import QuestionView from '../components/Question'
-import { getQuestion, updateQuestion, removeQuestion } from '../modules/question'
+import { getQuestionDetail, updateQuestion, removeQuestionDetail } from '../modules/question'
 import { getTrialDetail } from '../../TrialDetail/modules/trialdetail'
+import { getQuestion } from '../../QuestionSet/modules/questiondetail'
 import { getStageById } from '../../StageDetail/modules/stagedetail'
 
 const mapDispatchToProps = {
-  getQuestion,
+  getQuestionDetail,
   updateQuestion,
-  removeQuestion,
+  removeQuestionDetail,
   getStageById,
-  getTrialDetail
+  getTrialDetail,
+  getQuestion
+
 }
 
 const mapStateToProps = state => {
   return {
-    // questionDetailId: state.question.id,
-    // questionName: state.question.questionName,
-    // description: state.question.description,
-    // position: state.question.position,
-    // questionsDetailList: state.question.questions,
+    questionDetailId: state.question.id,
+    questionName: state.question.questionName,
+    description: state.question.description,
+    position: state.question.position,
+    commented: state.question.commented,
+    required: state.question.required,
+    option: state.question.option,
+    answerType: state.question.answerType,
     trialName: state.trialDetail.trialName,
-    stageName: state.stageDetail.stageName
+    stageName: state.stageDetail.stageName,
+    questionSetName: state.questionDetail.questionName
   }
 }
 

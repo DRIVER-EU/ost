@@ -60,7 +60,7 @@ export const getTrialManager = () => {
               id: x.trialId,
               name: x.trialName,
               description: x.trialDescription,
-              archived:x.archived
+              archived: x.archived
             }))
             for (let i = 0; i < mappedResponse.length; i++) {
               store.get(response.data[i].trialId).onsuccess = x => {
@@ -128,7 +128,6 @@ export const getListOfTrials = () => {
   }
 }
 
-// Once backend is fixed
 const realPath = 'import'
 export const importFile = formData => {
   return dispatch => {
@@ -139,15 +138,20 @@ export const importFile = formData => {
           window.indexedDB.open('driver', 1).onsuccess = event => {
             var { data } = response
             var newTrial = { id: data.id, name: data.name }
-            event.target.result
-              .transaction(['trial_session'], 'readwrite')
-              .objectStore('trial_session')
-              .put(newTrial).onsuccess = e => {
-                toastr.success('Import', 'Import sucessful!')
-                dispatch(addTrial(newTrial))
-              }
+            if (data.status !== 'BAD_REQUEST') {
+              event.target.result
+                .transaction(['trial_session'], 'readwrite')
+                .objectStore('trial_session')
+                .put(newTrial).onsuccess = e => {
+                  toastr.success('Import', 'Import sucessful!')
+                  dispatch(addTrial(newTrial))
+                }
+            }
+            resolve({
+              errors: data.errors,
+              warnings: data.warnings
+            })
           }
-          resolve()
         })
         .catch(error => {
           toastr.error('Import', 'Import failed!')
