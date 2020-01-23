@@ -14,9 +14,9 @@ class QuestionDetail extends Component {
     super(props)
     this.state = {
       questionId: '',
-      questionName: this.props.questionName,
-      description: this.props.description,
-      position: this.props.position,
+      questionName: this.props.questionName || '',
+      description: this.props.description || '',
+      position: this.props.position || 0,
       questionsDetailList: this.props.questionsDetailList,
       selectedQuestionDetail: null,
       withUsers: this.props.withUsers,

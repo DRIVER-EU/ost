@@ -24,7 +24,8 @@ class SaveBtn extends Component {
     description: PropTypes.string,
     position: PropTypes.any,
     commented: PropTypes.bool,
-    answerType: PropTypes.string
+    answerType: PropTypes.string,
+    questionId: PropTypes.any
   }
   handleOpenDialog (name) {
     let change = {}
@@ -61,7 +62,7 @@ class SaveBtn extends Component {
       commented: this.props.commented,
       position: parseInt(this.props.position),
       answerType: this.props.answerType,
-      observationTypeId: 1
+      observationTypeId: this.props.questionId
 
     }
     const actionsSaveDialog = [

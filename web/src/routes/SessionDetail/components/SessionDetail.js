@@ -22,7 +22,12 @@ class SessionDetailView extends Component {
     updateSession: PropTypes.func,
     removeSession: PropTypes.func,
     getObservations: PropTypes.func,
-    openRemoveInfoDialog: PropTypes.bool
+    openRemoveInfoDialog: PropTypes.bool,
+    roleSet: PropTypes.array,
+    usersList: PropTypes.array,
+    getUsersList: PropTypes.func,
+    addUser: PropTypes.func,
+    removeUser: PropTypes.func
   }
 
   render () {
@@ -36,6 +41,7 @@ class SessionDetailView extends Component {
           stageName={this.props.stageName}
           trialId={this.props.params.id_trial}
           trialName={this.props.trialName}
+          roleSet={this.props.roleSet}
           getTrialDetail={this.props.getTrialDetail}
           getSessionDetail={this.props.getSessionById}
           status={this.props.status}
@@ -45,6 +51,10 @@ class SessionDetailView extends Component {
           removeSession={this.props.removeSession}
           getObservations={this.props.getObservations}
           openRemoveInfoDialog={this.props.openRemoveInfoDialog}
+          usersList={this.props.usersList}
+          getUsersList={this.props.getUsersList}
+          addUser={this.props.addUser}
+          removeUser={this.props.removeUser}
         />
       </div>
     )

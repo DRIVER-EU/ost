@@ -16,14 +16,14 @@ class Question extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      questionDetailId: '',
-      questionName: this.props.questionName,
-      description: this.props.description,
-      position: this.props.position,
+      questionDetailId: this.props.questionDetailId,
+      questionName: this.props.questionName || '',
+      description: this.props.description || '',
+      position: this.props.position || '',
       option: this.props.option,
       selectedOption: null,
-      commented: this.props.commented,
-      required: this.props.required,
+      commented: this.props.commented || false,
+      required: false,
       answerType: [
         { value: 'CHECKBOX', text: 'checkbox' },
         { value: 'RADIO_BUTTON', text: 'radio button' },
@@ -51,7 +51,6 @@ class Question extends Component {
     questionName: PropTypes.string,
     description: PropTypes.string,
     position: PropTypes.any,
-    required: PropTypes.bool,
     commented: PropTypes.bool,
     getQuestion: PropTypes.func,
     answerType: PropTypes.string,
@@ -89,10 +88,8 @@ class Question extends Component {
       questionDetailId: nextProps.questionDetailId,
       description: nextProps.description,
       position: nextProps.position,
-      required: nextProps.required,
-      commented: nextProps.commented,
       selectedAnswerType: nextProps.answerType,
-      option: this.props.option
+      option: nextProps.option
     })
   }
 

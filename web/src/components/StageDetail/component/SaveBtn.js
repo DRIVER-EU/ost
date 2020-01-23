@@ -46,7 +46,7 @@ class SaveBtn extends Component {
   render () {
     let stage = {
       id: this.props.stageId,
-      name: this.props.stageName,
+      name: this.props.stageName || '',
       trialId: this.props.trialId
     }
     const actionsSaveDialog = [
