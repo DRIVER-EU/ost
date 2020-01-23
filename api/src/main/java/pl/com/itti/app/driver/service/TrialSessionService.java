@@ -21,19 +21,22 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.driver.dto.AdminUserRoleDTO;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.form.UserForm;
 import pl.com.itti.app.driver.model.*;
-import pl.com.itti.app.driver.model.enums.Languages;
-import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.model.enums.AuthRoleType;
+import pl.com.itti.app.driver.model.enums.Languages;
 import pl.com.itti.app.driver.model.enums.ManagementRoleType;
+import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.repository.*;
 import pl.com.itti.app.driver.repository.specification.TrialSessionSpecification;
 import pl.com.itti.app.driver.util.InternalServerException;
+import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
 import pl.com.itti.app.driver.util.schema.SchemaCreator;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -186,6 +189,38 @@ public class TrialSessionService {
                 .build();
 
         return trialSessionRepository.save(trialSession);
+    }
+
+    public UserRoleSession insertUserRoleSession(AdminUserRoleDTO.FullItem  adminUserRoleDTO) {
+        UserRoleSessionId userRoleSessionId =  new UserRoleSessionId();
+        userRoleSessionId.setTrialRoleId(adminUserRoleDTO.getTrialRoleId());
+        userRoleSessionId.setTrialSessionId(adminUserRoleDTO.getTrialSessionId());
+        userRoleSessionId.setTrialUserId(adminUserRoleDTO.getTrialUserId());
+        Optional<UserRoleSession> userRoleSessionExists = userRoleSessionRepository.findById(userRoleSessionId);
+
+        if(userRoleSessionExists.isPresent()) {
+            throw new InvalidDataException("User Session already exists. "+userRoleSessionId.toString());
+        }
+            TrialRole trialRole = trialRoleRepository.findById(adminUserRoleDTO.getTrialRoleId())
+                .orElseThrow(() -> new EntityNotFoundException(TrialRole.class, adminUserRoleDTO.getTrialRoleId()));
+            TrialSession trialSession =  trialSessionRepository.findById(adminUserRoleDTO.getTrialSessionId())
+                    .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, adminUserRoleDTO.getTrialSessionId()));
+            TrialUser trialUser = trialUserRepository.findById(adminUserRoleDTO.getTrialUserId())
+                    .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getTrialUserId()));
+            UserRoleSession userRoleSession = UserRoleSession.builder()
+                    .trialRole(trialRole)
+                    .trialUser(trialUser)
+                    .trialSession(trialSession)
+                    .build();
+
+            return userRoleSessionRepository.save(userRoleSession);
+
+    }
+
+    public void deleteUserRoleSession(UserRoleSessionId  userRoleSessionId) {
+        UserRoleSession userRoleSession = userRoleSessionRepository.findById(userRoleSessionId)
+                .orElseThrow(() -> new EntityNotFoundException(UserRoleSession.class, userRoleSessionId.getTrialUserId()));
+        userRoleSessionRepository.delete(userRoleSession);
     }
 
     public List<String> createNewSession(NewSessionForm newSessionForm, boolean isEmail) {

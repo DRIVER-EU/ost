@@ -10,6 +10,10 @@ export const GET_SESSION = 'GET_SESSION'
 export const UPDATE_SESSION = 'UPDATE_SESSION'
 export const REMOVE_SESSION = 'REMOVE_SESSION'
 export const REMOVE_INFO = 'REMOVE_INFO'
+export const GET_USERS_LIST = 'GET_USERS_LIST'
+export const ADD_USER = 'ADD_USER'
+export const REMOVE_USER = 'REMOVE_USER'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -38,11 +42,31 @@ export const getResponseError = () => {
     type: REMOVE_INFO
   }
 }
+export const getUsersListAction = (data = null) => {
+  return {
+    type: GET_USERS_LIST,
+    data: data
+  }
+}
+export const addUserAction = (data = null) => {
+  return {
+    type: ADD_USER,
+    data: data
+  }
+}
+export const removeUserAction = () => {
+  return {
+    type: REMOVE_USER
+  }
+}
 
 export const actions = {
   getSessionDetailAction,
   updateSessionAction,
-  removeSessionAction
+  removeSessionAction,
+  getUsersListAction,
+  removeUserAction,
+  addUserAction
 }
 
 export const updateSession = session => {
@@ -111,22 +135,83 @@ const FileDownload = require('js-file-download')
 export const getObservations = id => {
   return dispatch => {
     return new Promise(resolve =>
-      axios.get(
-        `${origin}/api/answers/csv-file?trialsession_id=${id}`,
-        getHeaders()
-      )
-      .then(response => {
-        FileDownload(response.data, 'observations.csv')
-        resolve()
-      })
-      .catch(error => {
-        errorHandle(error)
-        resolve()
-      })
+      axios
+        .get(
+          `${origin}/api/answers/csv-file?trialsession_id=${id}`,
+          getHeaders()
+        )
+        .then(response => {
+          FileDownload(response.data, 'observations.csv')
+          resolve()
+        })
+        .catch(error => {
+          errorHandle(error)
+          resolve()
+        })
     )
   }
 }
 
+export const getUsersList = () => {
+  return dispatch => {
+    return new Promise(resolve =>
+      axios
+        .get(
+          `${origin}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc`,
+          getHeaders()
+        )
+        .then(response => {
+          dispatch(getUsersListAction(response.data))
+          resolve()
+        })
+        .catch(error => {
+          errorHandle(error)
+          resolve()
+        })
+    )
+  }
+}
+export const addUser = user => {
+  return dispatch => {
+    return new Promise(resolve =>
+      axios
+        .post(
+          `${origin}/api/trialsessions/admin/addNewUserRoleSession`,
+          user,
+          getHeaders()
+        )
+        .then(response => {
+          dispatch(addUserAction(response.data))
+          resolve()
+        })
+        .catch(error => {
+          errorHandle(error)
+          resolve()
+        })
+    )
+  }
+}
+
+export const removeUser = (trialRoleId, trialSessionId, trialUserId) => {
+  let path = '/api/trialsessions/admin/deleteUserRoleSession'
+  return dispatch => {
+    return new Promise(resolve =>
+      axios
+        .delete(
+          `${origin}${path}?trialRoleId=${trialRoleId}&trialSessionId=${trialSessionId}&trialUserId=${trialUserId}`,
+          getHeaders()
+        )
+        .then(response => {
+          dispatch(removeUserAction(response.data))
+          resolve()
+        })
+        .catch(error => {
+          errorHandle(error)
+          resolve()
+        })
+    )
+  }
+}
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -162,6 +247,23 @@ const ACTION_HANDLERS = {
       ...state,
       openRemoveInfoDialog: true
     }
+  },
+  [GET_USERS_LIST]: (state, action) => {
+    return {
+      ...state,
+      usersList: action.data.data
+    }
+  },
+  [ADD_USER]: (state, action) => {
+    return {
+      ...state,
+      user: action.data
+    }
+  },
+  [REMOVE_USER]: (state, action) => {
+    return {
+      ...state
+    }
   }
 }
 // ------------------------------------
@@ -175,7 +277,9 @@ const initialState = {
   stageName: '',
   stages: [],
   userRoles: [],
-  openRemoveInfoDialog: false
+  openRemoveInfoDialog: false,
+  usersList: [],
+  user: {}
 }
 
 export default function sessionDetailReducer (state = initialState, action) {

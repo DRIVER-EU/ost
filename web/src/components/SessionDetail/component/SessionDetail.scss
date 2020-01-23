@@ -64,3 +64,8 @@
     max-height: 25vh;
   }
 }
+.custom__dialog {
+  & > div {
+    padding: 15px 10px;
+  }
+}

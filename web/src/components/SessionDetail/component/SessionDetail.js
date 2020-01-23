@@ -9,6 +9,8 @@ import ReactTable from 'react-table'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 
 class SessionDetail extends Component {
   constructor (props) {
@@ -24,7 +26,13 @@ class SessionDetail extends Component {
         { value: 'SUSPENDED', text: 'Suspended' },
         { value: 'ENDED', text: 'Ended' }
       ],
-      stageList: this.props.stages
+      stageList: this.props.stages,
+      selectedRole: null,
+      openUserRoleDialog: false,
+      roleSet: this.props.roleSet || [],
+      selectedCurrentRole: '',
+      usersList: this.props.usersList || [],
+      selectedCurrentUser: ''
     }
   }
 
@@ -44,7 +52,12 @@ class SessionDetail extends Component {
     stages: PropTypes.array,
     status: PropTypes.string,
     getObservations: PropTypes.func,
-    openRemoveInfoDialog: PropTypes.bool
+    openRemoveInfoDialog: PropTypes.bool,
+    roleSet: PropTypes.array,
+    usersList: PropTypes.array,
+    getUsersList: PropTypes.func,
+    addUser: PropTypes.func,
+    removeUser: PropTypes.func
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -58,8 +71,9 @@ class SessionDetail extends Component {
       userRoles: nextProps.userRoles,
       stageList: nextProps.stages,
       selectedStatus: nextProps.status,
-      selectedCurrentStage: nextProps.stageId
-
+      selectedCurrentStage: nextProps.stageId,
+      roleSet: nextProps.roleSet,
+      usersList: nextProps.usersList
     })
   }
   handleChangeStatus = (event, index, value) => {
@@ -68,6 +82,12 @@ class SessionDetail extends Component {
   handleChangeCurrentStage = (event, index, value) => {
     this.setState({ selectedCurrentStage: value })
   };
+  handleChangeCurrentRole = (event, index, value) => {
+    this.setState({ selectedCurrentRole: value })
+  }
+  handleChangeCurrentUser = (event, index, value) => {
+    this.setState({ selectedCurrentUser: value })
+  }
   getObservations (sessionId) {
     this.props.getObservations(sessionId)
   }
@@ -75,6 +95,33 @@ class SessionDetail extends Component {
     if (this.props.getTrialDetail) {
       this.props.getTrialDetail(this.props.trialId)
     }
+    if (this.props.getSessionDetail) {
+      this.props.getSessionDetail(this.props.sessionId)
+    }
+    if (this.props.getUsersList) {
+      this.props.getUsersList()
+    }
+  }
+  newUserRole () {
+    this.handleOpen()
+  }
+  handleOpen = () => {
+    this.setState({ openUserRoleDialog: true })
+  };
+
+  handleClose = () => {
+    this.setState({ openUserRoleDialog: false })
+  };
+
+  async addUser (user) {
+    await this.props.addUser(user)
+    this.handleClose()
+    if (this.props.getSessionDetail) {
+      this.props.getSessionDetail(this.props.sessionId)
+    }
+  }
+  async removeUser (user) {
+    await this.props.removeUser(user.id.trialRoleId, user.id.trialSessionId, user.id.trialUserId)
     if (this.props.getSessionDetail) {
       this.props.getSessionDetail(this.props.sessionId)
     }
@@ -100,6 +147,21 @@ class SessionDetail extends Component {
           }
         ]
       }
+    ]
+    const user = {
+      trialRoleId: this.state.selectedCurrentRole,
+      trialSessionId: parseInt(this.state.sessionId),
+      trialUserId: this.state.selectedCurrentUser
+    }
+    const actions = [
+      <FlatButton label='Cancel' primary onClick={this.handleClose} />,
+      <RaisedButton
+        backgroundColor='#FCB636'
+        labelColor='#fff'
+        label='Add'
+        type='Button'
+        onClick={this.addUser.bind(this, user)}
+      />
     ]
     return (
       <div className='main-container'>
@@ -173,30 +235,37 @@ class SessionDetail extends Component {
                 />
               </SelectField>
             </div>
-            {!this.props.new && <div>
-              <SelectField
-                floatingLabelText='Current Stage'
-                value={this.state.selectedCurrentStage}
-                onChange={this.handleChangeCurrentStage}
-              >
-                {this.state.stageList.map(stage => (
-                  <MenuItem
-                    key={stage.id}
-                    value={stage.id}
-                    primaryText={stage.name}
-                  />
-                ))}
-              </SelectField>
-            </div>}
-            {!this.props.new && <div className='download__btn'>
-              <RaisedButton
-                backgroundColor='#FCB636'
-                labelColor='#fff'
-                label='Download observations'
-                type='Button'
-                onClick={this.getObservations.bind(this, this.props.sessionId)}
-              />
-            </div>}
+            {!this.props.new && (
+              <div>
+                <SelectField
+                  floatingLabelText='Current Stage'
+                  value={this.state.selectedCurrentStage}
+                  onChange={this.handleChangeCurrentStage}
+                >
+                  {this.state.stageList.map(stage => (
+                    <MenuItem
+                      key={stage.id}
+                      value={stage.id}
+                      primaryText={stage.name}
+                    />
+                  ))}
+                </SelectField>
+              </div>
+            )}
+            {!this.props.new && (
+              <div className='download__btn'>
+                <RaisedButton
+                  backgroundColor='#FCB636'
+                  labelColor='#fff'
+                  label='Download observations'
+                  type='Button'
+                  onClick={this.getObservations.bind(
+                    this,
+                    this.props.sessionId
+                  )}
+                />
+              </div>
+            )}
             <div className='table__wrapper'>
               <ReactTable
                 data={this.state.userRoles}
@@ -210,16 +279,15 @@ class SessionDetail extends Component {
                     return {
                       onClick: e => {
                         this.setState({
-                          selectedQuestion: rowInfo.original
+                          selectedRole: rowInfo.original
                         })
                       },
                       onDoubleClick: e => {
-                        this.viewQuestion()
+                        this.viewUserRole()
                       },
                       style: {
-                        background: this.state.selectedQuestion
-                          ? rowInfo.original.id ===
-                            this.state.selectedQuestion.id
+                        background: this.state.selectedRole
+                          ? rowInfo.original.id === this.state.selectedRole.id
                             ? '#e5e5e5'
                             : ''
                           : '',
@@ -229,6 +297,68 @@ class SessionDetail extends Component {
                   }
                 }}
               />
+              {!this.props.new && (
+                <div className='action-btns'>
+                  <RaisedButton
+                    buttonStyle={{ width: '200px' }}
+                    backgroundColor='#244C7B'
+                    labelColor='#FCB636'
+                    label='+ New'
+                    type='Button'
+                    onClick={this.newUserRole.bind(this)}
+                  />
+                  <RaisedButton
+                    buttonStyle={{ width: '200px' }}
+                    labelColor='#fff'
+                    label='Remove'
+                    type='Button'
+                    backgroundColor={
+                      this.state.selectedRole ? '#b71c1c' : '#ccc'
+                    }
+                    disabled={!this.state.selectedRole}
+                    onClick={this.removeUser.bind(this, this.state.selectedRole)}
+                  />
+                  <Dialog
+                    title='Add User'
+                    actions={actions}
+                    contentClassName='custom__dialog'
+                    modal={false}
+                    open={this.state.openUserRoleDialog}
+                    onRequestClose={this.handleClose}
+                  >
+                    <div>
+                      <SelectField
+                        floatingLabelText='User'
+                        value={this.state.selectedCurrentUser}
+                        onChange={this.handleChangeCurrentUser}
+                      >
+                        {this.state.usersList.map(user => (
+                          <MenuItem
+                            key={user.id}
+                            value={user.id}
+                            primaryText={`${user.firstName} ${user.lastName}`}
+                          />
+                        ))}
+                      </SelectField>
+                    </div>
+                    <div>
+                      <SelectField
+                        floatingLabelText='Role'
+                        value={this.state.selectedCurrentRole}
+                        onChange={this.handleChangeCurrentRole}
+                      >
+                        {this.state.roleSet.map(role => (
+                          <MenuItem
+                            key={role.id}
+                            value={role.id}
+                            primaryText={role.name}
+                          />
+                        ))}
+                      </SelectField>
+                    </div>
+                  </Dialog>
+                </div>
+              )}
             </div>
           </div>
         </div>
