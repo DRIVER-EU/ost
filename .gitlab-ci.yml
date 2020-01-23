@@ -128,7 +128,7 @@ merge-check:api:build:
   variables:
     POSTGRES_DB: itti_driver
     POSTGRES_USER: itti_driver
-    POSTGRES_PASSWORD: APEKxySwg4Ku9yxz
+    POSTGRES_PASSWORD: EyDdqz7qPZFFJNUs
     SPRING_PROFILES_ACTIVE: integration
   before_script:
   - 'which git || ( apk update && apk add --update bash git openssh-client )'
