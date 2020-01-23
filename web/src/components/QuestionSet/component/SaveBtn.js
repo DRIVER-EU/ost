@@ -54,8 +54,8 @@ class SaveBtn extends Component {
   render () {
     let question = {
       id: this.props.questionId,
-      name: this.props.questionName,
-      description: this.props.description,
+      name: this.props.questionName || '',
+      description: this.props.description || '',
       trailStageId: parseInt(this.props.stageId),
       trailId: parseInt(this.props.trialId),
       multiplicity: this.props.multiplicity,
