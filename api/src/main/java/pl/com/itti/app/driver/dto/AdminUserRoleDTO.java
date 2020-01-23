@@ -3,8 +3,12 @@ package pl.com.itti.app.driver.dto;
 import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.model.UserRoleSessionId;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AdminUserRoleDTO {
@@ -33,6 +37,22 @@ public class AdminUserRoleDTO {
             this.trialRoleId = userRoleSession.getTrialRole().getId();
             this.trialRoleName = userRoleSession.getTrialRole().getName();
             this.trialSessionId = userRoleSession.getTrialSession().getId();
+        }
+    }
+    @Data
+    public static class FullItem extends ListItem {
+
+        @JsonFormat
+        private List<TrialRoleDTO.ListItem> roleSet = new ArrayList<>();
+
+        @Override
+        public void toDto(UserRoleSession userRoleSession) {
+            super.toDto(userRoleSession);
+            for (TrialRole trialRole : userRoleSession.getTrialSession().getTrial().getTrialRoles()) {
+                TrialRoleDTO.ListItem trialRoleDTO = new TrialRoleDTO.ListItem();
+                trialRoleDTO.toDto(trialRole);
+                roleSet.add(trialRoleDTO);
+            }
         }
     }
 

@@ -13,10 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.com.itti.app.driver.dto.AdminUserRoleDTO;
 import pl.com.itti.app.driver.dto.TrialSessionDTO;
 import pl.com.itti.app.driver.dto.TrialStageDTO;
 import pl.com.itti.app.driver.form.NewSessionForm;
 import pl.com.itti.app.driver.model.TrialSession;
+import pl.com.itti.app.driver.model.UserRoleSession;
+import pl.com.itti.app.driver.model.UserRoleSessionId;
 import pl.com.itti.app.driver.model.enums.SessionStatus;
 import pl.com.itti.app.driver.service.TrialSessionService;
 import pl.com.itti.app.driver.util.UserFileProperties;
@@ -171,6 +174,43 @@ public class TrialSessionController {
         return responseEntity;
     }
 
+    @PostMapping("/admin/addNewUserRoleSession")
+    public ResponseEntity addNewUserRoleSession(@RequestBody AdminUserRoleDTO.FullItem  adminUserRoleDTO) {
+        try {
+            UserRoleSession UserRoleSession = trialSessionService.insertUserRoleSession(adminUserRoleDTO);
+            adminUserRoleDTO.toDto(UserRoleSession);
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminUserRoleDTO);
+        return responseEntity;
+    }
+
+
+    @DeleteMapping("/admin/deleteUserRoleSession")
+    public ResponseEntity deleteUserRoleSession(@RequestParam(value = "trialRoleId") long trialRoleId,
+                                                @RequestParam(value = "trialUserId") long trialUserId,
+                                                @RequestParam(value = "trialSessionId") long trialSessionId) {
+        UserRoleSessionId  userRoleSessionId = new UserRoleSessionId();
+        userRoleSessionId.setTrialRoleId(trialRoleId);
+        userRoleSessionId.setTrialUserId(trialUserId);
+        userRoleSessionId.setTrialSessionId(trialSessionId);
+
+
+        try {
+            trialSessionService.deleteUserRoleSession(userRoleSessionId);
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body("Trial user session is deleted");
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+    }
     private ResponseEntity getResponseEntity(Exception e) {
         JSONObject jsonAnswer = new JSONObject();
         JSONArray serverErrorList = new JSONArray();

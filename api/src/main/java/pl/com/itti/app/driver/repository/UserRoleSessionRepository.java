@@ -7,9 +7,11 @@ import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.model.UserRoleSessionId;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRoleSessionRepository
         extends PagingAndSortingRepository<UserRoleSession, UserRoleSessionId>,
         JpaSpecificationExecutor<UserRoleSession> {
     List<UserRoleSession>  findByTrialSession(TrialSession trialSession);
+    Optional<UserRoleSession> findById(UserRoleSessionId id);
 }
