@@ -5,7 +5,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails,
         CredentialsContainer, Serializable {
@@ -17,14 +22,10 @@ public class UserDetails implements org.springframework.security.core.userdetail
     private final Long unitId;
 
     private final String username;
-
-    private String password;
-
     private final boolean activated;
-
     private final boolean deleted;
-
     private final Set<GrantedAuthority> authorities;
+    private String password;
 
     private UserDetails(Builder builder) {
         id = builder.id;
@@ -34,6 +35,21 @@ public class UserDetails implements org.springframework.security.core.userdetail
         activated = builder.activated;
         deleted = builder.deleted;
         authorities = Collections.unmodifiableSortedSet(sortAuthorities(builder.authorities));
+    }
+
+    private static SortedSet<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
+
+        // Ensure array iteration order is predictable (as per
+        // UserDetails.getAuthorities() contract and SEC-717)
+        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(new AuthorityComparator());
+
+        for (GrantedAuthority grantedAuthority : authorities) {
+            Assert.notNull(grantedAuthority, "GrantedAuthority list cannot contain any null elements");
+            sortedAuthorities.add(grantedAuthority);
+        }
+
+        return sortedAuthorities;
     }
 
     public Long getId() {
@@ -82,21 +98,6 @@ public class UserDetails implements org.springframework.security.core.userdetail
     @Override
     public void eraseCredentials() {
         password = null;
-    }
-
-    private static SortedSet<GrantedAuthority> sortAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
-
-        // Ensure array iteration order is predictable (as per
-        // UserDetails.getAuthorities() contract and SEC-717)
-        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<>(new AuthorityComparator());
-
-        for (GrantedAuthority grantedAuthority : authorities) {
-            Assert.notNull(grantedAuthority, "GrantedAuthority list cannot contain any null elements");
-            sortedAuthorities.add(grantedAuthority);
-        }
-
-        return sortedAuthorities;
     }
 
     private static class AuthorityComparator implements Comparator<GrantedAuthority>, Serializable {

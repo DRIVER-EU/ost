@@ -10,10 +10,10 @@ import java.io.Serializable;
 public abstract class PersistentObject
         implements Serializable {
 
+    public static final String SEQUENCE_GENERATOR = "DefaultSeqGen";
     private static final long serialVersionUID = 1L;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DefaultSeqGen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_GENERATOR)
     public Long id;
 
     public Long getId() {

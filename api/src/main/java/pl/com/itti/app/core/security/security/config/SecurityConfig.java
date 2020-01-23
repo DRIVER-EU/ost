@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity webSecurity) throws Exception {
         // @formatter:off
         webSecurity
-            .ignoring()
+                .ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**");
         // @formatter:on
     }
@@ -70,27 +70,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // @formatter:off
         httpSecurity
-            .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
-            .csrf()
+                .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
+                .csrf()
                 .disable()
-            .headers()
+                .headers()
                 .frameOptions()
                 .disable()
                 .and()
-            .requestCache()
+                .requestCache()
                 .requestCache(new NullRequestCache())
                 .and()
-            .exceptionHandling()
+                .exceptionHandling()
                 .authenticationEntryPoint(authEntryPoint)
                 .and()
-            .httpBasic()
+                .httpBasic()
                 .authenticationEntryPoint(authEntryPoint)
                 .and()
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/api/anonymous/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-            .logout()
+                .logout()
                 .logoutUrl("/api/auth/logout")
                 .logoutSuccessHandler(authLogoutHandler)
                 .permitAll();

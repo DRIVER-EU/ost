@@ -11,6 +11,10 @@ import java.util.Optional;
  */
 public abstract class UserDetailsUtils {
 
+    private UserDetailsUtils() {
+        throw new AssertionError();
+    }
+
     /**
      * Check if a user is authenticated.
      *
@@ -84,6 +88,7 @@ public abstract class UserDetailsUtils {
 
     /**
      * Get the current user.
+     *
      * @return the currently authenticated user if present, null otherwise
      */
     private static UserDetails getCurrentUser() {
@@ -96,9 +101,5 @@ public abstract class UserDetailsUtils {
         }
 
         return (UserDetails) authentication.getPrincipal();
-    }
-
-    private UserDetailsUtils() {
-        throw new AssertionError();
     }
 }

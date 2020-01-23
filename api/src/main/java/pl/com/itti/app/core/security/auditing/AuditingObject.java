@@ -8,7 +8,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 import pl.com.itti.app.core.security.security.model.AuthUser;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 

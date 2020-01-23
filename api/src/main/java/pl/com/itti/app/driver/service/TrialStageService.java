@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.com.itti.app.core.exception.EntityNotFoundException;
+import pl.com.itti.app.core.security.security.model.AuthUser;
 import pl.com.itti.app.driver.dto.AdminTrialStageDTO;
 import pl.com.itti.app.driver.model.Trial;
 import pl.com.itti.app.driver.model.TrialStage;
@@ -13,7 +15,6 @@ import pl.com.itti.app.driver.repository.TrialStageRepository;
 import pl.com.itti.app.driver.repository.specification.TrialStageSpecification;
 import pl.com.itti.app.driver.util.InvalidDataException;
 import pl.com.itti.app.driver.util.RepositoryUtils;
-import pl.com.itti.app.core.security.security.model.AuthUser;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

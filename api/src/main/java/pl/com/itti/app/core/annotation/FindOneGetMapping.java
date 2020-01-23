@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 @Documented
 @RequestMapping(method = RequestMethod.GET)
 @ResponseBody
-public @interface FindAllGetMapping {
+public @interface FindOneGetMapping {
 
     /**
      * Alias for {@link RequestMapping#name}.
@@ -29,13 +29,13 @@ public @interface FindAllGetMapping {
      * Alias for {@link RequestMapping#value}.
      */
     @AliasFor(annotation = RequestMapping.class)
-    String[] value() default "";
+    String[] value() default "/{id:\\d+}";
 
     /**
      * Alias for {@link RequestMapping#path}.
      */
     @AliasFor(annotation = RequestMapping.class)
-    String[] path() default "";
+    String[] path() default "/{id:\\d+}";
 
     /**
      * Alias for {@link RequestMapping#params}.

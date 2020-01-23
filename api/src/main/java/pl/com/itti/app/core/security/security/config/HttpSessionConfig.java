@@ -10,11 +10,10 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 import org.springframework.session.web.http.HttpSessionStrategy;
 
-import static pl.com.itti.app.core.security.security.config.HttpSessionConfig.SESSION_TIMEOUT;
 
 
 @Configuration
-@EnableJdbcHttpSession(maxInactiveIntervalInSeconds = SESSION_TIMEOUT)
+@EnableJdbcHttpSession(maxInactiveIntervalInSeconds = HttpSessionConfig.SESSION_TIMEOUT)
 public class HttpSessionConfig {
 
     /**

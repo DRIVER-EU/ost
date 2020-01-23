@@ -1,8 +1,8 @@
 package pl.com.itti.app.driver.dto;
 
-import co.perpixel.dto.EntityDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import pl.com.itti.app.core.dto.EntityDto;
 import pl.com.itti.app.driver.model.TrialRole;
 import pl.com.itti.app.driver.model.UserRoleSession;
 import pl.com.itti.app.driver.model.UserRoleSessionId;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AdminUserRoleDTO {
     @Data
-    public static class ListItem implements EntityDTO<UserRoleSession>{
+    public static class ListItem implements EntityDto<UserRoleSession> {
 
         @JsonFormat
         private UserRoleSessionId id;

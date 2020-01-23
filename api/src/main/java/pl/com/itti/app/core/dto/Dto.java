@@ -15,6 +15,10 @@ public abstract class Dto {
 
     private static final Logger LOG = LoggerFactory.getLogger(Dto.class);
 
+    private Dto() {
+        throw new AssertionError();
+    }
+
     /**
      * Converts a single entity into a DTO.
      *
@@ -100,11 +104,7 @@ public abstract class Dto {
                                                                                       Class<T_Dest> destClass) {
         PageDto<T_Dest> pageDTO = new PageDto<>();
         pageDTO.setTotal(sourcePage.getTotalElements());
-        pageDTO.setData(Dto.from(sourcePage.getContent(), destClass));
+        pageDTO.setData(from(sourcePage.getContent(), destClass));
         return pageDTO;
-    }
-
-    private Dto() {
-        throw new AssertionError();
     }
 }

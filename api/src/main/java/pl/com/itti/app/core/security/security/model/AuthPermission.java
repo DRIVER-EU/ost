@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 @GenericGenerator(
         name = "DefaultSeqGen",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-        parameters = { @org.hibernate.annotations.Parameter(name = "sequence_name", value = "auth_permission_seq") }
+        parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name", value = "auth_permission_seq")}
 )
 public class AuthPermission extends DictionaryObject
         implements GrantedAuthority {

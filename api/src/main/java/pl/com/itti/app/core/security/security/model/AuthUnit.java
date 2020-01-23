@@ -1,8 +1,6 @@
 package pl.com.itti.app.core.security.security.model;
 
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
-import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 import pl.com.itti.app.core.security.auditing.AuditingDeletableObject;
 
 import javax.persistence.Column;

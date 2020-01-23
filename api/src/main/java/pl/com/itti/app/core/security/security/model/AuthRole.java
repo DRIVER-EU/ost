@@ -1,13 +1,14 @@
 package pl.com.itti.app.core.security.security.model;
 
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import pl.com.itti.app.core.persistence.db.model.DictionaryObject;
-import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 
-import javax.persistence.*;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity

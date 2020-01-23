@@ -1,5 +1,4 @@
 package pl.com.itti.app.core.security.security.repository;
-
 import org.springframework.data.repository.CrudRepository;
 import pl.com.itti.app.core.security.security.model.AuthUserPosition;
 

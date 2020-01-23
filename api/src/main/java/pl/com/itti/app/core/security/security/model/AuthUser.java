@@ -1,18 +1,25 @@
 package pl.com.itti.app.core.security.security.model;
 
-import lombok.Data;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
-import pl.com.itti.app.core.persistence.db.model.PersistentObject;
 import pl.com.itti.app.core.security.auditing.AuditingDeletableObject;
 
-import javax.persistence.*;
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,10 +37,8 @@ import java.util.Set;
 public class AuthUser extends AuditingDeletableObject
         implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     public static final String LOGIN_REGEXP = "^[a-zA-Z0-9][a-zA-Z0-9_.-]*$";
-
+    private static final long serialVersionUID = 1L;
     @NotNull
     @Pattern(regexp = LOGIN_REGEXP)
     @Size(min = 3, max = 80)
