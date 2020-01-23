@@ -1,25 +1,17 @@
 import React, { Component } from 'react'
 import { RaisedButton, Checkbox, TextField, FlatButton } from 'material-ui'
-import ReactTable from 'react-table'
+import Spinner from 'react-spinkit'
+import PropTypes from 'prop-types'
 import 'react-table/react-table.css'
 import './Users.scss'
+import ReactTable from 'react-table'
 import Dialog from 'material-ui/Dialog'
-import axios from 'axios'
-import { origin } from './../../config/Api'
-import { getHeaders } from '../../store/addons'
+import _ from 'lodash'
 
 class Users extends Component {
   state = {
     selectedRow: null,
-    data: [
-      { id: 1, login: 'a', firstName: 'k', lastName: 's', deleted: 'yes' },
-      { id: 2, login: 'b', firstName: 'l', lastName: 't', deleted: 'no' },
-      { id: 3, login: 'c', firstName: 'm', lastName: 'u', deleted: 'yes' },
-      { id: 4, login: 'd', firstName: 'n', lastName: 'x', deleted: 'no' },
-      { id: 5, login: 'e', firstName: 'o', lastName: 'y', deleted: 'yes' },
-      { id: 6, login: 'f', firstName: 'p', lastName: 'z', deleted: 'no' },
-      { id: 7, login: 'g', firstName: 'q', lastName: 'zz', deleted: 'yes' }
-    ],
+    usersOptions: [],
     isUserDetailsOpen: false,
     user: {
       login: '',
@@ -31,14 +23,37 @@ class Users extends Component {
     }
   }
 
+  static propTypes = {
+    getAllUsersList: PropTypes.func,
+    allUsersList: PropTypes.object,
+    allUsersListLoading: PropTypes.bool
+  }
+
   componentDidMount () {
-    // const url = 'http://{{IP-Address}}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc'
-    axios.get(`${origin}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc`, getHeaders())
-    .then(res => {
-      console.log('DATA ::: ', res.data)
+    this.props.getAllUsersList()
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!_.isEqual(prevProps.allUsersList, this.props.allUsersList)) {
+      if (this.props.allUsersList.data && this.props.allUsersList.data.length) {
+        this.handleUsers(this.props.allUsersList.data)
+      }
+    }
+  }
+
+  handleUsers = (users) => {
+    let usersOptions = []
+    users.map(user => {
+      usersOptions.push({
+        id: user.id,
+        login: user.login,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        deleted: false
+      })
     })
-    .catch(err => {
-      console.log('ERROR :: ', err)
+    this.setState({
+      usersOptions
     })
   }
 
@@ -99,13 +114,20 @@ class Users extends Component {
       firstName,
       lastName,
       email,
-      contact
+      contact,
+      usersOptions
     } = this.state
+    console.log('ALL USERS ****** ', this.props.allUsersListLoading)
     return (
       <div className='users-container users-wrapper'>
         <div>
-          <ReactTable
-            data={this.state.data}
+          {this.props.allUsersListLoading ? <div className='spinner-box'>
+            <div className={'spinner'}>
+              <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
+            </div>
+          </div>
+          : <ReactTable
+            data={usersOptions}
             columns={columns}
             multiSort
             showPagination
@@ -132,7 +154,7 @@ class Users extends Component {
                   }
                 }
               }
-            }} />
+            }} />}
         </div>
         <div className='users-btn-container'>
           <a href='admin-home'>
@@ -177,15 +199,18 @@ class Users extends Component {
             <TextField
               value={login}
               fullWidth
+              autoComplete='off'
               floatingLabelText='Login' />
             <TextField
               value={password}
               floatingLabelText='Password'
               type='password'
+              autoComplete='off'
               style={{ marginRight: '20px' }} />
             <TextField
               value={password}
               floatingLabelText='Password'
+              autoComplete='off'
               type='password' />
             <TextField
               value={firstName}

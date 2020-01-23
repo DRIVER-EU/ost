@@ -17,6 +17,7 @@ import questionDetailReducer from '../routes/QuestionSet/modules/questiondetail'
 import newQuestionReducer from '../routes/NewQuestion/modules/newquestion'
 import questionReducer from '../routes/QuestionDetail/modules/question'
 import sessionDetailReducer from '../routes/SessionDetail/modules/sessiondetail'
+import usersManagerReducer from '../routes/Users/modules/users'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -38,6 +39,7 @@ export const makeRootReducer = (asyncReducers) => {
     newQuestionDetail: newQuestionReducer,
     questionDetail: questionReducer,
     sessionDetail: sessionDetailReducer,
+    usersManager: usersManagerReducer,
     ...asyncReducers
   })
 }
