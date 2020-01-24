@@ -2,7 +2,7 @@ package eu.fp7.driver.ost.core.security.security.config;
 
 import eu.fp7.driver.ost.core.security.security.core.AuthEntryPoint;
 import eu.fp7.driver.ost.core.security.security.core.AuthLogoutHandler;
-import org.apache.catalina.filters.CorsFilter;
+import eu.fp7.driver.ost.core.utils.http.CorsFilter;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
