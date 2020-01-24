@@ -45,7 +45,7 @@ export const logIn = (username, password) => {
   const hash = new Buffer(username + `:` + password).toString('base64')
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.post(`${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
+      axios.get(`${origin}/api/auth/login`, { headers: { 'Authorization': `Basic ` + hash } })
         .then((response) => {
           localStorage.setItem('drivertoken', response.headers['x-auth-token'])
           localStorage.setItem('driveruser', JSON.stringify(response.data))
