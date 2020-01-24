@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +29,7 @@ public class AuthController {
      * @param request the HTTP request
      * @return the basic profile if the user is authenticated
      */
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public AuthUserDto.LoginResponse login(HttpServletRequest request) {
         LOG.debug("Check if the '{}' user is authenticated", request.getRemoteUser());
         return authUserRepository.findOneCurrentlyAuthenticated()
