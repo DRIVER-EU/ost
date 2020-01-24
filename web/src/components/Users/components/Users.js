@@ -15,12 +15,21 @@ class Users extends Component {
     isUserDetailsOpen: false,
     user: {
       login: '',
+      loginError: false,
       password: '',
+      passwordError: false,
+      passwordConformation: '',
+      passwordConformationError: false,
       firstName: '',
+      firstNameError: false,
       lastName: '',
+      lastNameError: false,
       email: '',
-      contact: ''
-    }
+      emailError: false,
+      contact: '',
+      contactError: false
+    },
+    editionStarted: false
   }
 
   static propTypes = {
@@ -57,14 +66,24 @@ class Users extends Component {
     })
   }
 
-  handleNewUser = () => {
-    console.log('new user')
-  }
-
-  handleEditUser = () => {
+  handleUser = (type) => {
     this.setState({
       isUserDetailsOpen: true
     })
+  }
+
+  handleOnChangeInput = (value, stateName) => {
+    let updatedUser = { ...this.state.user }
+    updatedUser[stateName] = value
+    this.setState({ user: updatedUser, editionStarted: true })
+    this.validateBlur(updatedUser, stateName)
+  }
+
+  validateBlur = (updatedUser, stateName) => {
+    let updatedError = { ...updatedUser }
+    const error = updatedError[stateName].length < 1
+    updatedError[stateName + 'Error'] = error
+    this.setState({ user: updatedError })
   }
 
   saveUser = () => {
@@ -115,15 +134,21 @@ class Users extends Component {
       lastName,
       email,
       contact,
-      usersOptions
+      usersOptions,
+      user
     } = this.state
-    console.log('ALL USERS ****** ', this.props.allUsersListLoading)
     return (
       <div className='users-container users-wrapper'>
-        <div>
-          {this.props.allUsersListLoading ? <div className='spinner-box'>
+        <div style={{ width: '100%', height: '100%' }}>
+          {this.props.allUsersListLoading
+          ? <div className='spinner-box'>
             <div className={'spinner'}>
-              <Spinner fadeIn='none' className={'spin-item'} color={'#fdb913'} name='ball-spin-fade-loader' />
+              <Spinner
+                style={{ margin: '200px auto', width: '50px' }}
+                fadeIn='none'
+                className={'spin-item'}
+                color={'#fdb913'}
+                name='ball-spin-fade-loader' />
             </div>
           </div>
           : <ReactTable
@@ -166,7 +191,7 @@ class Users extends Component {
               type='button' />
           </a>
           <RaisedButton
-            onClick={this.handleNewUser}
+            onClick={() => this.handleUser('newUser')}
             buttonStyle={{ width: '200px', marginLeft: '25px' }}
             backgroundColor='#244C7B'
             labelColor='#FCB636'
@@ -174,7 +199,7 @@ class Users extends Component {
             type='button' />
           <RaisedButton
             disabled={!this.state.selectedRow}
-            onClick={this.handleEditUser}
+            onClick={() => this.handleUser('editUser')}
             buttonStyle={{ width: '200px', marginLeft: '25px' }}
             backgroundColor='#244C7B'
             labelColor='#FCB636'
@@ -198,36 +223,55 @@ class Users extends Component {
           <div>
             <TextField
               value={login}
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'login')}
+              errorText={user.loginError ? 'This field is required' : ''}
               fullWidth
-              autoComplete='off'
+              type='text'
+              floatingLabelFixed
               floatingLabelText='Login' />
             <TextField
               value={password}
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'password')}
+              errorText={user.passwordError ? 'This field is required' : ''}
               floatingLabelText='Password'
-              type='password'
-              autoComplete='off'
+              floatingLabelFixed
+              type='text'
               style={{ marginRight: '20px' }} />
             <TextField
               value={password}
-              floatingLabelText='Password'
-              autoComplete='off'
-              type='password' />
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'passwordConformation')}
+              errorText={user.passwordConformationError ? 'This field is required' : ''}
+              floatingLabelText='Confirm Password'
+              floatingLabelFixed
+              type='text' />
             <TextField
               value={firstName}
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'firstName')}
+              errorText={user.firstNameError ? 'This field is required' : ''}
               fullWidth
+              floatingLabelFixed
               floatingLabelText='First Name' />
             <TextField
               value={lastName}
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'lastName')}
+              errorText={user.lastNameError ? 'This field is required' : ''}
               fullWidth
+              floatingLabelFixed
               floatingLabelText='Last Name' />
             <TextField
               value={email}
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'email')}
+              errorText={user.emailError ? 'This field is required' : ''}
               fullWidth
               type='email'
+              floatingLabelFixed
               floatingLabelText='email' />
             <TextField
               value={contact}
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'contact')}
+              errorText={user.contactError ? 'This field is required' : ''}
               fullWidth
+              floatingLabelFixed
               floatingLabelText='Contact(Phone)' />
             <FlatButton
               label='Cancel'
