@@ -54,7 +54,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -348,7 +348,7 @@ public class TrialSessionService {
         authUser.setLogin(name + lastName);
         authUser.setLastName(lastName);
         authUser.setPassword(bCryptPasswordEncoder.encode(password));
-        authUser.setCreatedAt(OffsetDateTime.now());
+        authUser.setCreatedAt(ZonedDateTime.now());
 
         AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
                 .filter(position -> position.getName().contains("User"))
