@@ -13,13 +13,14 @@ class Users extends Component {
     selectedRow: null,
     usersOptions: [],
     isUserDetailsOpen: false,
+    editionMode: '',
     user: {
       login: '',
       loginError: false,
       password: '',
       passwordError: false,
-      passwordConformation: '',
-      passwordConformationError: false,
+      passwordConfirmation: '',
+      passwordConfirmationError: false,
       firstName: '',
       firstNameError: false,
       lastName: '',
@@ -27,14 +28,20 @@ class Users extends Component {
       email: '',
       emailError: false,
       contact: '',
-      contactError: false
-    },
-    editionStarted: false
+      contactError: false,
+      activated: false,
+      rolesIds: null,
+      positionId: null
+    }
   }
 
   static propTypes = {
     getAllUsersList: PropTypes.func,
+    putUser: PropTypes.func,
+    addUser: PropTypes.func,
+    getSelectedUser: PropTypes.func,
     allUsersList: PropTypes.object,
+    selectedUser: PropTypes.object,
     allUsersListLoading: PropTypes.bool
   }
 
@@ -50,6 +57,19 @@ class Users extends Component {
     }
   }
 
+  setSelectedUser = () => {
+    const { selectedUser } = this.props
+    const { user } = this.state
+    user.login = selectedUser.login
+    user.firstName = selectedUser.firstName
+    user.lastName = selectedUser.lastName
+    user.email = selectedUser.email
+    user.contact = selectedUser.contact
+    this.setState({
+      user: user
+    })
+  }
+
   handleUsers = (users) => {
     let usersOptions = []
     users.map(user => {
@@ -62,12 +82,42 @@ class Users extends Component {
       })
     })
     this.setState({
-      usersOptions
+      usersOptions,
+      isUserDetailsOpen: false,
+      selectedRow: null
     })
   }
 
-  handleUser = (type) => {
+  handleAddUser = (editionMode) => {
+    const user = { ...this.state.user }
+    user.login = ''
+    user.password = ''
+    user.passwordConfirmation = ''
+    user.firstName = ''
+    user.lastName = ''
+    user.email = ''
+    user.contact = ''
     this.setState({
+      user: user,
+      isUserDetailsOpen: true,
+      editionMode: editionMode
+    })
+  }
+
+  handleEditUser = (editionMode) => {
+    const user = { ...this.state.user }
+    const { selectedUser } = this.props
+    user.login = selectedUser.login ? selectedUser.login : ''
+    user.firstName = selectedUser.firstName ? selectedUser.firstName : ''
+    user.lastName = selectedUser.lastName ? selectedUser.lastName : ''
+    user.email = selectedUser.email ? selectedUser.email : ''
+    user.contact = selectedUser.contact ? selectedUser.contact : ''
+    user.activated = selectedUser.activated ? selectedUser.activated : false
+    user.rolesIds = selectedUser.roles && selectedUser.roles[0] ? [selectedUser.roles[0].id] : null
+    user.positionId = selectedUser.position && selectedUser.position.id ? selectedUser.position.id : null
+    this.setState({
+      user: user,
+      editionMode: editionMode,
       isUserDetailsOpen: true
     })
   }
@@ -75,25 +125,97 @@ class Users extends Component {
   handleOnChangeInput = (value, stateName) => {
     let updatedUser = { ...this.state.user }
     updatedUser[stateName] = value
-    this.setState({ user: updatedUser, editionStarted: true })
+    this.setState({ user: updatedUser })
     this.validateBlur(updatedUser, stateName)
   }
 
-  validateBlur = (updatedUser, stateName) => {
+  validateBlur = (updatedUser, stateName, validationType) => {
     let updatedError = { ...updatedUser }
-    const error = updatedError[stateName].length < 1
-    updatedError[stateName + 'Error'] = error
-    this.setState({ user: updatedError })
+    let error = false
+    if (stateName === 'email') {
+      error = this.validateEmail(updatedError.email)
+    } else if (stateName === 'password') {
+      error = updatedError[stateName].length < 6
+    } else if (stateName === 'passwordConfirmation') {
+      error = updatedError[stateName] !== updatedError.password
+    } else {
+      error = updatedError[stateName].length < 1
+    }
+    if (validationType === 'formValidation') {
+      return error
+    } else {
+      updatedError[stateName + 'Error'] = error
+      this.setState({ user: updatedError })
+    }
+  }
+
+  validateEmail = (email) => {
+    if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return false
+    } return true
+  }
+
+  isFormValid = () => {
+    let updatedUser = { ...this.state.user }
+    return (
+      (this.state.editionMode === 'editUser' ? true : !this.validateBlur(updatedUser, 'login', 'formValidation')) &&
+      !this.validateBlur(updatedUser, 'firstName', 'formValidation') &&
+      !this.validateBlur(updatedUser, 'lastName', 'formValidation') &&
+      !this.validateBlur(updatedUser, 'email', 'formValidation') &&
+      !this.validateBlur(updatedUser, 'contact', 'formValidation') &&
+      (this.state.editionMode === 'editUser' ? true : !this.validateBlur(updatedUser, 'password', 'formValidation')) &&
+      // eslint-disable-next-line max-len
+      (this.state.editionMode === 'editUser' ? true : !this.validateBlur(updatedUser, 'passwordConfirmation', 'formValidation'))
+    )
+  }
+
+  handleSelectedUser = (selectedUser) => {
+    this.props.getSelectedUser(selectedUser.id)
   }
 
   saveUser = () => {
-    console.log('save')
+    const { user } = this.state
+    if (this.state.editionMode === 'editUser') {
+      const userId = this.state.selectedRow && this.state.selectedRow.id ? this.state.selectedRow.id : null
+      const updatedUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        contact: user.contact,
+        activated: user.activated,
+        rolesIds: user.rolesIds,
+        positionId: user.positionId
+      }
+      this.props.putUser(updatedUser, userId)
+    } else {
+      const updatedUser = {
+        login: user.login,
+        password: user.password,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        contact: user.contact,
+        activated: user.activated,
+        rolesIds: [1],
+        positionId: 2
+      }
+      this.props.addUser(updatedUser)
+    }
   }
 
   handleCloseEditUser = () => {
     this.setState({
-      isUserDetailsOpen: false
+      isUserDetailsOpen: false,
+      selectedRow: null
     })
+  }
+
+  isSelectedUser = () => {
+    if (this.state.selectedRow && this.state.selectedRow.id) {
+      return this.state.selectedRow.id === this.props.selectedUser.id
+    } else {
+      return false
+    }
   }
 
   render () {
@@ -128,15 +250,20 @@ class Users extends Component {
     const {
       isUserDetailsOpen,
       selectedRow,
+      usersOptions,
+      user
+    } = this.state
+    const {
       login,
-      password,
       firstName,
       lastName,
       email,
       contact,
-      usersOptions,
-      user
-    } = this.state
+      password,
+      passwordConfirmation
+    } = user
+    const isFormValid = this.isFormValid()
+    const isSelectedUser = !this.isSelectedUser()
     return (
       <div className='users-container users-wrapper'>
         <div style={{ width: '100%', height: '100%' }}>
@@ -161,6 +288,7 @@ class Users extends Component {
               if (rowInfo && rowInfo.row) {
                 return {
                   onClick: e => {
+                    this.handleSelectedUser(rowInfo.original)
                     this.setState({
                       selectedRow: rowInfo.original
                     })
@@ -191,15 +319,15 @@ class Users extends Component {
               type='button' />
           </a>
           <RaisedButton
-            onClick={() => this.handleUser('newUser')}
+            onClick={() => this.handleAddUser('newUser')}
             buttonStyle={{ width: '200px', marginLeft: '25px' }}
             backgroundColor='#244C7B'
             labelColor='#FCB636'
             label='+ New'
             type='button' />
           <RaisedButton
-            disabled={!this.state.selectedRow}
-            onClick={() => this.handleUser('editUser')}
+            disabled={isSelectedUser}
+            onClick={() => this.handleEditUser('editUser')}
             buttonStyle={{ width: '200px', marginLeft: '25px' }}
             backgroundColor='#244C7B'
             labelColor='#FCB636'
@@ -214,6 +342,7 @@ class Users extends Component {
             : <Checkbox disabled />} <p>Deleted</p></p>
             <RaisedButton
               onClick={this.saveUser}
+              disabled={!isFormValid}
               buttonStyle={{ width: '200px' }}
               backgroundColor='#244C7B'
               labelColor='#FCB636'
@@ -221,29 +350,33 @@ class Users extends Component {
               type='button' />
           </div>
           <div>
-            <TextField
+            {this.state.editionMode !== 'editUser' && <TextField
               value={login}
               onChange={(e) => this.handleOnChangeInput(e.target.value, 'login')}
               errorText={user.loginError ? 'This field is required' : ''}
               fullWidth
               type='text'
               floatingLabelFixed
-              floatingLabelText='Login' />
-            <TextField
+              floatingLabelText='Login' />}
+            {this.state.editionMode !== 'editUser' && <TextField
               value={password}
+              autoComplete='new-password'
               onChange={(e) => this.handleOnChangeInput(e.target.value, 'password')}
-              errorText={user.passwordError ? 'This field is required' : ''}
+              errorText={user.passwordError ? 'This field is required. Min 6 characters.' : ''}
               floatingLabelText='Password'
+              fullWidth
               floatingLabelFixed
-              type='text'
-              style={{ marginRight: '20px' }} />
-            <TextField
-              value={password}
-              onChange={(e) => this.handleOnChangeInput(e.target.value, 'passwordConformation')}
-              errorText={user.passwordConformationError ? 'This field is required' : ''}
+              type='password'
+              style={{ marginRight: '20px' }} />}
+            {this.state.editionMode !== 'editUser' && <TextField
+              value={passwordConfirmation}
+              autoComplete='new-password'
+              onChange={(e) => this.handleOnChangeInput(e.target.value, 'passwordConfirmation')}
+              errorText={user.passwordConfirmationError ? 'Required field. Both passwords must be the same.' : ''}
               floatingLabelText='Confirm Password'
+              fullWidth
               floatingLabelFixed
-              type='text' />
+              type='password' />}
             <TextField
               value={firstName}
               onChange={(e) => this.handleOnChangeInput(e.target.value, 'firstName')}
@@ -263,6 +396,7 @@ class Users extends Component {
               onChange={(e) => this.handleOnChangeInput(e.target.value, 'email')}
               errorText={user.emailError ? 'This field is required' : ''}
               fullWidth
+              required
               type='email'
               floatingLabelFixed
               floatingLabelText='email' />

@@ -57,7 +57,6 @@ export const logIn = (username, password) => {
           resolve()
         })
         .catch((error) => {
-          console.log(error)
           if (error.message === 'Network Error') {
             toastr.error('Login', 'You cannot log in while being offline', toastrOptions)
           } else {
