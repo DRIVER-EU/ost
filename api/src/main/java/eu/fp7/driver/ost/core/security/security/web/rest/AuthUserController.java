@@ -1,8 +1,11 @@
 package eu.fp7.driver.ost.core.security.security.web.rest;
 
+import eu.fp7.driver.ost.core.annotation.DeleteMapping;
 import eu.fp7.driver.ost.core.annotation.FindAllGetMapping;
 import eu.fp7.driver.ost.core.annotation.FindOneGetMapping;
 import eu.fp7.driver.ost.core.annotation.IsAdmin;
+import eu.fp7.driver.ost.core.annotation.PostMapping;
+import eu.fp7.driver.ost.core.annotation.PutMapping;
 import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.core.exception.FormValidationException;
@@ -18,10 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

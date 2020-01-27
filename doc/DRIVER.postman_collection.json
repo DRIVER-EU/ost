@@ -147,7 +147,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"login\": \"test\",\n\t\"password\": \"null\",\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}"
+									"raw": "{\n\t\"login\": \"test\",\n\t\"password\": \"TestoweHaslo123$\",\n\t\"firstName\": \"Grzegorz\",\n\t\"lastName\": \"Brzęczyszczykiewicz\",\n\t\"email\": \"grzegorz.brzeczyszczykiewicz@chrzaszczyzewoszyce.pl\",\n\t\"contact\": \"Chrząszczyżewoszyce, powiat Łękołody\",\n\t\"activated\": true,\n\t\"rolesIds\": [1],\n\t\"positionId\": 2\n}"
 								},
 								"url": {
 									"raw": "http://{{IP-Address}}/api/auth/users",
@@ -426,7 +426,7 @@
 							"basic": [
 								{
 									"key": "password",
-									"value": "adminpass",
+									"value": "admin",
 									"type": "string"
 								},
 								{
@@ -446,7 +446,7 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Authorization",

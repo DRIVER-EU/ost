@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -30,14 +30,14 @@ public abstract class AuditingObject extends PersistentObject
 
     @CreatedDate
     @Column(nullable = false)
-    private OffsetDateTime createdAt;
+    private ZonedDateTime createdAt;
 
     @LastModifiedBy
     @ManyToOne
     private AuthUser modifiedBy;
 
     @LastModifiedDate
-    private OffsetDateTime modifiedAt;
+    private ZonedDateTime modifiedAt;
 
     public AuthUser getCreatedBy() {
         return createdBy;
@@ -47,11 +47,11 @@ public abstract class AuditingObject extends PersistentObject
         this.createdBy = createdBy;
     }
 
-    public OffsetDateTime getCreatedAt() {
+    public ZonedDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
+    public void setCreatedAt(ZonedDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -63,11 +63,11 @@ public abstract class AuditingObject extends PersistentObject
         this.modifiedBy = modifiedBy;
     }
 
-    public OffsetDateTime getModifiedAt() {
+    public ZonedDateTime getModifiedAt() {
         return modifiedAt;
     }
 
-    public void setModifiedAt(OffsetDateTime modifiedAt) {
+    public void setModifiedAt(ZonedDateTime modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
 }
