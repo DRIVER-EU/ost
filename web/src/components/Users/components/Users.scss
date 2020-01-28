@@ -1,0 +1,31 @@
+.users-container.users-wrapper {
+    width: 100%;
+    height: calc(100vh - 89px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.users-btn-container {
+    width: 100%;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+}
+
+.users-btn-container div {
+    box-shadow: none!important;
+}
+
+.user-info-save {
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    p {
+        display: flex;
+    }
+    div {
+        box-shadow: rgba(0, 0, 0, 0) 0 0 0, rgba(0, 0, 0, 0) 0 0 0 !important;
+    }
+}
