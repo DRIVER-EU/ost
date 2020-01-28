@@ -15,6 +15,7 @@ export const PUT_USER_SUCCESS = 'PUT_USER_SUCCESS'
 export const PUT_USER_FAIL = 'PUT_USER_FAIL'
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS'
 export const GET_USER_FAIL = 'GET_USER_FAIL'
+export const GET_USER_START = 'GET_USER_START'
 
 export const actions = {
   getAllUsersList,
@@ -62,6 +63,13 @@ export const updateUserFailAction = (data) => {
   }
 }
 
+export const getUserStartAction = (data) => {
+  return {
+    type: GET_USER_START,
+    data: data
+  }
+}
+
 export const getUserSuccessAction = (data) => {
   return {
     type: GET_USER_SUCCESS,
@@ -106,7 +114,7 @@ export const putUser = (user, userId) => {
 
 export const getSelectedUser = (userId) => {
   return dispatch => {
-    dispatch(updateUserStartAction())
+    dispatch(getUserStartAction())
     axios.get(`${origin}/api/auth/users/${userId}`, getHeaders())
     .then(res => {
       dispatch(getUserSuccessAction(res.data))
@@ -171,17 +179,23 @@ const ACTION_HANDLERS = {
       allUsersListLoading: false
     }
   },
+  [GET_USER_START]: (state) => {
+    return {
+      ...state,
+      isUserLoading: true
+    }
+  },
   [GET_USER_SUCCESS]: (state, action) => {
     return {
       ...state,
       selectedUser: action.data,
-      allUsersListLoading: false
+      isUserLoading: false
     }
   },
   [GET_USER_FAIL]: (state) => {
     return {
       ...state,
-      allUsersListLoading: false
+      isUserLoading: false
     }
   }
 }
@@ -191,7 +205,8 @@ const ACTION_HANDLERS = {
 const initialState = {
   allUsersList: {},
   selectedUser: {},
-  allUsersListLoading: false
+  allUsersListLoading: false,
+  isUserLoading: false
 }
 
 export default function usersManagerReducer (state = initialState, action) {

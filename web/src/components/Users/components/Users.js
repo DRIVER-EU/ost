@@ -8,12 +8,15 @@ import ReactTable from 'react-table'
 import Dialog from 'material-ui/Dialog'
 import _ from 'lodash'
 
+// eslint-disable-next-line no-useless-escape
+const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
 class Users extends Component {
   state = {
     selectedRow: null,
     usersOptions: [],
     isUserDetailsOpen: false,
     editionMode: '',
+    isDoubleClicked: false,
     user: {
       login: '',
       loginError: false,
@@ -42,7 +45,8 @@ class Users extends Component {
     getSelectedUser: PropTypes.func,
     allUsersList: PropTypes.object,
     selectedUser: PropTypes.object,
-    allUsersListLoading: PropTypes.bool
+    allUsersListLoading: PropTypes.bool,
+    isUserLoading: PropTypes.bool
   }
 
   componentDidMount () {
@@ -55,19 +59,9 @@ class Users extends Component {
         this.handleUsers(this.props.allUsersList.data)
       }
     }
-  }
-
-  setSelectedUser = () => {
-    const { selectedUser } = this.props
-    const { user } = this.state
-    user.login = selectedUser.login
-    user.firstName = selectedUser.firstName
-    user.lastName = selectedUser.lastName
-    user.email = selectedUser.email
-    user.contact = selectedUser.contact
-    this.setState({
-      user: user
-    })
+    if (this.state.isDoubleClicked) {
+      this.handleEditUser('editUser')
+    }
   }
 
   handleUsers = (users) => {
@@ -118,7 +112,8 @@ class Users extends Component {
     this.setState({
       user: user,
       editionMode: editionMode,
-      isUserDetailsOpen: true
+      isUserDetailsOpen: true,
+      isDoubleClicked: false
     })
   }
 
@@ -139,7 +134,8 @@ class Users extends Component {
     } else if (stateName === 'passwordConfirmation') {
       error = updatedError[stateName] !== updatedError.password
     } else {
-      error = updatedError[stateName].length < 1
+      const containsSpecialSigns = regex.test(updatedError[stateName])
+      error = updatedError[stateName].length < 1 || containsSpecialSigns
     }
     if (validationType === 'formValidation') {
       return error
@@ -169,8 +165,13 @@ class Users extends Component {
     )
   }
 
-  handleSelectedUser = (selectedUser) => {
+  handleSelectedUser = (selectedUser, mode) => {
     this.props.getSelectedUser(selectedUser.id)
+    if (mode === 'doubleClick') {
+      this.setState({
+        isUserDetailsOpen: true
+      })
+    }
   }
 
   saveUser = () => {
@@ -290,11 +291,16 @@ class Users extends Component {
                   onClick: e => {
                     this.handleSelectedUser(rowInfo.original)
                     this.setState({
-                      selectedRow: rowInfo.original
+                      selectedRow: rowInfo.original,
+                      isDoubleClicked: false
                     })
                   },
                   onDoubleClick: e => {
-                    this.viewQuestion()
+                    this.handleSelectedUser(rowInfo.original)
+                    this.setState({
+                      selectedRow: rowInfo.original,
+                      isDoubleClicked: true
+                    })
                   },
                   style: {
                     background: this.state.selectedRow
@@ -334,7 +340,18 @@ class Users extends Component {
             label='Edit'
             type='button' />
         </div>
-        <Dialog open={isUserDetailsOpen}>
+        {this.props.isUserLoading
+        ? <div className='spinner-box'>
+          <div className={'spinner'}>
+            <Spinner
+              style={{ margin: '200px auto', width: '50px' }}
+              fadeIn='none'
+              className={'spin-item'}
+              color={'#fdb913'}
+              name='ball-spin-fade-loader' />
+          </div>
+        </div>
+        : <Dialog open={isUserDetailsOpen}>
           <h2>User details</h2>
           <div className='user-info-save'>
             <p>{selectedRow && <span>ID: {selectedRow.id}</span>}</p>
@@ -412,7 +429,7 @@ class Users extends Component {
               secondary
               onClick={this.handleCloseEditUser} />
           </div>
-        </Dialog>
+        </Dialog>}
       </div>
     )
   }
