@@ -16,12 +16,16 @@ export const PUT_USER_FAIL = 'PUT_USER_FAIL'
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS'
 export const GET_USER_FAIL = 'GET_USER_FAIL'
 export const GET_USER_START = 'GET_USER_START'
+export const USER_PASSWORD_SUCCESS = 'USER_PASSWORD_SUCCESS'
+export const USER_PASSWORD_FAIL = 'USER_PASSWORD_FAIL'
 
 export const actions = {
   getAllUsersList,
   putUser,
   getSelectedUser,
-  addUser
+  addUser,
+  putUserPassword,
+  passwordUpdateFailAction
 }
 
 export const allUsersListAction = (data) => {
@@ -83,6 +87,18 @@ export const getUserFailAction = (data) => {
   }
 }
 
+export const passwordUpdateSuccessAction = () => {
+  return {
+    type: USER_PASSWORD_SUCCESS
+  }
+}
+
+export const passwordUpdateFailAction = () => {
+  return {
+    type: USER_PASSWORD_FAIL
+  }
+}
+
 export const getAllUsersList = () => {
   return dispatch => {
     dispatch(allUsersListStartAction())
@@ -92,7 +108,7 @@ export const getAllUsersList = () => {
     })
     .catch(err => {
       dispatch(allUsersListFailAction())
-      toastr.error('Failed to get users list. Check network and try again.', toastrOptions)
+      toastr.error('Failed to get users list Check network and try again', toastrOptions)
     })
   }
 }
@@ -103,11 +119,26 @@ export const putUser = (user, userId) => {
     axios.put(`${origin}/api/auth/users/${userId}`, user, getHeaders())
     .then(res => {
       dispatch(updateUserSuccessAction())
+      toastr.success('User data are updated', toastrOptions)
       dispatch(getAllUsersList())
     })
     .catch(err => {
       dispatch(updateUserFailAction())
-      toastr.error('Failed to update the user.', toastrOptions)
+      toastr.error('Failed to update the user', toastrOptions)
+    })
+  }
+}
+
+export const putUserPassword = (userId, data) => {
+  return dispatch => {
+    axios.put(`${origin}/api/auth/users/${userId}/change-password`, data, getHeaders())
+    .then(res => {
+      dispatch(passwordUpdateSuccessAction())
+      toastr.success('User password is updated', toastrOptions)
+    })
+    .catch(err => {
+      toastr.error('Failed to update user password', toastrOptions)
+      console.error(err)
     })
   }
 }
@@ -121,7 +152,7 @@ export const getSelectedUser = (userId) => {
     })
     .catch(err => {
       dispatch(getUserFailAction())
-      toastr.error('Failed to get selected user. Try again.', toastrOptions)
+      toastr.error('Failed to get selected user Try again', toastrOptions)
     })
   }
 }
@@ -133,10 +164,11 @@ export const addUser = (user) => {
     .then(res => {
       dispatch(updateUserSuccessAction())
       dispatch(getAllUsersList())
+      toastr.success('User added', toastrOptions)
     })
     .catch(err => {
       dispatch(updateUserFailAction())
-      toastr.error('Failed to add user. Check data and try again.', toastrOptions)
+      toastr.error('Failed to add user Check data and try again', toastrOptions)
     })
   }
 }
@@ -197,6 +229,18 @@ const ACTION_HANDLERS = {
       ...state,
       isUserLoading: false
     }
+  },
+  [USER_PASSWORD_SUCCESS]: (state) => {
+    return {
+      ...state,
+      isPasswordUpdated: true
+    }
+  },
+  [USER_PASSWORD_FAIL]: (state) => {
+    return {
+      ...state,
+      isPasswordUpdated: false
+    }
   }
 }
   // ------------------------------------
@@ -206,7 +250,8 @@ const initialState = {
   allUsersList: {},
   selectedUser: {},
   allUsersListLoading: false,
-  isUserLoading: false
+  isUserLoading: false,
+  isPasswordUpdated: false
 }
 
 export default function usersManagerReducer (state = initialState, action) {
