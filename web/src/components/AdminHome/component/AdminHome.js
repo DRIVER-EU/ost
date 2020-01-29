@@ -10,12 +10,14 @@ class AdminHome extends Component {
         <div className='pages-box' style={{ 'background': 'white' }}>
           <div className='home-container'>
             <div className='buttons-container'>
-              <RaisedButton
-                buttonStyle={{ width: '200px' }}
-                backgroundColor='#244C7B'
-                labelColor='#FCB636'
-                label='Users'
-                type='button' />
+              <a href='users'>
+                <RaisedButton
+                  buttonStyle={{ width: '200px' }}
+                  backgroundColor='#244C7B'
+                  labelColor='#FCB636'
+                  label='Users'
+                  type='button' />
+              </a>
               <a href='trial-manager'>
                 <RaisedButton
                   buttonStyle={{ width: '200px' }}

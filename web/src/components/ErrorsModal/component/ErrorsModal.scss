@@ -1,0 +1,23 @@
+.modalContainer {
+  .titleContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    .title {
+      font-weight: bold;
+      font-size: 22px;
+    }
+  }
+
+  .errorsContainer {
+    color: #b71c1c;
+  }
+  .warningsContainer {
+    color: #fcb636;
+  }
+}
+.custom__dialog {
+  & > div {
+    padding: 20px 10px;
+  }
+}

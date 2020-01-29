@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router'
 import Spinner from 'react-spinkit'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-
+import ErrorsModal from '../../ErrorsModal/component/ErrorsModal'
 class TrialManager extends Component {
   constructor (props) {
     super(props)
@@ -16,7 +16,12 @@ class TrialManager extends Component {
       isLoading: false,
       openModal: false,
       trialId: null,
-      selectedTrial: null
+      selectedTrial: null,
+      errorsModal: {
+        show: false,
+        warnings: [],
+        errors: []
+      }
     }
   }
 
@@ -25,6 +30,15 @@ class TrialManager extends Component {
     listOfTrialsManager: PropTypes.object,
     getListOfTrials: PropTypes.func,
     listOfTrials: PropTypes.object
+  };
+
+  handleCloseModal = () => {
+    this.setState({
+      errorsModal: {
+        ...this.state.errorsModal,
+        show: false
+      }
+    })
   };
 
   componentWillMount () {
@@ -36,12 +50,19 @@ class TrialManager extends Component {
     if (
       nextProps.listOfTrialsManager.trialsSet &&
       nextProps.listOfTrialsManager.trialsSet !==
-      this.state.listOfTrialsManager &&
+        this.state.listOfTrialsManager &&
       nextProps.listOfTrialsManager.trialsSet !==
-      this.props.listOfTrialsManager.trialsSet
+        this.props.listOfTrialsManager.trialsSet
     ) {
+      let data = []
+      for (let i = 0; i < nextProps.listOfTrialsManager.trialsSet.length; i++) {
+        let trial = nextProps.listOfTrialsManager.trialsSet[i]
+        if (!trial.archived) {
+          data.push(trial)
+        }
+      }
       this.setState({
-        listOfTrialsManager: nextProps.listOfTrialsManager.trialsSet,
+        listOfTrialsManager: data,
         isLoading: false
       })
     }
@@ -60,9 +81,12 @@ class TrialManager extends Component {
   viewTrial () {
     if (this.state.selectedTrial) {
       browserHistory.push(
-        `trial-manager/${this.state.selectedTrial.id}/admin-trials/${this.state.selectedTrial.id}`
+        `trial-manager/trial-detail/${this.state.selectedTrial.id}`
       )
     }
+  }
+  newTrial () {
+    browserHistory.push(`trial-manager/new-trial`)
   }
 
   getShortDesc (str) {
@@ -95,7 +119,17 @@ class TrialManager extends Component {
   importFileAction = (el, props) => {
     const data = new FormData()
     data.append('multipartFile', el.target.files[0])
-    props.importFile(data)
+    this.setState({ isLoading: true })
+    props.importFile(data).then(x => {
+      this.setState({
+        errorsModal: {
+          errors: x.errors.map(y => y.message),
+          warnings: x.warnings.map(y => y.message),
+          show: x.errors.length !== 0 || x.warnings.length !== 0
+        },
+        isLoading: false
+      })
+    })
   };
   handleChangeDropDown (stateName, event, index, value) {
     let change = { ...this.state }
@@ -104,15 +138,6 @@ class TrialManager extends Component {
   }
 
   render () {
-    // const actions = [
-    //   <FlatButton label="Cancel" primary onTouchTap={this.handleClose} />,
-    //   <FlatButton
-    //     label="Next"
-    //     secondary
-    //     keyboardFocused
-    //     onClick={this.newSession.bind(this)}
-    //   />
-    // ];
     const columns = [
       {
         Header: 'Trials',
@@ -180,36 +205,45 @@ class TrialManager extends Component {
                 getTdProps={(state, rowInfo) => {
                   if (rowInfo && rowInfo.row) {
                     return {
-                      onClick: (e) => {
+                      onClick: e => {
                         this.setState({
                           selectedTrial: rowInfo.original
                         })
                       },
-                      style: {
-                        background: this.state.selectedTrial ? rowInfo.original.id ===
-                          this.state.selectedTrial.id ? '#e5e5e5' : '' : '',
-                        cursor: 'pointer'
+                      onDoubleClick: e => {
+                        this.viewTrial()
                       }
                     }
                   } else {
                     return {}
                   }
                 }}
+                getTrProps={(state, rowInfo) => {
+                  if (rowInfo && rowInfo.row) {
+                    return {
+                      style: {
+                        background: this.state.selectedTrial
+                          ? rowInfo.original.id === this.state.selectedTrial.id
+                            ? '#e5e5e5'
+                            : ''
+                          : '',
+                        cursor: 'pointer',
+                        display: rowInfo.original.archived
+                          ? 'none'
+                          : 'inline-flex'
+                      }
+                    }
+                  }
+                }}
               />
             )}
-            {/* <FloatingActionButton
-              className={'observation-add'}
-              style={{ float: 'right' }}
-              onTouchTap={this.handleOpen}
-              secondary>
-              <ContentAdd />
-            </FloatingActionButton> */}
             <div className='action-btns'>
               <RaisedButton
                 buttonStyle={{ width: '200px' }}
                 backgroundColor='#244C7B'
                 labelColor='#FCB636'
                 label='+ New'
+                onClick={this.newTrial.bind(this)}
                 type='Button'
               />
               <RaisedButton
@@ -221,52 +255,15 @@ class TrialManager extends Component {
                 disabled={!this.state.selectedTrial}
                 onClick={this.viewTrial.bind(this)}
               />
+              <ErrorsModal
+                show={this.state.errorsModal.show}
+                handleCloseModal={this.handleCloseModal}
+                warnings={this.state.errorsModal.warnings}
+                errors={this.state.errorsModal.errors}
+              />
             </div>
           </div>
         </div>
-        {/* <Dialog
-          title="Select Trial"
-          actions={actions}
-          modal={false}
-          open={this.state.openModal}
-          onRequestClose={this.handleClose}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 600,
-              marginBottom: 10
-            }}
-          >
-            <h2
-              style={{
-                display: "inline-block",
-                padding: "50px 40px 55px 50px"
-              }}
-            >
-              Trial:
-            </h2>
-            <SelectField
-              value={this.state.trialId}
-              floatingLabelText="Select Trial"
-              onChange={this.handleChangeDropDown.bind(this, "trialId")}
-            >
-              {this.state.listOfTrials &&
-                this.state.listOfTrials.length !== 0 &&
-                this.state.listOfTrials.map(index => (
-                  <MenuItem
-                    key={index.id}
-                    value={index.id}
-                    style={{ color: "grey" }}
-                    primaryText={index.name}
-                  />
-                ))}
-            </SelectField>
-          </div>
-        </Dialog> */}
       </div>
     )
   }
