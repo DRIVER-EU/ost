@@ -29,3 +29,11 @@
         box-shadow: rgba(0, 0, 0, 0) 0 0 0, rgba(0, 0, 0, 0) 0 0 0 !important;
     }
 }
+
+.users-spinner-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
