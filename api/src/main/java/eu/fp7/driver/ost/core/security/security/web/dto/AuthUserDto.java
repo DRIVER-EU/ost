@@ -51,6 +51,8 @@ public final class AuthUserDto {
 
         public List<DictionaryObjectDto.MinimalItem> roles;
 
+        public boolean activated;
+
         @Override
         public void toDto(AuthUser authUser) {
             super.toDto(authUser);
@@ -62,6 +64,7 @@ public final class AuthUserDto {
                             .map(DictionaryObject.class::cast)
                             .collect(Collectors.toList()),
                     DictionaryObjectDto.MinimalItem.class);
+            this.activated = authUser.isActivated();
         }
     }
 
