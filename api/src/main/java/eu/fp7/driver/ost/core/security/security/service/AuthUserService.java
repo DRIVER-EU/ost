@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,7 +112,9 @@ public class AuthUserService {
         entity.setPosition(Optional.ofNullable(form.positionId)
                 .map(id -> authUserPositionRepository.findOne(id))
                 .orElse(null));
-        entity.setRoles(authRoleRepository.findByIdIn(form.rolesIds));
+        ArrayList al = new ArrayList();
+        al.add(Long.valueOf(2));
+        entity.setRoles(authRoleRepository.findByIdIn(al));
         return repository.save(entity);
     }
 }
