@@ -23,7 +23,6 @@ public class QuestionOptionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-
     @Transactional(readOnly = true)
     public QuestionOption findById(Long id) {
         QuestionOption question = questionOptionRepository.findById(id)
