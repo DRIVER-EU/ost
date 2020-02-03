@@ -1,6 +1,7 @@
 package eu.fp7.driver.ost.driver.service;
 
-import co.perpixel.exception.EntityNotFoundException;
+
+import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
 import eu.fp7.driver.ost.driver.dto.AdminQuestionOptionDTO;
 import eu.fp7.driver.ost.driver.model.Question;
 import eu.fp7.driver.ost.driver.model.QuestionOption;
@@ -21,7 +22,6 @@ public class QuestionOptionService {
 
     @Autowired
     private QuestionRepository questionRepository;
-
 
     @Transactional(readOnly = true)
     public QuestionOption findById(Long id) {
