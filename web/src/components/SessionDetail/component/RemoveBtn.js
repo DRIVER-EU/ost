@@ -85,7 +85,7 @@ class RemoveBtn extends Component {
           onClick={this.handleOpenDialog.bind(this, 'openRemoveDialog')}
         />
         <Dialog
-          title='Do you want to remove question set?'
+          title='Do you want to remove session?'
           actions={actionsRemoveDialog}
           modal={false}
           contentClassName='custom__dialog'

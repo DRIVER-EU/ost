@@ -32,7 +32,9 @@ class SessionDetail extends Component {
       roleSet: this.props.roleSet || [],
       selectedCurrentRole: '',
       usersList: this.props.usersList || [],
-      selectedCurrentUser: ''
+      selectedCurrentUser: '',
+      openRemoveDialog: false,
+      openAddUserInfoDialog: false
     }
   }
 
@@ -84,12 +86,22 @@ class SessionDetail extends Component {
   };
   handleChangeCurrentRole = (event, index, value) => {
     this.setState({ selectedCurrentRole: value })
-  }
+  };
   handleChangeCurrentUser = (event, index, value) => {
     this.setState({ selectedCurrentUser: value })
-  }
+  };
   getObservations (sessionId) {
     this.props.getObservations(sessionId)
+  }
+  checkIfExist (user, usersList) {
+    let isExist = false
+    for (let i = 0; i < usersList.length; i++) {
+      const userItem = usersList[i]
+      if (user.trialRoleId === userItem.id.trialRoleId && user.trialUserId === userItem.id.trialUserId) {
+        isExist = true
+      }
+    }
+    return isExist
   }
   componentDidMount () {
     if (this.props.getTrialDetail) {
@@ -114,19 +126,39 @@ class SessionDetail extends Component {
   };
 
   async addUser (user) {
-    await this.props.addUser(user)
-    this.handleClose()
-    if (this.props.getSessionDetail) {
-      this.props.getSessionDetail(this.props.sessionId)
+    if (!this.checkIfExist(user, this.state.userRoles)) {
+      await this.props.addUser(user)
+      this.handleClose()
+      if (this.props.getSessionDetail) {
+        this.props.getSessionDetail(this.props.sessionId)
+      }
+    } else {
+      this.handleOpenDialog('openAddUserInfoDialog')
     }
   }
   async removeUser (user) {
-    await this.props.removeUser(user.id.trialRoleId, user.id.trialSessionId, user.id.trialUserId)
+    await this.props.removeUser(
+      user.id.trialRoleId,
+      user.id.trialSessionId,
+      user.id.trialUserId
+    )
+    this.handleCloseDialog('openRemoveDialog')
+    this.setState({ selectedRole: null })
     if (this.props.getSessionDetail) {
       this.props.getSessionDetail(this.props.sessionId)
     }
   }
+  handleOpenDialog (name) {
+    let change = {}
+    change[name] = true
+    this.setState(change)
+  }
 
+  handleCloseDialog (name) {
+    let change = {}
+    change[name] = false
+    this.setState(change)
+  }
   render () {
     const columns = [
       {
@@ -148,6 +180,20 @@ class SessionDetail extends Component {
         ]
       }
     ]
+    const actionsRemoveDialog = [
+      <FlatButton
+        label='No'
+        primary
+        onClick={this.handleCloseDialog.bind(this, 'openRemoveDialog')}
+      />,
+      <RaisedButton
+        backgroundColor='#b71c1c'
+        labelColor='#fff'
+        label='Yes'
+        type='Button'
+        onClick={this.removeUser.bind(this, this.state.selectedRole)}
+      />
+    ]
     const user = {
       trialRoleId: this.state.selectedCurrentRole,
       trialSessionId: parseInt(this.state.sessionId),
@@ -161,6 +207,15 @@ class SessionDetail extends Component {
         label='Add'
         type='Button'
         onClick={this.addUser.bind(this, user)}
+      />
+    ]
+    const actionsAddUser = [
+      <RaisedButton
+        backgroundColor='#FCB636'
+        labelColor='#fff'
+        label='Ok'
+        type='Button'
+        onClick={this.handleCloseDialog.bind(this, 'openAddUserInfoDialog')}
       />
     ]
     return (
@@ -299,14 +354,64 @@ class SessionDetail extends Component {
               />
               {!this.props.new && (
                 <div className='action-btns'>
-                  <RaisedButton
-                    buttonStyle={{ width: '200px' }}
-                    backgroundColor='#244C7B'
-                    labelColor='#FCB636'
-                    label='+ New'
-                    type='Button'
-                    onClick={this.newUserRole.bind(this)}
-                  />
+                  <div>
+                    <RaisedButton
+                      buttonStyle={{ width: '200px' }}
+                      backgroundColor='#244C7B'
+                      labelColor='#FCB636'
+                      label='+ New'
+                      type='Button'
+                      onClick={this.newUserRole.bind(this)}
+                    />
+
+                    <Dialog
+                      title='Add User'
+                      actions={actions}
+                      contentClassName='custom__dialog'
+                      modal={false}
+                      open={this.state.openUserRoleDialog}
+                      onRequestClose={this.handleClose}
+                    >
+                      <div>
+                        <SelectField
+                          floatingLabelText='User'
+                          value={this.state.selectedCurrentUser}
+                          onChange={this.handleChangeCurrentUser}
+                        >
+                          {this.state.usersList.map(user => (
+                            <MenuItem
+                              key={user.id}
+                              value={user.id}
+                              primaryText={`${user.firstName} ${user.lastName}`}
+                            />
+                          ))}
+                        </SelectField>
+                      </div>
+                      <div>
+                        <SelectField
+                          floatingLabelText='Role'
+                          value={this.state.selectedCurrentRole}
+                          onChange={this.handleChangeCurrentRole}
+                        >
+                          {this.state.roleSet.map(role => (
+                            <MenuItem
+                              key={role.id}
+                              value={role.id}
+                              primaryText={role.name}
+                            />
+                          ))}
+                        </SelectField>
+                      </div>
+                    </Dialog>
+                    <Dialog
+                      title='This user role already exists.'
+                      actions={actionsAddUser}
+                      modal={false}
+                      contentClassName='custom__dialog'
+                      open={this.state.openAddUserInfoDialog}
+                      onRequestClose={this.handleCloseDialog.bind(this, 'openAddUserInfoDialog')}
+                   />
+                  </div>
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
                     labelColor='#fff'
@@ -316,47 +421,17 @@ class SessionDetail extends Component {
                       this.state.selectedRole ? '#b71c1c' : '#ccc'
                     }
                     disabled={!this.state.selectedRole}
-                    onClick={this.removeUser.bind(this, this.state.selectedRole)}
+
+                    onClick={this.handleOpenDialog.bind(this, 'openRemoveDialog')}
                   />
                   <Dialog
-                    title='Add User'
-                    actions={actions}
-                    contentClassName='custom__dialog'
+                    title='Do you want to remove user role?'
+                    actions={actionsRemoveDialog}
                     modal={false}
-                    open={this.state.openUserRoleDialog}
-                    onRequestClose={this.handleClose}
-                  >
-                    <div>
-                      <SelectField
-                        floatingLabelText='User'
-                        value={this.state.selectedCurrentUser}
-                        onChange={this.handleChangeCurrentUser}
-                      >
-                        {this.state.usersList.map(user => (
-                          <MenuItem
-                            key={user.id}
-                            value={user.id}
-                            primaryText={`${user.firstName} ${user.lastName}`}
-                          />
-                        ))}
-                      </SelectField>
-                    </div>
-                    <div>
-                      <SelectField
-                        floatingLabelText='Role'
-                        value={this.state.selectedCurrentRole}
-                        onChange={this.handleChangeCurrentRole}
-                      >
-                        {this.state.roleSet.map(role => (
-                          <MenuItem
-                            key={role.id}
-                            value={role.id}
-                            primaryText={role.name}
-                          />
-                        ))}
-                      </SelectField>
-                    </div>
-                  </Dialog>
+                    contentClassName='custom__dialog'
+                    open={this.state.openRemoveDialog}
+                    onRequestClose={this.handleCloseDialog.bind(this, 'openRemoveDialog')}
+                   />
                 </div>
               )}
             </div>

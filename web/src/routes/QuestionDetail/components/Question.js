@@ -25,7 +25,12 @@ class QuestionView extends Component {
     updateQuestion: PropTypes.func,
     removeQuestionDetail: PropTypes.func,
     questionSetName: PropTypes.any,
-    getQuestion: PropTypes.func
+    getQuestion: PropTypes.func,
+    addOption: PropTypes.func,
+    optionId: PropTypes.any,
+    optionName: PropTypes.string,
+    optionPosition: PropTypes.any,
+    removeOption: PropTypes.func
   }
 
   render () {
@@ -53,6 +58,11 @@ class QuestionView extends Component {
           answerType={this.props.answerType}
           questionSetName={this.props.questionSetName}
           getQuestionSet={this.props.getQuestion}
+          addOption={this.props.addOption}
+          optionName={this.props.optionName}
+          optionId={this.props.optionId}
+          optionPosition={this.props.optionPosition}
+          removeOption={this.props.removeOption}
         />
       </div>
     )
