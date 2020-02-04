@@ -21,7 +21,6 @@ import roleDetailReducer from '../routes/RoleDetail/modules/roledetail'
 import newRoleDetailReducer from '../routes/NewRole/modules/newrole'
 import usersManagerReducer from '../routes/Users/modules/users'
 
-
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
     location: locationReducer,
