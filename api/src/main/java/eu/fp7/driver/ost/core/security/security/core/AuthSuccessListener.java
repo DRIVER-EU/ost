@@ -35,12 +35,9 @@ public class AuthSuccessListener implements ApplicationListener<AuthenticationSu
         if (!authUser.isPresent()) return;
         String login = authUser.get().getLogin();
         String password = authUser.get().getPassword();
-        if (keycloakIsDominant) {
-//            scope = keycloakUtil.authorization(login, password);
-            if(scope==null) {
-                event.getAuthentication().setAuthenticated(false);
-                return;
-            }
+        if (keycloakIsDominant && !keycloakUtil.authorization(login, password)) {
+            event.getAuthentication().setAuthenticated(false);
+            return;
         }
         authUserRepository.updateLastLogin(authUser.get().getId(), Calendar.getInstance());
     }
