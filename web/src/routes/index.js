@@ -21,6 +21,8 @@ import QuestionDetail from './QuestionDetail'
 import NewQuestion from './NewQuestion'
 import SessionDetail from './SessionDetail'
 import NewSessionDetail from './NewSessionDetail'
+import RoleDetail from './RoleDetail'
+import NewRole from './NewRole'
 import Users from './Users'
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -50,6 +52,8 @@ export const createRoutes = store => ({
             NewStage(store),
             SessionDetail(store),
             NewSessionDetail(store),
+            RoleDetail(store),
+            NewRole(store),
             QuestionSet(store),
             NewQuestionSet(store),
             QuestionDetail(store),

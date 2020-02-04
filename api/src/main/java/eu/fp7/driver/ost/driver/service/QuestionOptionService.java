@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @Transactional
 public class QuestionOptionService {
@@ -22,6 +23,7 @@ public class QuestionOptionService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
 
     @Transactional(readOnly = true)
     public QuestionOption findById(Long id) {
