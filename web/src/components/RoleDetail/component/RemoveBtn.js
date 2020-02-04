@@ -11,17 +11,14 @@ class RemoveBtn extends Component {
     this.state = {
       openRemoveDialog: false,
       openRemoveInfoDialog: false,
-      sessionId: this.props.sessionId,
-      removeSession: this.props.openRemoveInfoDialog
+      roleId: this.props.roleId
     }
   }
 
   static propTypes={
-    sessionId: PropTypes.any,
-    removeSession: PropTypes.func,
-    userRoles: PropTypes.array,
-    trialId: PropTypes.any,
-    openRemoveInfoDialog: PropTypes.bool
+    roleId: PropTypes.any,
+    removeRole: PropTypes.func,
+    trialId: PropTypes.any
   }
   handleOpenDialog (name) {
     let change = {}
@@ -34,20 +31,12 @@ class RemoveBtn extends Component {
     change[name] = false
     this.setState(change)
   }
-  async removeQuestion () {
+  async removeRole () {
     if (
-      this.props.userRoles.length === 0
+      this.props.removeRole
     ) {
-      await this.props.removeSession(this.props.sessionId)
-      if (this.state.removeSession) {
-        this.handleCloseDialog('openRemoveDialog')
-        this.handleOpenDialog('openRemoveInfoDialog')
-      } else {
-        browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)
-      }
-    } else {
-      this.handleCloseDialog('openRemoveDialog')
-      this.handleOpenDialog('openRemoveInfoDialog')
+      await this.props.removeRole(this.props.roleId)
+      browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)
     }
   }
   render () {
@@ -62,16 +51,7 @@ class RemoveBtn extends Component {
         labelColor='#fff'
         label='Yes'
         type='Button'
-        onClick={this.removeQuestion.bind(this)}
-      />
-    ]
-    const actionsRemoveInfoDialog = [
-      <RaisedButton
-        backgroundColor='#FCB636'
-        labelColor='#fff'
-        label='Ok'
-        type='Button'
-        onClick={this.handleCloseDialog.bind(this, 'openRemoveInfoDialog')}
+        onClick={this.removeRole.bind(this)}
       />
     ]
     return (
@@ -85,23 +65,12 @@ class RemoveBtn extends Component {
           onClick={this.handleOpenDialog.bind(this, 'openRemoveDialog')}
         />
         <Dialog
-          title='Do you want to remove session?'
+          title='Are you sure to remove role?'
           actions={actionsRemoveDialog}
           modal={false}
           contentClassName='custom__dialog'
           open={this.state.openRemoveDialog}
           onRequestClose={this.handleCloseDialog.bind(this, 'openRemoveDialog')}
-        />
-        <Dialog
-          title='System cannot remove this session due to existing dependent objects to this session.'
-          actions={actionsRemoveInfoDialog}
-          modal={false}
-          contentClassName='custom__dialog'
-          open={this.state.openRemoveInfoDialog}
-          onRequestClose={this.handleCloseDialog.bind(
-            this,
-            'openRemoveInfoDialog'
-          )}
         />
       </div>
     )

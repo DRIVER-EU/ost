@@ -4,10 +4,6 @@
   .info__btn {
     margin: 20px 0;
   }
-  .info__item {
-    flex: 3;
-    margin-right: 50px;
-  }
 }
 .stage-container {
   width: 100%;
@@ -33,42 +29,6 @@
     .header__link {
       text-decoration: underline;
       font-size: 16px;
-      margin: 0 10px;
     }
-  }
-  .table__wrapper {
-    margin-top: 50px;
-    .rt-td {
-      text-align: center;
-    }
-  }
-  .action-btns {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    div {
-      margin: 0 20px;
-    }
-  }
-  .position__field {
-    width: 256px;
-    margin-bottom: 10px;
-  }
-}
-.ReactTable {
-  .rt-thead.-headerGroups {
-    font-size: 22px;
-  }
-  .rt-tbody {
-    overflow-y: auto;
-    max-height: 25vh;
-  }
-}
-.custom__dialog {
-  & > div {
-    padding: 15px 10px;
-  }
-  h3 {
-    text-align: center;
   }
 }

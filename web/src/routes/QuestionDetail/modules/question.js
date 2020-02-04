@@ -9,6 +9,8 @@ import { getHeaders, errorHandle } from '../../../store/addons'
 export const GET_QUESTION_DETAIL = 'GET_QUESTION_DETAIL'
 export const UPDATE_QUESTION_DETAIL = 'UPDATE_QUESTION_DETAIL'
 export const REMOVE_QUESTION_DETAIL = 'REMOVE_QUESTION_DETAIL'
+export const ADD_OPTION = 'ADD_OPTION'
+export const REMOVE_OPTION = 'REMOVE_OPTION'
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -33,10 +35,25 @@ export const removeQuestionAction = (data = null) => {
   }
 }
 
+export const addOptionAction = (data = null) => {
+  return {
+    type: ADD_OPTION,
+    data: data
+  }
+}
+export const removeOptionAction = (data = null) => {
+  return {
+    type: REMOVE_OPTION,
+    data: data
+  }
+}
+
 export const actions = {
   getQuestionDetailAction,
   updateQuestionAction,
-  removeQuestionAction
+  removeQuestionAction,
+  addOptionAction,
+  removeOptionAction
 }
 
 export const updateQuestion = stage => {
@@ -98,6 +115,44 @@ export const getQuestionDetail = id => {
     )
   }
 }
+export const addOption = option => {
+  return dispatch => {
+    return new Promise(resolve =>
+      axios
+        .post(
+          `${origin}/api/questionOptions/admin/addNewQuestionOption`, option,
+          getHeaders()
+        )
+        .then(response => {
+          dispatch(addOptionAction(response.data))
+          resolve()
+        })
+        .catch(error => {
+          errorHandle(error)
+          resolve()
+        })
+    )
+  }
+}
+export const removeOption = id => {
+  return dispatch => {
+    return new Promise(resolve =>
+      axios
+        .delete(
+          `${origin}/api/questionOptions/admin/deleteQuestionOption?id=${id}`,
+          getHeaders()
+        )
+        .then(response => {
+          dispatch(removeOptionAction(response.data))
+          resolve()
+        })
+        .catch(error => {
+          errorHandle(error)
+          resolve()
+        })
+    )
+  }
+}
 
 // ------------------------------------
 // Action Handlers
@@ -112,7 +167,8 @@ const ACTION_HANDLERS = {
       position: action.data.position,
       answerType: action.data.answerType,
       questions: action.data.questions,
-      commented: action.data.commented
+      commented: action.data.commented,
+      option: action.data.questionOptions
     }
   },
   [UPDATE_QUESTION_DETAIL]: (state, action) => {
@@ -130,6 +186,19 @@ const ACTION_HANDLERS = {
     return {
       ...state
     }
+  },
+  [ADD_OPTION]: (state, action) => {
+    return {
+      ...state,
+      optionId: action.id,
+      optionName: action.data.name,
+      optionPosition: action.data.position
+    }
+  },
+  [REMOVE_OPTION]: (state, action) => {
+    return {
+      ...state
+    }
   }
 }
 // ------------------------------------
@@ -140,7 +209,10 @@ const initialState = {
   questionName: '',
   option: [],
   required: false,
-  commented: false
+  commented: false,
+  optionId: 0,
+  optionName: '',
+  optionPosition: 0
 }
 
 export default function questionReducer (state = initialState, action) {

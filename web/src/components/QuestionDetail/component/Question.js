@@ -2,15 +2,14 @@ import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
 import SaveBtn from './SaveBtn'
 import RemoveBtn from './RemoveBtn'
-import ReactTable from 'react-table'
 import PropTypes from 'prop-types'
 import { browserHistory } from 'react-router'
-import RaisedButton from 'material-ui/RaisedButton'
 import 'react-table/react-table.css'
 import './QuestionDetail.scss'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import Checkbox from 'material-ui/Checkbox'
+import Option from './Option'
 
 class Question extends Component {
   constructor (props) {
@@ -56,7 +55,9 @@ class Question extends Component {
     answerType: PropTypes.string,
     questionDetailId: PropTypes.any,
     questionSetName: PropTypes.string,
-    getQuestionSet: PropTypes.func
+    getQuestionSet: PropTypes.func,
+    addOption: PropTypes.func,
+    removeOption: PropTypes.func
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -108,26 +109,6 @@ class Question extends Component {
     }
   }
   render () {
-    const columns = [
-      {
-        Header: 'Option',
-        columns: [
-          {
-            Header: 'Id',
-            accessor: 'id',
-            width: 100
-          },
-          {
-            Header: 'Value',
-            accessor: 'value'
-          },
-          {
-            Header: 'Position',
-            accessor: 'position'
-          }
-        ]
-      }
-    ]
     let trialId = this.props.trialId
     let stageId = this.props.stageId
     let questionId = this.props.questionId
@@ -264,60 +245,14 @@ class Question extends Component {
               checked={this.state.required}
               onCheck={this.updateCheck.bind(this, 'required')}
             />
-            <div className='table__wrapper'>
-              <ReactTable
-                data={this.state.option}
-                columns={columns}
-                multiSort
-                showPagination={false}
-                minRows={0}
-                getTdProps={(state, rowInfo) => {
-                  if (rowInfo && rowInfo.row) {
-                    return {
-                      onClick: e => {
-                        this.setState({
-                          selectedQuestionDetail: rowInfo.original
-                        })
-                      },
-                      onDoubleClick: e => {
-                        this.viewQuestion()
-                      },
-                      style: {
-                        background: this.state.selectedQuestionDetail
-                          ? rowInfo.original.id ===
-                            this.state.selectedQuestionDetail.id
-                            ? '#e5e5e5'
-                            : ''
-                          : '',
-                        cursor: 'pointer'
-                      }
-                    }
-                  }
-                }}
-              />
-              {!this.props.new && (
-                <div className='action-btns'>
-                  <RaisedButton
-                    buttonStyle={{ width: '200px' }}
-                    backgroundColor='#244C7B'
-                    labelColor='#FCB636'
-                    label='+ New'
-                    type='Button'
-                  />
-                  <RaisedButton
-                    buttonStyle={{ width: '200px' }}
-                    backgroundColor={
-                      this.state.selectedOption ? '#FCB636' : '#ccc'
-                    }
-                    labelColor='#fff'
-                    label='Edit'
-                    type='Button'
-                    disabled={!this.state.selectedOption}
-                    onClick={this.viewOption.bind(this)}
-                  />
-                </div>
-              )}
-            </div>
+            <Option
+              option={this.state.option}
+              new={this.props.new}
+              questionDetailId={this.props.questionDetailId}
+              addOption={this.props.addOption}
+              getQuestion={this.props.getQuestion}
+              removeOption={this.props.removeOption}
+            />
           </div>
         </div>
       </div>

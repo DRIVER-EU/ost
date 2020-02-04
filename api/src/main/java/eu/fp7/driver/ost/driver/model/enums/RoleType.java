@@ -4,3 +4,4 @@ public enum RoleType {
     PARTICIPANT,
     OBSERVER
 }
+
