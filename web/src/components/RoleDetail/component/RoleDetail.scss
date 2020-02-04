@@ -1,0 +1,34 @@
+.stageDetail__info {
+  display: flex;
+  justify-content: space-between;
+  .info__btn {
+    margin: 20px 0;
+  }
+}
+.stage-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  overflow-y: auto;
+
+  .stage__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #282829;
+    font-weight: normal;
+    font-size: 20px;
+    .header__text {
+      font-size: 20px;
+      color: #282829;
+      font-weight: normal;
+      margin-bottom: 30px;
+    }
+    .header__link {
+      text-decoration: underline;
+      font-size: 16px;
+    }
+  }
+}
