@@ -1,0 +1,30 @@
+version: '3'
+services:
+
+  ost_db:
+    image: janbalbierzitti/ost_database:fddr2_2
+    ports:
+     - "5437:5432"
+    volumes:
+     - database-OST:/var/lib/postgresql/data
+#    restart: always
+
+  ost_web:
+    image: janbalbierzitti/ost_frontend:fddr2_2
+    links:
+    - ost_api
+    ports:
+    - "127.0.0.1:85:80"
+    - "127.0.0.1:445:443"
+#        restart: always
+
+  ost_api:
+    image: janbalbierzitti/ost_backend:fddr2_2
+    links:
+    - ost_db
+    ports:
+    - "8080:8080"
+#    restart: always
+
+volumes:
+  database-OST:
