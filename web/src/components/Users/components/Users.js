@@ -163,8 +163,12 @@ class Users extends Component {
     if (stateName === 'email') {
       error = this.validateEmail(updatedError.email)
     } else if (stateName === 'password') {
-      const isValidPassword = passwordRegex.test(updatedError.password)
-      error = !isValidPassword
+      if (updatedError.password !== '' && updatedError.passwordConfirmation !== '') {
+        const isValidPassword = passwordRegex.test(updatedError.password)
+        error = !isValidPassword
+      } else if (updatedError.password === '' && updatedError.passwordConfirmation === '') {
+        error = false
+      }
     } else if (stateName === 'passwordConfirmation') {
       error = updatedError.passwordConfirmation !== updatedError.password
     } else {
@@ -221,7 +225,9 @@ class Users extends Component {
         positionId: user.positionId
       }
       this.props.putUser(updatedUser, userId)
-      this.props.putUserPassword(userId, { password: user.password })
+      if (user.password !== '' && user.passwordConfirmation !== '') {
+        this.props.putUserPassword(userId, { password: user.password })
+      }
     } else {
       const updatedUser = {
         login: user.login,
