@@ -76,7 +76,7 @@ public class AuthUser extends AuditingDeletableObject
     private Calendar lastLogin;
 
     @NotNull
-    private boolean activated = false;
+    private boolean activated = true;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private AuthUserPosition position;
