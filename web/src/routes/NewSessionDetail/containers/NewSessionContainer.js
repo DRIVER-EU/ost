@@ -16,7 +16,8 @@ const mapStateToProps = state => ({
   stageId: state.newSessionDetail.stageId,
   stageName: state.newSessionDetail.stageName,
   stages: state.newSessionDetail.stages,
-  userRoles: state.newSessionDetail.userRoles
+  userRoles: state.newSessionDetail.userRoles,
+  manual: state.newSessionDetail.manual
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewSessionWrapper)

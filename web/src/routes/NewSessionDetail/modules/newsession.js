@@ -52,7 +52,8 @@ const ACTION_HANDLERS = {
       stageId: action.data.lastTrialStageId,
       stageName: action.data.lastTrialStageName,
       stages: action.data.stages,
-      userRoles: action.data.userRoles
+      userRoles: action.data.userRoles,
+      manual: action.data.manualStageChange
     }
   }
 }
@@ -66,7 +67,8 @@ const initialState = {
   stageId: 1,
   stageName: '',
   stages: [],
-  userRoles: []
+  userRoles: [],
+  manual: false
 }
 
 export default function newSessionDetailReducer (state = initialState, action) {

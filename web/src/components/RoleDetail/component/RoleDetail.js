@@ -6,6 +6,9 @@ import SaveBtn from './SaveBtn'
 import RemoveBtn from './RemoveBtn'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
+import ReactTable from 'react-table'
+import RaisedButton from 'material-ui/RaisedButton'
+import { browserHistory } from 'react-router'
 
 class RoleDetail extends Component {
   constructor (props) {
@@ -17,7 +20,9 @@ class RoleDetail extends Component {
         { id: 'PARTICIPANT', name: 'PARTICIPANT' },
         { id: 'OBSERVER', name: 'OBSERVER' }
       ],
-      selectedCurrentRoleType: this.props.roleType || ''
+      selectedCurrentRoleType: this.props.roleType || '',
+      questionsList: this.props.questions,
+      selectedQuestion: null
     }
   }
 
@@ -32,7 +37,8 @@ class RoleDetail extends Component {
     removeRole: PropTypes.func,
     getRoleById: PropTypes.func,
     addNewRole: PropTypes.func,
-    roleType: PropTypes.string
+    roleType: PropTypes.string,
+    questions: PropTypes.array
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -44,7 +50,8 @@ class RoleDetail extends Component {
     this.setState({
       name: nextProps.roleName,
       roleId: nextProps.roleId,
-      selectedCurrentRoleType: nextProps.roleType
+      selectedCurrentRoleType: nextProps.roleType,
+      questionsList: nextProps.questions
     })
   }
   handleChangeCurrentRoleType = (event, index, value) => {
@@ -58,8 +65,43 @@ class RoleDetail extends Component {
       this.props.getRoleById(this.props.roleId)
     }
   }
+  viewQuestion () {
+    if (this.state.selectedQuestion) {
+      let trialId = this.props.trialId
+      let roleId = this.props.roleId
+      let questionId = this.state.selectedQuestion.id
+      browserHistory.push(
+        `/trial-manager/trial-detail/${trialId}/role/${roleId}/question/${questionId}`
+      )
+    }
+  }
+  newQuestion () {
+    browserHistory.push(
+      `/trial-manager/trial-detail/${this.props.trialId}/role/${this.state.roleId}/new-question`
+    )
+  }
 
   render () {
+    const columns = [
+      {
+        Header: 'Question Set',
+        columns: [
+          {
+            Header: 'Id',
+            accessor: 'id',
+            width: 100
+          },
+          {
+            Header: 'Name',
+            accessor: 'name'
+          },
+          {
+            Header: 'Position',
+            accessor: 'position'
+          }
+        ]
+      }
+    ]
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -123,6 +165,62 @@ class RoleDetail extends Component {
                   />
                 )}
               </div>
+            </div>
+            <div className='table__wrapper'>
+              <ReactTable
+                data={this.state.questionsList}
+                columns={columns}
+                multiSort
+                showPagination={false}
+                defaultPageSize={500}
+                minRows={0}
+                getTdProps={(state, rowInfo) => {
+                  if (rowInfo && rowInfo.row) {
+                    return {
+                      onClick: e => {
+                        this.setState({
+                          selectedQuestion: rowInfo.original
+                        })
+                      },
+                      onDoubleClick: e => {
+                        this.viewQuestion()
+                      },
+                      style: {
+                        background: this.state.selectedQuestion
+                          ? rowInfo.original.id ===
+                            this.state.selectedQuestion.id
+                            ? '#e5e5e5'
+                            : ''
+                          : '',
+                        cursor: 'pointer'
+                      }
+                    }
+                  }
+                }}
+              />
+              {!this.props.new && (
+                <div className='action-btns'>
+                  <RaisedButton
+                    buttonStyle={{ width: '200px' }}
+                    backgroundColor='#244C7B'
+                    labelColor='#FCB636'
+                    label='+ New'
+                    type='Button'
+                    onClick={this.newQuestion.bind(this)}
+                  />
+                  <RaisedButton
+                    buttonStyle={{ width: '200px' }}
+                    backgroundColor={
+                      this.state.selectedQuestion ? '#FCB636' : '#ccc'
+                    }
+                    labelColor='#fff'
+                    label='Edit'
+                    type='Button'
+                    disabled={!this.state.selectedQuestion}
+                    onClick={this.viewQuestion.bind(this)}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

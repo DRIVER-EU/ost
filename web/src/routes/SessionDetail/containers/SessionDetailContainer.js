@@ -34,7 +34,8 @@ const mapStateToProps = state => {
     stages: state.sessionDetail.stages,
     userRoles: state.sessionDetail.userRoles,
     openRemoveInfoDialog: state.sessionDetail.openRemoveInfoDialog,
-    usersList: state.sessionDetail.usersList
+    usersList: state.sessionDetail.usersList,
+    manual: state.sessionDetail.manual
   }
 }
 

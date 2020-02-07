@@ -1,22 +1,13 @@
 package eu.fp7.driver.ost.driver.service;
 
+import eu.fp7.driver.ost.driver.dto.ImportExcelTrialAnswerDTO;
 import eu.fp7.driver.ost.driver.dto.ImportExcelTrialDTO;
 import eu.fp7.driver.ost.driver.dto.ImportExcelTrialPositionDTO;
-import eu.fp7.driver.ost.driver.model.ObservationType;
-import eu.fp7.driver.ost.driver.model.ObservationTypeTrialRole;
-import eu.fp7.driver.ost.driver.model.Question;
-import eu.fp7.driver.ost.driver.model.Trial;
-import eu.fp7.driver.ost.driver.model.TrialRole;
-import eu.fp7.driver.ost.driver.model.TrialStage;
+import eu.fp7.driver.ost.driver.model.*;
 import eu.fp7.driver.ost.driver.model.enums.AnswerType;
 import eu.fp7.driver.ost.driver.model.enums.Languages;
 import eu.fp7.driver.ost.driver.model.enums.RoleType;
-import eu.fp7.driver.ost.driver.repository.ObservationTypeRepository;
-import eu.fp7.driver.ost.driver.repository.ObservationTypeRoleRepository;
-import eu.fp7.driver.ost.driver.repository.QuestionRepository;
-import eu.fp7.driver.ost.driver.repository.TrialRepository;
-import eu.fp7.driver.ost.driver.repository.TrialRoleRepository;
-import eu.fp7.driver.ost.driver.repository.TrialStageRepository;
+import eu.fp7.driver.ost.driver.repository.*;
 import eu.fp7.driver.ost.driver.util.ExcelImportException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +39,9 @@ public class ExcelImportService {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    QuestionOptionRepository questionOptionRepository;
 
     @Autowired
     ObservationTypeRoleRepository observationTypeRoleRepository;
@@ -86,6 +80,16 @@ public class ExcelImportService {
                     .position(trailPosition.getPosition())
                     .build();
             question = questionRepository.save(question);
+            for  (ImportExcelTrialAnswerDTO importExcelTrialAnswerDTO: trailPosition.getExcelAnswers())
+            {
+                QuestionOption questionOption = new QuestionOption().builder()
+                        .question(question)
+                        .name(importExcelTrialAnswerDTO.getDescription())
+                        .position(importExcelTrialAnswerDTO.getPosition())
+                        .build();
+                questionOptionRepository.save(questionOption);
+            }
+
             observationType.getQuestions().add(question);
 
 //        }

@@ -15,7 +15,8 @@ class NewRoleView extends Component {
     roleId: PropTypes.any,
     roleName: PropTypes.string,
     addNewRole: PropTypes.func,
-    roleType: PropTypes.string
+    roleType: PropTypes.string,
+    questions: PropTypes.array
   }
 
   render () {
@@ -30,6 +31,7 @@ class NewRoleView extends Component {
           roleName={this.props.roleName}
           roleType={this.props.roleType}
           addNewRole={this.props.addNewRole}
+          questions={this.props.questions}
         />
       </div>
     )

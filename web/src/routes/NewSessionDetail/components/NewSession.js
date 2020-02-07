@@ -19,7 +19,8 @@ class NewSessionWrapper extends Component {
     stages: PropTypes.array,
     userRoles: PropTypes.array,
     addNewSession: PropTypes.func,
-    sessionId: PropTypes.any
+    sessionId: PropTypes.any,
+    manual: PropTypes.bool
   };
   render () {
     return (
@@ -35,6 +36,7 @@ class NewSessionWrapper extends Component {
         stages={this.props.stages}
         userRoles={this.props.userRoles}
         addNewSession={this.props.addNewSession}
+        manual={this.props.manual}
       />
     )
   }

@@ -1,6 +1,7 @@
 package eu.fp7.driver.ost.driver.service;
 
 import eu.fp7.driver.ost.driver.dto.AdminQuestionDTO;
+import eu.fp7.driver.ost.driver.dto.AdminQuestionOptionDTO;
 import eu.fp7.driver.ost.driver.model.ObservationType;
 import eu.fp7.driver.ost.driver.model.Question;
 import eu.fp7.driver.ost.driver.repository.ObservationTypeRepository;
@@ -95,7 +96,49 @@ public class QuestionService {
         fullQuestion.toDto(question);
         return fullQuestion;
     }
-
+    public void updateJonson(Long id)
+    {
+        Question question = questionRepository.findById(id).orElseThrow(() -> new InvalidDataException("No question found with given id = " + id));
+        AdminQuestionDTO.FullItem fullQuestion = new AdminQuestionDTO.FullItem();
+        fullQuestion.toDto(question);
+        fullQuestion.jsonSchema =  createJsonSchemaFromOptions(fullQuestion);
+        update(fullQuestion);
+    }
+    private String createJsonSchemaFromOptions(AdminQuestionDTO.FullItem adminQuestionDTO) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            objectNode.put("title", adminQuestionDTO.getName());
+            objectNode.put("description", adminQuestionDTO.getDescription());
+            String answerType = adminQuestionDTO.getAnswerType().toString();
+            String enumString = "";
+            String jsonStructureToString = "";
+            if (answerType.equals("RADIO_BUTTON")) {
+                objectNode.put("type", "string");
+                enumString = adminQuestionDTO.getQuestionOptions()
+                        .stream()
+                        .map(AdminQuestionOptionDTO.ListItem::getName)
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]}"));
+                jsonStructureToString = objectNode.toString().replace("}", ",");
+            } else if (answerType.equals("TEXT_FIELD")) {
+                objectNode.put("type", "string");
+                jsonStructureToString = objectNode.toString();
+            } else if (answerType.equals("CHECKBOX")) {
+                objectNode.put("type", "boolean");
+                jsonStructureToString = objectNode.toString();
+            } else if (answerType.equals("SLIDER")) {
+                objectNode.put("type", "number");
+                jsonStructureToString = objectNode.toString();
+            } else {
+                objectNode.put("type", adminQuestionDTO.getAnswerType().toString());
+                jsonStructureToString = objectNode.toString();
+            }
+            return jsonStructureToString + enumString;
+        } catch (Exception e) {
+            throw new InvalidDataException("error by creating Json schema for the question ");
+        }
+    }
     private String createJsonSchema(AdminQuestionDTO.FullItem adminQuestionDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
