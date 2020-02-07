@@ -102,7 +102,8 @@ const ACTION_HANDLERS = {
       id: action.data.id,
       roleName: action.data.name,
       roleType: action.data.roleType,
-      trialId: action.data.trialId
+      trialId: action.data.trialId,
+      questions: action.data.questions
     }
   },
   [UPDATE_ROLE]: (state, action) => {
@@ -111,6 +112,7 @@ const ACTION_HANDLERS = {
       roleName: action.data.name,
       id: action.data.id,
       roleType: action.data.roleType,
+      questions: action.data.questions,
       trialId: action.data.trialId
     }
   },
@@ -127,7 +129,8 @@ const initialState = {
   id: 0,
   roleName: '',
   roleType: '',
-  trialId: 0
+  trialId: 0,
+  questions: []
 }
 
 export default function roleDetailReducer (state = initialState, action) {

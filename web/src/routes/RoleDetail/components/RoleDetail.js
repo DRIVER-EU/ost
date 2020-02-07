@@ -16,7 +16,8 @@ class RoleDetailView extends Component {
     getRoleById: PropTypes.func,
     removeRole: PropTypes.func,
     updateRole: PropTypes.func,
-    roleType: PropTypes.string
+    roleType: PropTypes.string,
+    questions: PropTypes.array
   }
 
   render () {
@@ -33,6 +34,7 @@ class RoleDetailView extends Component {
           removeRole={this.props.removeRole}
           updateRole={this.props.updateRole}
           roleType={this.props.roleType}
+          questions={this.props.questions}
         />
       </div>
     )

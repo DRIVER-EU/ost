@@ -192,6 +192,7 @@ public class TrialSessionService {
             trialSession.setLastTrialStage(trialStage);
         }
         trialSession.setStatus(sessionDTO.status);
+        trialSession.setIsManualStageChange(sessionDTO.isManualStageChange());
         return trialSessionRepository.save(trialSession);
     }
 
@@ -210,6 +211,7 @@ public class TrialSessionService {
                 .status(SessionStatus.ACTIVE)
                 .pausedTime(LocalDateTime.now())
                 .lastTrialStage(trialStage)
+                .isManualStageChange(sessionDTO.isManualStageChange())
                 .build();
 
         return trialSessionRepository.save(trialSession);

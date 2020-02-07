@@ -41,8 +41,9 @@ class QuestionDetail extends Component {
     position: PropTypes.any,
     withUsers: PropTypes.bool,
     multiplicity: PropTypes.bool,
-    getQuestion: PropTypes.func
-
+    getQuestion: PropTypes.func,
+    questionForRole: PropTypes.bool,
+    roleId: PropTypes.any
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -133,7 +134,11 @@ class QuestionDetail extends Component {
                 </a>
                 <a
                   className='header__link'
-                  href={`/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`}
+                  href={
+                    this.props.roleId
+                      ? `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
+                      : `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`
+                  }
                 >
                   {this.props.stageName}
                 </a>
@@ -169,6 +174,8 @@ class QuestionDetail extends Component {
                   addNewQuestion={this.props.addNewQuestion}
                   withUsers={this.state.withUsers}
                   multiplicity={this.state.multiplicity}
+                  questionForRole={this.props.questionForRole}
+                  roleId={this.props.roleId}
                 />
                 {!this.props.new && (
                   <RemoveBtn

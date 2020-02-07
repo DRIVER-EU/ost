@@ -45,7 +45,8 @@ const ACTION_HANDLERS = {
       id: action.data.id,
       roleName: action.data.name,
       roleType: action.data.roleType,
-      trialId: action.data.trialId
+      trialId: action.data.trialId,
+      questions: action.data.questions
     }
   }
 }
@@ -56,7 +57,8 @@ const initialState = {
   id: 0,
   roleName: '',
   roleType: '',
-  trialId: 0
+  trialId: 0,
+  questions: []
 }
 
 export default function newRoleDetailReducer (state = initialState, action) {

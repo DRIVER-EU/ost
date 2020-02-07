@@ -10,6 +10,7 @@ import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
+import Checkbox from 'material-ui/Checkbox'
 import FlatButton from 'material-ui/FlatButton'
 
 class SessionDetail extends Component {
@@ -34,7 +35,8 @@ class SessionDetail extends Component {
       usersList: this.props.usersList || [],
       selectedCurrentUser: '',
       openRemoveDialog: false,
-      openAddUserInfoDialog: false
+      openAddUserInfoDialog: false,
+      manual: this.props.manual
     }
   }
 
@@ -59,7 +61,8 @@ class SessionDetail extends Component {
     usersList: PropTypes.array,
     getUsersList: PropTypes.func,
     addUser: PropTypes.func,
-    removeUser: PropTypes.func
+    removeUser: PropTypes.func,
+    manual: PropTypes.bool
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -75,7 +78,8 @@ class SessionDetail extends Component {
       selectedStatus: nextProps.status,
       selectedCurrentStage: nextProps.stageId,
       roleSet: nextProps.roleSet,
-      usersList: nextProps.usersList
+      usersList: nextProps.usersList,
+      manual: nextProps.manual
     })
   }
   handleChangeStatus = (event, index, value) => {
@@ -90,6 +94,11 @@ class SessionDetail extends Component {
   handleChangeCurrentUser = (event, index, value) => {
     this.setState({ selectedCurrentUser: value })
   };
+  updateCheck (name) {
+    this.setState({
+      [name]: !this.state[name]
+    })
+  }
   getObservations (sessionId) {
     this.props.getObservations(sessionId)
   }
@@ -258,6 +267,7 @@ class SessionDetail extends Component {
                   addNewSession={this.props.addNewSession}
                   stageId={this.state.selectedCurrentStage}
                   status={this.state.selectedStatus}
+                  manual={this.state.manual}
                 />
                 {!this.props.new && (
                   <RemoveBtn
@@ -307,6 +317,13 @@ class SessionDetail extends Component {
                 </SelectField>
               </div>
             )}
+            <div>
+              <Checkbox
+                label='Manual'
+                checked={this.state.manual}
+                onCheck={this.updateCheck.bind(this, 'manual')}
+              />
+            </div>
             {!this.props.new && (
               <div className='download__btn'>
                 <RaisedButton
