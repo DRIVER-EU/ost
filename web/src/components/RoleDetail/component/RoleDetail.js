@@ -9,6 +9,7 @@ import MenuItem from 'material-ui/MenuItem'
 import ReactTable from 'react-table'
 import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
+import UserRole from './UserRole'
 
 class RoleDetail extends Component {
   constructor (props) {
@@ -22,7 +23,10 @@ class RoleDetail extends Component {
       ],
       selectedCurrentRoleType: this.props.roleType || '',
       questionsList: this.props.questions,
-      selectedQuestion: null
+      selectedQuestion: null,
+      roleSet: this.props.roleSet,
+      userRoles: this.props.userRoles,
+      trialName: this.props.trialName
     }
   }
 
@@ -38,7 +42,13 @@ class RoleDetail extends Component {
     getRoleById: PropTypes.func,
     addNewRole: PropTypes.func,
     roleType: PropTypes.string,
-    questions: PropTypes.array
+    questions: PropTypes.array,
+    userRoles: PropTypes.array,
+    roleSet: PropTypes.array,
+    usersList: PropTypes.array,
+    getUsersList: PropTypes.func,
+    addUser: PropTypes.func,
+    removeUser: PropTypes.func
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -51,7 +61,10 @@ class RoleDetail extends Component {
       name: nextProps.roleName,
       roleId: nextProps.roleId,
       selectedCurrentRoleType: nextProps.roleType,
-      questionsList: nextProps.questions
+      questionsList: nextProps.questions,
+      userRoles: nextProps.userRoles,
+      roleSet: nextProps.roleSet,
+      trialName: nextProps.trialName
     })
   }
   handleChangeCurrentRoleType = (event, index, value) => {
@@ -63,6 +76,9 @@ class RoleDetail extends Component {
     }
     if (this.props.getRoleById) {
       this.props.getRoleById(this.props.roleId)
+    }
+    if (this.props.getUsersList) {
+      this.props.getUsersList()
     }
   }
   viewQuestion () {
@@ -166,6 +182,15 @@ class RoleDetail extends Component {
                 )}
               </div>
             </div>
+            <UserRole
+              userRoles={this.props.userRoles}
+              roleSet={this.props.roleSet}
+              getRoleById={this.props.getRoleById}
+              roleId={this.props.roleId}
+              usersList={this.props.usersList}
+              addUser={this.props.addUser}
+              removeUser={this.props.removeUser}
+            />
             <div className='table__wrapper'>
               <ReactTable
                 data={this.state.questionsList}
@@ -206,6 +231,7 @@ class RoleDetail extends Component {
                     labelColor='#FCB636'
                     label='+ New'
                     type='Button'
+                    disabled
                     onClick={this.newQuestion.bind(this)}
                   />
                   <RaisedButton

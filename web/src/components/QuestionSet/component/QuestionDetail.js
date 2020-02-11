@@ -114,7 +114,7 @@ class QuestionDetail extends Component {
           },
           {
             Header: 'Type',
-            accessor: 'type'
+            accessor: 'answerType'
           }
         ]
       }
