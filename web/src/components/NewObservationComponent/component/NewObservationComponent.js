@@ -9,11 +9,12 @@ import _ from 'lodash'
 // import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog'
 import Slider from './Slider'
 import radio from './Radio'
+import WarningModal from './WarningModal'
 import Form from 'react-jsonschema-form-mui'
 import { browserHistory } from 'react-router'
 import Spinner from 'react-spinkit'
 import FontIcon from 'material-ui/FontIcon'
-import DropzoneComponent from 'react-dropzone-component'
+// import DropzoneComponent from 'react-dropzone-component'
 import './Upload.scss'
 import moment from 'moment'
 import { toastr } from 'react-redux-toastr'
@@ -67,7 +68,11 @@ class NewObservationComponent extends Component {
       validParticipants: true,
       files: [],
       isShow: false,
-      time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss')
+      time: moment(props.trialTime ? props.trialTime : new Date().getTime()).format('DD/MM/YYYY HH:mm:ss'),
+      isWarningOpen: false,
+      suggestedText: '',
+      suggestedChangeIndex: null,
+      isFormValid: false
     }
   }
 
@@ -292,9 +297,67 @@ class NewObservationComponent extends Component {
   }
 
   changeObservation (object) {
-    let change = { ...this.state.observationForm }
+    let change = _.cloneDeep(this.state.observationForm)
+    const regex = /(\t|\n|_|\||\[|\]|\{|\}|;)/g
+    for (let key in object.formData) {
+      if (!regex.test(object.formData[key])) {
+        change.uiSchema[key]['ui:disabled'] = false
+      } else {
+        change.uiSchema[key]['ui:autofocus'] = true
+      }
+    }
+    const isFormValid = this.validateForm(change.uiSchema)
     change.formData = object.formData
-    this.setState({ observationForm: change })
+    this.setState({ observationForm: change, isFormValid })
+  }
+
+  closeWarningModal = () => {
+    const { suggestedChangeIndex } = this.state
+    const questions = _.cloneDeep(this.state.observationForm)
+    questions.uiSchema[suggestedChangeIndex]['ui:autofocus'] = true
+    for (let key in questions.uiSchema) {
+      if (key !== suggestedChangeIndex) {
+        questions.uiSchema[key]['ui:disabled'] = true
+      }
+    }
+    this.setState({
+      isWarningOpen: false,
+      observationForm: questions
+    })
+  }
+
+  validateInput = (id) => {
+    const questions = { ...this.state.observationForm }
+    const regex = /(\t|\n|_|\||\[|\]|\{|\}|;)/g
+    id = id.replace('root_', '')
+    let question = questions.formData[id]
+    if (regex.test(question)) {
+      const suggestedText = question.replace(regex, '')
+      this.setState({
+        isWarningOpen: true,
+        suggestedText,
+        suggestedChangeIndex: id
+      })
+    }
+  }
+
+  acceptSuggestedText = () => {
+    const questions = { ...this.state.observationForm }
+    const { suggestedChangeIndex, suggestedText } = this.state
+    questions.formData[suggestedChangeIndex] = suggestedText
+    this.setState({
+      isWarningOpen: false,
+      observationForm: questions,
+      suggestedChangeIndex: null
+    })
+  }
+
+  validateForm = (uiSchema) => {
+    let isFormValid = true
+    for (let key in uiSchema) {
+      isFormValid = isFormValid && !uiSchema[key]['ui:disabled']
+    }
+    return isFormValid
   }
 
   setDate = (dateTime) => this.setState({ dateTime: moment(dateTime).format('YYYY-MM-DD kk:mm:ss') })
@@ -399,6 +462,11 @@ class NewObservationComponent extends Component {
       <div className='main-container'>
         <div className='pages-box' style={{ height: '100%' }}>
           <div className='question-container'>
+            <WarningModal
+              isWarningOpen={this.state.isWarningOpen}
+              suggestedText={this.state.suggestedText}
+              closeWarningModal={this.closeWarningModal}
+              acceptSuggestedText={this.acceptSuggestedText} />
             {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
             <div className={'buttons-obs'} style={{ textAlign: 'right' }}>
               <RaisedButton
@@ -482,6 +550,7 @@ class NewObservationComponent extends Component {
                 widgets={widgets}
                 showErrorList={false}
                 onError={() => this.handleError()}
+                onBlur={(fieldId) => this.validateInput(fieldId)}
                 onSubmit={(value) => this.handleOnSubmit(value)}
                 onChange={(value) => this.changeObservation(value)}>
                 <div>
@@ -511,7 +580,7 @@ class NewObservationComponent extends Component {
                     floatingLabelText='Altitude'
                     errorText={this.state.coords2ErrorText}
                     disabled={this.props.mode !== 'new' && this.props.mode !== 'profileQuestion'} /> */}
-                  {false &&
+                  {/* {false &&
                   <div>
                     {(this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
                     <div>
@@ -533,7 +602,7 @@ class NewObservationComponent extends Component {
                       })}
                     </div>
                   }
-                  </div>}
+                  </div>} */}
                 </div>
                 <div className={'buttons-center'}>
                   {(this.props.mode !== 'viewAdmin' && this.props.mode !== 'profileQuestion') &&
@@ -551,6 +620,7 @@ class NewObservationComponent extends Component {
                   {(this.props.mode === 'new' || this.props.mode === 'profileQuestion') &&
                   <div className={'submit buttons-observation'}>
                     <RaisedButton
+                      disabled={!this.state.isFormValid}
                       buttonStyle={{ width: '200px' }}
                       backgroundColor='#244C7B'
                       labelColor='#FCB636'
