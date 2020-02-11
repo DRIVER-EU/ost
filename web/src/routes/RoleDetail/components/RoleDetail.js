@@ -16,8 +16,16 @@ class RoleDetailView extends Component {
     getRoleById: PropTypes.func,
     removeRole: PropTypes.func,
     updateRole: PropTypes.func,
-    roleType: PropTypes.string
-  }
+    roleType: PropTypes.string,
+    questions: PropTypes.array,
+    userRoles: PropTypes.array,
+    roleSet: PropTypes.array,
+    getTrialDetail: PropTypes.func,
+    usersList: PropTypes.array,
+    getUsersList: PropTypes.func,
+    addUser: PropTypes.func,
+    removeUser: PropTypes.func
+  };
 
   render () {
     return (
@@ -33,6 +41,14 @@ class RoleDetailView extends Component {
           removeRole={this.props.removeRole}
           updateRole={this.props.updateRole}
           roleType={this.props.roleType}
+          questions={this.props.questions}
+          userRoles={this.props.userRoles}
+          roleSet={this.props.roleSet}
+          getTrialDetail={this.props.getTrialDetail}
+          usersList={this.props.usersList}
+          getUsersList={this.props.getUsersList}
+          addUser={this.props.addUser}
+          removeUser={this.props.removeUser}
         />
       </div>
     )

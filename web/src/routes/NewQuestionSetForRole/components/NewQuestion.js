@@ -10,7 +10,7 @@ class NewQuestionView extends Component {
 
   static propTypes = {
     addNewQuestion: PropTypes.func,
-    getStageById: PropTypes.func,
+    getRoleById: PropTypes.func,
     getTrialDetail: PropTypes.func,
     newQuestionDetail: PropTypes.object,
     trialName: PropTypes.string,
@@ -24,12 +24,13 @@ class NewQuestionView extends Component {
         <QuestionDetail
           new
           addNewQuestion={this.props.addNewQuestion}
-          getStageById={this.props.getStageById}
+          getStageById={this.props.getRoleById}
           getTrialDetail={this.props.getTrialDetail}
           trialName={this.props.trialName}
           stageName={this.props.stageName}
           trialId={this.props.params.id_trial}
-          stageId={this.props.params.id_stage}
+          stageId={this.props.params.id_role}
+          roleId={this.props.params.id_role}
           questionName={this.props.newQuestionDetail.name}
           questionsDetailList={this.props.newQuestionDetail.questions}
           questionId={this.props.newQuestionDetail.id}
@@ -37,7 +38,7 @@ class NewQuestionView extends Component {
           position={this.props.newQuestionDetail.position}
           multiplicity={this.props.newQuestionDetail.multiplicity}
           withUsers={this.props.newQuestionDetail.withUsers}
-          questionForRole={false}
+          questionForRole
         />
       </div>
     )

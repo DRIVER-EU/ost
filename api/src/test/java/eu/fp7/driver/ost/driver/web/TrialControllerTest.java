@@ -1,7 +1,10 @@
 package eu.fp7.driver.ost.driver.web;
 
+import eu.fp7.driver.ost.driver.dto.ObservationTypeDTO;
+import eu.fp7.driver.ost.driver.model.ObservationType;
 import eu.fp7.driver.ost.driver.repository.ObservationTypeRepository;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @BootstrapWith(SpringBootTestContextBootstrapper.class)

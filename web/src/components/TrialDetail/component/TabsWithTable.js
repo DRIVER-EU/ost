@@ -67,7 +67,8 @@ class TabsWithTable extends Component {
       },
       {
         Header: 'Manual',
-        accessor: 'manual'
+        accessor: 'manualStageChange',
+        Cell: props => <span className='manual'>{props.value ? 'yes' : 'no'}</span>
       },
       {
         Header: 'Status',

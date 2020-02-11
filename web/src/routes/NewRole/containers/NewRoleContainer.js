@@ -13,7 +13,8 @@ const mapStateToProps = state => {
     trialName: state.trialDetail.trialName,
     roleId: state.newRole.id,
     roleName: state.newRole.roleName,
-    roleType: state.newRole.roleType
+    roleType: state.newRole.roleType,
+    questions: state.newRole.questions
   }
 }
 

@@ -225,7 +225,8 @@ const ACTION_HANDLERS = {
       stageId: action.data.lastTrialStageId,
       stageName: action.data.lastTrialStageName,
       stages: action.data.stages,
-      userRoles: action.data.userRoles
+      userRoles: action.data.userRoles,
+      manual: action.data.manualStageChange
     }
   },
   [UPDATE_SESSION]: (state, action) => {
@@ -234,6 +235,7 @@ const ACTION_HANDLERS = {
       id: action.data.id,
       sessionName: action.data.name,
       status: action.data.status,
+      manual: action.data.manualStageChange,
       stageId: action.data.lastTrialStageId
     }
   },
@@ -279,7 +281,8 @@ const initialState = {
   userRoles: [],
   openRemoveInfoDialog: false,
   usersList: [],
-  user: {}
+  user: {},
+  manual: false
 }
 
 export default function sessionDetailReducer (state = initialState, action) {

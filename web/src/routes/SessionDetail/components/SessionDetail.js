@@ -27,7 +27,8 @@ class SessionDetailView extends Component {
     usersList: PropTypes.array,
     getUsersList: PropTypes.func,
     addUser: PropTypes.func,
-    removeUser: PropTypes.func
+    removeUser: PropTypes.func,
+    manual: PropTypes.bool
   }
 
   render () {
@@ -55,6 +56,7 @@ class SessionDetailView extends Component {
           getUsersList={this.props.getUsersList}
           addUser={this.props.addUser}
           removeUser={this.props.removeUser}
+          manual={this.props.manual}
         />
       </div>
     )

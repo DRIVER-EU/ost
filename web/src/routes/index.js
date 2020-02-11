@@ -24,6 +24,8 @@ import NewSessionDetail from './NewSessionDetail'
 import RoleDetail from './RoleDetail'
 import NewRole from './NewRole'
 import Users from './Users'
+import QuestionsSetForRole from './QuestionsSetForRole'
+import NewQuestionSetForRole from './NewQuestionSetForRole'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -57,7 +59,9 @@ export const createRoutes = store => ({
             QuestionSet(store),
             NewQuestionSet(store),
             QuestionDetail(store),
-            NewQuestion(store)
+            NewQuestion(store),
+            QuestionsSetForRole(store),
+            NewQuestionSetForRole(store)
           ]
         }
       ]

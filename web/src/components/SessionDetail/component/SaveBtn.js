@@ -20,7 +20,8 @@ class SaveBtn extends Component {
     sessionId: PropTypes.any,
     new: PropTypes.bool,
     status: PropTypes.string,
-    stageId: PropTypes.any
+    stageId: PropTypes.any,
+    manual: PropTypes.bool
   }
   handleOpenDialog (name) {
     let change = {}
@@ -49,7 +50,8 @@ class SaveBtn extends Component {
       id: this.props.sessionId,
       trialId: this.props.trialId,
       status: this.props.status,
-      lastTrialStageId: this.props.stageId
+      lastTrialStageId: this.props.stageId,
+      manualStageChange: this.props.manual
     }
     const actionsSaveDialog = [
       <FlatButton

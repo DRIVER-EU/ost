@@ -8,10 +8,7 @@ import eu.fp7.driver.ost.driver.util.ApiJsonAnswer;
 import eu.fp7.driver.ost.driver.util.ApiValidationWarning;
 import eu.fp7.driver.ost.driver.util.ExcelImportException;
 import eu.fp7.driver.ost.driver.util.ReadingToDTOExcelException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
@@ -40,6 +37,7 @@ public class ExcelReadToDtoService {
   public static final int ANSWER_TYPE = 9;
   public static final int COMMENTS = 10;
   public static final int MAX_NUMBER_OF_ANSWERS = 10;
+
 
   @Autowired
   ExcelImportService excelImportService;
@@ -122,21 +120,71 @@ public class ExcelReadToDtoService {
 
     try {
       ImportExcelTrialPositionDTO importExcelTrialPositionDTO = ImportExcelTrialPositionDTO.builder()
-              .questionSetId((long) row.getCell(QUESTION_SET_ID).getNumericCellValue())
-              .stageName(row.getCell(STAGE_NAME).getRichStringCellValue().toString())
-              .roleName(row.getCell(ROLE_NAME).getRichStringCellValue().toString())
-              .question(row.getCell(QUESTION).getRichStringCellValue().toString())
-              .description(row.getCell(DESCRIPTION).getRichStringCellValue().toString())
-              .dimension(row.getCell(DIMENSION).getRichStringCellValue().toString())
-              .position((int) row.getCell(POSITION).getNumericCellValue())
-              .required(getBooleanValueFromInt(row.getCell(REQUIRED).getNumericCellValue()))
-              .answerType(row.getCell(ANSWER_TYPE).getRichStringCellValue().toString())
-              .comments((int) row.getCell(COMMENTS).getNumericCellValue())
+              .questionSetId((long) getNumericCellValue (row,QUESTION_SET_ID))
+              .stageName(getStringCellValue(row,STAGE_NAME))
+              .roleName(getStringCellValue(row,ROLE_NAME))
+              .question(getStringCellValue(row,QUESTION))
+              .description(getStringCellValue(row,DESCRIPTION))
+              .dimension(getStringCellValue(row,DIMENSION))
+              .position(getNumericCellValue (row,POSITION))
+              .required(getBooleanValueFromInt(getNumericCellValue (row,REQUIRED)))
+              .answerType(getStringCellValue(row,ANSWER_TYPE))
+              .comments(getNumericCellValue (row,COMMENTS))
               .build();
       return importExcelTrialPositionDTO;
     } catch (Exception e) {
-      throw new ExcelImportException("Invalid data Type inside Excel document - please check data-types of Excel Colums", row, e);
+      throw new ExcelImportException("Invalid data Type inside Excel document - please check data-types of Excel Columns", row, e);
     }
+  }
+
+  private Integer getNumericCellValue(Row row, int cellNumber) {
+
+    if(row.getCell(cellNumber)==null) {
+      throw new ExcelImportException("Invalid data Type inside Excel document - please check data-types of Excel Columns", row, new Exception("Null value in Cell"));
+    }
+      if(CellType.STRING.equals(row.getCell(cellNumber).getCellType())) {
+        try {
+          return Integer.valueOf(row.getCell(cellNumber).getRichStringCellValue().toString());
+        }
+        catch (Exception e) {
+          throw new ExcelImportException("Invalid data Type inside Excel document - can not convert string into numeric values", row, e);
+        }
+      }
+      else if (CellType.NUMERIC.equals(row.getCell(cellNumber).getCellType()))
+      {
+        return  Integer.valueOf((int) row.getCell(cellNumber).getNumericCellValue());
+      }
+      else if (CellType.BOOLEAN.equals(row.getCell(cellNumber).getCellType()))
+      {
+        if(row.getCell(cellNumber).getBooleanCellValue())
+        {
+          return 1;
+        }
+        else {
+          return 0;
+        }
+      }
+
+    return null;
+
+  }
+  private String getStringCellValue(Row row, int cellNumber) {
+
+    if(row.getCell(cellNumber)!=null ) {
+      if(CellType.STRING.equals(row.getCell(cellNumber).getCellType())) {
+        return String.valueOf(row.getCell(cellNumber).getRichStringCellValue());
+      }
+      else if (CellType.NUMERIC.equals(row.getCell(cellNumber).getCellType()))
+      {
+        return  String.valueOf(row.getCell(cellNumber).getNumericCellValue());
+      }
+      else if (CellType.BOOLEAN.equals(row.getCell(cellNumber).getCellType()))
+      {
+        return  String.valueOf(row.getCell(cellNumber).getBooleanCellValue());
+      }
+    }
+     return "";
+
   }
 
   private boolean getBooleanValueFromInt(double doubleValue) {

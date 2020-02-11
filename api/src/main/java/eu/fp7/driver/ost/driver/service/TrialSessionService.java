@@ -192,6 +192,7 @@ public class TrialSessionService {
             trialSession.setLastTrialStage(trialStage);
         }
         trialSession.setStatus(sessionDTO.status);
+        trialSession.setIsManualStageChange(sessionDTO.isManualStageChange());
         return trialSessionRepository.save(trialSession);
     }
 
@@ -210,27 +211,39 @@ public class TrialSessionService {
                 .status(SessionStatus.ACTIVE)
                 .pausedTime(LocalDateTime.now())
                 .lastTrialStage(trialStage)
+                .isManualStageChange(sessionDTO.isManualStageChange())
                 .build();
 
         return trialSessionRepository.save(trialSession);
     }
 
     public UserRoleSession insertUserRoleSession(AdminUserRoleDTO.FullItem  adminUserRoleDTO) {
+        AuthUser authUser = authUserRepository.findOne(adminUserRoleDTO.getTrialUserId());
+        if(authUser== null)
+        {
+            new EntityNotFoundException(AuthUser.class, adminUserRoleDTO.getTrialUserId());
+        }
+
+        TrialUser trialUser = trialUserRepository.findByAuthUser(authUser);
+        if(trialUser== null)
+        {
+            new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getTrialUserId());
+        }
+
         UserRoleSessionId userRoleSessionId =  new UserRoleSessionId();
         userRoleSessionId.setTrialRoleId(adminUserRoleDTO.getTrialRoleId());
         userRoleSessionId.setTrialSessionId(adminUserRoleDTO.getTrialSessionId());
-        userRoleSessionId.setTrialUserId(adminUserRoleDTO.getTrialUserId());
+        userRoleSessionId.setTrialUserId(trialUser.getId());
         Optional<UserRoleSession> userRoleSessionExists = userRoleSessionRepository.findById(userRoleSessionId);
 
         if(userRoleSessionExists.isPresent()) {
-            throw new InvalidDataException("User Session already exists. "+userRoleSessionId.toString());
+            throw new InvalidDataException("User Session for given user & role already exists. "+userRoleSessionId.toString());
         }
             TrialRole trialRole = trialRoleRepository.findById(adminUserRoleDTO.getTrialRoleId())
                 .orElseThrow(() -> new EntityNotFoundException(TrialRole.class, adminUserRoleDTO.getTrialRoleId()));
             TrialSession trialSession =  trialSessionRepository.findById(adminUserRoleDTO.getTrialSessionId())
                     .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, adminUserRoleDTO.getTrialSessionId()));
-            TrialUser trialUser = trialUserRepository.findById(adminUserRoleDTO.getTrialUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getTrialUserId()));
+
             UserRoleSession userRoleSession = UserRoleSession.builder()
                     .trialRole(trialRole)
                     .trialUser(trialUser)

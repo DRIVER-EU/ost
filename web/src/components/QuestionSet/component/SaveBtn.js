@@ -24,7 +24,8 @@ class SaveBtn extends Component {
     description: PropTypes.string,
     position: PropTypes.any,
     withUsers: PropTypes.bool,
-    multiplicity: PropTypes.bool
+    multiplicity: PropTypes.bool,
+    questionForRole: PropTypes.bool
   }
   handleOpenDialog (name) {
     let change = {}
@@ -46,8 +47,13 @@ class SaveBtn extends Component {
       await this.props.addNewQuestion(question)
       let questionId = this.props.questionId
       let stageId = this.props.stageId
+      let roleId = this.props.roleId
       let trialId = this.props.trialId
-      browserHistory.push(`/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}`)
+      if (this.props.questionForRole) {
+        browserHistory.push(`/trial-manager/trial-detail/${trialId}/role/${roleId}/question/${questionId}`)
+      } else {
+        browserHistory.push(`/trial-manager/trial-detail/${trialId}/stage/${stageId}/question/${questionId}`)
+      }
     }
   };
 

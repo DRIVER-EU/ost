@@ -34,7 +34,6 @@ public class ExcelReadToDTOTests {
     @Test
     public void compareTrialNameFromExcel() throws IOException {
         // given
-        int sheetNoToRead = 4;
         String fileName = "src/test/resources/Trial3_questions_CP_OST_20190911_2.xlsx";
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
@@ -48,7 +47,6 @@ public class ExcelReadToDTOTests {
     @Test
     public void compareAnswerTypeOfParsedExcelDTO() throws IOException {
         // given
-        int sheetNoToRead = 4;
         String fileName = "src/test/resources/Trial3_questions_CP_OST_20190911_2.xlsx";
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
@@ -62,7 +60,6 @@ public class ExcelReadToDTOTests {
     @Test
     public void compareNumberOfDtoObjectsReadFromExcel() throws IOException {
         // given
-        int sheetNoToRead = 4;
         String fileName = "src/test/resources/Trial3_questions_CP_OST_20190911_2.xlsx";
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 
@@ -76,7 +73,6 @@ public class ExcelReadToDTOTests {
     @Test
     public void readJsonObject() throws IOException {
         // given
-        int sheetNoToRead = 4;
         String fileName = "src/test/resources/Trial3_questions_CP_OST_20190911_2.xlsx";
         MultipartFile multipartFile = new MockMultipartFile("Trial3_questions_CP_OST_20190911_2.xlsx", new FileInputStream(new File(fileName)));
 

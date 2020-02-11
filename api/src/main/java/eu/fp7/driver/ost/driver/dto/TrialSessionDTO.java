@@ -35,10 +35,12 @@ public class TrialSessionDTO {
         public String trialDescription;
         public long lastTrialStageId;
         public String lastTrialStageName;
+        boolean manualStageChange = true;
         public List<AdminTrialStageDTO.ListItem> stages= new ArrayList<>();
         public List<AdminUserRoleDTO.ListItem> userRoles= new ArrayList<>();
         public List<TrialUserDTO.AdminEditItem> trialUsers= new ArrayList<>();
         public List<SessionStatus> statuses= SessionStatus.getStatuses();
+
 
 
         public void toDto(TrialSession trialSession) {
@@ -47,21 +49,23 @@ public class TrialSessionDTO {
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
             this.lastTrialStageId = trialSession.getLastTrialStage().getId();
-            lastTrialStageName = trialSession.getLastTrialStage().getName();
-            for (TrialStage trialStage:  trialSession.getLastTrialStage().getTrial().getTrialStages()) {
+            this.lastTrialStageName = trialSession.getLastTrialStage().getName();
+            if(trialSession.getIsManualStageChange() != null)
+            {
+                this.manualStageChange = trialSession.getIsManualStageChange();
+            }
+            for (TrialStage trialStage:  trialSession.getTrial().getTrialStages()) {
                 AdminTrialStageDTO.ListItem trialStageDTO =  new AdminTrialStageDTO.ListItem();
                 trialStageDTO.toDto(trialStage);
                 stages.add(trialStageDTO);
             }
             for (UserRoleSession userRoleSession:  trialSession.getUserRoleSessions()) {
-
                 AdminUserRoleDTO.ListItem adminUserRoleDTO =  new AdminUserRoleDTO.ListItem();
                 adminUserRoleDTO.toDto(userRoleSession);
                 userRoles.add(adminUserRoleDTO);
             }
 
             for (UserRoleSession userRoleSession:  trialSession.getUserRoleSessions()) {
-
                 TrialUserDTO.AdminEditItem trialUserDTO =  new TrialUserDTO.AdminEditItem();
                 trialUserDTO.toDto(userRoleSession.getTrialUser());
                 trialUsers.add(trialUserDTO);
@@ -76,6 +80,7 @@ public class TrialSessionDTO {
         public String trialName;
         public String trialDescription;
         public String lastTrialStage;
+        public boolean manualStageChange = true;
 
         public void toDto(TrialSession trialSession) {
             super.toDto(trialSession);
@@ -83,6 +88,10 @@ public class TrialSessionDTO {
             this.trialName = trialSession.getTrial().getName();
             this.trialDescription = trialSession.getTrial().getDescription();
             this.lastTrialStage = trialSession.getLastTrialStage().getName();
+            if(trialSession.getIsManualStageChange() != null)
+            {
+                this.manualStageChange = trialSession.getIsManualStageChange();
+            }
         }
     }
 
