@@ -17,7 +17,9 @@ public final class AdminQuestionDTO {
         public long id;
         public String name;
         public String description;
+        public int position;
         public long observationTypeId;
+        public AnswerType answerType;
 
 
         @Override
@@ -25,6 +27,8 @@ public final class AdminQuestionDTO {
             this.id = question.getId();
             this.name = question.getName();
             this.description = question.getDescription();
+            this.position = question.getPosition();
+            this.answerType = question.getAnswerType();
             if(question.getObservationType() !=null) {
                 this.observationTypeId = question.getObservationType().getId();
             }
@@ -32,8 +36,8 @@ public final class AdminQuestionDTO {
     }
     @Data
     public static class FullItem extends ListItem {
-        public AnswerType answerType;
-        public int position;
+
+
         public String jsonSchema;
         public boolean commented;
         private List<AdminQuestionOptionDTO.ListItem> questionOptions = new ArrayList<>();
@@ -42,8 +46,8 @@ public final class AdminQuestionDTO {
         @Override
         public void toDto(Question question) {
             super.toDto(question);
-            this.answerType = question.getAnswerType();
-            this.position = question.getPosition();
+
+
             this.jsonSchema = question.getJsonSchema();
             this.commented = question.isCommented();
             for( QuestionOption questionOption :question.getQuestionOptions())

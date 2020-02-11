@@ -219,7 +219,7 @@ public class ObservationTypeService {
 
         Trial trial = trialRepository.findById(adminObservationTypeDTO.getTrailId())
                 .orElseThrow(() -> new EntityNotFoundException(Trial.class, adminObservationTypeDTO.getTrailId()));
-        TrialStage trialStage = trialStageRepository.findById(adminObservationTypeDTO.getTrailId())
+        TrialStage trialStage = trialStageRepository.findById(adminObservationTypeDTO.getTrailStageId())
                 .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, adminObservationTypeDTO.getTrailStageId()));
 
 
