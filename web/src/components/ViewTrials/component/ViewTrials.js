@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import DateComponent from '../../DateComponent/DateComponent'
+import WarningModal from '../../NewObservationComponent/component/WarningModal'
 import './ViewTrials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
 import { RaisedButton, FontIcon } from 'material-ui'
@@ -42,7 +43,9 @@ class ViewTrials extends Component {
       answerRemoveErrorText: '',
       comment: '',
       commentErrorText: '',
-      commentModal: false
+      commentModal: false,
+      isWarningOpen: false,
+      suggestedText: ''
     }
   }
 
@@ -173,13 +176,35 @@ class ViewTrials extends Component {
     })
   }
 
+  closeWarningModal = () => {
+    this.setState({
+      isWarningOpen: false
+    })
+  }
+
+  acceptSuggestedText = () => {
+    const { suggestedText } = this.state
+    this.setState({
+      comment: suggestedText,
+      isWarningOpen: false,
+      suggestedText: ''
+    })
+  }
+
   handleAddComment () {
-    if (this.state.comment) {
+    const regex = /(\t|\n|_|\||\[|\]|\{|\}|;)/g
+    if (!regex.test(this.state.comment)) {
       this.setState({ commentModal: false },
         () => this.props.editComment(
           this.state.selectedObject.id,
           this.state.comment
         ))
+    } else {
+      const suggestedText = this.state.comment.replace(regex, '')
+      this.setState({
+        suggestedText,
+        isWarningOpen: true
+      })
     }
   }
 
@@ -312,6 +337,11 @@ class ViewTrials extends Component {
           modal={false}
           open={this.state.commentModal}
           onRequestClose={this.handleCommentModalClose}>
+          <WarningModal
+            isWarningOpen={this.state.isWarningOpen}
+            suggestedText={this.state.suggestedText}
+            closeWarningModal={this.closeWarningModal}
+            acceptSuggestedText={this.acceptSuggestedText} />
           <TextField
             value={this.state.comment}
             hintText='enter the comment'

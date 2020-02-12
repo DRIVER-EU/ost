@@ -26,6 +26,7 @@ const warningModal = (props) => {
       actions={actions} >
       <h4>The text contains invalid characters. Suggested text without these characters:</h4>
       <TextField
+        multiLine
         disabled
         value={props.suggestedText}
         fullWidth />
