@@ -7,6 +7,7 @@ import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.driver.dto.AdminUserRoleDTO;
 import eu.fp7.driver.ost.driver.dto.TrialSessionDTO;
 import eu.fp7.driver.ost.driver.dto.TrialStageDTO;
+import eu.fp7.driver.ost.driver.dto.TrialUserDTO;
 import eu.fp7.driver.ost.driver.form.NewSessionForm;
 import eu.fp7.driver.ost.driver.model.TrialSession;
 import eu.fp7.driver.ost.driver.model.UserRoleSession;
@@ -21,16 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -38,6 +30,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -124,6 +117,57 @@ public class TrialSessionController {
             TrialSession trialSession = trialSessionService.findById(id);
             adminTrialSessionDTO.toDto(trialSession);
             ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(adminTrialSessionDTO);
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+
+    }
+
+    @GetMapping("/admin/getListTrialSessionAllActive")
+    public ResponseEntity getListTrialSessionAllActive() {
+        try{
+            List<TrialSessionDTO.ListItem> trialSessionListDTO = new ArrayList<>();
+
+            for (TrialSession activeTrialSession :trialSessionService.findActiveTrialSessions() ) {
+
+                    TrialSessionDTO.ListItem trialSessionDTO = new TrialSessionDTO.ListItem();
+                    trialSessionDTO.toDto(activeTrialSession);
+                    trialSessionListDTO.add(trialSessionDTO);
+            }
+
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(trialSessionListDTO);
+            return responseEntity;
+        }
+        catch (Exception e)
+        {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+
+    }
+
+    @GetMapping("/admin/getSessionUserWithStatistics")
+    public ResponseEntity getSessionUserWithStatistics(@RequestParam(value = "id") long id) {
+        try{
+
+
+            List<TrialUserDTO.AdminEditItemStatistics> trialUserListDTO = new ArrayList<>();
+
+            for (UserRoleSession userRoleSession :trialSessionService.findUserTrialSessions(id) ) {
+                if(SessionStatus.ACTIVE.equals(userRoleSession.getTrialSession().getStatus()))
+                {
+                    TrialUserDTO.AdminEditItemStatistics trialUserDTO = new TrialUserDTO.AdminEditItemStatistics();
+                    trialUserDTO.toDto(userRoleSession);
+                    trialUserListDTO.add(trialUserDTO);
+                }
+
+            }
+
+            ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(trialUserListDTO);
             return responseEntity;
         }
         catch (Exception e)

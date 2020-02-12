@@ -20,6 +20,7 @@ import sessionDetailReducer from '../routes/SessionDetail/modules/sessiondetail'
 import roleDetailReducer from '../routes/RoleDetail/modules/roledetail'
 import newRoleDetailReducer from '../routes/NewRole/modules/newrole'
 import usersManagerReducer from '../routes/Users/modules/users'
+import activeSessionsReducer from '../routes/ActiveSessions/modules/activesessions'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -44,6 +45,7 @@ export const makeRootReducer = (asyncReducers) => {
     roleDetail: roleDetailReducer,
     newRole: newRoleDetailReducer,
     usersManager: usersManagerReducer,
+    activeSessions: activeSessionsReducer,
     ...asyncReducers
   })
 }
