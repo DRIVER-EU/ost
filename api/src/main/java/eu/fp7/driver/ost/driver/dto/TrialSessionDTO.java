@@ -110,6 +110,36 @@ public class TrialSessionDTO {
         }
     }
 
+
+    public static class ListOfActiveSessions extends ListItem {
+
+        public Long lastStageId;
+        public Boolean initHasAnswer = false;
+        public String roleName;
+        public int numberOfAnswers;
+        public List<TrialStageDTO.Statistic> stageStatistics = new ArrayList<>();
+        public void toDto(UserRoleSession userRoleSession) {
+            TrialSession trialSession = userRoleSession.getTrialSession();
+            super.toDto(trialSession);
+            this.numberOfAnswers = trialSession.getAnswers().size();
+            if(this.numberOfAnswers >0){
+                this.initHasAnswer = true;
+            }
+
+            if(trialSession.getLastTrialStage()!=null) {
+                this.lastStageId = trialSession.getLastTrialStage().getId();
+            }
+            for(TrialStage trialStages : trialSession.getTrial().getTrialStages())
+            {
+                TrialStageDTO.Statistic stageStatistic = new TrialStageDTO.Statistic();
+                stageStatistic.toDto(trialStages);
+                stageStatistics.add(stageStatistic);
+            }
+            this.roleName = userRoleSession.getTrialRole().getName();
+        }
+
+    }
+
     public static class FullItem extends MinimalItem {
 
         public long trialId;
@@ -128,4 +158,6 @@ public class TrialSessionDTO {
             this.pausedTime = trialSession.getPausedTime();
         }
     }
+
+
 }

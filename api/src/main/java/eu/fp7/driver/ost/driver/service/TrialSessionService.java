@@ -16,27 +16,12 @@ import eu.fp7.driver.ost.driver.dto.AdminUserRoleDTO;
 import eu.fp7.driver.ost.driver.dto.TrialSessionDTO;
 import eu.fp7.driver.ost.driver.form.NewSessionForm;
 import eu.fp7.driver.ost.driver.form.UserForm;
-import eu.fp7.driver.ost.driver.model.Trial;
-import eu.fp7.driver.ost.driver.model.TrialManager;
-import eu.fp7.driver.ost.driver.model.TrialRole;
-import eu.fp7.driver.ost.driver.model.TrialSession;
-import eu.fp7.driver.ost.driver.model.TrialSessionManager;
-import eu.fp7.driver.ost.driver.model.TrialStage;
-import eu.fp7.driver.ost.driver.model.TrialUser;
-import eu.fp7.driver.ost.driver.model.UserRoleSession;
-import eu.fp7.driver.ost.driver.model.UserRoleSessionId;
+import eu.fp7.driver.ost.driver.model.*;
 import eu.fp7.driver.ost.driver.model.enums.AuthRoleType;
 import eu.fp7.driver.ost.driver.model.enums.Languages;
 import eu.fp7.driver.ost.driver.model.enums.ManagementRoleType;
 import eu.fp7.driver.ost.driver.model.enums.SessionStatus;
-import eu.fp7.driver.ost.driver.repository.AnswerRepository;
-import eu.fp7.driver.ost.driver.repository.TrialRepository;
-import eu.fp7.driver.ost.driver.repository.TrialRoleRepository;
-import eu.fp7.driver.ost.driver.repository.TrialSessionManagerRepository;
-import eu.fp7.driver.ost.driver.repository.TrialSessionRepository;
-import eu.fp7.driver.ost.driver.repository.TrialStageRepository;
-import eu.fp7.driver.ost.driver.repository.TrialUserRepository;
-import eu.fp7.driver.ost.driver.repository.UserRoleSessionRepository;
+import eu.fp7.driver.ost.driver.repository.*;
 import eu.fp7.driver.ost.driver.repository.specification.TrialSessionSpecification;
 import eu.fp7.driver.ost.driver.util.InternalServerException;
 import eu.fp7.driver.ost.driver.util.InvalidDataException;
@@ -55,16 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -149,6 +125,20 @@ public class TrialSessionService {
         PageDto<TrialSessionDTO.ActiveListItem> pageDTO = Dto.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
         pageDTO.getData().forEach(d -> d.initHasAnswer = setInitAnswer(d, authUser));
         return pageDTO;
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserRoleSession> findUserTrialSessions(long trialSessionId) {
+        TrialSession trialSession = trialSessionRepository.findOne(trialSessionId);
+        return userRoleSessionRepository.findByTrialSession(trialSession);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<TrialSession> findActiveTrialSessions() {
+
+        return trialSessionRepository.findByStatus(SessionStatus.ACTIVE);
+
     }
 
     public TrialSession updateLastTrialStage(long trialSessionId, long lastTrialStageId) {

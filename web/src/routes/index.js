@@ -26,6 +26,7 @@ import NewRole from './NewRole'
 import Users from './Users'
 import QuestionsSetForRole from './QuestionsSetForRole'
 import NewQuestionSetForRole from './NewQuestionSetForRole'
+import ActiveSessions from './ActiveSessions'
 
 /*  Note: Instead of using JSX, we recommend using react-router
     PlainRoute objects to build route definitions.   */
@@ -40,6 +41,7 @@ export const createRoutes = store => ({
     AdminHome(store),
     TrialManager(store),
     Users(store),
+    ActiveSessions(store),
     {
       path: 'trial-manager',
       childRoutes: [

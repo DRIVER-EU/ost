@@ -157,7 +157,7 @@ export const getUsersList = () => {
     return new Promise(resolve =>
       axios
         .get(
-          `${origin}/api/auth/users?page=0&size=10&sort=login,asc&sort=lastName,desc`,
+          `${origin}/api/auth/users?page=0&size=150&sort=login,asc&sort=lastName,desc`,
           getHeaders()
         )
         .then(response => {
