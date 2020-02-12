@@ -14,4 +14,5 @@ public interface UserRoleSessionRepository
         JpaSpecificationExecutor<UserRoleSession> {
     List<UserRoleSession>  findByTrialSession(TrialSession trialSession);
     Optional<UserRoleSession> findById(UserRoleSessionId id);
+    List<UserRoleSession> findAllByOrderByTrialUser();
 }

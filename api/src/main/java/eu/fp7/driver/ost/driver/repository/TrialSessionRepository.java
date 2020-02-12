@@ -5,6 +5,7 @@ import eu.fp7.driver.ost.driver.model.enums.SessionStatus;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TrialSessionRepository
@@ -13,7 +14,9 @@ public interface TrialSessionRepository
 
     Optional<TrialSession> findByIdAndTrialId(long id, long trialId);
 
-    Optional<TrialSession> findByStatus(SessionStatus status);
+    List<TrialSession> findByStatus(SessionStatus status);
 
     Optional<TrialSession> findByIdAndStatus(long id, SessionStatus status);
+
+
 }

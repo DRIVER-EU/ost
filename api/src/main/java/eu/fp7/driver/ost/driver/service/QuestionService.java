@@ -124,10 +124,20 @@ public class QuestionService {
             } else if (answerType.equals("TEXT_FIELD")) {
                 objectNode.put("type", "string");
                 jsonStructureToString = objectNode.toString();
-            } else if (answerType.equals("CHECKBOX")) {
+            } else if (answerType.equals("CHECKBOX") && adminQuestionDTO.getQuestionOptions().size()==0) {
                 objectNode.put("type", "boolean");
                 jsonStructureToString = objectNode.toString();
-            } else if (answerType.equals("SLIDER")) {
+            }
+            else if (answerType.equals("CHECKBOX") && adminQuestionDTO.getQuestionOptions().size()>0) {
+                objectNode.put("type", "string");
+                enumString = adminQuestionDTO.getQuestionOptions()
+                        .stream()
+                        .map(AdminQuestionOptionDTO.ListItem::getName)
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]}"));
+                jsonStructureToString = objectNode.toString().replace("}", ",");
+            }
+            else if (answerType.equals("SLIDER")) {
                 objectNode.put("type", "number");
                 jsonStructureToString = objectNode.toString();
             } else {
@@ -158,10 +168,19 @@ public class QuestionService {
             } else if (answerType.equals("TEXT_FIELD")) {
                 objectNode.put("type", "string");
                 jsonStructureToString = objectNode.toString();
-            } else if (answerType.equals("CHECKBOX")) {
+            } else if (answerType.equals("CHECKBOX") && adminQuestionDTO.getQuestionOptions().size()==0) {
                 objectNode.put("type", "boolean");
                 jsonStructureToString = objectNode.toString();
-            } else if (answerType.equals("SLIDER")) {
+            }
+            else if (answerType.equals("CHECKBOX") && adminQuestionDTO.getQuestionOptions().size()>0) {
+                objectNode.put("type", "string");
+                enumString = Arrays.asList(adminQuestionDTO.getDescription())
+                        .stream()
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]}"));
+                jsonStructureToString = objectNode.toString().replace("}", ",");
+            }
+            else if (answerType.equals("SLIDER")) {
                 objectNode.put("type", "number");
                 jsonStructureToString = objectNode.toString();
             } else {

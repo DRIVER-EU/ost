@@ -3,11 +3,10 @@ import './AdminHome.scss'
 import RaisedButton from 'material-ui/RaisedButton'
 
 class AdminHome extends Component {
-
   render () {
     return (
       <div className='main-container'>
-        <div className='pages-box' style={{ 'background': 'white' }}>
+        <div className='pages-box' style={{ background: 'white' }}>
           <div className='home-container'>
             <div className='buttons-container'>
               <a href='users'>
@@ -16,7 +15,8 @@ class AdminHome extends Component {
                   backgroundColor='#244C7B'
                   labelColor='#FCB636'
                   label='Users'
-                  type='button' />
+                  type='button'
+                />
               </a>
               <a href='trial-manager'>
                 <RaisedButton
@@ -24,17 +24,21 @@ class AdminHome extends Component {
                   backgroundColor='#244C7B'
                   labelColor='#FCB636'
                   label='Trials'
-                  type='button' />
+                  type='button'
+                />
               </a>
-              <RaisedButton
-                buttonStyle={{ width: '200px' }}
-                backgroundColor='#244C7B'
-                labelColor='#FCB636'
-                label='Session'
-                type='button' />
+              <a href='active-sessions'>
+                <RaisedButton
+                  buttonStyle={{ width: '200px' }}
+                  backgroundColor='#244C7B'
+                  labelColor='#FCB636'
+                  label='Session'
+                  type='button'
+                />
+              </a>
             </div>
             <div className='image-container'>
-              <img src='https://fakeimg.pl/800x400/?text=PNG' />
+              <img src='/images/ost.png' />
             </div>
           </div>
         </div>

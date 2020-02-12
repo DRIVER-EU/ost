@@ -2,6 +2,8 @@ package eu.fp7.driver.ost.driver.dto;
 
 import eu.fp7.driver.ost.core.dto.EntityDto;
 import eu.fp7.driver.ost.driver.model.TrialUser;
+import eu.fp7.driver.ost.driver.model.UserRoleSession;
+import lombok.Data;
 
 public final class TrialUserDTO {
 
@@ -31,6 +33,27 @@ public final class TrialUserDTO {
             this.login = trialUser.getAuthUser().getLogin();
         }
     }
+    @Data
+    public static class AdminEditItemStatistics extends ListItem {
+
+        public String email;
+        public String login;
+        public String trialRoleName;
+
+        public TrialSessionDTO.ListOfActiveSessions activeSession = new TrialSessionDTO.ListOfActiveSessions();
+
+        public void toDto(UserRoleSession userRoleSession) {
+            TrialUser trialUser = userRoleSession.getTrialUser();
+            super.toDto(trialUser);
+            this.email = trialUser.getAuthUser().getEmail();
+            this.login = trialUser.getAuthUser().getLogin();
+            this.activeSession.toDto(userRoleSession);
+            this.trialRoleName  = userRoleSession.getTrialRole().getName();
+
+        }
+    }
+
+
 
     private TrialUserDTO() {
         throw new AssertionError();

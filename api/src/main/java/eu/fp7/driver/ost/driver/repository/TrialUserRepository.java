@@ -13,4 +13,6 @@ public interface TrialUserRepository
     TrialUser findByAuthUser(AuthUser authUser);
 
     Optional<TrialUser> findById(Long id);
+
+    Optional<TrialUser> getAllBy();
 }
