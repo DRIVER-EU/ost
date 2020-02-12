@@ -38,7 +38,7 @@ class AdminHome extends Component {
               </a>
             </div>
             <div className='image-container'>
-            <img className='img-responsive driver-logo' src='/images/ost.png' />
+              <img src='/images/ost.png' />
             </div>
           </div>
         </div>
