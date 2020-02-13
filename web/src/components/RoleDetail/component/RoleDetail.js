@@ -190,6 +190,7 @@ class RoleDetail extends Component {
               usersList={this.props.usersList}
               addUser={this.props.addUser}
               removeUser={this.props.removeUser}
+              new={this.props.new}
             />
             <div className='table__wrapper'>
               <ReactTable

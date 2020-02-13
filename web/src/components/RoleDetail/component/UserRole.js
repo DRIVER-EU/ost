@@ -23,7 +23,8 @@ class UserRole extends Component {
       selectedCurrentRole: '',
       selectedCurrentUser: '',
       openRemoveDialog: false,
-      openAddUserInfoDialog: false
+      openAddUserInfoDialog: false,
+      usersList: this.props.usersList || []
     }
   }
   static propTypes = {
