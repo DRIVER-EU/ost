@@ -55,7 +55,7 @@ public final class TrialUserDTO {
 
 
 
-    private TrialUserDTO() {
+    public TrialUserDTO() {
         throw new AssertionError();
     }
 }
