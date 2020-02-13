@@ -1,11 +1,13 @@
 import { connect } from 'react-redux'
 import { getTrialDetail } from '../../TrialDetail/modules/trialdetail'
 import NewRoleView from '../components/NewRole'
+import { getUsersList } from '../../SessionDetail/modules/sessiondetail'
 import { addNewRole } from '../modules/newrole'
 
 const mapDispatchToProps = {
   getTrialDetail,
-  addNewRole
+  addNewRole,
+  getUsersList
 }
 
 const mapStateToProps = state => {
@@ -14,7 +16,9 @@ const mapStateToProps = state => {
     roleId: state.newRole.id,
     roleName: state.newRole.roleName,
     roleType: state.newRole.roleType,
-    questions: state.newRole.questions
+    questions: state.newRole.questions,
+    roleSet: state.trialDetail.roleSet,
+    usersList: state.sessionDetail.usersList
   }
 }
 
