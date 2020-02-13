@@ -9,6 +9,9 @@ import eu.fp7.driver.ost.core.security.security.repository.AuthUnitRepository;
 import eu.fp7.driver.ost.core.security.security.repository.AuthUserPositionRepository;
 import eu.fp7.driver.ost.core.security.security.repository.AuthUserRepository;
 import eu.fp7.driver.ost.core.security.security.web.dto.AuthUserDto;
+import eu.fp7.driver.ost.driver.model.TrialUser;
+import eu.fp7.driver.ost.driver.model.enums.Languages;
+import eu.fp7.driver.ost.driver.repository.TrialUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +28,9 @@ import java.util.regex.Pattern;
 
 @Service
 public class AuthUserService {
+
+    @Autowired
+    private TrialUserRepository trialUserRepository;
 
     @Autowired
     private AuthUserRepository repository;
@@ -115,6 +121,16 @@ public class AuthUserService {
         ArrayList al = new ArrayList();
         al.add(Long.valueOf(2));
         entity.setRoles(authRoleRepository.findByIdIn(al));
-        return repository.save(entity);
+        repository.save(entity);
+
+        Optional<AuthUser> authUser = repository.findOneByLogin(entity.getLogin());
+        TrialUser trialUser = new TrialUser();
+        trialUser.setAuthUser(authUser.get());
+        trialUser.setIsTrialCreator(true);
+        trialUser.setUserLanguage(Languages.ENGLISH);
+        trialUserRepository.save(trialUser);
+        System.out.println(trialUser.id);
+        return (entity);
+
     }
 }
