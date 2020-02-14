@@ -11,6 +11,7 @@ public interface ObservationTypeRepository
         extends PagingAndSortingRepository<ObservationType, Long>, JpaSpecificationExecutor<ObservationType> {
     Optional<ObservationType> findById(Long observationTypeId);
     List<ObservationType> findAllByTrialIdAndTrialStageId(Long trialId, Long trialStageId);
+    List<ObservationType> findAllByTrialId(Long trialId);
 //    List<ObservationType> findAllByTrialIdAndTrialStageIdAndObservationTypeTrialRolesOrderByPosition(Long trialId, Long trialStageId, ObservationTypeTrialRole observationTypeTrialRole);
     List<ObservationType> findAllByTrialIdAndTrialStageIdOrderByPosition(Long trialId, Long trialStageId);
 

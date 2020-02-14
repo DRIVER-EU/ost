@@ -19,7 +19,8 @@ class NewRoleView extends Component {
     questions: PropTypes.array,
     usersList: PropTypes.array,
     getUsersList: PropTypes.func,
-    roleSet: PropTypes.array
+    roleSet: PropTypes.array,
+    unassignedQuestions: PropTypes.array
   }
 
   render () {
@@ -38,6 +39,7 @@ class NewRoleView extends Component {
           getUsersList={this.props.getUsersList}
           usersList={this.props.usersList}
           roleSet={this.props.roleSet}
+          unassignedQuestions={this.props.unassignedQuestions}
         />
       </div>
     )

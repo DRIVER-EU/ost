@@ -3,7 +3,9 @@ package eu.fp7.driver.ost.driver.web;
 import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.driver.dto.TrialRoleDTO;
+import eu.fp7.driver.ost.driver.model.ObservationType;
 import eu.fp7.driver.ost.driver.model.TrialRole;
+import eu.fp7.driver.ost.driver.service.ObservationTypeService;
 import eu.fp7.driver.ost.driver.service.TrialRoleService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,12 +15,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/role")
 public class TrialRoleController {
 
     @Autowired
     private TrialRoleService trialRoleService;
+
+    @Autowired
+    private ObservationTypeService observationTypeService;
+
 
     @GetMapping
     private PageDto<TrialRoleDTO.FullItem> findByTrialId(
@@ -85,7 +93,8 @@ public class TrialRoleController {
         TrialRoleDTO.FullItem fullItem = new TrialRoleDTO.FullItem();
         try{
             TrialRole trialRole = trialRoleService.findById(id);
-            fullItem.toDto(trialRole);
+            List<ObservationType> unassignedObservationTypes = observationTypeService.getAllObservationTypesForTrial(trialRole.getTrial().getId());
+            fullItem.toDto(trialRole, unassignedObservationTypes);
         }
         catch (Exception e)
         {
@@ -94,6 +103,9 @@ public class TrialRoleController {
         ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(fullItem);
         return responseEntity;
     }
+
+
+
     private ResponseEntity getResponseEntity(Exception e) {
         JSONObject jsonAnswer = new JSONObject();
         JSONArray serverErrorList = new JSONArray();
