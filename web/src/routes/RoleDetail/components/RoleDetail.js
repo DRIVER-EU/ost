@@ -24,7 +24,10 @@ class RoleDetailView extends Component {
     usersList: PropTypes.array,
     getUsersList: PropTypes.func,
     addUser: PropTypes.func,
-    removeUser: PropTypes.func
+    removeUser: PropTypes.func,
+    unassignedQuestions: PropTypes.array,
+    assignQuestion: PropTypes.func,
+    unassignQuestion: PropTypes.func
   };
 
   render () {
@@ -49,6 +52,9 @@ class RoleDetailView extends Component {
           getUsersList={this.props.getUsersList}
           addUser={this.props.addUser}
           removeUser={this.props.removeUser}
+          unassignedQuestions={this.props.unassignedQuestions}
+          assignQuestion={this.props.assignQuestion}
+          unassignQuestion={this.props.unassignQuestion}
         />
       </div>
     )
