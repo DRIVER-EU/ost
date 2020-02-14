@@ -124,12 +124,17 @@ public class AuthUserService {
         repository.save(entity);
 
         Optional<AuthUser> authUser = repository.findOneByLogin(entity.getLogin());
-        TrialUser trialUser = new TrialUser();
-        trialUser.setAuthUser(authUser.get());
-        trialUser.setIsTrialCreator(true);
-        trialUser.setUserLanguage(Languages.ENGLISH);
-        trialUserRepository.save(trialUser);
-        System.out.println(trialUser.id);
+        TrialUser trialUserCheck = trialUserRepository.findByAuthUser(authUser.get());
+        if (trialUserCheck==null) {
+            TrialUser trialUser = new TrialUser();
+            trialUser.setAuthUser(authUser.get());
+            trialUser.setIsTrialCreator(true);
+            trialUser.setUserLanguage(Languages.ENGLISH);
+            trialUserRepository.save(trialUser);
+            System.out.println(trialUser.id);
+        }
+
         return (entity);
+
     }
 }
