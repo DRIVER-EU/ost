@@ -18,7 +18,8 @@ const mapStateToProps = state => {
     roleType: state.newRole.roleType,
     questions: state.newRole.questions,
     roleSet: state.trialDetail.roleSet,
-    usersList: state.sessionDetail.usersList
+    usersList: state.sessionDetail.usersList,
+    unassignedQuestions: state.newRole.unassignedQuestions
   }
 }
 

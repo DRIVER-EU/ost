@@ -31,11 +31,7 @@ import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,16 +72,6 @@ public class ObservationTypeService {
                 .findAllByTrialIdAndTrialStageIdOrderByPosition(
                         observationTypeCriteriaDTO.getTrialId(), observationTypeCriteriaDTO.getTrialStageId());
 
-//TODO JKW clean code - stream
-//         observationTypes.stream()
-//                .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))
-//                .collect(Collectors.toList());
-//        Optional<TrialRole> role = trialRoleRepository.findById(observationTypeCriteriaDTO.getTrialRoleId());
-//        List<ObservationType> list = observationTypesList.stream()
-//                .filter(x -> x.getObservationTypeTrialRoles().contains(ObservationTypeTrialRole.builder().observationType(x).trialRole(role.get()).build()))
-//                .collect(Collectors.toList());
-//        list.contains(null);
-
         List<ObservationTypeDTO.SchemaItem> generatedSchemaList = new ArrayList<>();
         for (ObservationType observationType : observationTypesList) {
 
@@ -121,6 +107,17 @@ public class ObservationTypeService {
 
         return observationTypes.stream()
                 .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public List<ObservationType> getAllObservationTypesForTrial(long id) {
+
+        List<ObservationType> observationTypes = observationTypeRepository.findAllByTrialId(id);
+
+        return observationTypes.stream()
                 .collect(Collectors.toList());
     }
 

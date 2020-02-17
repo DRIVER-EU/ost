@@ -26,7 +26,9 @@ class RoleDetail extends Component {
       selectedQuestion: null,
       roleSet: this.props.roleSet,
       userRoles: this.props.userRoles,
-      trialName: this.props.trialName
+      trialName: this.props.trialName,
+      unassignedQuestions: this.props.unassignedQuestions,
+      selectedUnassignedQuestion: null
     }
   }
 
@@ -48,7 +50,9 @@ class RoleDetail extends Component {
     usersList: PropTypes.array,
     getUsersList: PropTypes.func,
     addUser: PropTypes.func,
-    removeUser: PropTypes.func
+    removeUser: PropTypes.func,
+    unassignedQuestions: PropTypes.array,
+    assignQuestion: PropTypes.func
   };
   handleChangeInput (name, e) {
     let change = {}
@@ -64,7 +68,8 @@ class RoleDetail extends Component {
       questionsList: nextProps.questions,
       userRoles: nextProps.userRoles,
       roleSet: nextProps.roleSet,
-      trialName: nextProps.trialName
+      trialName: nextProps.trialName,
+      unassignedQuestions: nextProps.unassignedQuestions
     })
   }
   handleChangeCurrentRoleType = (event, index, value) => {
@@ -96,11 +101,33 @@ class RoleDetail extends Component {
       `/trial-manager/trial-detail/${this.props.trialId}/role/${this.state.roleId}/new-question`
     )
   }
+  async assignQuestion (questionId) {
+    let question = {
+      observationTypeId: questionId,
+      trialRoleId: this.state.roleId
+    }
+    if (this.props.assignQuestion) {
+      await this.props.assignQuestion(question)
+      if (this.props.getRoleById) {
+        this.props.getRoleById(this.state.roleId)
+      }
+      this.setState({ selectedUnassignedQuestion: null })
+    }
+  }
+  async unassignQuestion (questionId) {
+    if (this.props.unassignQuestion) {
+      await this.props.unassignQuestion(this.state.roleId, questionId)
+      if (this.props.getRoleById) {
+        this.props.getRoleById(this.state.roleId)
+      }
+      this.setState({ selectedQuestion: null })
+    }
+  }
 
   render () {
     const columns = [
       {
-        Header: 'Question Set',
+        Header: 'Assigned Question Set',
         columns: [
           {
             Header: 'Id',
@@ -114,6 +141,52 @@ class RoleDetail extends Component {
           {
             Header: 'Position',
             accessor: 'position'
+          },
+          {
+            Header: 'Unassign',
+            Cell: props => (
+              <RaisedButton
+                backgroundColor='#FCB636'
+                labelColor='#fff'
+                label='Unassign'
+                type='Button'
+                onClick={this.unassignQuestion.bind(this, props.original.id)}
+              />
+            ),
+            width: 200
+          }
+        ]
+      }
+    ]
+    const columnsUnassignedQuestions = [
+      {
+        Header: 'Unassigned Question Set',
+        columns: [
+          {
+            Header: 'Id',
+            accessor: 'id',
+            width: 100
+          },
+          {
+            Header: 'Name',
+            accessor: 'name'
+          },
+          {
+            Header: 'Position',
+            accessor: 'position'
+          },
+          {
+            Header: 'Assign',
+            Cell: props => (
+              <RaisedButton
+                backgroundColor='#FCB636'
+                labelColor='#fff'
+                label='Assign'
+                type='Button'
+                onClick={this.assignQuestion.bind(this, props.original.id)}
+              />
+            ),
+            width: 200
           }
         ]
       }
@@ -248,6 +321,39 @@ class RoleDetail extends Component {
                   />
                 </div>
               )}
+            </div>
+            <div className='table__wrapper'>
+              <ReactTable
+                data={this.state.unassignedQuestions}
+                columns={columnsUnassignedQuestions}
+                multiSort
+                showPagination={false}
+                defaultPageSize={500}
+                minRows={0}
+                getTdProps={(state, rowInfo) => {
+                  if (rowInfo && rowInfo.row) {
+                    return {
+                      onClick: e => {
+                        this.setState({
+                          selectedUnassignedQuestion: rowInfo.original
+                        })
+                      },
+                      onDoubleClick: e => {
+                        this.viewQuestion()
+                      },
+                      style: {
+                        background: this.state.selectedUnassignedQuestion
+                          ? rowInfo.original.id ===
+                            this.state.selectedUnassignedQuestion.id
+                            ? '#e5e5e5'
+                            : ''
+                          : '',
+                        cursor: 'pointer'
+                      }
+                    }
+                  }
+                }}
+              />
             </div>
           </div>
         </div>
