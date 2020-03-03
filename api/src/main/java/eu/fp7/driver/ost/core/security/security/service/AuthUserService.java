@@ -118,9 +118,7 @@ public class AuthUserService {
         entity.setPosition(Optional.ofNullable(form.positionId)
                 .map(id -> authUserPositionRepository.findOne(id))
                 .orElse(null));
-        ArrayList al = new ArrayList();
-        al.add(Long.valueOf(2));
-        entity.setRoles(authRoleRepository.findByIdIn(al));
+        entity.setRoles(authRoleRepository.findByIdIn(form.rolesIds));
         repository.save(entity);
 
         Optional<AuthUser> authUser = repository.findOneByLogin(entity.getLogin());
