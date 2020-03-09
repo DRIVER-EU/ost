@@ -189,12 +189,13 @@ public class TrialSessionService {
     public TrialSession insert(TrialSessionDTO.AdminEditItem sessionDTO) {
 
         TrialStage trialStage =null;
-        if(sessionDTO.lastTrialStageId !=0 ) {
-             trialStage = trialStageRepository.findById(sessionDTO.lastTrialStageId)
-                    .orElseThrow(() -> new EntityNotFoundException(TrialStage.class, sessionDTO.getLastTrialStageId()));
-        }
+
         Trial trial = trialRepository.findById(sessionDTO.trialId)
                 .orElseThrow(() -> new EntityNotFoundException(Trial.class, sessionDTO.trialId));
+        if(trial.getTrialStages().size() >0)
+        {
+            trialStage = trial.getTrialStages().get(0);
+        }
 
         TrialSession trialSession = TrialSession.builder().trial(trial)
                 .startTime(LocalDateTime.now())

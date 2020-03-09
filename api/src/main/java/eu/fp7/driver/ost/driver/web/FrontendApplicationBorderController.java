@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("admin/border")
+@RequestMapping("api/admin/border")
 public class FrontendApplicationBorderController {
 
   @ResponseBody

@@ -24,8 +24,7 @@ import java.util.stream.Collectors;
 @Service
 
 public class ExcelImportService {
-    //TODO JKW where to find it ?
-    public static final long TEST_BED_STAGE_ID = 1L;
+
     @Autowired
     TrialRepository trialRepository;
     @Autowired
