@@ -15,7 +15,7 @@ export const getTrialInfo = (user) => {
 export const getBorderInfo = (message) => {
   return (dispatch) => {
     return new Promise((resolve) => {
-      axios.get(`${origin}/admin/border/lower`, getHeaders())
+      axios.get(`${origin}/api/admin/border/lower`, getHeaders())
         .then((response) => {
           dispatch(getBorderInfoAction(response.data))
           resolve()
