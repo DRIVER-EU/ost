@@ -10,7 +10,7 @@ import _ from 'lodash'
 
 // eslint-disable-next-line no-useless-escape
 const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
 class Users extends Component {
   state = {
     selectedRow: null,
@@ -100,6 +100,13 @@ class Users extends Component {
     user.email = ''
     user.contact = ''
     user.isAdmin = false
+    user.loginError = false
+    user.passwordError = false
+    user.passwordConfirmationError = false
+    user.firstNameError = false
+    user.lastNameError = false
+    user.emailError = false
+    user.contactError = false
     this.setState({
       user: user,
       isUserDetailsOpen: true,
@@ -167,12 +174,8 @@ class Users extends Component {
     if (stateName === 'email') {
       error = this.validateEmail(updatedError.email)
     } else if (stateName === 'password') {
-      if (updatedError.password !== '' && updatedError.passwordConfirmation !== '') {
-        const isValidPassword = passwordRegex.test(updatedError.password)
-        error = !isValidPassword
-      } else if (updatedError.password === '' && updatedError.passwordConfirmation === '') {
-        error = false
-      }
+      const isValidPassword = passwordRegex.test(updatedError.password)
+      error = !isValidPassword
     } else if (stateName === 'passwordConfirmation') {
       error = updatedError.passwordConfirmation !== updatedError.password
     } else {
@@ -201,9 +204,24 @@ class Users extends Component {
       !this.validateBlur(updatedUser, 'lastName', 'formValidation') &&
       !this.validateBlur(updatedUser, 'email', 'formValidation') &&
       !this.validateBlur(updatedUser, 'contact', 'formValidation') &&
-      !this.validateBlur(updatedUser, 'password', 'formValidation') &&
-      !this.validateBlur(updatedUser, 'passwordConfirmation', 'formValidation')
+      this.handlePasswordCheck(this.state.editionMode, updatedUser)
     )
+  }
+
+  handlePasswordCheck = (mode, user) => {
+    if (mode === 'newUser') {
+      return (
+        !this.validateBlur(user, 'password', 'formValidation') &&
+        !this.validateBlur(user, 'passwordConfirmation', 'formValidation')
+      )
+    } else if (user.password || user.passwordConfirmation) {
+      return (
+        !this.validateBlur(user, 'password', 'formValidation') &&
+        !this.validateBlur(user, 'passwordConfirmation', 'formValidation')
+      )
+    } else if (!user.password && !user.passwordConfirmation) {
+      return true
+    }
   }
 
   handleSelectedUser = (selectedUser, mode) => {
@@ -259,6 +277,14 @@ class Users extends Component {
     user.lastName = ''
     user.email = ''
     user.contact = ''
+    user.isAdmin = false
+    user.loginError = false
+    user.passwordError = false
+    user.passwordConfirmationError = false
+    user.firstNameError = false
+    user.lastNameError = false
+    user.emailError = false
+    user.contactError = false
     this.setState({
       isUserDetailsOpen: false,
       selectedRow: null,
@@ -406,7 +432,7 @@ class Users extends Component {
             color={'#fdb913'}
             name='ball-spin-fade-loader' />
         </div>
-        : <Dialog open={isUserDetailsOpen}>
+        : <Dialog open={isUserDetailsOpen} className='users-dialog-container'>
           <div>
             <h2>User details</h2>
             <div className='user-info-save'>
@@ -427,6 +453,7 @@ class Users extends Component {
                 label='Save'
                 type='button' />
             </div>
+            {!isFormValid && <span className='users-form-invalid-warning'>Fill all fields below to save user</span>}
             <div>
               {this.state.editionMode !== 'editUser' && <TextField
                 value={login}
