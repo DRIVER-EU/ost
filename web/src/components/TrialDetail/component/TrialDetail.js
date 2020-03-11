@@ -29,6 +29,7 @@ class TrialDetail extends Component {
     tabs: PropTypes.any,
     params: PropTypes.object
   };
+
   handleOpenDialog (name) {
     let change = {}
     change[name] = true
@@ -45,11 +46,7 @@ class TrialDetail extends Component {
     change[name] = e.target.value
     this.setState(change)
   }
-  async getTrialDetail () {
-    let id
-    if (this.props.params) {
-      id = this.props.params.id_trial
-    }
+  getTrialDetail = async(id) => {
     if (this.props.getTrialDetail) {
       await this.props.getTrialDetail(id)
     }
@@ -66,7 +63,11 @@ class TrialDetail extends Component {
   }
 
   componentWillMount () {
-    this.getTrialDetail()
+    let id
+    if (this.props.params) {
+      id = this.props.params.id_trial
+    }
+    this.getTrialDetail(id)
   }
 
   componentDidMount () {
@@ -117,6 +118,8 @@ class TrialDetail extends Component {
                   name={this.state.trialName}
                   description={this.state.description}
                   newTrialDetail={this.props.newTrialDetail}
+                  inputsValue={[this.state.trialName, this.state.description]}
+                  getTrialDetail={this.getTrialDetail}
                 />
                 {this.props.removeBtn && (
                   <RemoveBtn

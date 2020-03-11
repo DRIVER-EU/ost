@@ -208,7 +208,7 @@ class RoleDetail extends Component {
               <div className='info__container'>
                 <TextField
                   type='id'
-                  value={this.props.roleId}
+                  value={this.state.roleId}
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
@@ -241,10 +241,12 @@ class RoleDetail extends Component {
                   new={this.props.new}
                   trialId={this.props.trialId}
                   roleName={this.state.name}
-                  roleId={this.props.roleId}
+                  roleId={this.state.roleId}
                   updateRole={this.props.updateRole}
                   addNewRole={this.props.addNewRole}
                   roleType={this.state.selectedCurrentRoleType}
+                  inputsValue={[this.state.name]}
+                  getRoleById={this.props.getRoleById}
                 />
                 {!this.props.new && (
                   <RemoveBtn
