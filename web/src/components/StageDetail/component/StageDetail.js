@@ -130,6 +130,8 @@ class StageDetail extends Component {
                   stageId={this.state.stageId}
                   updateStage={this.props.updateStage}
                   addNewStage={this.props.addNewStage}
+                  inputsValue={[this.state.stageName]}
+                  getStage={this.props.getStage}
                 />
                 {!this.props.new && (
                   <RemoveBtn

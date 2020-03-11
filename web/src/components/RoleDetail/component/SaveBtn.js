@@ -4,13 +4,20 @@ import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import browserHistory from 'react-router/lib/browserHistory'
+import WarningModal, {
+  checkInputs,
+  inputValidationRegex
+} from '../../NewObservationComponent/component/WarningModal'
 
 class SaveBtn extends Component {
   constructor (props) {
     super(props)
     this.state = {
       openSaveDialog: false,
-      new: this.props.new
+      new: this.props.new,
+      roleName: this.props.roleName,
+      isWarningOpen: false,
+      suggestedText: ''
     }
   }
   static propTypes = {
@@ -20,8 +27,9 @@ class SaveBtn extends Component {
     trialId: PropTypes.any,
     roleId: PropTypes.any,
     new: PropTypes.bool,
-    roleType: PropTypes.string
-  }
+    roleType: PropTypes.string,
+    inputsValue: PropTypes.array
+  };
   handleOpenDialog (name) {
     let change = {}
     change[name] = true
@@ -38,16 +46,44 @@ class SaveBtn extends Component {
     if (!this.state.new) {
       this.props.updateRole(role)
       this.handleCloseDialog('openSaveDialog')
+      this.props.getRoleById(this.props.roleId)
     } else {
       await this.props.addNewRole(role)
-      browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`)
+      browserHistory.push(
+        `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
+      )
     }
+  }
+  validateInputs (nameOfDialog, inputsValue) {
+    let isValid = checkInputs(inputsValue).isValid
+    if (isValid) {
+      this.handleOpenDialog(nameOfDialog)
+    } else {
+      this.setState({
+        isWarningOpen: true,
+        suggestedText: checkInputs(inputsValue).suggestedText
+      })
+    }
+  }
+  closeWarningModal = () => {
+    this.setState({
+      isWarningOpen: false
+    })
+  };
+  acceptSuggestedText = () => {
+    const regex = inputValidationRegex
+    let name = this.props.roleName.replace(regex, '')
+    this.setState({
+      isWarningOpen: false,
+      openSaveDialog: true,
+      roleName: name
+    })
   };
 
   render () {
     let role = {
       id: this.props.roleId,
-      name: this.props.roleName || '',
+      name: this.state.roleName || '',
       roleType: this.props.roleType,
       trialId: this.props.trialId
     }
@@ -55,7 +91,7 @@ class SaveBtn extends Component {
       <FlatButton
         label='No'
         primary
-        onClick={this.handleCloseDialog.bind(this, 'openSaveDialog')}
+        onClick={this.handleOpenDialog.bind(this, 'openSaveDialog')}
       />,
       <RaisedButton
         backgroundColor='#FCB636'
@@ -66,23 +102,35 @@ class SaveBtn extends Component {
       />
     ]
     return (
-      <div className='info__btn'>
-        <RaisedButton
-          buttonStyle={{ width: '200px' }}
-          backgroundColor='#FCB636'
-          labelColor='#fff'
-          label='Save'
-          type='Button'
-          onClick={this.handleOpenDialog.bind(this, 'openSaveDialog')}
+      <div>
+        <WarningModal
+          isWarningOpen={this.state.isWarningOpen}
+          suggestedText={this.state.suggestedText}
+          closeWarningModal={this.closeWarningModal}
+          acceptSuggestedText={this.acceptSuggestedText}
         />
-        <Dialog
-          title='Are you sure to save changes?'
-          actions={actionsSaveDialog}
-          contentClassName='custom__dialog'
-          modal={false}
-          open={this.state.openSaveDialog}
-          onRequestClose={this.handleCloseDialog.bind(this, 'openSaveDialog')}
-        />
+        <div className='info__btn'>
+          <RaisedButton
+            buttonStyle={{ width: '200px' }}
+            backgroundColor='#FCB636'
+            labelColor='#fff'
+            label='Save'
+            type='Button'
+            onClick={this.validateInputs.bind(
+              this,
+              'openSaveDialog',
+              this.props.inputsValue
+            )}
+          />
+          <Dialog
+            title='Are you sure to save changes?'
+            actions={actionsSaveDialog}
+            contentClassName='custom__dialog'
+            modal={false}
+            open={this.state.openSaveDialog}
+            onRequestClose={this.handleCloseDialog.bind(this, 'openSaveDialog')}
+          />
+        </div>
       </div>
     )
   }
