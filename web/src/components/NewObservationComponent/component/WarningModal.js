@@ -12,12 +12,14 @@ export const checkInputs = (inputsValue) => {
   const regex = inputValidationRegex
   for (let i = 0; i < inputsValue.length; i++) {
     const input = inputsValue[i]
-    suggestedText = input.replace(regex, '')
-    if (regex.test(input)) {
-      isValid = false
-      break
-    } else {
-      isValid = true
+    if (input !== undefined) {
+      suggestedText = input.replace(regex, '')
+      if (regex.test(input)) {
+        isValid = false
+        break
+      } else {
+        isValid = true
+      }
     }
   }
   return ({ isValid: isValid, suggestedText: suggestedText })
