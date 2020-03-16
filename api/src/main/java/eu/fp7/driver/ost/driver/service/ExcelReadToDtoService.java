@@ -172,7 +172,10 @@ public class ExcelReadToDtoService {
 
     if(row.getCell(cellNumber)!=null ) {
       if(CellType.STRING.equals(row.getCell(cellNumber).getCellType())) {
-        return String.valueOf(row.getCell(cellNumber).getRichStringCellValue());
+
+        String cellValue = String.valueOf(row.getCell(cellNumber).getRichStringCellValue());
+        cellValue = cellValue.replaceAll("/(\\t|\\n|_|\\||\\[|\\]|\\{|\\}|;)/g","");
+        return cellValue;
       }
       else if (CellType.NUMERIC.equals(row.getCell(cellNumber).getCellType()))
       {
@@ -237,8 +240,21 @@ public class ExcelReadToDtoService {
         objectNode.put("type", "string");
         jsonStructureToString = objectNode.toString();
       } else if (answerType.equals("CHECKBOX")) {
-        objectNode.put("type", "boolean");
-        jsonStructureToString = objectNode.toString();
+        enumString = importExcelTrialPositionDTO.getExcelAnswers()
+                .stream()
+                .map(ImportExcelTrialAnswerDTO::getDescription)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]}"));
+        if(enumString.isEmpty())
+        {
+          objectNode.put("type", "boolean");
+          jsonStructureToString = objectNode.toString();
+        }
+        else {
+          objectNode.put("type", "string");
+          jsonStructureToString = objectNode.toString().replace("}", ",");
+        }
+
       } else if (answerType.equals("SLIDER")) {
         objectNode.put("type", "number");
         jsonStructureToString = objectNode.toString();

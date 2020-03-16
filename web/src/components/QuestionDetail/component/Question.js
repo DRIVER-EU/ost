@@ -172,6 +172,8 @@ class Question extends Component {
                   required={this.state.required}
                   answerType={this.state.selectedAnswerType}
                   questionId={this.props.questionId}
+                  inputsValue={[this.state.questionName, this.state.description]}
+                  getQuestion={this.props.getQuestion}
                 />
                 {!this.props.new && (
                   <RemoveBtn

@@ -176,6 +176,8 @@ class QuestionDetail extends Component {
                   multiplicity={this.state.multiplicity}
                   questionForRole={this.props.questionForRole}
                   roleId={this.props.roleId}
+                  inputsValue={[this.state.questionName, this.state.description]}
+                  getQuestion={this.props.getQuestion}
                 />
                 {!this.props.new && (
                   <RemoveBtn

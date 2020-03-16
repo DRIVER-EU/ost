@@ -10,7 +10,7 @@ import _ from 'lodash'
 
 // eslint-disable-next-line no-useless-escape
 const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/
 class Users extends Component {
   state = {
     selectedRow: null,
@@ -35,7 +35,8 @@ class Users extends Component {
       contactError: false,
       activated: false,
       rolesIds: null,
-      positionId: null
+      positionId: null,
+      isAdmin: false
     }
   }
 
@@ -98,6 +99,14 @@ class Users extends Component {
     user.lastName = ''
     user.email = ''
     user.contact = ''
+    user.isAdmin = false
+    user.loginError = false
+    user.passwordError = false
+    user.passwordConfirmationError = false
+    user.firstNameError = false
+    user.lastNameError = false
+    user.emailError = false
+    user.contactError = false
     this.setState({
       user: user,
       isUserDetailsOpen: true,
@@ -115,6 +124,7 @@ class Users extends Component {
     user.lastName = ''
     user.email = ''
     user.contact = ''
+    user.isAdmin = false
     this.setState({
       user: user
     })
@@ -123,13 +133,14 @@ class Users extends Component {
   handleEditUser = (editionMode) => {
     const user = { ...this.state.user }
     const { selectedUser } = this.props
+    const isAdmin = selectedUser.roles[0].id === 1
     user.activated = selectedUser.activated
+    user.isAdmin = isAdmin
     user.login = selectedUser.login ? selectedUser.login : ''
     user.firstName = selectedUser.firstName ? selectedUser.firstName : ''
     user.lastName = selectedUser.lastName ? selectedUser.lastName : ''
     user.email = selectedUser.email ? selectedUser.email : ''
     user.contact = selectedUser.contact ? selectedUser.contact : ''
-    user.activated = selectedUser.activated
     user.rolesIds = selectedUser.roles && selectedUser.roles[0] ? [selectedUser.roles[0].id] : null
     user.positionId = selectedUser.position && selectedUser.position.id ? selectedUser.position.id : null
     user.password = ''
@@ -149,9 +160,9 @@ class Users extends Component {
     this.validateBlur(updatedUser, stateName)
   }
 
-  toggleChecked = () => {
+  toggleChecked = (key) => {
     const user = { ...this.state.user }
-    user.activated = !user.activated
+    user[key] = !user[key]
     this.setState({
       user
     })
@@ -163,12 +174,8 @@ class Users extends Component {
     if (stateName === 'email') {
       error = this.validateEmail(updatedError.email)
     } else if (stateName === 'password') {
-      if (updatedError.password !== '' && updatedError.passwordConfirmation !== '') {
-        const isValidPassword = passwordRegex.test(updatedError.password)
-        error = !isValidPassword
-      } else if (updatedError.password === '' && updatedError.passwordConfirmation === '') {
-        error = false
-      }
+      const isValidPassword = passwordRegex.test(updatedError.password)
+      error = !isValidPassword
     } else if (stateName === 'passwordConfirmation') {
       error = updatedError.passwordConfirmation !== updatedError.password
     } else {
@@ -197,9 +204,24 @@ class Users extends Component {
       !this.validateBlur(updatedUser, 'lastName', 'formValidation') &&
       !this.validateBlur(updatedUser, 'email', 'formValidation') &&
       !this.validateBlur(updatedUser, 'contact', 'formValidation') &&
-      !this.validateBlur(updatedUser, 'password', 'formValidation') &&
-      !this.validateBlur(updatedUser, 'passwordConfirmation', 'formValidation')
+      this.handlePasswordCheck(this.state.editionMode, updatedUser)
     )
+  }
+
+  handlePasswordCheck = (mode, user) => {
+    if (mode === 'newUser') {
+      return (
+        !this.validateBlur(user, 'password', 'formValidation') &&
+        !this.validateBlur(user, 'passwordConfirmation', 'formValidation')
+      )
+    } else if (user.password || user.passwordConfirmation) {
+      return (
+        !this.validateBlur(user, 'password', 'formValidation') &&
+        !this.validateBlur(user, 'passwordConfirmation', 'formValidation')
+      )
+    } else if (!user.password && !user.passwordConfirmation) {
+      return true
+    }
   }
 
   handleSelectedUser = (selectedUser, mode) => {
@@ -229,6 +251,7 @@ class Users extends Component {
         this.props.putUserPassword(userId, { password: user.password })
       }
     } else {
+      const role = user.isAdmin ? 1 : 2
       const updatedUser = {
         login: user.login,
         password: user.password,
@@ -237,7 +260,7 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        rolesIds: [1],
+        rolesIds: [role],
         positionId: 2
       }
       this.props.addUser(updatedUser)
@@ -254,6 +277,14 @@ class Users extends Component {
     user.lastName = ''
     user.email = ''
     user.contact = ''
+    user.isAdmin = false
+    user.loginError = false
+    user.passwordError = false
+    user.passwordConfirmationError = false
+    user.firstNameError = false
+    user.lastNameError = false
+    user.emailError = false
+    user.contactError = false
     this.setState({
       isUserDetailsOpen: false,
       selectedRow: null,
@@ -312,7 +343,8 @@ class Users extends Component {
       contact,
       password,
       passwordConfirmation,
-      activated
+      activated,
+      isAdmin
     } = user
     const isFormValid = this.isFormValid()
     const isSelectedUser = !this.isSelectedUser()
@@ -336,6 +368,7 @@ class Users extends Component {
             multiSort
             showPagination
             minRows={0}
+            defaultPageSize={10}
             getTdProps={(state, rowInfo) => {
               if (rowInfo && rowInfo.row) {
                 return {
@@ -399,13 +432,17 @@ class Users extends Component {
             color={'#fdb913'}
             name='ball-spin-fade-loader' />
         </div>
-        : <Dialog open={isUserDetailsOpen}>
+        : <Dialog open={isUserDetailsOpen} className='users-dialog-container'>
           <div>
             <h2>User details</h2>
             <div className='user-info-save'>
               <p>{selectedRow && <span>ID: {selectedRow.id}</span>}</p>
               <p>{<Checkbox
-                onClick={this.toggleChecked}
+                disabled={this.state.editionMode === 'editUser'}
+                onClick={() => this.toggleChecked('isAdmin')}
+                checked={isAdmin} />} <p>Admin</p></p>
+              <p>{<Checkbox
+                onClick={() => this.toggleChecked('activated')}
                 checked={!activated} />} <p>Deleted</p></p>
               <RaisedButton
                 onClick={this.saveUser}
@@ -416,6 +453,7 @@ class Users extends Component {
                 label='Save'
                 type='button' />
             </div>
+            {!isFormValid && <span className='users-form-invalid-warning'>Fill all fields below to save user</span>}
             <div>
               {this.state.editionMode !== 'editUser' && <TextField
                 value={login}

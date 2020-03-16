@@ -268,6 +268,8 @@ class SessionDetail extends Component {
                   stageId={this.state.selectedCurrentStage}
                   status={this.state.selectedStatus}
                   manual={this.state.manual}
+                  inputsValue={[this.state.sessionName]}
+                  getSessionDetail={this.props.getSessionDetail}
                 />
                 {!this.props.new && (
                   <RemoveBtn

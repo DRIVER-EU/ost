@@ -102,7 +102,7 @@ export const passwordUpdateFailAction = () => {
 export const getAllUsersList = () => {
   return dispatch => {
     dispatch(allUsersListStartAction())
-    axios.get(`${origin}/api/auth/users?page=0&sort=login,asc&sort=lastName,desc`, getHeaders())
+    axios.get(`${origin}/api/auth/users?page=0&size=100&sort=login,asc&sort=lastName,desc`, getHeaders())
     .then(res => {
       dispatch(allUsersListAction(res.data))
     })
@@ -138,7 +138,6 @@ export const putUserPassword = (userId, data) => {
     })
     .catch(err => {
       toastr.error('Failed to update user password', toastrOptions)
-      console.error(err)
     })
   }
 }
