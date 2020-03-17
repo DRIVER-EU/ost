@@ -83,7 +83,7 @@ class SaveBtn extends Component {
   render () {
     let role = {
       id: this.props.roleId,
-      name: this.state.roleName || '',
+      name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
       roleType: this.props.roleType,
       trialId: this.props.trialId
     }

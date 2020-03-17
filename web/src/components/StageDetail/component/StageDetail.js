@@ -102,7 +102,7 @@ class StageDetail extends Component {
                 className='header__link'
                 href={`/trial-manager/trial-detail/${this.props.trialId}`}
               >
-                {this.props.trialName}
+                {this.props.trialName || '...'}
               </a>
             </div>
             <div className='stageDetail__info'>
@@ -120,6 +120,7 @@ class StageDetail extends Component {
                   value={this.state.stageName}
                   floatingLabelText='Name'
                   fullWidth
+                  required
                 />
               </div>
               <div className='btns__wrapper'>

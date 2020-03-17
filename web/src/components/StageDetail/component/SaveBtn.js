@@ -14,7 +14,7 @@ class SaveBtn extends Component {
       new: this.props.new,
       isWarningOpen: false,
       suggestedText: '',
-      stageName: this.props.stageName
+      stageName:''
     }
   }
   static propTypes = {
@@ -76,7 +76,7 @@ class SaveBtn extends Component {
   render () {
     let stage = {
       id: this.props.stageId,
-      name: this.state.stageName || '',
+      name: this.state.stageName === '' ? this.props.stageName : this.state.stageName,
       trialId: this.props.trialId
     }
     const actionsSaveDialog = [
