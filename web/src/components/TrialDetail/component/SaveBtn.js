@@ -77,8 +77,8 @@ class SaveBtn extends Component {
   render () {
     let trial = {
       trialId: this.props.id,
-      trialName: this.state.name,
-      trialDescription: this.state.description
+      trialName: this.state.name === '' ? this.props.name : this.state.name,
+      trialDescription: this.state.description === '' ? this.props.description : this.state.description
     }
     const actionsSaveDialog = [
       <FlatButton

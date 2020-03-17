@@ -91,8 +91,8 @@ class SaveBtn extends Component {
   render () {
     let question = {
       id: this.props.questionDetailId || 0,
-      name: this.state.questionName,
-      description: this.state.description,
+      name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
+      description: this.state.description === '' ? this.props.description : this.state.description,
       commented: this.props.commented,
       position: parseInt(this.props.position),
       answerType: this.props.answerType,
