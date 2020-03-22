@@ -4,7 +4,9 @@ import eu.fp7.driver.ost.core.dto.EntityDto;
 import eu.fp7.driver.ost.driver.model.Question;
 import eu.fp7.driver.ost.driver.model.QuestionOption;
 import eu.fp7.driver.ost.driver.model.enums.AnswerType;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;

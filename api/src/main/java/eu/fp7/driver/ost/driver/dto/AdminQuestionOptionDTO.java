@@ -2,7 +2,9 @@ package eu.fp7.driver.ost.driver.dto;
 
 import eu.fp7.driver.ost.core.dto.EntityDto;
 import eu.fp7.driver.ost.driver.model.QuestionOption;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public final class AdminQuestionOptionDTO {
