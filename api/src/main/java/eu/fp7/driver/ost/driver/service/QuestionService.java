@@ -68,6 +68,9 @@ public class QuestionService {
         }
         ObservationType observationType = observationTypeRepository.findById(adminQuestionDTO.getObservationTypeId())
                 .orElseThrow(() -> new InvalidDataException("No observation type found with given id = " + adminQuestionDTO.getObservationTypeId()));
+        if(adminQuestionDTO.getJsonSchema() == null) {
+            adminQuestionDTO.setJsonSchema(createSimpleJson(adminQuestionDTO));
+        }
 
         Question question = Question.builder()
                 .observationType(observationType)
@@ -157,6 +160,16 @@ public class QuestionService {
         } catch (Exception e) {
             throw new InvalidDataException("error by creating Json schema for the question ");
         }
+    }
+
+    private String createSimpleJson(AdminQuestionDTO.FullItem adminQuestionDTO) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("title",adminQuestionDTO.getName());
+        objectNode.put("description", adminQuestionDTO.getDescription() );
+        objectNode.put("type", "string");
+        String response = objectNode.toString();
+        return response;
     }
 
     private String buildJsonStuructureEnding(ObjectNode objectNode) {
