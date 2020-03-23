@@ -31,6 +31,9 @@ public class ExcelImportService {
     TrialStageRepository trialStageRepository;
 
     @Autowired
+    QuestionService questionService;
+
+    @Autowired
     ObservationTypeRepository observationTypeRepository;
 
     @Autowired
@@ -87,8 +90,9 @@ public class ExcelImportService {
                         .position(importExcelTrialAnswerDTO.getPosition())
                         .build();
                 questionOptionRepository.save(questionOption);
+                question.getQuestionOptions().add(questionOption);
             }
-
+            questionService.updateJson(question.getId());
             observationType.getQuestions().add(question);
 
 //        }
