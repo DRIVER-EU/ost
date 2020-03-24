@@ -4,7 +4,6 @@ import eu.fp7.driver.ost.driver.dto.AdminQuestionDTO;
 import eu.fp7.driver.ost.driver.dto.AdminQuestionOptionDTO;
 import eu.fp7.driver.ost.driver.model.ObservationType;
 import eu.fp7.driver.ost.driver.model.Question;
-import eu.fp7.driver.ost.driver.model.QuestionOption;
 import eu.fp7.driver.ost.driver.model.enums.AnswerType;
 import eu.fp7.driver.ost.driver.repository.ObservationTypeRepository;
 import eu.fp7.driver.ost.driver.repository.QuestionRepository;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,13 +50,15 @@ public class QuestionService {
         Question question = questionRepository.findById(adminQuestionDTO.getId()).orElseThrow(() -> new InvalidDataException("No question found with given id = " + adminQuestionDTO.getId()));
         question.setName(adminQuestionDTO.getName());
         question.setDescription(adminQuestionDTO.getDescription());
-        question.setJsonSchema(adminQuestionDTO.getJsonSchema());
+
         question.setPosition(adminQuestionDTO.getPosition());
         question.setCommented(adminQuestionDTO.isCommented());
         question.setAnswerType(adminQuestionDTO.getAnswerType());
 
         return questionRepository.save(question);
     }
+
+
 
     @Transactional
     public Question insert(AdminQuestionDTO.FullItem adminQuestionDTO) {
@@ -69,7 +68,7 @@ public class QuestionService {
         ObservationType observationType = observationTypeRepository.findById(adminQuestionDTO.getObservationTypeId())
                 .orElseThrow(() -> new InvalidDataException("No observation type found with given id = " + adminQuestionDTO.getObservationTypeId()));
         if(adminQuestionDTO.getJsonSchema() == null) {
-            adminQuestionDTO.setJsonSchema(createSimpleJson(adminQuestionDTO));
+            adminQuestionDTO.setJsonSchema(createJsonSchemaFromOptions(adminQuestionDTO));
         }
 
         Question question = Question.builder()
@@ -98,7 +97,8 @@ public class QuestionService {
         AdminQuestionDTO.FullItem fullQuestion = new AdminQuestionDTO.FullItem();
         fullQuestion.toDto(question);
         fullQuestion.jsonSchema =  createJsonSchemaFromOptions(fullQuestion);
-        update(fullQuestion);
+        question.setJsonSchema(fullQuestion.getJsonSchema());
+        questionRepository.save(question);
     }
     public String createJsonSchemaFromOptions(AdminQuestionDTO.FullItem adminQuestionDTO) {
         try {
