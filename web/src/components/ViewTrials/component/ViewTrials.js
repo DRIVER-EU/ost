@@ -111,8 +111,8 @@ class ViewTrials extends Component {
   }
 
   newObservation () {
-    // browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
-    browserHistory.push(`/trials`)
+    browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+    // browserHistory.push(`/trials`)
   }
 
   handleFindObservation () {
