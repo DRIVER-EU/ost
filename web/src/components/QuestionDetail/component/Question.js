@@ -28,7 +28,6 @@ class Question extends Component {
         { value: 'RADIO_BUTTON', text: 'radio button' },
         { value: 'SLIDER', text: 'slider' },
         { value: 'TEXT_FIELD', text: 'text field' },
-        { value: 'BOX_LIST', text: 'box list' },
         { value: 'RADIO_LINE', text: 'radio line' }
       ],
       selectedAnswerType: this.props.answerType || 'CHECKBOX'
@@ -221,11 +220,7 @@ class Question extends Component {
                 <MenuItem
                   value={this.state.answerType[4].value}
                   primaryText={this.state.answerType[4].text}
-                />
-                <MenuItem
-                  value={this.state.answerType[5].value}
-                  primaryText={this.state.answerType[5].text}
-                />
+                />               
               </SelectField>
             </div>
             <div className='position__field'>
