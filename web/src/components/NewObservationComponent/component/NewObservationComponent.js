@@ -202,7 +202,8 @@ class NewObservationComponent extends Component {
       }
     }
     if (nextProps.observation && nextProps.observation !== this.props.observation) {
-      browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+      // browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+      browserHistory.push(`/trials`)
     }
   }
 
@@ -412,7 +413,8 @@ class NewObservationComponent extends Component {
   }
 
   back () {
-    browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+    // browserHistory.push(`/trials/${this.props.params.id}/select-observation`)
+    browserHistory.push(`/trials`)
   }
 
   // handleDescription (value) {
