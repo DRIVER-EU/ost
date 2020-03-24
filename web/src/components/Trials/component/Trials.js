@@ -38,7 +38,8 @@ class Trials extends Component {
       this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
       if (!JSON.parse(localStorage.getItem('openTrial')) && nextProps.listOfTrials.data.length !== 0) {
         localStorage.setItem('openTrial', true)
-        browserHistory.push(`/trials/${nextProps.listOfTrials.data[0].id}/select-observation`)
+        // browserHistory.push(`/trials/${nextProps.listOfTrials.data[0].id}/select-observation`)
+        browserHistory.push(`/trials`)
       }
     }
   }
