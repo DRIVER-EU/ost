@@ -220,7 +220,7 @@ class Question extends Component {
                 <MenuItem
                   value={this.state.answerType[4].value}
                   primaryText={this.state.answerType[4].text}
-                />               
+                />
               </SelectField>
             </div>
             <div className='position__field'>
