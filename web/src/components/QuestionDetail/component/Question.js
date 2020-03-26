@@ -200,6 +200,7 @@ class Question extends Component {
                 floatingLabelText='Answer type'
                 value={this.state.selectedAnswerType}
                 onChange={this.handleChange}
+                disabled={this.state.questionDetailId ? parseInt(this.state.questionDetailId) > 0 : false}
               >
                 <MenuItem
                   value={this.state.answerType[0].value}
