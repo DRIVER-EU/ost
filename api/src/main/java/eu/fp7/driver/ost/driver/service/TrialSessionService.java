@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.core.security.security.model.AuthRole;
+//import eu.fp7.driver.ost.core.security.security.model.AuthRole;
 import eu.fp7.driver.ost.core.security.security.model.AuthUser;
-import eu.fp7.driver.ost.core.security.security.model.AuthUserPosition;
-import eu.fp7.driver.ost.core.security.security.repository.AuthRoleRepository;
-import eu.fp7.driver.ost.core.security.security.repository.AuthUnitRepository;
-import eu.fp7.driver.ost.core.security.security.repository.AuthUserPositionRepository;
+//import eu.fp7.driver.ost.core.security.security.model.AuthUserPosition;
+//import eu.fp7.driver.ost.core.security.security.repository.AuthRoleRepository;
+//import eu.fp7.driver.ost.core.security.security.repository.AuthUnitRepository;
+//import eu.fp7.driver.ost.core.security.security.repository.AuthUserPositionRepository;
 import eu.fp7.driver.ost.core.security.security.repository.AuthUserRepository;
 import eu.fp7.driver.ost.driver.dto.AdminUserRoleDTO;
 import eu.fp7.driver.ost.driver.dto.TrialSessionDTO;
@@ -67,17 +67,17 @@ public class TrialSessionService {
     @Autowired
     private AuthUserRepository authUserRepository;
 
-    @Autowired
-    private AuthUserPositionRepository authUserPositionRepository;
+//    @Autowired
+//    private AuthUserPositionRepository authUserPositionRepository;
 
-    @Autowired
-    private AuthUnitRepository authUnitRepository;
+//    @Autowired
+//    private AuthUnitRepository authUnitRepository;
 
     @Autowired
     private TrialUserRepository trialUserRepository;
 
-    @Autowired
-    private AuthRoleRepository authRoleRepository;
+//    @Autowired
+//    private AuthRoleRepository authRoleRepository;
 
     @Autowired
     private TrialRoleRepository trialRoleRepository;
@@ -263,11 +263,11 @@ public class TrialSessionService {
                 AuthUser authUser = createUser(user, password, newSessionForm.prefix);
 
                 users.put(user.getEmail(), trialUserRepository.save(getTrialUser(authUser)));
-                AuthRole authRole = StreamSupport.stream(authRoleRepository.findAll().spliterator(), false)
-                        .filter(role -> role.getShortName().contains("ROLE_USER"))
-                        .findFirst()
-                        .orElse(null);
-                authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
+//                AuthRole authRole = StreamSupport.stream(authRoleRepository.findAll().spliterator(), false)
+//                        .filter(role -> role.getShortName().contains("ROLE_USER"))
+//                        .findFirst()
+//                        .orElse(null);
+//                authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
                 if (isEmail) {
                     String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
                     EmailService.sendNewSessionMail(authUser, password, trialName, user);
@@ -354,13 +354,13 @@ public class TrialSessionService {
         authUser.setPassword(bCryptPasswordEncoder.encode(password));
         authUser.setCreatedAt(ZonedDateTime.now());
 
-        AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
-                .filter(position -> position.getName().contains("User"))
-                .findFirst()
-                .orElse(null);
+//        AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
+//                .filter(position -> position.getName().contains("User"))
+//                .findFirst()
+//                .orElse(null);
 
-        authUser.setPosition(authUserPosition);
-        authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
+//        authUser.setPosition(authUserPosition);
+//        authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
 
         try {
             return authUserRepository.saveAndFlush(authUser);
@@ -397,14 +397,14 @@ public class TrialSessionService {
         List<TrialRole> trialRoles = trialRoleRepository.findAllByTrialId(trialId);
         List<AuthUser> authUsers = new ArrayList<>();
 
-        for (AuthUser user : authUserRepository.findAll()) {
-            for (AuthRole role : user.getRoles()) {
-                if (AuthRoleType.ROLE_USER.name().contains(role.getShortName())) {
-                    authUsers.add(user);
-                    break;
-                }
-            }
-        }
+//        for (AuthUser user : authUserRepository.findAll()) {
+//            for (AuthRole role : user.getRoles()) {
+//                if (AuthRoleType.ROLE_USER.name().contains(role.getShortName())) {
+//                    authUsers.add(user);
+//                    break;
+//                }
+//            }
+//        }
 
         authUsers.remove(trialUserService.getCurrentUser());
         return SchemaCreator.createNewSessionSchemaForm(trialStages, trialRoles, authUsers);

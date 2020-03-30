@@ -175,22 +175,12 @@ dependencies {
     compile("org.apache.lucene:lucene-core:${luceneVersion}")
     compile("org.apache.lucene:lucene-queryparser:${luceneVersion}")
 
-    // PerPixel
-    // compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-dto:${perpixelSpringDtoVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-exception:${perpixelSpringDtoVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-persistence:${perpixelSpringPersistenceVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-security:${perpixelSpringSecurityVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-utils:${perpixelSpringUtilsVersion}")
-
     // javax mail
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
 
     // TestBed
     compile("driver.eu:testbed-adapter:2.0.0")
 
-    // Keycloak
-    compile("org.keycloak:keycloak-authz-client:${KEYCLOAK_VERSION}")
 
     // ----------------------------------------
     // Test
