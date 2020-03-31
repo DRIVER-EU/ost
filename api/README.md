@@ -39,6 +39,12 @@ Schema registry: http://localhost:3601/
 Admin tool: http://localhost:8090/#/overview  
 * kliknięcie initialise test-bed wywala 500tke w dockerze  
 Time service: http://localhost:8100/time-service/#!/  
-* w lewym górnym rogu jest guzik do sterowania czasem  
+* w lewym górnym rogu jest guzik do sterowania czasem
 
 
+ENVIRONMENT VARIABLES:
+
+OST_DB_HOST=localhost
+OST_DB_PORT=5437
+OST_DB_NAME=itti_driver
+DRIVER_IS_TESTBED_ON=[true/false]
