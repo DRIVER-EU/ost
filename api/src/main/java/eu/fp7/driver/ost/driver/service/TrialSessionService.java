@@ -2,6 +2,7 @@ package eu.fp7.driver.ost.driver.service;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.Lists;
 import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
@@ -28,6 +29,7 @@ import eu.fp7.driver.ost.driver.util.InvalidDataException;
 import eu.fp7.driver.ost.driver.util.RepositoryUtils;
 import eu.fp7.driver.ost.driver.util.schema.SchemaCreator;
 import org.flywaydb.core.internal.util.StringUtils;
+import org.flywaydb.core.internal.util.logging.apachecommons.ApacheCommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -50,6 +52,9 @@ import java.util.stream.StreamSupport;
 public class TrialSessionService {
 
     @Autowired
+    private AnswerService answerService;
+
+    @Autowired
     private TrialSessionRepository trialSessionRepository;
 
     @Autowired
@@ -57,9 +62,6 @@ public class TrialSessionService {
 
     @Autowired
     private TrialUserService trialUserService;
-
-    @Autowired
-    private AnswerService answerService;
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -104,6 +106,12 @@ public class TrialSessionService {
         return trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
     }
+
+    @Transactional()
+    public List<Trial> findAll() {
+        return Lists.newArrayList(trialRepository.findAll());
+    }
+
     @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
         AuthUser authUser = trialUserService.getCurrentUser();
@@ -169,6 +177,10 @@ public class TrialSessionService {
             throw new EntityNotFoundException(TrialStage.class, trialSessionId);
         }
         trialSessionRepository.delete(trialSessionId);
+    }
+
+    public TrialSession save(TrialSession trialSession){
+        return trialSessionRepository.save(trialSession);
     }
 
     public TrialSession update(TrialSessionDTO.AdminEditItem sessionDTO) {
