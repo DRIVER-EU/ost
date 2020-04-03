@@ -7,6 +7,7 @@ import eu.fp7.driver.ost.driver.model.TrialStage;
 import eu.fp7.driver.ost.driver.model.enums.SessionStatus;
 import eu.fp7.driver.ost.driver.service.TrialSessionService;
 import eu.fp7.driver.ost.driver.service.TrialStageService;
+import org.apache.kafka.common.protocol.types.Field;
 import org.hibernate.Hibernate;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,44 +29,51 @@ public class TestBedController {
     TrialStageService trialStageService;
 
 
-    @GetMapping("/testbed/trails")
-    public JSONArray getTrialsForTestbed() {
-        List<Trial> trialList = trialSessionService.findAll();
-        JSONArray trialListJsonArray = new JSONArray();
-        trialList.forEach(trial -> {
-            JSONObject trialJsonObj = new JSONObject();
-            trialJsonObj.put("name", trial.getName());
-            trialJsonObj.put("id", trial.getId());
-
-            List<TrialSession> trialSessionList = trial.getTrialSessions();
-            Hibernate.initialize(trialSessionList);
-            JSONArray sessionSet = new JSONArray();
-            trialSessionList.forEach(session -> {
-                JSONObject sessionJsonObj = new JSONObject();
-                sessionJsonObj.put("id", session.getId());
-                sessionJsonObj.put("status", session.getStatus().name());
-                sessionJsonObj.put("currentStage", session.getLastTrialStage());
-                sessionSet.put(sessionJsonObj);
+    @GetMapping(value="/trials", produces="application/json")
+    public ResponseEntity getTrialsForTestbed() {
+        JSONObject jsonReturn =  new JSONObject();
+        jsonReturn.put("test","test");
+        try {
+            List<Trial> trialList = trialSessionService.findAll();
+            JSONArray trialListJsonArray = new JSONArray();
+            trialList.forEach(trial -> {
+                JSONObject trialJsonObj = new JSONObject();
+                trialJsonObj.put("name", trial.getName());
+                trialJsonObj.put("id", trial.getId());
+                List<TrialSession> trialSessionList = trial.getTrialSessions();
+                Hibernate.initialize(trialSessionList);
+                JSONArray sessionSet = new JSONArray();
+                trialSessionList.forEach(session -> {
+                    JSONObject sessionJsonObj = new JSONObject();
+                    sessionJsonObj.put("id", session.getId());
+                    sessionJsonObj.put("status", session.getStatus().name());
+                    sessionJsonObj.put("currentStage", session.getLastTrialStage().getId());
+                    sessionSet.put(sessionJsonObj);
+                });
+                trialJsonObj.put("sessionSet", sessionSet);
+                JSONArray stageSet = new JSONArray();
+                List<TrialStage> trialStageList = trial.getTrialStages();
+                Hibernate.initialize(trialStageList);
+                trialStageList.forEach(stage -> {
+                    JSONObject stageJsonObj = new JSONObject();
+                    stageJsonObj.put("id", stage.getId());
+                    stageJsonObj.put("name", stage.getName());
+                    stageSet.put(stageJsonObj);
+                });
+                trialJsonObj.put("stageSet", stageSet);
+                trialListJsonArray.put(trialJsonObj);
             });
-            trialJsonObj.put("sessionSet", sessionSet);
-
-            JSONArray stageSet = new JSONArray();
-            List<TrialStage> trialStageList = trial.getTrialStages();
-            Hibernate.initialize(trialStageList);
-            trialStageList.forEach(item -> {
-                JSONObject stageJsonObj = new JSONObject();
-                stageJsonObj.put("id", item.getId());
-                stageJsonObj.put("name", item.getName());
-                stageSet.put(stageJsonObj);
-            });
-            trialJsonObj.put("stageSet", stageSet);
-            trialListJsonArray.put(trialJsonObj);
-        });
-        return trialListJsonArray;
+            jsonReturn.put("trialList",trialListJsonArray);
+        } catch (Exception e) {
+            ResponseEntity responseEntity = getResponseEntity(e);
+            return responseEntity;
+        }
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(jsonReturn.toString());
+        return responseEntity;
     }
 
 
-    @PutMapping("/testbed/updateSession")
+    @PutMapping("/updateSession")
     public ResponseEntity updateTestbedSession(@RequestParam(value = "sessionId") long sessionId,
                                                @RequestParam(value = "sessionStatus") String sessionStatus,
                                                @RequestParam(value = "currentStageId") long currentStageId) {
