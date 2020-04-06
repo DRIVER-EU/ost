@@ -1,4 +1,4 @@
-package eu.fp7.driver.ost.core.security.security.model;
+package eu.fp7.driver.ost.driver.model;
 
 import eu.fp7.driver.ost.core.security.auditing.AuditingDeletableObject;
 import org.hibernate.annotations.BatchSize;
@@ -9,11 +9,7 @@ import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -21,8 +17,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @GenericGenerator(

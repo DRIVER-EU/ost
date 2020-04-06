@@ -1,7 +1,7 @@
-package eu.fp7.driver.ost.core.security.security.repository;
+package eu.fp7.driver.ost.driver.repository;
 
 import eu.fp7.driver.ost.core.annotation.IsAuthenticated;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

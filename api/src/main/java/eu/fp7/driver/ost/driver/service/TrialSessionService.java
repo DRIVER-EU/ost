@@ -6,18 +6,17 @@ import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
 //import eu.fp7.driver.ost.core.security.security.model.AuthRole;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 //import eu.fp7.driver.ost.core.security.security.model.AuthUserPosition;
 //import eu.fp7.driver.ost.core.security.security.repository.AuthRoleRepository;
 //import eu.fp7.driver.ost.core.security.security.repository.AuthUnitRepository;
 //import eu.fp7.driver.ost.core.security.security.repository.AuthUserPositionRepository;
-import eu.fp7.driver.ost.core.security.security.repository.AuthUserRepository;
+import eu.fp7.driver.ost.driver.repository.AuthUserRepository;
 import eu.fp7.driver.ost.driver.dto.AdminUserRoleDTO;
 import eu.fp7.driver.ost.driver.dto.TrialSessionDTO;
 import eu.fp7.driver.ost.driver.form.NewSessionForm;
 import eu.fp7.driver.ost.driver.form.UserForm;
 import eu.fp7.driver.ost.driver.model.*;
-import eu.fp7.driver.ost.driver.model.enums.AuthRoleType;
 import eu.fp7.driver.ost.driver.model.enums.Languages;
 import eu.fp7.driver.ost.driver.model.enums.ManagementRoleType;
 import eu.fp7.driver.ost.driver.model.enums.SessionStatus;
@@ -41,9 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Service
 @Transactional

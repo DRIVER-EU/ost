@@ -1,6 +1,6 @@
 package eu.fp7.driver.ost.driver.repository;
 
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.model.TrialUser;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;

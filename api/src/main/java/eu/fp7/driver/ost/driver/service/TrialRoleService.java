@@ -1,6 +1,6 @@
 package eu.fp7.driver.ost.driver.service;
 
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.TrialRoleDTO;
 import eu.fp7.driver.ost.driver.model.Trial;
 import eu.fp7.driver.ost.driver.model.TrialRole;

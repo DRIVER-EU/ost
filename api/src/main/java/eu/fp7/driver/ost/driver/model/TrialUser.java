@@ -1,7 +1,6 @@
 package eu.fp7.driver.ost.driver.model;
 
 import eu.fp7.driver.ost.core.persistence.db.model.PersistentObject;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
 import eu.fp7.driver.ost.driver.model.enums.Languages;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -8,7 +8,7 @@ import eu.driver.model.core.AdminHeartbeat;
 import eu.driver.model.core.Heartbeat;
 import eu.driver.model.core.ObserverToolAnswer;
 import eu.driver.model.core.RequestChangeOfTrialStage;
-import eu.driver.model.core.Timing;
+import eu.driver.model.sim.config.TimeManagement;
 import eu.fp7.driver.ost.driver.model.Answer;
 import eu.fp7.driver.ost.driver.model.Attachment;
 import eu.fp7.driver.ost.driver.model.ObservationType;
@@ -57,7 +57,7 @@ public class BrokerUtil {
     public static long trialStageId;
     static Heartbeat heartbeat;
     static AdminHeartbeat adminHeartbeat;
-    public static Timing timing;
+    public static TimeManagement timeManagement;
 
 
     @Autowired
@@ -99,16 +99,16 @@ public class BrokerUtil {
 
     public static LocalDateTime getTrialTime() {
 
-        if (timing != null) {
-            return Instant.ofEpochMilli(timing.getTrialTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+        if (timeManagement != null) {
+            return Instant.ofEpochMilli(timeManagement.getSimulationTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
         }
         return Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public static LocalTime getTimeElapsed() {
 
-        if (timing != null) {
-            return Instant.ofEpochMilli(timing.getTimeElapsed()).atZone(ZoneId.systemDefault()).toLocalTime();
+        if (timeManagement != null) {
+            return Instant.ofEpochMilli(timeManagement.getSimulationTime()).atZone(ZoneId.systemDefault()).toLocalTime();
         }
         return LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault()).toLocalTime();
     }
@@ -177,11 +177,11 @@ public class BrokerUtil {
 
         public void messageReceived(IndexedRecord key, IndexedRecord receivedMessage, String topicName) {
             try {
-                timing = (eu.driver.model.core.Timing) SpecificData.get().deepCopy(eu.driver.model.core.Timing.SCHEMA$, receivedMessage);
+                timeManagement = (TimeManagement) SpecificData.get().deepCopy(TimeManagement.SCHEMA$, receivedMessage);
             } catch (Exception e) {
                 System.out.println("Error heartbeat receive message! " + e.getMessage());
             }
-            System.out.println("timing receive message! " + timing.getTrialTime());
+            System.out.println("timing receive message! " + timeManagement.getSimulationTime());
         }
     }
 
