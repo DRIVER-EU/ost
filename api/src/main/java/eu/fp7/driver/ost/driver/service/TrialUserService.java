@@ -7,6 +7,8 @@ import eu.fp7.driver.ost.driver.repository.TrialUserRepository;
 import eu.fp7.driver.ost.driver.repository.specification.TrialUserSpecification;
 import eu.fp7.driver.ost.driver.util.ForbiddenException;
 import eu.fp7.driver.ost.driver.util.RepositoryUtils;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +24,9 @@ import java.util.Set;
 @Service
 @Transactional(readOnly = true)
 public class TrialUserService {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Autowired
     private TrialUserRepository trialUserRepository;
@@ -53,7 +59,29 @@ public class TrialUserService {
     }
 
     public AuthUser getCurrentUser() {
-        return authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        return  getCurrentKeycloakUser();
+    }
+
+
+    public AuthUser getCurrentKeycloakUser(){
+        KeycloakSecurityContext attr = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
+        AccessToken accessToken = attr.getToken();
+        AccessToken.Access access = accessToken.getRealmAccess();
+        String[] roleSet = access.getRoles().toArray(new String[0]);
+        String userKeycloakId = accessToken.getPreferredUsername();
+        AuthUser currentUser;
+        Optional<AuthUser> currentUserOptional = authUserRepository.findOneByLogin(userKeycloakId);
+        if(currentUserOptional.isPresent()){
+            currentUser = currentUserOptional.get();
+        }
+        else{
+            currentUser = new AuthUser();
+            currentUser.setLogin(userKeycloakId);
+            authUserRepository.save(currentUser);
+            TrialUser currentTrialUser = new TrialUser();
+            currentTrialUser.setAuthUser(currentUser);
+            trialUserRepository.save(currentTrialUser);
+        }
+        return currentUser;
     }
 }

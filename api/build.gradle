@@ -179,7 +179,7 @@ dependencies {
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
 
     // TestBed
-    compile("driver.eu:testbed-adapter:2.0.3")
+    compile("driver.eu:testbed-adapter:2.0.4")
 
     //Keycloak
     compile("org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}")
