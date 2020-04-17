@@ -1,7 +1,7 @@
 package eu.fp7.driver.ost.core.security.auditing;
 
 import eu.fp7.driver.ost.core.persistence.db.model.PersistentObject;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;

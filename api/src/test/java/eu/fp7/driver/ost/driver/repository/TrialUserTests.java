@@ -1,6 +1,5 @@
 package eu.fp7.driver.ost.driver.repository;
 
-import eu.fp7.driver.ost.core.security.security.repository.AuthUserRepository;
 import eu.fp7.driver.ost.driver.model.TrialUser;
 import eu.fp7.driver.ost.driver.model.enums.Languages;
 import org.junit.Assert;

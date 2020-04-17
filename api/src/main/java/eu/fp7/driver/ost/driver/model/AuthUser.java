@@ -1,4 +1,4 @@
-package eu.fp7.driver.ost.core.security.security.model;
+package eu.fp7.driver.ost.driver.model;
 
 import eu.fp7.driver.ost.core.security.auditing.AuditingDeletableObject;
 import org.hibernate.annotations.BatchSize;
@@ -9,11 +9,7 @@ import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -21,8 +17,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @GenericGenerator(
@@ -78,17 +72,17 @@ public class AuthUser extends AuditingDeletableObject
     @NotNull
     private boolean activated = true;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private AuthUserPosition position;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    private AuthUserPosition position;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private AuthUnit unit;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private AuthUnit unit;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "auth_user_m2m_roles",
-            joinColumns = @JoinColumn(name = "auth_user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "id"))
-    private Set<AuthRole> roles = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "auth_user_m2m_roles",
+//            joinColumns = @JoinColumn(name = "auth_user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "auth_role_id", referencedColumnName = "id"))
+//    private Set<AuthRole> roles = new HashSet<>();
 
     public String getLogin() {
         return login;
@@ -162,29 +156,29 @@ public class AuthUser extends AuditingDeletableObject
         this.activated = activated;
     }
 
-    public AuthUserPosition getPosition() {
-        return position;
-    }
+//    public AuthUserPosition getPosition() {
+//        return position;
+//    }
+//
+//    public void setPosition(AuthUserPosition position) {
+//        this.position = position;
+//    }
 
-    public void setPosition(AuthUserPosition position) {
-        this.position = position;
-    }
+//    public AuthUnit getUnit() {
+//        return unit;
+//    }
 
-    public AuthUnit getUnit() {
-        return unit;
-    }
+//    public void setUnit(AuthUnit unit) {
+//        this.unit = unit;
+//    }
 
-    public void setUnit(AuthUnit unit) {
-        this.unit = unit;
-    }
-
-    public Set<AuthRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<AuthRole> roles) {
-        this.roles = roles;
-    }
+//    public Set<AuthRole> getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(Set<AuthRole> roles) {
+//        this.roles = roles;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -203,9 +197,11 @@ public class AuthUser extends AuditingDeletableObject
         if (email != null ? !email.equals(authUser.email) : authUser.email != null) return false;
         if (contact != null ? !contact.equals(authUser.contact) : authUser.contact != null) return false;
         if (lastLogin != null ? !lastLogin.equals(authUser.lastLogin) : authUser.lastLogin != null) return false;
-        if (position != null ? !position.equals(authUser.position) : authUser.position != null) return false;
-        if (unit != null ? !unit.equals(authUser.unit) : authUser.unit != null) return false;
-        return roles != null ? roles.equals(authUser.roles) : authUser.roles == null;
+
+//        if (position != null ? !position.equals(authUser.position) : authUser.position != null) return false;
+//        if (unit != null ? !unit.equals(authUser.unit) : authUser.unit != null) return false;
+//        return roles != null ? roles.equals(authUser.roles) : authUser.roles == null;
+        return true;
     }
 
     @Override
@@ -227,7 +223,7 @@ public class AuthUser extends AuditingDeletableObject
                 ", email='" + email + '\'' +
                 ", lastLogin=" + lastLogin +
                 ", activated=" + activated +
-                ", roles=" + roles +
+//                ", roles=" + roles +
                 "} " + super.toString();
     }
 }

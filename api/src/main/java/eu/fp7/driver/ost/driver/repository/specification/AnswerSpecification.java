@@ -1,6 +1,6 @@
 package eu.fp7.driver.ost.driver.repository.specification;
 
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.model.Answer;
 import eu.fp7.driver.ost.driver.model.Answer_;
 import eu.fp7.driver.ost.driver.model.ObservationType;

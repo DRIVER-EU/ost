@@ -1,7 +1,7 @@
 package eu.fp7.driver.ost.driver.service;
 
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.EventDTO;
 import eu.fp7.driver.ost.driver.model.Event;
 import eu.fp7.driver.ost.driver.model.TrialRole;

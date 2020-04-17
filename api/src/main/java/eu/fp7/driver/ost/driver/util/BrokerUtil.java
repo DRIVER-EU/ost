@@ -8,8 +8,6 @@ import eu.driver.model.core.AdminHeartbeat;
 import eu.driver.model.core.Heartbeat;
 import eu.driver.model.core.ObserverToolAnswer;
 import eu.driver.model.core.RequestChangeOfTrialStage;
-
-//import eu.driver.model.core.Timing;
 import eu.driver.model.sim.config.TimeManagement;
 import eu.fp7.driver.ost.driver.model.Answer;
 import eu.fp7.driver.ost.driver.model.Attachment;
@@ -183,7 +181,7 @@ public class BrokerUtil {
             } catch (Exception e) {
                 System.out.println("Error heartbeat receive message! " + e.getMessage());
             }
-            System.out.println("timeManagement receive message! current simulation time is: " + timeManagement.getSimulationTime());
+            System.out.println("timing receive message! " + timeManagement.getSimulationTime());
         }
     }
 

@@ -123,7 +123,7 @@ dependencies {
     // Spring Boot
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile 'org.springframework.boot:spring-boot-starter-security'
+//    compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.session:spring-session'
     compile("org.springframework.security:spring-security-data")
     compile("org.springframework.boot:spring-boot-starter-tomcat")
@@ -181,8 +181,9 @@ dependencies {
     // TestBed
     compile("driver.eu:testbed-adapter:2.0.4")
 
-    // Keycloak
-    compile("org.keycloak:keycloak-authz-client:${KEYCLOAK_VERSION}")
+    //Keycloak
+    compile("org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}")
+    compile group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '3.3.0.Final', ext: 'pom'
 
     // ----------------------------------------
     // Test
@@ -194,6 +195,8 @@ dependencies {
     // Java JsonPath
     testCompile("com.jayway.jsonpath:json-path:${jsonpathVersion}")
 
+
+
     // ----------------------------------------
     // Integration Test
     // ----------------------------------------
@@ -201,6 +204,7 @@ dependencies {
     // Apache HTTP Client
     integrationTestCompile("org.apache.httpcomponents:httpclient:${httpclientVersion}")
 }
+
 
 // ----------------------------------------
 // TASKS

@@ -31,7 +31,7 @@ Java Adapter: https://github.com/DRIVER-EU/java-test-bed-adapter/tree/master/tes
 Time-service: https://github.com/DRIVER-EU/test-bed-time-service  
 Test-Bed: https://github.com/DRIVER-EU/test-bed  
 Test-bed Admin: https://github.com/DRIVER-EU/test-bed-admin
-Avro schemas: https://github.com/DRIVER-EU/avro-schemas
+Avro schemas: https://github.com/DRIVER-EU/avro-schemas  
 
 ## Przydatne linki
 Kafka: http://localhost:3600  
@@ -47,9 +47,4 @@ ENVIRONMENT VARIABLES:
 OST_DB_HOST=localhost
 OST_DB_PORT=5437
 OST_DB_NAME=itti_driver
-DRIVER_IS_TESTBED_ON=false
-OST_KEYCLOAK_IS_ENABLED=false
-KEYCLOAK_HOST=localhost
-KEYCLOAK_PORT=8070
-KEYCLOAK_OST_REALM=driver2
-KEYCLOAK_OST_CLIENT=ost_app
+DRIVER_IS_TESTBED_ON=[true/false]
