@@ -1,0 +1,11 @@
+{
+    "realm": "driver2",
+    "url": "http://192.168.1.21:8070/auth",
+    "ssl-required": "none",
+    "resource": "ost_app",
+    "public-client": true,
+    "verify-token-audience": true,
+    "use-resource-role-mappings": true,
+    "confidential-port": 0,
+    "clientId": "ost_app"
+  }

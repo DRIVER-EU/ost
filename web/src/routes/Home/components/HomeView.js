@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './HomeView.scss'
+import PropTypes from 'prop-types'
 import HomeDesktop from '../../../components/HomeDesktop'
 
 class HomeView extends Component {
@@ -8,10 +9,14 @@ class HomeView extends Component {
     this.state = {}
   }
 
+  static propTypes = {
+    keycloak  : PropTypes.object
+  }
+
   render () {
     return (
       <div className='background-home'>
-        <HomeDesktop />
+        <HomeDesktop keycloak={this.props.keycloak} />
       </div>
     )
   }

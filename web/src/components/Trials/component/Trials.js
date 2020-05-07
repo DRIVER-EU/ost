@@ -31,6 +31,10 @@ class Trials extends Component {
     })
   }
 
+  componentWillUnmount () {
+    clearInterval(this.state.interval)
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrials.data &&
       nextProps.listOfTrials.data !== this.state.listOfTrials &&

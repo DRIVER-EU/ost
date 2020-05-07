@@ -7,6 +7,7 @@ import './Users.scss'
 import ReactTable from 'react-table'
 import Dialog from 'material-ui/Dialog'
 import _ from 'lodash'
+import browserHistory from 'react-router/lib/browserHistory'
 
 // eslint-disable-next-line no-useless-escape
 const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
@@ -400,7 +401,7 @@ class Users extends Component {
             }} />}
         </div>
         <div className='users-btn-container'>
-          <a href='admin-home'>
+          <a style={{ curosor: 'pointer' }} onClick={() => browserHistory.push('/admin-home')}>
             <RaisedButton
               buttonStyle={{ width: '200px' }}
               backgroundColor='#244C7B'
