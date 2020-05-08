@@ -75,9 +75,7 @@ class CoreLayout extends Component {
 
   logInToKeyCloack = () => {
     const keycloak = Keycloak(keycloakJson)
-    keycloak.init({
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html' })
+    keycloak.init({ onLoad: 'login-required' })
     keycloak.onAuthLogout = () => {
       this.setState({ isReady: false })
       this.props.logOut()
@@ -157,7 +155,9 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.login.isLoggedIn,
   user: state.login.user,
   trial: state.layout.trial,
-  borderInfo: state.layout.borderInfo
+  borderInfo: state.layout.borderInfo,
+  keycloak: state.layout.keycloak,
+  isReady: state.layout.isReady
 })
 
 export default connect(mapStateToProps, actionLayout)(CoreLayout)
