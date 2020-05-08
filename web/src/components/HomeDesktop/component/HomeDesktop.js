@@ -20,7 +20,8 @@ class HomeDesktop extends Component {
 
   static propTypes = {
     logIn: PropTypes.func,
-    isLoggedIn: PropTypes.bool
+    isLoggedIn: PropTypes.bool,
+    keycloak: PropTypes.object
   }
 
   render () {
@@ -31,6 +32,7 @@ class HomeDesktop extends Component {
             <div>
               <img className='img-responsive driver-logo' src='/images/driver-logo.png' />
               <LoginPanel
+                keycloak={this.props.keycloak}
                 isLoggedIn={this.props.isLoggedIn}
                 logIn={this.props.logIn} />
             </div>

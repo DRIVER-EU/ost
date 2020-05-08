@@ -1,6 +1,7 @@
 import { origin } from '../../config/Api'
 import axios from 'axios'
 import { getHeaders, errorHandle } from '../../store/addons'
+import { logInAction, logOutAction } from '../../routes/Login/modules/login'
 
 export const GET_TRIAL_INFO = 'GET_TRIAL_INFO'
 export const GET_BORDER_INFO = 'GET_BORDER_INFO'
@@ -10,6 +11,14 @@ export const getTrialInfo = (user) => {
     type: GET_TRIAL_INFO,
     trial: user
   }
+}
+
+export const logIn = user => {
+  return (dispatch) => dispatch(logInAction(user))
+}
+
+export const logOut = () => {
+  return (dispatch) => dispatch(logOutAction())
 }
 
 export const getBorderInfo = (message) => {

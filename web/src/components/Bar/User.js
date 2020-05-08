@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { logIn, logOut } from '../../routes/Login/modules/login'
 import './User.scss'
+// import { browserHistory } from 'react-router'
 
 class UserComponent extends Component {
   constructor (props) {
@@ -9,22 +10,20 @@ class UserComponent extends Component {
   }
 
   static propTypes = {
-    user: PropTypes.any
-  }
-
-  componentDidMount () {
-    let logOutBtn = document.getElementById('logOut')
-    let self = this
-    logOutBtn.onclick = function () {
-      self.props.logOut()
-    }
+    user: PropTypes.any,
+    keycloak: PropTypes.object
   }
 
   render () {
     return (
       <div className='btns__wrapper'>
         <button className='menu__btn'>{this.props.user.login}</button>
-        <button className='menu__btn' id='logOut'>Log out</button>
+        <button
+          disabled={this.props.keycloak === null}
+          onClick={() => this.props.keycloak.onAuthLogout()}
+          className='menu__btn'>
+            Log out
+        </button>
       </div>
     )
   }

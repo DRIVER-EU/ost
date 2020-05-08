@@ -6,8 +6,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { green300 } from 'material-ui/styles/colors'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import Keycloak from 'keycloak-js'
-
 require('es6-promise').polyfill()
 injectTapEventPlugin()
 if (!Array.prototype.find) {
@@ -188,159 +186,49 @@ const muiTheme = getMuiTheme({
   }
 })
 
-// let render = () => {
-//   const routes = require('./routes/index').default(store)
+let render = () => {
+  const routes = require('./routes/index').default(store)
 
-//   ReactDOM.render(
-//     <MuiThemeProvider muiTheme={muiTheme}>
-//       <AppContainer store={store} routes={routes} />
-//     </MuiThemeProvider>,
-//     MOUNT_NODE
-//   )
-// }
-
-// // This code is excluded from production bundle
-// if (__DEV__) {
-//   if (module.hot) {
-//     // Development render functions
-//     const renderApp = render
-//     const renderError = (error) => {
-//       const RedBox = require('redbox-react').default
-
-//       ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
-//     }
-
-//     // Wrap render in try/catch
-//     render = () => {
-//       try {
-//         renderApp()
-//       } catch (error) {
-//         console.error(error)
-//         renderError(error)
-//       }
-//     }
-
-//     // Setup hot module replacement
-//     module.hot.accept('./routes/index', () =>
-//       setImmediate(() => {
-//         ReactDOM.unmountComponentAtNode(MOUNT_NODE)
-//         render()
-//       })
-//     )
-//   }
-// }
-
-// // ========================================================
-// // Go!
-// // ========================================================
-// render()
-
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-///// TEST AREA //////
-
-
-//keycloak init options
-let initOptions = {
-  url: 'http://192.168.1.21:8070/auth', realm: 'driver2', clientId: 'ost_app', onLoad: 'login-required'
+  ReactDOM.render(
+    <MuiThemeProvider muiTheme={muiTheme}>
+      <AppContainer store={store} routes={routes} />
+    </MuiThemeProvider>,
+    MOUNT_NODE
+  )
 }
 
+// This code is excluded from production bundle
+if (__DEV__) {
+  if (module.hot) {
+    // Development render functions
+    const renderApp = render
+    const renderError = (error) => {
+      const RedBox = require('redbox-react').default
 
-let keycloak = Keycloak(initOptions);
+      ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
+    }
 
-keycloak.init({ onLoad: initOptions.onLoad }).success((auth) => {
+    // Wrap render in try/catch
+    render = () => {
+      try {
+        renderApp()
+      } catch (error) {
+        console.error(error)
+        renderError(error)
+      }
+    }
 
-  if (!auth) {
-      window.location.reload();
-  } else {
-      console.info("Authenticated");
-  }
-
-  //React Render
-  let render = () => {
-    const routes = require('./routes/index').default(store)
-  
-    ReactDOM.render(
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <AppContainer store={store} routes={routes} />
-      </MuiThemeProvider>,
-      MOUNT_NODE
+    // Setup hot module replacement
+    module.hot.accept('./routes/index', () =>
+      setImmediate(() => {
+        ReactDOM.unmountComponentAtNode(MOUNT_NODE)
+        render()
+      })
     )
   }
-  
-  // This code is excluded from production bundle
-  if (__DEV__) {
-    if (module.hot) {
-      // Development render functions
-      const renderApp = render
-      const renderError = (error) => {
-        const RedBox = require('redbox-react').default
-  
-        ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
-      }
-  
-      // Wrap render in try/catch
-      render = () => {
-        try {
-          renderApp()
-        } catch (error) {
-          console.error(error)
-          renderError(error)
-        }
-      }
-  
-      // Setup hot module replacement
-      module.hot.accept('./routes/index', () =>
-        setImmediate(() => {
-          ReactDOM.unmountComponentAtNode(MOUNT_NODE)
-          render()
-        })
-      )
-    }
-  }
-  
-  // ========================================================
-  // Go!
-  // ========================================================
-  render()
+}
 
-  localStorage.setItem("react-token", keycloak.token);
-  localStorage.setItem("react-refresh-token", keycloak.refreshToken);
-
-  setTimeout(() => {
-      keycloak.updateToken(70).success((refreshed) => {
-          if (refreshed) {
-              console.debug('Token refreshed' + refreshed);
-          } else {
-              console.warn('Token not refreshed, valid for '
-                  + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
-          }
-      }).error(() => {
-          console.error('Failed to refresh token');
-      });
-
-
-  }, 2000)
-
-}).error(() => {
-  console.error("Authenticated Failed");
-});
+// ========================================================
+// Go!
+// ========================================================
+render()

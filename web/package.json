@@ -103,7 +103,7 @@
     "ip": "^1.1.2",
     "js-file-download": "^0.4.9",
     "json-loader": "^0.5.4",
-    "keycloak-js": "^9.0.3",
+    "keycloak-js": "9.0.3",
     "lodash": "^4.17.4",
     "material-ui": "^0.17.4",
     "material-ui-datetimepicker": "^1.0.7",
