@@ -123,7 +123,7 @@ dependencies {
     // Spring Boot
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-//    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-security'
     compile 'org.springframework.session:spring-session'
     compile("org.springframework.security:spring-security-data")
     compile("org.springframework.boot:spring-boot-starter-tomcat")
