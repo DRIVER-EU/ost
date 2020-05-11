@@ -7,12 +7,15 @@ import eu.fp7.driver.ost.driver.repository.TrialUserRepository;
 import eu.fp7.driver.ost.driver.repository.specification.TrialUserSpecification;
 import eu.fp7.driver.ost.driver.util.ForbiddenException;
 import eu.fp7.driver.ost.driver.util.RepositoryUtils;
+import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +27,6 @@ import java.util.Set;
 @Service
 @Transactional(readOnly = true)
 public class TrialUserService {
-
-    @Autowired
-    private HttpServletRequest request;
 
     @Autowired
     private TrialUserRepository trialUserRepository;
@@ -64,8 +64,9 @@ public class TrialUserService {
 
 
     public AuthUser getCurrentKeycloakUser(){
-        KeycloakSecurityContext attr = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
-        AccessToken accessToken = attr.getToken();
+        KeycloakAuthenticationToken keycloakAuthenticationToken = ((KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication());
+        KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) keycloakAuthenticationToken.getPrincipal();
+        AccessToken accessToken = keycloakPrincipal.getKeycloakSecurityContext().getToken();
         AccessToken.Access access = accessToken.getRealmAccess();
         String[] roleSet = access.getRoles().toArray(new String[0]);
         String userKeycloakId = accessToken.getPreferredUsername();
@@ -77,7 +78,6 @@ public class TrialUserService {
         else{
             currentUser = new AuthUser();
             currentUser.setLogin(userKeycloakId);
-            authUserRepository.save(currentUser);
             TrialUser currentTrialUser = new TrialUser();
             currentTrialUser.setAuthUser(currentUser);
             trialUserRepository.save(currentTrialUser);

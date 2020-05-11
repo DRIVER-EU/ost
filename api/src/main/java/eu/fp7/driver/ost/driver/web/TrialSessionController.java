@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +56,8 @@ public class TrialSessionController {
     }
 
     @GetMapping("/active")
-    private PageDto<TrialSessionDTO.ActiveListItem> findActive(Pageable pageable) {
+    @RolesAllowed("ost_observer")
+    public PageDto<TrialSessionDTO.ActiveListItem> findActive(Pageable pageable) {
         return trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable);
     }
 
@@ -127,6 +129,7 @@ public class TrialSessionController {
 
     }
 
+    @RolesAllowed("ost_admin")
     @GetMapping("/admin/getListTrialSessionAllActive")
     public ResponseEntity getListTrialSessionAllActive() {
         try{
