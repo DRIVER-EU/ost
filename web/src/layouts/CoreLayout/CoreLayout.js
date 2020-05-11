@@ -116,7 +116,6 @@ class CoreLayout extends Component {
   }
 
   render () {
-    console.log(this.state.keycloak)
     return (
       <div className='core-container'>
         <div />
@@ -156,9 +155,7 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.login.isLoggedIn,
   user: state.login.user,
   trial: state.layout.trial,
-  borderInfo: state.layout.borderInfo,
-  keycloak: state.layout.keycloak,
-  isReady: state.layout.isReady
+  borderInfo: state.layout.borderInfo
 })
 
 export default connect(mapStateToProps, actionLayout)(CoreLayout)
