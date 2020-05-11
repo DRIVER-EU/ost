@@ -75,9 +75,7 @@ class CoreLayout extends Component {
 
   logInToKeyCloack = () => {
     const keycloak = Keycloak(keycloakJson)
-    keycloak.init({
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html' })
+    keycloak.init({ onLoad: 'login-required' })
     keycloak.onAuthLogout = () => {
       this.setState({ isReady: false })
       this.props.logOut()
