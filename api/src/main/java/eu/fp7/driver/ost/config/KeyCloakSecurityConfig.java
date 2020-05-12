@@ -1,5 +1,6 @@
 package eu.fp7.driver.ost.config;
 
+import com.google.common.collect.ImmutableList;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
@@ -48,7 +49,6 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
         http.cors()
                 .and()
             .csrf()
@@ -61,10 +61,10 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token", "Access-Control-Allow-Credentials", "Origin", "Accept"));
-        configuration.setExposedHeaders(Arrays.asList("X-Auth-Token"));
+        configuration.setAllowedOrigins(ImmutableList.of("*"));
+        configuration.setAllowedMethods(ImmutableList.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Content-Type", "Access-Control-Allow-Credentials", "Origin", "Accept"));
+        configuration.setExposedHeaders(ImmutableList.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
