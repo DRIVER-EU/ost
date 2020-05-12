@@ -2,25 +2,25 @@ import axios from 'axios'
 
 export const getHeaders = () => {
   let token = localStorage.getItem('drivertoken')
-  let globalHeaders = { headers: { Authorization: `Bearer${token}` } }
+  let globalHeaders = { headers: { Authorization: `Bearer ${token}` } }
   return globalHeaders
 }
 
 export const getHeadersASCI = () => {
   let token = localStorage.getItem('drivertoken')
-  let globalHeaders = { headers: { 'x-auth-token': token }, responseType: 'arraybuffer' }
+  let globalHeaders = { headers: { Authorization: `Bearer ${token}` }, responseType: 'arraybuffer' }
   return globalHeaders
 }
 
 export const getHeadersFileDownload = () => {
   let token = localStorage.getItem('drivertoken')
-  let globalHeaders = { headers: { 'x-auth-token': token }, responseType: 'arraybuffer' }
+  let globalHeaders = { headers: { Authorization: `Bearer ${token}` }, responseType: 'arraybuffer' }
   return globalHeaders
 }
 
 export const getHeadersReferences = () => {
   let token = localStorage.getItem('drivertoken')
-  let globalHeaders = { headers: { 'x-auth-token': token, 'content-Type': 'multipart/form-data; ' } }
+  let globalHeaders = { headers: { Authorization: `Bearer ${token}`, 'content-Type': 'multipart/form-data; ' } }
   return globalHeaders
 }
 

@@ -46,11 +46,6 @@ class CoreLayout extends Component {
 
   componentDidMount () {
     this.logInToKeyCloack()
-    this.getTrialsInfo(this.props)
-    this.getBorderInfo(this.props)
-    fetch('/version.txt')
-    .then(response => response.text())
-      .then(data => this.setState({ version: data }))
   }
 
   getTrialsInfo = (props) => {
@@ -89,6 +84,11 @@ class CoreLayout extends Component {
     }
     keycloak.onReady = () => {
       this.setState({ keycloak, isReady: true })
+      this.getTrialsInfo(this.props)
+      this.getBorderInfo(this.props)
+      fetch('/version.txt')
+      .then(response => response.text())
+        .then(data => this.setState({ version: data }))
     }
     keycloak.onAuthSuccess = () => {
       const user = {
