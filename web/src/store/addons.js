@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const getHeaders = () => {
   let token = localStorage.getItem('drivertoken')
-  let globalHeaders = { headers: { 'x-auth-token': token } }
+  let globalHeaders = { headers: { Authorization: `Bearer${token}` } }
   return globalHeaders
 }
 
