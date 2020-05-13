@@ -2,19 +2,12 @@ package eu.fp7.driver.ost.driver.service;
 
 import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.driver.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.*;
 import eu.fp7.driver.ost.driver.repository.AuthUserRepository;
 import eu.fp7.driver.ost.driver.dto.AdminObservationTypeDTO;
 import eu.fp7.driver.ost.driver.dto.ObservationTypeCriteriaDTO;
 import eu.fp7.driver.ost.driver.dto.ObservationTypeDTO;
 import eu.fp7.driver.ost.driver.dto.TrialRoleDTO;
-import eu.fp7.driver.ost.driver.model.Answer;
-import eu.fp7.driver.ost.driver.model.ObservationType;
-import eu.fp7.driver.ost.driver.model.ObservationTypeTrialRole;
-import eu.fp7.driver.ost.driver.model.Trial;
-import eu.fp7.driver.ost.driver.model.TrialRole;
-import eu.fp7.driver.ost.driver.model.TrialSession;
-import eu.fp7.driver.ost.driver.model.TrialStage;
 import eu.fp7.driver.ost.driver.repository.ObservationTypeRepository;
 import eu.fp7.driver.ost.driver.repository.ObservationTypeRoleRepository;
 import eu.fp7.driver.ost.driver.repository.TrialRepository;
@@ -39,7 +32,7 @@ import java.util.stream.Collectors;
 public class ObservationTypeService {
 
     @Autowired
-    private AuthUserRepository authUserRepository;
+    private TrialUserService trialUserService;
 
     @Autowired
     private ObservationTypeRepository observationTypeRepository;
@@ -91,22 +84,21 @@ public class ObservationTypeService {
 
     @Transactional(readOnly = true)
     public List<ObservationType> find(Long trialSessionId) {
-        AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
 
         TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
         List<ObservationType> observationTypes = observationTypeRepository.findAll(
                 getObservationTypeSpecifications(
-                        authUser,
+                        keycloakUserId,
                         trialSession
                 ));
 
         observationTypes.sort(Comparator.comparing(observationType -> observationType.getPosition()));
 
         return observationTypes.stream()
-                .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, authUser))
+                .filter(observationType -> observationType.isMultiplicity() || hasObservationTypeNoAnswer(observationType, keycloakUserId))
                 .collect(Collectors.toList());
     }
 
@@ -121,14 +113,14 @@ public class ObservationTypeService {
                 .collect(Collectors.toList());
     }
 
-    private boolean hasObservationTypeNoAnswer(ObservationType observationType, AuthUser authUser) {
+    private boolean hasObservationTypeNoAnswer(ObservationType observationType, String keycloakUserId) {
         return observationType.getAnswers().stream()
-                .noneMatch(answer -> answerContainAuthUserAndIsNotDeleted(answer, authUser));
+                .noneMatch(answer -> answerContainAuthUserAndIsNotDeleted(answer, keycloakUserId));
 
     }
 
-    boolean answerContainAuthUserAndIsNotDeleted(Answer answer, AuthUser authUser) {
-        return answer.getTrialUser().getAuthUser().equals(authUser) && answer.getDeleteComment() == null;
+    boolean answerContainAuthUserAndIsNotDeleted(Answer answer, String keycloakUserId) {
+        return answer.getTrialUser().getKeycloakUserId().equals(keycloakUserId) && answer.getDeleteComment() == null;
     }
 
 
@@ -152,31 +144,30 @@ public class ObservationTypeService {
         List<TrialRoleDTO.ListItem> trialRoles = new ArrayList<>();
 
         if (observationType.isWithUsers()) {
-            AuthUser authUser = authUserRepository.findOneCurrentlyAuthenticated()
-                    .orElseThrow(() -> new IllegalArgumentException("Session for current user is closed"));
+            String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
             TrialSession trialSession = trialSessionRepository.findById(trialSessionId)
                     .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
 
-            List<TrialRole> roles = trialRoleRepository.findAll(getTrialRoleSpecifications(authUser, trialSession, observationType));
+            List<TrialRole> roles = trialRoleRepository.findAll(getTrialRoleSpecifications(keycloakUserId, trialSession, observationType));
             trialRoles = Dto.from(roles, TrialRoleDTO.ListItem.class);
         }
 
         return trialRoles;
     }
 
-    private Specifications<ObservationType> getObservationTypeSpecifications(AuthUser authUser,
+    private Specifications<ObservationType> getObservationTypeSpecifications(String keycloakUserId,
                                                                              TrialSession trialSession) {
         Set<Specification<ObservationType>> conditions = new HashSet<>();
-        conditions.add(ObservationTypeSpecification.user(authUser, trialSession));
+        conditions.add(ObservationTypeSpecification.user(keycloakUserId, trialSession));
         //conditions.add(ObservationTypeSpecification.trialSession(trialSession));
         return RepositoryUtils.concatenate(conditions);
     }
 
-    private Specifications<TrialRole> getTrialRoleSpecifications(AuthUser authUser,
+    private Specifications<TrialRole> getTrialRoleSpecifications(String keycloakUserId,
                                                                  TrialSession trialSession,
                                                                  ObservationType observationType) {
         Set<Specification<TrialRole>> conditions = new HashSet<>();
-        conditions.add(TrialRoleSpecification.findByObserver(authUser, trialSession, observationType));
+        conditions.add(TrialRoleSpecification.findByObserver(keycloakUserId, trialSession, observationType));
         conditions.add(TrialRoleSpecification.trialSession(trialSession));
         return RepositoryUtils.concatenate(conditions);
     }

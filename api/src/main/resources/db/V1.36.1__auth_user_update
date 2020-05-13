@@ -1,3 +1,0 @@
-ALTER TABLE public.trial_user
-ADD COLUMN is_admin BOOLEAN DEFAULT TRUE,
-ADD COLUMN auth_user_id_name varchar;

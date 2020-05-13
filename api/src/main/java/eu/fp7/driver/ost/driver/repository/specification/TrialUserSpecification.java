@@ -17,21 +17,21 @@ import javax.persistence.criteria.JoinType;
 
 public class TrialUserSpecification {
 
-    public static Specification<TrialUser> trialSessionManager(AuthUser authUser, Long trialSessionId) {
+    public static Specification<TrialUser> trialSessionManager(String keycloakUserId, Long trialSessionId) {
         Specification<TrialUser> specification = (root, query, cb) -> {
             Join<TrialUser, TrialSessionManager> trialSessionManagerJoin = RepositoryUtils.getOrCreateJoin(root, TrialUser_.trialSessionManagers, JoinType.LEFT);
             Join<TrialSessionManager, TrialSession> trialSessionJoin = trialSessionManagerJoin.join(TrialSessionManager_.trialSession, JoinType.LEFT);
             return cb.and(
                     cb.equal(trialSessionJoin.get(TrialSession_.id), trialSessionId),
-                    cb.equal(root.get(TrialUser_.authUser), authUser)
+                    cb.equal(root.get(TrialUser_.keycloakUserId), keycloakUserId)
             );
         };
 
-        return authUser != null ? specification : null;
+        return keycloakUserId != null ? specification : null;
     }
 
-    public static Specification<TrialUser> trialSessionUser(AuthUser authUser, Long trialSessionId) {
-        if (authUser == null || trialSessionId == null) {
+    public static Specification<TrialUser> trialSessionUser(String keycloakUserId, Long trialSessionId) {
+        if (keycloakUserId == null || trialSessionId == null) {
             return null;
         }
 
@@ -40,7 +40,7 @@ public class TrialUserSpecification {
             Join<UserRoleSession, TrialSession> trialSessionJoin = trialSessionManagerJoin.join(UserRoleSession_.trialSession, JoinType.LEFT);
             return cb.and(
                     cb.equal(trialSessionJoin.get(TrialSession_.id), trialSessionId),
-                    cb.equal(root.get(TrialUser_.authUser), authUser)
+                    cb.equal(root.get(TrialUser_.keycloakUserId), keycloakUserId)
             );
         };
     }
