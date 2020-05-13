@@ -56,7 +56,6 @@ public class TrialSessionController {
     }
 
     @GetMapping("/active")
-    @RolesAllowed("ost_observer")
     public PageDto<TrialSessionDTO.ActiveListItem> findActive(Pageable pageable) {
         return trialSessionService.findByStatus(SessionStatus.ACTIVE, pageable);
     }

@@ -11,6 +11,7 @@ import eu.fp7.driver.ost.driver.model.TrialStage;
 import eu.fp7.driver.ost.driver.model.TrialUser;
 import eu.fp7.driver.ost.driver.model.TrialUser_;
 import eu.fp7.driver.ost.driver.util.RepositoryUtils;
+import org.keycloak.KeycloakPrincipal;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.Join;
@@ -19,15 +20,15 @@ import javax.persistence.criteria.Path;
 
 public class AnswerSpecification {
 
-    public static Specification<Answer> isConnectedToAuthUser(AuthUser authUser) {
-        if (authUser == null) {
+    public static Specification<Answer> isConnectedToAuthUser(String keycloakUserId) {
+        if (keycloakUserId == null) {
             return null;
         }
 
         return (root, query, cb) -> {
             Join<Answer, TrialUser> trialUserJoin = RepositoryUtils.getOrCreateJoin(root, Answer_.trialUser, JoinType.LEFT);
 
-            return cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser);
+            return cb.equal(trialUserJoin.get(TrialUser_.keycloakUserId), keycloakUserId);
         };
     }
 
