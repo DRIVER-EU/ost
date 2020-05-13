@@ -45,7 +45,7 @@ class CoreLayout extends Component {
   }
 
   componentDidMount () {
-    this.logInToKeyCloack()
+    this.logInToKeyCloak()
   }
 
   getTrialsInfo = (props) => {
@@ -68,7 +68,7 @@ class CoreLayout extends Component {
     toastr.warning('Offline mode', 'Welcome to offline mode', toastrOptions)
   }
 
-  logInToKeyCloack = () => {
+  logInToKeyCloak = () => {
     const keycloak = Keycloak(keycloakJson)
     keycloak.init({ onLoad: 'login-required' })
     keycloak.onAuthLogout = () => {
