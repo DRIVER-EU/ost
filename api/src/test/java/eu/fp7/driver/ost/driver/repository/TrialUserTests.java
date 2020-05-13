@@ -16,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.UUID;
+
 @RunWith(SpringRunner.class)
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 @OverrideAutoConfiguration(enabled = false)
@@ -27,9 +29,6 @@ public class TrialUserTests {
 
     @Autowired
     private TrialUserRepository trialUserRepository;
-
-    @Autowired
-    private AuthUserRepository authUserRepository;
 
     @Autowired
     private TrialSessionManagerRepository trialSessionManagerRepository;
@@ -61,8 +60,9 @@ public class TrialUserTests {
     @Test
     public void create() {
         // given
+        String keycloakId = UUID.randomUUID().toString();
         TrialUser trialUser = TrialUser.builder()
-                .authUser(authUserRepository.findOne(1L))
+                .keycloakUserId(keycloakId)
                 .userLanguage(Languages.POLISH)
                 .isTrialCreator(Boolean.FALSE)
                 .build();
@@ -73,7 +73,7 @@ public class TrialUserTests {
 
         // then
         Assert.assertEquals(7L, trialUserPage.getTotalElements());
-        Assert.assertEquals(trialUser.getAuthUser(), savedTrialUser.getAuthUser());
+        Assert.assertEquals(trialUser.getKeycloakUserId(), savedTrialUser.getKeycloakUserId());
         Assert.assertEquals(trialUser.getUserLanguage(), savedTrialUser.getUserLanguage());
         Assert.assertEquals(trialUser.getIsTrialCreator(), savedTrialUser.getIsTrialCreator());
     }
@@ -89,7 +89,7 @@ public class TrialUserTests {
 
         // then
         Assert.assertEquals(Languages.POLISH, savedTrialUser.getUserLanguage());
-        Assert.assertEquals(trialUser.getAuthUser().getLogin(), savedTrialUser.getAuthUser().getLogin());
+        Assert.assertEquals(trialUser.getKeycloakUserId(), savedTrialUser.getKeycloakUserId());
         Assert.assertEquals(trialUser.getIsTrialCreator(), savedTrialUser.getIsTrialCreator());
     }
 

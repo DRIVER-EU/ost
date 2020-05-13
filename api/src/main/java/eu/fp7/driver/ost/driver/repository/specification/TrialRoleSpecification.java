@@ -32,10 +32,10 @@ public class TrialRoleSpecification {
         return trialSessionId != null ? specification : null;
     }
 
-    public static Specification<TrialRole> findByObserver(AuthUser authUser,
+    public static Specification<TrialRole> findByObserver(String keycloakUserId,
                                                           TrialSession trialSession,
                                                           ObservationType observationType) {
-        if (authUser == null || trialSession == null || observationType == null) {
+        if (keycloakUserId == null || trialSession == null || observationType == null) {
             return null;
         }
 
@@ -48,7 +48,7 @@ public class TrialRoleSpecification {
             return cb.and(
                     cb.equal(observationTypeTrialRoleJoin.get(ObservationTypeTrialRole_.observationType), observationType),
                     cb.equal(userRoleSessionJoinRole.get(UserRoleSession_.trialSession), trialSession),
-                    cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser)
+                    cb.equal(trialUserJoin.get(TrialUser_.keycloakUserId), keycloakUserId)
             );
         };
     }

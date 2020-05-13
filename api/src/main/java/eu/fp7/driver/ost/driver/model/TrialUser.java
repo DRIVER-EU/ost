@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -26,8 +27,7 @@ import java.util.List;
 )
 public class TrialUser extends PersistentObject implements Serializable {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private AuthUser authUser;
+    private String keycloakUserId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

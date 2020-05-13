@@ -40,8 +40,8 @@ public class TrialRoleService {
     private TrialUserService trialUserService;
 
     public Page<TrialRole> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
-        AuthUser authUser = trialUserService.getCurrentUser();
-        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
 
         Set<Specification<TrialRole>> conditions = new HashSet<>();
         conditions.add(TrialRoleSpecification.trialRole(trialSessionId));

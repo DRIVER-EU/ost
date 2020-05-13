@@ -25,27 +25,27 @@ public class TrialSessionSpecification {
         return (root, query, cb) -> cb.equal(root.get(TrialSession_.status), sessionStatus);
     }
 
-    public static Specification<TrialSession> loggedUser(AuthUser authUser) {
-        if (authUser == null) {
+    public static Specification<TrialSession> loggedUser(String keycloakUserId) {
+        if (keycloakUserId == null) {
             return null;
         }
 
         return (root, query, cb) -> {
             Join<TrialSession, UserRoleSession> userRoleSessionJoin = root.join(TrialSession_.userRoleSessions, JoinType.LEFT);
             Join<UserRoleSession, TrialUser> trialUserJoin = userRoleSessionJoin.join(UserRoleSession_.trialUser, JoinType.LEFT);
-            return cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser);
+            return cb.equal(trialUserJoin.get(TrialUser_.keycloakUserId), keycloakUserId);
         };
     }
 
-    public static Specification<TrialSession> trialSessionManager(AuthUser authUser) {
-        if (authUser == null) {
+    public static Specification<TrialSession> trialSessionManager(String keycloakUserId) {
+        if (keycloakUserId == null) {
             return null;
         }
 
         return (root, query, cb) -> {
             Join<TrialSession, TrialSessionManager> trialSessionManagerJoin = root.join(TrialSession_.trialSessionManagers, JoinType.LEFT);
             Join<TrialSessionManager, TrialUser> trialUserJoin = trialSessionManagerJoin.join(TrialSessionManager_.trialUser, JoinType.LEFT);
-            return cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser);
+            return cb.equal(trialUserJoin.get(TrialUser_.keycloakUserId), keycloakUserId);
         };
     }
 }

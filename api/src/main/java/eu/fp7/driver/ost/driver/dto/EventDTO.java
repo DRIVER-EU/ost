@@ -48,8 +48,7 @@ public final class EventDTO {
 
     public static class ListItem extends Item {
 
-        public String firstName;
-        public String lastName;
+        public String keycloakUserId;
         public String trialRoleName;
 
         @Override
@@ -58,8 +57,7 @@ public final class EventDTO {
             this.trialRoleName = event.getTrialRole() != null ? event.getTrialRole().getName() : null;
 
             Optional<TrialUser> trialUserOptional = Optional.ofNullable(event.getTrialUser());
-            this.firstName = trialUserOptional.map(t -> t.getAuthUser().getFirstName()).orElse(null);
-            this.lastName = trialUserOptional.map(t -> t.getAuthUser().getLastName()).orElse(null);
+            this.keycloakUserId = trialUserOptional.map(t -> t.getKeycloakUserId()).orElse(null);
         }
     }
 

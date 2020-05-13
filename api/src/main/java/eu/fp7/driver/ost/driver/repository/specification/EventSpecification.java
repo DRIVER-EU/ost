@@ -19,8 +19,8 @@ import javax.persistence.criteria.JoinType;
 
 public class EventSpecification {
 
-    public static Specification<Event> isConnectedToAuthUser(AuthUser authUser) {
-        if (authUser == null) {
+    public static Specification<Event> isConnectedToAuthUser(String keycloakUserId) {
+        if (keycloakUserId == null) {
             return null;
         }
 
@@ -37,8 +37,8 @@ public class EventSpecification {
                             cb.isNull(root.get(Event_.trialUser)),
                             cb.isNull(root.get(Event_.trialRole))
                     ),
-                    cb.equal(trial.get(TrialUser_.authUser), authUser),
-                    cb.equal(trialUserByRoleJoin.get(TrialUser_.authUser), authUser)
+                    cb.equal(trial.get(TrialUser_.keycloakUserId), keycloakUserId),
+                    cb.equal(trialUserByRoleJoin.get(TrialUser_.keycloakUserId), keycloakUserId)
             );
         };
     }

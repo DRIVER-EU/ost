@@ -33,7 +33,7 @@ public class AdminUserRoleDTO {
         public void toDto(UserRoleSession userRoleSession) {
             this.id = userRoleSession.getId();
             this.trialUserId = userRoleSession.getTrialUser().getId();
-            this.trialUserName =  userRoleSession.getTrialUser().getAuthUser().getFirstName() + " " +userRoleSession.getTrialUser().getAuthUser().getLastName();
+            this.trialUserName =  userRoleSession.getTrialUser().getKeycloakUserId();
             this.trialRoleId = userRoleSession.getTrialRole().getId();
             this.trialRoleName = userRoleSession.getTrialRole().getName();
             this.trialSessionId = userRoleSession.getTrialSession().getId();

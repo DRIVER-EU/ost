@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface TrialUserRepository
         extends PagingAndSortingRepository<TrialUser, Long>, JpaSpecificationExecutor<TrialUser> {
 
-    TrialUser findByAuthUser(AuthUser authUser);
-
     Optional<TrialUser> findById(Long id);
 
     Optional<TrialUser> getAllBy();
+
+    Optional<TrialUser> findByKeycloakUserId(String id);
 }
