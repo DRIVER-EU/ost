@@ -24,6 +24,7 @@ export const actions = {
 }
 
 export const getTrials = () => {
+  console.log(9876)
   return (dispatch) => {
     return new Promise((resolve) => {
       axios.get(`${origin}/api/trialsessions/active`, getHeaders())
