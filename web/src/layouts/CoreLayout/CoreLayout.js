@@ -70,7 +70,13 @@ class CoreLayout extends Component {
 
   logInToKeyCloak = () => {
     const keycloak = Keycloak(keycloakJson)
-    keycloak.init({ onLoad: 'login-required' })
+    const origin = window.location.origin
+    !origin.includes('localhost') && (keycloakJson.url = `${origin}/auth`)
+    keycloak.init({
+      onLoad: 'check-sso',
+      promiseType: 'native',
+      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+      pkceMethod: 'S256' })
     keycloak.onAuthLogout = () => {
       this.setState({ isReady: false })
       this.props.logOut()
@@ -102,16 +108,20 @@ class CoreLayout extends Component {
       this.props.logIn(user)
       const role = keycloak.tokenParsed.realm_access.roles.includes('ost_admin') ? 'ost_admin' : 'ost_observer'
       if (role === 'ost_admin') {
-        browserHistory.push('/admin-home')
+        window.location.pathname === '/' && browserHistory.push('/admin-home')
       } else if (role === 'ost_observer') {
-        browserHistory.push('/trials')
+        window.location.pathname === '/' && browserHistory.push('/trials')
       }
       localStorage.setItem('driveruser', JSON.stringify(user))
       localStorage.setItem('drivertoken', keycloak.token)
       localStorage.setItem('driverrole', role)
       localStorage.setItem('openTrial', false)
       localStorage.setItem('online', true)
-      this.setState({ keycloak })
+    }
+    keycloak.onTokenExpired = () => {
+      keycloak.updateToken().then(() => {
+        localStorage.setItem('drivertoken', keycloak.token)
+      })
     }
   }
 
