@@ -71,7 +71,11 @@ class CoreLayout extends Component {
   logInToKeyCloak = () => {
     const keycloak = Keycloak(keycloakJson)
     const origin = window.location.origin
-    !origin.includes('localhost') && (keycloakJson.url = `${origin}/oauth2/`)
+    if (!origin.includes('localhost')) {
+      keycloakJson.url = `${origin}/oauth2/auth`
+      keycloakJson['auth-server-url'] = `${origin}/oauth2/auth`
+    }
+
     keycloak.init({
       onLoad: 'check-sso',
       promiseType: 'native',
