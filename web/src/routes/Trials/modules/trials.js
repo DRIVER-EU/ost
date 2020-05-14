@@ -5,6 +5,7 @@
 import { origin } from './../../../config/Api'
 import axios from 'axios'
 import { getHeaders, errorHandle, freeQueue } from '../../../store/addons'
+// import { logOutAction } from '../../../routes/Login/modules/login'
 
 export const GET_TRIALS = 'GET_TRIALS'
 // ------------------------------------

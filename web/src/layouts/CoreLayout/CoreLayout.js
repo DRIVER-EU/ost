@@ -4,7 +4,7 @@ import Menu from '../../components/Menu'
 import './CoreLayout.scss'
 import '../../styles/core.scss'
 import { connect } from 'react-redux'
-import Auth from 'components/Auth'
+// import Auth from 'components/Auth'
 import { toastr } from 'react-redux-toastr'
 import { Detector } from 'react-detect-offline'
 import * as actionLayout from './layout-action'
@@ -37,7 +37,7 @@ class CoreLayout extends Component {
 
   static propTypes = {
     children: PropTypes.element.isRequired,
-    isLoggedIn: PropTypes.any,
+    // isLoggedIn: PropTypes.any,
     user: PropTypes.object,
     borderInfo: PropTypes.any,
     logIn: PropTypes.func,
@@ -45,7 +45,22 @@ class CoreLayout extends Component {
   }
 
   componentDidMount () {
-    this.logInToKeyCloak()
+    if (navigator.onLine) {
+      console.log('Online')
+      this.logInToKeyCloak()
+    } else if (
+      localStorage.getItem('driveruser') &&
+      localStorage.getItem('drivertoken') &&
+      localStorage.getItem('drivertoken') &&
+      localStorage.getItem('driverrole')) {
+      console.log('offline but logged in')
+      this.redirect(localStorage.getItem('driverrole'))
+      this.setState({ isReady: true })
+    } else {
+      console.log('offline and log out')
+      window.location.pathname !== '/' && browserHistory.push('/')
+      this.setState({ isReady: true })
+    }
   }
 
   getTrialsInfo = (props) => {
@@ -71,7 +86,9 @@ class CoreLayout extends Component {
   logInToKeyCloak = () => {
     const keycloak = Keycloak(keycloakJson)
     const origin = window.location.origin
-    !origin.includes('localhost') && (keycloakJson.url = `${origin}/auth`)
+    if (!origin.includes('localhost')) {
+      (keycloakJson.url = `${origin}/oauth2`)
+    }
     keycloak.init({
       onLoad: 'check-sso',
       promiseType: 'native',
@@ -90,11 +107,13 @@ class CoreLayout extends Component {
     }
     keycloak.onReady = () => {
       this.setState({ keycloak, isReady: true })
-      this.getTrialsInfo(this.props)
-      this.getBorderInfo(this.props)
-      fetch('/version.txt')
-      .then(response => response.text())
-        .then(data => this.setState({ version: data }))
+      if (keycloak.authenticated) {
+        this.getTrialsInfo(this.props)
+        this.getBorderInfo(this.props)
+        fetch('/version.txt')
+        .then(response => response.text())
+          .then(data => this.setState({ version: data }))
+      }
     }
     keycloak.onAuthSuccess = () => {
       const user = {
@@ -107,11 +126,12 @@ class CoreLayout extends Component {
       }
       this.props.logIn(user)
       const role = keycloak.tokenParsed.realm_access.roles.includes('ost_admin') ? 'ost_admin' : 'ost_observer'
-      if (role === 'ost_admin') {
-        window.location.pathname === '/' && browserHistory.push('/admin-home')
-      } else if (role === 'ost_observer') {
-        window.location.pathname === '/' && browserHistory.push('/trials')
-      }
+      // if (role === 'ost_admin') {
+      //   window.location.pathname === '/' && browserHistory.push('/admin-home')
+      // } else if (role === 'ost_observer') {
+      //   window.location.pathname === '/' && browserHistory.push('/trials')
+      // }
+      this.redirect(role)
       localStorage.setItem('driveruser', JSON.stringify(user))
       localStorage.setItem('drivertoken', keycloak.token)
       localStorage.setItem('driverrole', role)
@@ -121,7 +141,16 @@ class CoreLayout extends Component {
     keycloak.onTokenExpired = () => {
       keycloak.updateToken().then(() => {
         localStorage.setItem('drivertoken', keycloak.token)
+        console.log(123456)
       })
+    }
+  }
+
+  redirect (role) {
+    if (role === 'ost_admin') {
+      window.location.pathname === '/' && browserHistory.push('/admin-home')
+    } else if (role === 'ost_observer') {
+      window.location.pathname === '/' && browserHistory.push('/trials')
     }
   }
 
@@ -132,7 +161,7 @@ class CoreLayout extends Component {
         {this.state.isReady
         ? <div className='view-container'>
           <div style={styles.menubox}>
-            <Auth isLoggedIn={this.props.isLoggedIn} />
+            {/* <Auth isLoggedIn={this.props.isLoggedIn} /> */}
             <Menu role={this.state.role} keycloak={this.state.keycloak} className='menu-layout' />
           </div>
           <div className='core-layout__viewport'>
