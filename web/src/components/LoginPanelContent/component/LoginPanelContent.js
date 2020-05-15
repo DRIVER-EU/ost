@@ -23,7 +23,7 @@ class LoginPanelContent extends Component {
     return (
       <div className='pages-flex'>
         <div className='login-box'>
-          <p className='singin-title'>Sign in</p>
+          <p className='singin-title'>Log in</p>
           <RaisedButton
             label='Log in'
             style={styles.signIn}

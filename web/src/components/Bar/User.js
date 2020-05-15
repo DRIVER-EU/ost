@@ -2,8 +2,11 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { logIn, logOut } from '../../routes/Login/modules/login'
 import './User.scss'
-// import { browserHistory } from 'react-router'
+import { toastr } from 'react-redux-toastr'
 
+const toastrOptions = {
+  timeOut: 3000
+}
 class UserComponent extends Component {
   constructor (props) {
     super()
@@ -17,13 +20,14 @@ class UserComponent extends Component {
   render () {
     return (
       <div className='btns__wrapper'>
-        <button className='menu__btn'>{this.props.user.login}</button>
-        <button
-          disabled={this.props.keycloak === null}
-          onClick={() => this.props.keycloak.onAuthLogout()}
+        <span style={{ marginRight: 10 }}>{this.props.user.login}</span>
+        {this.props.keycloak !== null && <button
+          onClick={() => navigator.onLine
+            ? this.props.keycloak.onAuthLogout()
+            : toastr.warning('Offline mode', 'You can not log out in offline mode', toastrOptions)}
           className='menu__btn'>
             Log out
-        </button>
+        </button>}
       </div>
     )
   }

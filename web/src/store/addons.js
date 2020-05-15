@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { logOut } from '../layouts/CoreLayout/layout-action'
 
 export const getHeaders = () => {
   let token = localStorage.getItem('drivertoken')
@@ -25,9 +26,12 @@ export const getHeadersReferences = () => {
 }
 
 export const errorHandle = (error) => {
-  if (error && error.reponse && error.response.status === 401) {
-    localStorage.clear()
-    window.location.replace(window.location.origin)
+  if (error && error.response && error.response.status === 401) {
+    logOut()
+    localStorage.removeItem('driveruser')
+    localStorage.removeItem('drivertoken')
+    localStorage.removeItem('driverrole')
+    window.location.replace(window.location.href)
   } else if (error.message === 'Network Error' && localStorage.getItem('online')) {
     localStorage.removeItem('online')
   }
