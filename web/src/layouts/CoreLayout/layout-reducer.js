@@ -1,8 +1,9 @@
-import { GET_TRIAL_INFO, GET_BORDER_INFO } from './layout-action'
+import { GET_TRIAL_INFO, GET_BORDER_INFO, CHECK_CONNECTION } from './layout-action'
 
 let defaultState = {
   trial: undefined,
-  borderInfo: '---'
+  borderInfo: '---',
+  isConnected: false
 }
 
 const layoutReducer = (state = defaultState, action) => {
@@ -15,6 +16,11 @@ const layoutReducer = (state = defaultState, action) => {
     return {
       ...state,
       borderInfo: action.borderInfo
+    }
+  } if (action.type === CHECK_CONNECTION) {
+    return {
+      ...state,
+      isConnected: action.isConnected
     }
   } else {
     return {

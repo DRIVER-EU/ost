@@ -41,26 +41,38 @@ class CoreLayout extends Component {
     user: PropTypes.object,
     borderInfo: PropTypes.any,
     logIn: PropTypes.func,
-    logOut: PropTypes.func
+    logOut: PropTypes.func,
+    isConnected: PropTypes.bool,
+    checkConnection: PropTypes.func
   }
 
   componentDidMount () {
-    if (navigator.onLine) {
-      console.log('Online')
-      this.logInToKeyCloak()
-    } else if (
+    this.props.checkConnection()
+    .then(() => {
+      if (this.props.isConnected) {
+        console.log('Online')
+        this.logInToKeyCloak()
+      } else if (
+        localStorage.getItem('driveruser') &&
+        localStorage.getItem('drivertoken') &&
+        localStorage.getItem('driverrole')) {
+        console.log('offline but logged in')
+        this.redirect(localStorage.getItem('driverrole'))
+        this.setState({ isReady: true })
+      } else {
+        console.log('offline and log out')
+        window.location.pathname !== '/' && browserHistory.push('/')
+        this.setState({ isReady: true })
+      }
+    })
+    browserHistory.listen(location => {
+      if (location.pathname === '/' &&
       localStorage.getItem('driveruser') &&
       localStorage.getItem('drivertoken') &&
-      localStorage.getItem('drivertoken') &&
       localStorage.getItem('driverrole')) {
-      console.log('offline but logged in')
-      this.redirect(localStorage.getItem('driverrole'))
-      this.setState({ isReady: true })
-    } else {
-      console.log('offline and log out')
-      window.location.pathname !== '/' && browserHistory.push('/')
-      this.setState({ isReady: true })
-    }
+        this.redirect(localStorage.getItem('driverrole'))
+      }
+    })
   }
 
   getTrialsInfo = (props) => {
@@ -87,8 +99,8 @@ class CoreLayout extends Component {
     const keycloak = Keycloak(keycloakJson)
     const origin = window.location.origin
     if (!origin.includes('localhost')) {
-      keycloakJson.url = `${origin}/oauth2`
-      keycloakJson['auth-server-url'] = `${origin}/oauth2`
+      keycloakJson.url = `${origin}/auth`
+      keycloakJson['auth-server-url'] = `${origin}/auth`
     }
     keycloak.init({
       onLoad: 'check-sso',
@@ -101,19 +113,18 @@ class CoreLayout extends Component {
       localStorage.removeItem('driveruser')
       localStorage.removeItem('drivertoken')
       localStorage.removeItem('driverrole')
-      localStorage.removeItem('openTrial')
-      localStorage.removeItem('online')
       window.location.pathname !== '/' && browserHistory.push('/')
       keycloak.logout()
     }
     keycloak.onReady = () => {
-      this.setState({ keycloak, isReady: true })
       if (keycloak.authenticated) {
         this.getTrialsInfo(this.props)
         this.getBorderInfo(this.props)
         fetch('/version.txt')
         .then(response => response.text())
-          .then(data => this.setState({ version: data }))
+          .then(data => this.setState({ version: data, keycloak, isReady: true }))
+      } else {
+        this.setState({ keycloak, isReady: true })
       }
     }
     keycloak.onAuthSuccess = () => {
@@ -127,11 +138,6 @@ class CoreLayout extends Component {
       }
       this.props.logIn(user)
       const role = keycloak.tokenParsed.realm_access.roles.includes('ost_admin') ? 'ost_admin' : 'ost_observer'
-      // if (role === 'ost_admin') {
-      //   window.location.pathname === '/' && browserHistory.push('/admin-home')
-      // } else if (role === 'ost_observer') {
-      //   window.location.pathname === '/' && browserHistory.push('/trials')
-      // }
       this.redirect(role)
       localStorage.setItem('driveruser', JSON.stringify(user))
       localStorage.setItem('drivertoken', keycloak.token)
@@ -140,9 +146,8 @@ class CoreLayout extends Component {
       localStorage.setItem('online', true)
     }
     keycloak.onTokenExpired = () => {
-      keycloak.updateToken().then(() => {
+      navigator.onLine && keycloak.updateToken().then(() => {
         localStorage.setItem('drivertoken', keycloak.token)
-        console.log(123456)
       })
     }
   }
@@ -169,7 +174,7 @@ class CoreLayout extends Component {
             <Detector
               render={({ online }) => (
                 <div style={{ display: 'none' }}>
-                  {online ? ''
+                  {online ? this.state.keycloak === null && this.logInToKeyCloak()
                     : toastr.warning('Offline mode',
                       'Welcome to offline mode', toastrOptions) }
                 </div>
@@ -195,7 +200,8 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.login.isLoggedIn,
   user: state.login.user,
   trial: state.layout.trial,
-  borderInfo: state.layout.borderInfo
+  borderInfo: state.layout.borderInfo,
+  isConnected: state.layout.isConnected
 })
 
 export default connect(mapStateToProps, actionLayout)(CoreLayout)

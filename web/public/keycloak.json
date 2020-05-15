@@ -1,7 +1,7 @@
 {
     "realm": "driver2",
-    "url": "http://192.168.1.21:8070/auth",
-    "auth-server-url": "http://192.168.1.21:8070/auth/",
+    "url": "https://testbed-ost.itti.com.pl/auth",
+    "auth-server-url": "https://testbed-ost.itti.com.pl/auth/",
     "ssl-required": "external",
     "resource": "ost_app",
     "public-client": true,
