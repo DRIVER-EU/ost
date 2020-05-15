@@ -26,6 +26,10 @@ public class TrialUserService {
     @Autowired
     private TrialUserRepository trialUserRepository;
 
+    public Page<TrialUser> findAll(Pageable pageable) {
+        return trialUserRepository.findAll(pageable);
+    }
+
     public Page<TrialUser> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
         String keycloakUserId = getCurrentKeycloakUserId();
 
@@ -53,6 +57,6 @@ public class TrialUserService {
     public String getCurrentKeycloakUserId() {
         KeycloakAuthenticationToken keycloakAuthenticationToken = ((KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication());
         KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) keycloakAuthenticationToken.getPrincipal();
-        return keycloakPrincipal.getKeycloakSecurityContext().getToken().getSubject();
+        return keycloakPrincipal.getName();
     }
 }
