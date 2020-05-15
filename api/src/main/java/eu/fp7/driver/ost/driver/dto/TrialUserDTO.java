@@ -10,12 +10,12 @@ public final class TrialUserDTO {
     public static class ListItem implements EntityDto<TrialUser> {
 
         public long id;
-        public String keycloakUserId;
+        public String login;
 
         @Override
         public void toDto(TrialUser trialUser) {
             this.id = trialUser.getId();
-            this.keycloakUserId = trialUser.getKeycloakUserId();
+            this.login = trialUser.getKeycloakUserId();
         }
     }
 
@@ -30,7 +30,6 @@ public final class TrialUserDTO {
     public static class AdminEditItemStatistics extends ListItem {
 
         public String email;
-        public String login;
         public String trialRoleName;
 
         public TrialSessionDTO.ListOfActiveSessions activeSession = new TrialSessionDTO.ListOfActiveSessions();
