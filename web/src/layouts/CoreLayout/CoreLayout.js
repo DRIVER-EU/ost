@@ -72,8 +72,8 @@ class CoreLayout extends Component {
     const keycloak = Keycloak(keycloakJson)
     const origin = window.location.origin
     if (!origin.includes('localhost')) {
-      keycloakJson.url = `${origin}/oauth2/auth`
-      keycloakJson['auth-server-url'] = `${origin}/oauth2/auth`
+      keycloakJson.url = `${origin}/auth`
+      keycloakJson['auth-server-url'] = `${origin}/auth`
     }
 
     keycloak.init({
