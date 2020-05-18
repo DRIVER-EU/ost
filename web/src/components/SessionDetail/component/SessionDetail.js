@@ -401,7 +401,8 @@ class SessionDetail extends Component {
                             <MenuItem
                               key={user.id}
                               value={user.id}
-                              primaryText={`${user.firstName} ${user.lastName}`}
+                              // primaryText={`${user.firstName} ${user.lastName}`}
+                              primaryText={user.login}
                             />
                           ))}
                         </SelectField>
