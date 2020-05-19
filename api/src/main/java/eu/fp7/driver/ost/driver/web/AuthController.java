@@ -30,6 +30,11 @@ public class AuthController {
         return Dto.from(authService.findAll(pageable), KeycloakUserDto.ListItem.class);
     }
 
+    @GetMapping("/active")
+    public List<KeycloakUserDto.ListItem> findAllActive() {
+        return Dto.from(authService.findAllActive(), KeycloakUserDto.ListItem.class);
+    }
+
     @GetMapping("/{id}")
     public KeycloakUserDto.FullItem findOne(@PathVariable("id") String id) {
         return Dto.from(authService.findOne(id), KeycloakUserDto.FullItem.class);

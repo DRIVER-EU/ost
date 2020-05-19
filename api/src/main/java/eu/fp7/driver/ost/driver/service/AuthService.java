@@ -36,6 +36,12 @@ public class AuthService {
         return new PageImpl(userRepresentations, pageable,total);
     }
 
+    public List<UserRepresentation> findAllActive() {
+        return realmResource.users().list().stream()
+                .filter(UserRepresentation::isEnabled)
+                .collect(Collectors.toList());
+    }
+
     public UserRepresentation findOne(String id) {
         List<String> roles = getUserRoles(id);
         UserRepresentation userRepresentation = realmResource.users().get(id).toRepresentation();
