@@ -110,6 +110,7 @@ idea {
 
 repositories {
     maven {
+        mavenCentral()
         url 'https://repo.maven.apache.org/maven2/'
         jcenter()
         maven { url 'https://raw.github.com/DRIVER-EU/maven-repo/master' }
@@ -184,6 +185,10 @@ dependencies {
     //Keycloak
     compile("org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}")
     compile group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '3.3.0.Final', ext: 'pom'
+    compile group: 'org.keycloak', name: 'keycloak-adapter-core', version: '9.0.3'
+    compile group: 'org.keycloak', name: 'keycloak-admin-client', version: '9.0.3'
+
+
 
     // ----------------------------------------
     // Test
