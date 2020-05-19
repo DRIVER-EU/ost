@@ -310,27 +310,33 @@ class Users extends Component {
   render () {
     const columns = [
       {
+        Header: 'Users',
         columns: [
           {
             Header: 'Id',
             accessor: 'id',
+            style: { textAlign: 'right' },
             width: 90
           },
           {
             Header: 'Login',
-            accessor: 'login'
+            accessor: 'login',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'FirstName',
-            accessor: 'firstName'
+            accessor: 'firstName',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'LastName',
-            accessor: 'lastName'
+            accessor: 'lastName',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Deleted',
-            accessor: 'deleted'
+            accessor: 'deleted',
+            style: { textAlign: 'left' }
           }
         ]
       }

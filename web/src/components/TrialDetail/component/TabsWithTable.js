@@ -44,35 +44,42 @@ class TabsWithTable extends Component {
       {
         Header: 'Id',
         accessor: 'id',
-        width: 100
+        width: 100,
+        style: { textAlign: 'right' }
       },
       {
         Header: 'Name',
-        accessor: 'name'
+        accessor: 'name',
+        style: { textAlign: 'left' }
       }
     ]
     const sessionColumns = [
       {
         Header: 'Id',
         accessor: 'id',
-        width: 100
+        width: 100,
+        style: { textAlign: 'right' }
       },
       {
         Header: 'Name',
-        accessor: 'name'
+        accessor: 'name',
+        style: { textAlign: 'left' }
       },
       {
         Header: 'Actual Stage Name',
-        accessor: 'lastTrialStage'
+        accessor: 'lastTrialStage',
+        style: { textAlign: 'left' }
       },
       {
         Header: 'Manual',
         accessor: 'manualStageChange',
-        Cell: props => <span className='manual'>{props.value ? 'yes' : 'no'}</span>
+        Cell: props => <span className='manual'>{props.value ? 'yes' : 'no'}</span>,
+        style: { textAlign: 'left' }
       },
       {
         Header: 'Status',
-        accessor: 'status'
+        accessor: 'status',
+        style: { textAlign: 'left' }
       }
     ]
     return (

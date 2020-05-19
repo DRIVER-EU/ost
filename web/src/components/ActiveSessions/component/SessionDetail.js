@@ -38,32 +38,38 @@ class SessionDetail extends Component {
       {
         Header: 'Id',
         accessor: 'id',
-        width: 100
+        width: 100,
+        style: { textAlign: 'right' }
       },
       {
         Header: 'Login',
         width: 200,
-        accessor: 'login'
+        accessor: 'login',
+        style: { textAlign: 'left' }
       },
       {
         Header: 'Role',
         accessor: 'trialRoleName',
-        width: 200
+        width: 200,
+        style: { textAlign: 'left' }
       },
       {
         Header: 'Account',
         columns: [
           {
             Header: 'Questions',
-            accessor: 'activeSession.stageStatistics[0].numberOfQuestions'
+            accessor: 'activeSession.stageStatistics[0].numberOfQuestions',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Answers',
-            accessor: 'activeSession.stageStatistics[0].totalNumberOfAnswers'
+            accessor: 'activeSession.stageStatistics[0].totalNumberOfAnswers',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Missing questions',
-            accessor: 'activeSession.stageStatistics[0].numberOfQuestionsWithOutAnswer'
+            accessor: 'activeSession.stageStatistics[0].numberOfQuestionsWithOutAnswer',
+            style: { textAlign: 'left' }
           },
           {
             Header: '',
