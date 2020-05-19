@@ -3,6 +3,7 @@ package eu.fp7.driver.ost.driver.web;
 import eu.fp7.driver.ost.core.annotation.FindAllGetMapping;
 import eu.fp7.driver.ost.core.annotation.PostMapping;
 import eu.fp7.driver.ost.core.dto.Dto;
+import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.core.exception.FormValidationException;
 import eu.fp7.driver.ost.driver.dto.KeycloakUserDto;
 import eu.fp7.driver.ost.driver.service.AuthService;
@@ -25,8 +26,13 @@ public class AuthController {
     }
 
     @FindAllGetMapping
-    public List<KeycloakUserDto.ListItem> findAll(Pageable pageable) {
+    public PageDto<KeycloakUserDto.ListItem> findAll(Pageable pageable) {
         return Dto.from(authService.findAll(pageable), KeycloakUserDto.ListItem.class);
+    }
+
+    @GetMapping("/active")
+    public List<KeycloakUserDto.ListItem> findAllActive() {
+        return Dto.from(authService.findAllActive(), KeycloakUserDto.ListItem.class);
     }
 
     @GetMapping("/{id}")
