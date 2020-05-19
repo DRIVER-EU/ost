@@ -7,7 +7,6 @@ import './Users.scss'
 import ReactTable from 'react-table'
 import Dialog from 'material-ui/Dialog'
 import _ from 'lodash'
-import browserHistory from 'react-router/lib/browserHistory'
 
 // eslint-disable-next-line no-useless-escape
 const regex = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
