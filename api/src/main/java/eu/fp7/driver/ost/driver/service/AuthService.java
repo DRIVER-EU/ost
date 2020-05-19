@@ -61,7 +61,7 @@ public class AuthService {
         if (HttpStatus.CREATED.value() == response.getStatus()) {
             String userId = response.getLocation().getPath().substring(response.getLocation().getPath().lastIndexOf("/") + 1);
             form.roles.forEach(role -> assignRole(userId, role));
-            trialUserService.create(userId);
+            trialUserService.create(userRepresentation.getUsername());
             userRepresentation.setId(userId);
             return userRepresentation;
         } else {

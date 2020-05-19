@@ -65,9 +65,9 @@ public class TrialUserService {
         return keycloakPrincipal.getName();
     }
 
-    public TrialUser create(String keycloakId) {
+    public TrialUser create(String keycloakLogin) {
         TrialUser trialUser = TrialUser.builder()
-                .keycloakUserId(keycloakId)
+                .keycloakUserId(keycloakLogin)
                 .isTrialCreator(false)
                 .userLanguage(Languages.ENGLISH)
                 .build();
