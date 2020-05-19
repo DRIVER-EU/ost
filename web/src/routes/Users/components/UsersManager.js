@@ -27,7 +27,7 @@ class UsersManager extends Component {
   }
   render () {
     return (
-      <div>
+      <div className='background-home'>
         <Users
           allUsersList={this.props.allUsersList}
           selectedUser={this.props.selectedUser}
