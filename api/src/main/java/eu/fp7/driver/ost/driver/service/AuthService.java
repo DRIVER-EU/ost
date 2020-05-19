@@ -6,6 +6,9 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,8 +30,10 @@ public class AuthService {
         this.trialUserService = trialUserService;
     }
 
-    public List<UserRepresentation> findAll(Pageable pageable) {
-        return realmResource.users().list(pageable.getOffset(), pageable.getPageSize());
+    public Page<UserRepresentation> findAll(Pageable pageable) {
+        List<UserRepresentation> userRepresentations = realmResource.users().list(pageable.getOffset(), pageable.getPageSize());
+        Integer total = realmResource.users().count();
+        return new PageImpl(userRepresentations, pageable,total);
     }
 
     public UserRepresentation findOne(String id) {
