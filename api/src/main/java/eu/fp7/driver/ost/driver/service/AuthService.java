@@ -75,7 +75,7 @@ public class AuthService {
 
     private UserRepresentation createUserRepresentation(KeycloakUserDto.CreateFormItem form) {
         UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setUsername(form.login);
+        userRepresentation.setUsername(form.login.toLowerCase());
         userRepresentation.setFirstName(form.firstName);
         userRepresentation.setLastName(form.lastName);
         userRepresentation.setEmail(form.email);

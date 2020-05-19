@@ -215,11 +215,7 @@ public class TrialSessionService {
 
     public UserRoleSession insertUserRoleSession(AdminUserRoleDTO.FullItem  adminUserRoleDTO) {
         TrialUser trialUser = trialUserRepository.findByKeycloakUserId(adminUserRoleDTO.getKeycloakUserId())
-                .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getTrialRoleId()));
-        if(trialUser== null)
-        {
-            new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getKeycloakUserId());
-        }
+                .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getKeycloakUserId()));
 
         UserRoleSessionId userRoleSessionId =  new UserRoleSessionId();
         userRoleSessionId.setTrialRoleId(adminUserRoleDTO.getTrialRoleId());
