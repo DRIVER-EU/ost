@@ -18,7 +18,7 @@ public class AdminUserRoleDTO {
         @JsonFormat
         private UserRoleSessionId id;
         @JsonFormat
-        private long trialUserId;
+        private String keycloakUserId;
         @JsonFormat
         private long trialRoleId;
         @JsonFormat
@@ -32,7 +32,7 @@ public class AdminUserRoleDTO {
         @Override
         public void toDto(UserRoleSession userRoleSession) {
             this.id = userRoleSession.getId();
-            this.trialUserId = userRoleSession.getTrialUser().getId();
+            this.keycloakUserId = userRoleSession.getTrialUser().getKeycloakUserId();
             this.trialUserName =  userRoleSession.getTrialUser().getKeycloakUserId();
             this.trialRoleId = userRoleSession.getTrialRole().getId();
             this.trialRoleName = userRoleSession.getTrialRole().getName();
