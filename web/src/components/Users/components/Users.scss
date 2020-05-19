@@ -1,22 +1,30 @@
-.users-container.users-wrapper {
+.users-container {
     width: 100%;
     height: calc(100vh - 89px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    // .users-wrapper {
+    //     background: rgba(255, 255, 255, 0.6);
+    //     width: 98%;
+    //     height: 98%;
+    //     margin-left: auto;
+    //     margin-right: auto;
+    //     border-radius: 5px;
+    // }
 }
 
-.users-btn-container {
-    width: 100%;
-    padding: 20px 0;
-    display: flex;
-    justify-content: center;
-    background-color: white;
-}
+// .users-btn-container {
+//     width: 100%;
+//     padding: 20px 0;
+//     display: flex;
+//     justify-content: center;
+//     background-color: white;
+// }
 
-.users-btn-container div {
-    box-shadow: none!important;
-}
+// .users-btn-container div {
+//     box-shadow: none!important;
+// }
 
 .user-info-save {
     display: flex;
@@ -47,3 +55,74 @@
     right: 55px;
     color: rgb(253, 185, 19);
 }
+
+.users-container {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #fff;
+    overflow-y: auto;
+
+    .user-select {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .users-header {
+      display: flex;
+      justify-content: space-between;
+      color: #282829;
+      font-size: 20px;
+    }
+    .users-btn {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 50px;
+    }
+    .users-header:first-child {
+      font-size: 25px;
+      padding-bottom: 10px;
+    }
+    .rt-td {
+      text-align: center;
+    }
+    .ReactTable {
+      .rt-thead.-headerGroups {
+        font-size: 22px;
+      }
+      .rt-tbody {
+        overflow-y: auto;
+        max-height: 60vh;
+      }
+    }
+
+    .no-sessions {
+      text-align: center;
+    }
+    .spinner-box {
+      width: 100%;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      .spinner {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    .observation-add {
+      right: 60px;
+      margin-right: 5px;
+      margin-top: 10px;
+      position: fixed;
+      bottom: 40px;
+    }
+    .action-btns {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      &>div {
+        margin: 0 20px;
+      }
+    }
+  }

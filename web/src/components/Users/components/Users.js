@@ -60,6 +60,13 @@ class Users extends Component {
   }
 
   componentDidUpdate (prevProps) {
+    if (_.isEqual(prevProps.allUsersList, this.props.allUsersList) &&
+        this.props.allUsersList &&
+        this.props.allUsersList.data &&
+        this.props.allUsersList.data.length &&
+        _.isEmpty(this.state.usersOptions)) {
+      this.handleUsers(this.props.allUsersList.data)
+    }
     if (!_.isEqual(prevProps.allUsersList, this.props.allUsersList)) {
       if (this.props.allUsersList.data && this.props.allUsersList.data.length) {
         this.handleUsers(this.props.allUsersList.data)
@@ -304,7 +311,6 @@ class Users extends Component {
   render () {
     const columns = [
       {
-        Header: 'User List',
         columns: [
           {
             Header: 'Id',
@@ -350,9 +356,14 @@ class Users extends Component {
     const isFormValid = this.isFormValid()
     const isSelectedUser = !this.isSelectedUser()
     return (
-      <div className='users-container users-wrapper'>
-        <div style={{ width: '100%', height: '100%' }}>
-          {this.props.allUsersListLoading
+      <div className='main-container'>
+        <div className='pages-box'>
+          <div className='users-container'>
+            <div>
+              <div className='users-header'>
+                <div className={'user-select'}>User List</div>
+              </div>
+              {this.props.allUsersListLoading
           ? <div className='spinner-box'>
             <div className={'spinner'}>
               <Spinner
@@ -399,31 +410,25 @@ class Users extends Component {
                 }
               }
             }} />}
-        </div>
-        <div className='users-btn-container'>
-          <a style={{ curosor: 'pointer' }} onClick={() => browserHistory.push('/admin-home')}>
-            <RaisedButton
-              buttonStyle={{ width: '200px' }}
-              backgroundColor='#244C7B'
-              labelColor='#FCB636'
-              label='Back'
-              type='button' />
-          </a>
-          <RaisedButton
-            onClick={() => this.handleAddUser('newUser')}
-            buttonStyle={{ width: '200px', marginLeft: '25px' }}
-            backgroundColor='#244C7B'
-            labelColor='#FCB636'
-            label='+ New'
-            type='button' />
-          <RaisedButton
-            disabled={isSelectedUser}
-            onClick={() => this.handleEditUser('editUser')}
-            buttonStyle={{ width: '200px', marginLeft: '25px' }}
-            backgroundColor='#244C7B'
-            labelColor='#FCB636'
-            label='Edit'
-            type='button' />
+            </div>
+            <div className='action-btns'>
+              <RaisedButton
+                onClick={() => this.handleAddUser('newUser')}
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='+ New'
+                type='button' />
+              <RaisedButton
+                disabled={isSelectedUser}
+                onClick={() => this.handleEditUser('editUser')}
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='Edit'
+                type='button' />
+            </div>
+          </div>
         </div>
         {isUserDetailsOpen && this.props.isUserLoading
         ? <div className='users-spinner-fixed'>
