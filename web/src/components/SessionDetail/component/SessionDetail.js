@@ -36,7 +36,8 @@ class SessionDetail extends Component {
       selectedCurrentUser: '',
       openRemoveDialog: false,
       openAddUserInfoDialog: false,
-      manual: this.props.manual
+      manual: this.props.manual,
+      keycloakUserId: null
     }
   }
 
@@ -92,7 +93,10 @@ class SessionDetail extends Component {
     this.setState({ selectedCurrentRole: value })
   };
   handleChangeCurrentUser = (event, index, value) => {
-    this.setState({ selectedCurrentUser: value })
+    this.setState({
+      selectedCurrentUser: value,
+      keycloakUserId: this.state.usersList[index].login
+    })
   };
   updateCheck (name) {
     this.setState({
@@ -206,7 +210,7 @@ class SessionDetail extends Component {
     const user = {
       trialRoleId: this.state.selectedCurrentRole,
       trialSessionId: parseInt(this.state.sessionId),
-      trialUserId: this.state.selectedCurrentUser
+      keycloakUserId: this.state.keycloakUserId
     }
     const actions = [
       <FlatButton label='Cancel' primary onClick={this.handleClose} />,
