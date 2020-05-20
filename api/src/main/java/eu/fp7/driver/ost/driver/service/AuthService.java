@@ -101,4 +101,8 @@ public class AuthService {
         userRepresentation.setEnabled(false);
         realmResource.users().get(id).update(userRepresentation);
     }
+
+    public void changePassword(String id, String password) {
+        realmResource.users().get(id).resetPassword(createUserPasswordCredential(password));
+    }
 }

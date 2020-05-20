@@ -8,6 +8,7 @@ import eu.fp7.driver.ost.core.exception.FormValidationException;
 import eu.fp7.driver.ost.driver.dto.KeycloakUserDto;
 import eu.fp7.driver.ost.driver.service.AuthService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -55,4 +56,17 @@ public class AuthController {
     public void delete(@PathVariable("id") String id) {
         authService.delete(id);
     }
+
+    @PutMapping(value = "/{id}/change-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@PathVariable("id") String id,
+                               @Validated @RequestBody KeycloakUserDto.ChangePasswordFormItem form,
+                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new FormValidationException(KeycloakUserDto.ChangePasswordFormItem.class);
+        }
+
+        authService.changePassword(id, form.password);
+    }
+
 }
