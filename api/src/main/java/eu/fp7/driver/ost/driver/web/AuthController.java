@@ -69,4 +69,14 @@ public class AuthController {
         authService.changePassword(id, form.password);
     }
 
+    @PutMapping("/{id}")
+    public KeycloakUserDto.FullItem update(@PathVariable("id") String id,
+                                       @Validated @RequestBody KeycloakUserDto.UpdateFormItem form,
+                                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new FormValidationException(KeycloakUserDto.UpdateFormItem.class);
+        }
+
+        return Dto.from(authService.update(id, form), KeycloakUserDto.FullItem.class);
+    }
 }

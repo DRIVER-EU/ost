@@ -3,6 +3,9 @@ package eu.fp7.driver.ost.driver.service;
 import eu.fp7.driver.ost.driver.dto.KeycloakUserDto;
 import eu.fp7.driver.ost.driver.util.InvalidDataException;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.RoleMappingResource;
+import org.keycloak.admin.client.resource.RoleResource;
+import org.keycloak.admin.client.resource.RoleScopeResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -14,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +28,10 @@ public class AuthService {
     private RealmResource realmResource;
 
     private TrialUserService trialUserService;
+
+    public final static String CONTACT = "contact";
+    public final static String ROLE_ADMIN = "ost_admin";
+    public final static String ROLE_OBSERVER = "ost_observer";
 
     public AuthService(RealmResource realmResource, TrialUserService trialUserService) {
         this.realmResource = realmResource;
@@ -60,17 +68,27 @@ public class AuthService {
         Response response = realmResource.users().create(userRepresentation);
         if (HttpStatus.CREATED.value() == response.getStatus()) {
             String userId = response.getLocation().getPath().substring(response.getLocation().getPath().lastIndexOf("/") + 1);
-            form.roles.forEach(role -> assignRole(userId, role));
+            updateRole(userId, form.isAdmin);
             trialUserService.create(userRepresentation.getUsername());
             userRepresentation.setId(userId);
+            userRepresentation.setRealmRoles(Collections.singletonList(form.isAdmin ? ROLE_ADMIN : ROLE_OBSERVER));
             return userRepresentation;
         } else {
             throw new InvalidDataException("Users login or email already exists");
         }
     }
 
-    private void assignRole(String userId, String role) {
-        realmResource.users().get(userId).roles().realmLevel().add(Collections.singletonList(realmResource.roles().get(role).toRepresentation()));
+    private void updateRole(String userId, boolean isAdmin) {
+        RoleScopeResource roleScopeResource = realmResource.users().get(userId).roles().realmLevel();
+        RoleRepresentation adminRole = realmResource.roles().get(ROLE_ADMIN).toRepresentation();
+        RoleRepresentation observerRole = realmResource.roles().get(ROLE_OBSERVER).toRepresentation();
+        if (isAdmin) {
+            roleScopeResource.add(Collections.singletonList(adminRole));
+            roleScopeResource.remove(Collections.singletonList(observerRole));
+        } else {
+            roleScopeResource.add(Collections.singletonList(observerRole));
+            roleScopeResource.remove(Collections.singletonList(adminRole));
+        }
     }
 
     private UserRepresentation createUserRepresentation(KeycloakUserDto.CreateFormItem form) {
@@ -79,9 +97,8 @@ public class AuthService {
         userRepresentation.setFirstName(form.firstName);
         userRepresentation.setLastName(form.lastName);
         userRepresentation.setEmail(form.email);
-        userRepresentation.singleAttribute("contact", form.contact);
+        userRepresentation.singleAttribute(CONTACT, form.contact);
         userRepresentation.setCredentials(Collections.singletonList(createUserPasswordCredential(form.password)));
-        userRepresentation.setRealmRoles(form.roles);
         userRepresentation.setEnabled(form.activated);
         return userRepresentation;
     }
@@ -104,5 +121,18 @@ public class AuthService {
 
     public void changePassword(String id, String password) {
         realmResource.users().get(id).resetPassword(createUserPasswordCredential(password));
+    }
+
+    public UserRepresentation update(String id, KeycloakUserDto.UpdateFormItem form) {
+        UserRepresentation userRepresentation = realmResource.users().get(id).toRepresentation();
+        userRepresentation.setFirstName(form.firstName);
+        userRepresentation.setLastName(form.lastName);
+        userRepresentation.setEmail(form.email);
+        userRepresentation.singleAttribute(CONTACT, form.contact);
+        userRepresentation.setEnabled(form.activated);
+        updateRole(id, form.isAdmin);
+        realmResource.users().get(id).update(userRepresentation);
+        userRepresentation.setRealmRoles(Collections.singletonList(form.isAdmin ? ROLE_ADMIN : ROLE_OBSERVER));
+        return userRepresentation;
     }
 }
