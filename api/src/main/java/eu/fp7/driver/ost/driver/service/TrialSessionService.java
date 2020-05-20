@@ -197,10 +197,8 @@ public class TrialSessionService {
 
         Trial trial = trialRepository.findById(sessionDTO.trialId)
                 .orElseThrow(() -> new EntityNotFoundException(Trial.class, sessionDTO.trialId));
-        if(trial.getTrialStages().size() >0)
-        {
-            trialStage = trial.getTrialStages().get(0);
-        }
+        trialStage = trial.getTrialStages().stream().findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(TrialStage.class));
 
         TrialSession trialSession = TrialSession.builder().trial(trial)
                 .startTime(LocalDateTime.now())
