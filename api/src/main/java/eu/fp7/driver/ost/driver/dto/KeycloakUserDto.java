@@ -3,6 +3,7 @@ package eu.fp7.driver.ost.driver.dto;
 import eu.fp7.driver.ost.core.dto.EntityDto;
 import eu.fp7.driver.ost.core.dto.FormDto;
 import eu.fp7.driver.ost.driver.model.AuthUser;
+import eu.fp7.driver.ost.driver.service.AuthService;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -10,7 +11,6 @@ import org.keycloak.representations.idm.UserRepresentation;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 public final class KeycloakUserDto {
 
@@ -52,7 +52,7 @@ public final class KeycloakUserDto {
 
         public boolean activated;
 
-        public List<String> roles;
+        public Boolean isAdmin;
 
 
         @Override
@@ -60,8 +60,8 @@ public final class KeycloakUserDto {
             super.toDto(userRepresentation);
             this.email = userRepresentation.getEmail();
             this.activated = userRepresentation.isEnabled();
-            this.roles = userRepresentation.getRealmRoles();
-            this.contact = userRepresentation.getAttributes().get("contact").get(0);
+            this.isAdmin = userRepresentation.getRealmRoles().contains(AuthService.ROLE_ADMIN);
+            this.contact = userRepresentation.getAttributes().get(AuthService.CONTACT).get(0);
         }
     }
 
@@ -84,8 +84,8 @@ public final class KeycloakUserDto {
         @NotEmpty
         public String contact;
 
-        @Size(min = 1)
-        public List<String> roles;
+        @NotNull
+        public Boolean isAdmin;
 
         @NotNull
         public Boolean activated;
