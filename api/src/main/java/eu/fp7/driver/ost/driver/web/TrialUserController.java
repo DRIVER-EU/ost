@@ -31,9 +31,4 @@ public class TrialUserController {
     public String getVersion() {
         return Application.version;
     }
-
-    @GetMapping("/all")
-    public PageDto<TrialUserDTO.ListItem> findAll(@SortDefault(sort = "keycloakUserId", direction = Sort.Direction.ASC) Pageable pageable) {
-        return Dto.from(trialUserService.findAll(pageable), TrialUserDTO.ListItem.class);
-    }
 }

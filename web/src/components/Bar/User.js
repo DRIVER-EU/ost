@@ -22,7 +22,7 @@ class UserComponent extends Component {
       <div className='btns__wrapper'>
         <span style={{ marginRight: 10 }}>{this.props.user.login}</span>
         {this.props.keycloak !== null && <button
-          onClick={() => navigator.onLine
+          onClick={() => navigator.onLine && this.props.keycloak !== null
             ? this.props.keycloak.onAuthLogout()
             : toastr.warning('Offline mode', 'You can not log out in offline mode', toastrOptions)}
           className='menu__btn'>

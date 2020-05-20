@@ -132,15 +132,18 @@ class RoleDetail extends Component {
           {
             Header: 'Id',
             accessor: 'id',
-            width: 100
+            width: 100,
+            style: { textAlign: 'right' }
           },
           {
             Header: 'Name',
-            accessor: 'name'
+            accessor: 'name',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Position',
-            accessor: 'position'
+            accessor: 'position',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Unassign',
@@ -165,15 +168,18 @@ class RoleDetail extends Component {
           {
             Header: 'Id',
             accessor: 'id',
-            width: 100
+            width: 100,
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Name',
-            accessor: 'name'
+            accessor: 'name',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Position',
-            accessor: 'position'
+            accessor: 'position',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Assign',

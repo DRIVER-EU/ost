@@ -157,8 +157,7 @@ export const getUsersList = () => {
     return new Promise(resolve =>
       axios
         .get(
-          // `${origin}/api/auth/users?page=0&size=150&sort=login,asc&sort=lastName,desc`,
-          `${origin}/api/user/all?page=0&size=100&sort=id`,
+          `${origin}/api/auth/users/active`,
           getHeaders()
         )
         .then(response => {
@@ -254,7 +253,7 @@ const ACTION_HANDLERS = {
   [GET_USERS_LIST]: (state, action) => {
     return {
       ...state,
-      usersList: action.data.data
+      usersList: action.data
     }
   },
   [ADD_USER]: (state, action) => {

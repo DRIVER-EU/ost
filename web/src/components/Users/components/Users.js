@@ -33,9 +33,8 @@ class Users extends Component {
       emailError: false,
       contact: '',
       contactError: false,
-      activated: false,
+      activated: true,
       rolesIds: null,
-      positionId: null,
       isAdmin: false
     }
   }
@@ -149,7 +148,6 @@ class Users extends Component {
     user.email = selectedUser.email ? selectedUser.email : ''
     user.contact = selectedUser.contact ? selectedUser.contact : ''
     user.rolesIds = selectedUser.roles && selectedUser.roles[0] ? [selectedUser.roles[0].id] : null
-    user.positionId = selectedUser.position && selectedUser.position.id ? selectedUser.position.id : null
     user.password = ''
     user.passwordConfirmation = ''
     this.setState({
@@ -250,15 +248,14 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        rolesIds: user.rolesIds,
-        positionId: user.positionId
+        rolesIds: user.rolesIds
       }
       this.props.putUser(updatedUser, userId)
       if (user.password !== '' && user.passwordConfirmation !== '') {
         this.props.putUserPassword(userId, { password: user.password })
       }
     } else {
-      const role = user.isAdmin ? 1 : 2
+      const role = user.isAdmin ? 'ost_admin' : 'ost_observer'
       const updatedUser = {
         login: user.login,
         password: user.password,
@@ -267,8 +264,7 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        rolesIds: [role],
-        positionId: 2
+        roles: [role]
       }
       this.props.addUser(updatedUser)
     }

@@ -73,18 +73,19 @@ class SessionDetail extends Component {
           },
           {
             Header: '',
+            width: 150,
             Cell: props => <RaisedButton
               backgroundColor='#FCB636'
               labelColor='#fff'
               label='Send Message'
-              type='Button'
-                      />
+              type='Button' />
           }
         ]
       },
       {
         Header: 'Active',
-        accessor: 'active'
+        accessor: 'active',
+        style: { textAlign: 'left' }
       }
     ]
     return (
