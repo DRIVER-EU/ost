@@ -19,12 +19,14 @@ public class TrialSessionDTO {
     public static class MinimalItem implements EntityDto<TrialSession> {
 
         public long id;
+        public String trialSessionName;
         public SessionStatus status;
 
         @Override
         public void toDto(TrialSession trialSession) {
             this.id = trialSession.getId();
             this.status = trialSession.getStatus();
+            this.trialSessionName = trialSession.getName();
         }
     }
     @Data
