@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -36,6 +37,9 @@ import java.util.List;
 public class TrialSession extends PersistentObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Column(nullable = false)
+    private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIdentityReference(alwaysAsId = true)
