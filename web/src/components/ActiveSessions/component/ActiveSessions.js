@@ -43,7 +43,7 @@ class ActiveSessions extends Component {
           },
           {
             Header: 'Name',
-            accessor: 'trialName',
+            accessor: 'trialSessionName',
             style: { textAlign: 'left' }
           },
           {

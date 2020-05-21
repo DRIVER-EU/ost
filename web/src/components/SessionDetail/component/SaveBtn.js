@@ -84,6 +84,7 @@ class SaveBtn extends Component {
 
   render () {
     let session = {
+      trialSessionName: this.props.sessionName,
       id: this.props.sessionId,
       trialId: this.props.trialId,
       status: this.props.status,

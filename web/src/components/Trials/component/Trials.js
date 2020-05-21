@@ -22,6 +22,7 @@ class Trials extends Component {
   }
 
   componentWillMount () {
+    this.props.getTrials()
     let interval = setInterval(() => {
       this.props.getTrials()
     }, 5000)
@@ -49,7 +50,7 @@ class Trials extends Component {
   }
 
   viewTrial (id) {
-    browserHistory.push(`/trials/${id}`)
+    browserHistory.push(`/trials/${id}/select-observation`)
   }
 
   getShortDesc (str) {
@@ -84,7 +85,7 @@ class Trials extends Component {
                     title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
                       {object.trialName}</h3>
                       <h5 style={{ margin: '4px 0 10px' }}>
-                        session: #{object.id} stage: {object.name}
+                        session: {object.trialSessionName} stage: {object.name}
                       </h5>
                       <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
                     </div>} expanded={false} >
