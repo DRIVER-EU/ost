@@ -125,6 +125,10 @@ class CoreLayout extends Component {
           .then(data => this.setState({ version: data, keycloak, isReady: true }))
       } else {
         this.setState({ keycloak, isReady: true })
+        this.props.logOut()
+        localStorage.removeItem('driveruser')
+        localStorage.removeItem('drivertoken')
+        localStorage.removeItem('driverrole')
       }
     }
     keycloak.onAuthSuccess = () => {

@@ -62,7 +62,7 @@ class TabsWithTable extends Component {
       },
       {
         Header: 'Name',
-        accessor: 'name',
+        accessor: 'trialSessionName',
         style: { textAlign: 'left' }
       },
       {
