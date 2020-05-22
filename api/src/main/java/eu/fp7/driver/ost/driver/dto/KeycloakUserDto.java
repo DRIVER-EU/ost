@@ -11,6 +11,8 @@ import org.keycloak.representations.idm.UserRepresentation;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Collections;
+import java.util.Optional;
 
 public final class KeycloakUserDto {
 
@@ -61,7 +63,10 @@ public final class KeycloakUserDto {
             this.email = userRepresentation.getEmail();
             this.activated = userRepresentation.isEnabled();
             this.isAdmin = userRepresentation.getRealmRoles().contains(AuthService.ROLE_ADMIN);
-            this.contact = userRepresentation.getAttributes().get(AuthService.CONTACT).get(0);
+            this.contact = Optional.ofNullable(userRepresentation.getAttributes().get(AuthService.CONTACT))
+                    .orElse(Collections.emptyList()).stream()
+                    .findFirst()
+                    .orElse("");
         }
     }
 
