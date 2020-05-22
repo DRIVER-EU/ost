@@ -121,19 +121,23 @@ class Question extends Component {
               <div>
                 <a
                   className='header__link'
-                  href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
                 >
                   {this.props.trialName}
                 </a>
                 <a
                   className='header__link'
-                  href={`/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(
+                    `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`)}
                 >
                   {this.props.stageName}
                 </a>
                 <a
                   className='header__link'
-                  href={questionPath}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(questionPath)}
                 >
                   {this.props.questionSetName}
                 </a>
@@ -147,6 +151,7 @@ class Question extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'

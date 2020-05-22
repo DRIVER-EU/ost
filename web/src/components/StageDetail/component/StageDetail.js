@@ -103,7 +103,8 @@ class StageDetail extends Component {
               <h1 className='header__text'>Stage</h1>
               <a
                 className='header__link'
-                href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
               >
                 {this.props.trialName || '...'}
               </a>
@@ -116,6 +117,7 @@ class StageDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'
