@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import 'react-table/react-table.css'
 import ReactTable from 'react-table'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
-import RaisedButton from 'material-ui/RaisedButton'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
+// import SelectField from 'material-ui/SelectField'
+// import MenuItem from 'material-ui/MenuItem'
+// import RaisedButton from 'material-ui/RaisedButton'
+// import Dialog from 'material-ui/Dialog'
+// import FlatButton from 'material-ui/FlatButton'
 
 class UserRole extends Component {
   constructor (props) {
@@ -29,8 +29,8 @@ class UserRole extends Component {
   }
   static propTypes = {
     userRoles: PropTypes.array,
-    new: PropTypes.bool,
-    roleSet: PropTypes.array,
+    // new: PropTypes.bool,
+    // roleSet: PropTypes.array,
     usersList: PropTypes.array,
     roleId: PropTypes.any
   };
@@ -119,44 +119,44 @@ class UserRole extends Component {
         ]
       }
     ]
-    const user = {
-      trialRoleId: this.state.selectedCurrentRole,
-      trialSessionId: 1,
-      trialUserId: this.state.selectedCurrentUser
-    }
-    const actions = [
-      <FlatButton label='Cancel' primary onClick={this.handleClose} />,
-      <RaisedButton
-        backgroundColor='#FCB636'
-        labelColor='#fff'
-        label='Add'
-        type='Button'
-        onClick={this.addUser.bind(this, user)}
-      />
-    ]
-    const actionsAddUser = [
-      <RaisedButton
-        backgroundColor='#FCB636'
-        labelColor='#fff'
-        label='Ok'
-        type='Button'
-        onClick={this.handleCloseDialog.bind(this, 'openAddUserInfoDialog')}
-      />
-    ]
-    const actionsRemoveDialog = [
-      <FlatButton
-        label='No'
-        primary
-        onClick={this.handleCloseDialog.bind(this, 'openRemoveDialog')}
-      />,
-      <RaisedButton
-        backgroundColor='#b71c1c'
-        labelColor='#fff'
-        label='Yes'
-        type='Button'
-        onClick={this.removeUser.bind(this, this.state.selectedRole)}
-      />
-    ]
+    // const user = {
+    //   trialRoleId: this.state.selectedCurrentRole,
+    //   trialSessionId: 1,
+    //   trialUserId: this.state.selectedCurrentUser
+    // }
+    // const actions = [
+    //   <FlatButton label='Cancel' primary onClick={this.handleClose} />,
+    //   <RaisedButton
+    //     backgroundColor='#FCB636'
+    //     labelColor='#fff'
+    //     label='Add'
+    //     type='Button'
+    //     onClick={this.addUser.bind(this, user)}
+    //   />
+    // ]
+    // const actionsAddUser = [
+    //   <RaisedButton
+    //     backgroundColor='#FCB636'
+    //     labelColor='#fff'
+    //     label='Ok'
+    //     type='Button'
+    //     onClick={this.handleCloseDialog.bind(this, 'openAddUserInfoDialog')}
+    //   />
+    // ]
+    // const actionsRemoveDialog = [
+    //   <FlatButton
+    //     label='No'
+    //     primary
+    //     onClick={this.handleCloseDialog.bind(this, 'openRemoveDialog')}
+    //   />,
+    //   <RaisedButton
+    //     backgroundColor='#b71c1c'
+    //     labelColor='#fff'
+    //     label='Yes'
+    //     type='Button'
+    //     onClick={this.removeUser.bind(this, this.state.selectedRole)}
+    //   />
+    // ]
     return (
       <div className='table__wrapper'>
         <ReactTable
@@ -174,9 +174,9 @@ class UserRole extends Component {
                     selectedRole: rowInfo.original
                   })
                 },
-                onDoubleClick: e => {
-                  this.viewUserRole()
-                },
+                // onDoubleClick: e => {
+                //   this.viewUserRole()
+                // },
                 style: {
                   background: this.state.selectedRole
                     ? rowInfo.original.id === this.state.selectedRole.id
@@ -189,7 +189,7 @@ class UserRole extends Component {
             }
           }}
         />
-        {!this.props.new && (
+        {/* {!this.props.new && (
           <div className='action-btns'>
             <div>
               <RaisedButton
@@ -274,7 +274,7 @@ class UserRole extends Component {
               )}
             />
           </div>
-        )}
+        )} */}
       </div>
     )
   }

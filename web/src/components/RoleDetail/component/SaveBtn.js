@@ -44,9 +44,10 @@ class SaveBtn extends Component {
 
   async dialogAccepted (role) {
     if (!this.state.new) {
-      this.props.updateRole(role)
+      this.props.updateRole(role).then(() => {
+        this.props.getRoleById(this.props.roleId)
+      })
       this.handleCloseDialog('openSaveDialog')
-      this.props.getRoleById(this.props.roleId)
     } else {
       await this.props.addNewRole(role)
       browserHistory.push(
@@ -83,7 +84,8 @@ class SaveBtn extends Component {
   render () {
     let role = {
       id: this.props.roleId,
-      name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
+      // name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
+      name: this.props.roleName,
       roleType: this.props.roleType,
       trialId: this.props.trialId
     }

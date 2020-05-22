@@ -60,7 +60,7 @@ export const updateRole = role => {
       axios
         .put(`${origin}/api/role/admin/updateTrialRole`, role, getHeaders())
         .then(response => {
-          dispatch(updateRoleAction(response.data))
+          // dispatch(updateRoleAction(response.data))
           resolve()
         })
         .catch(error => {
@@ -97,6 +97,16 @@ export const getRoleById = id => {
       axios
         .get(`${origin}/api/role/admin/getFullTrialRole?id=${id}`, getHeaders())
         .then(response => {
+          let questions = []
+          response.data.questions.forEach((question) => {
+            question.assign = true
+            questions.push(question)
+          })
+          response.data.unAssignedQuestions.forEach((question) => {
+            question.assign = false
+            questions.push(question)
+          })
+          response.data.questions = questions
           dispatch(getRoleDetailAction(response.data))
           resolve()
         })
