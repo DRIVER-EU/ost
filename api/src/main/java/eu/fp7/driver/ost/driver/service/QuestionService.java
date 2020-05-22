@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Service
@@ -183,6 +184,7 @@ public class QuestionService {
         if (AnswerType.RADIO_LINE.equals(adminQuestionDTO.getAnswerType())) {
             return adminQuestionDTO.getQuestionOptions()
                     .stream()
+                    .sorted(Comparator.comparingInt(listItem -> listItem.position))
                     .map(AdminQuestionOptionDTO.ListItem::getName)
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]"));
@@ -191,12 +193,14 @@ public class QuestionService {
     else if(AnswerType.CHECKBOX.equals(adminQuestionDTO.getAnswerType())){
             return adminQuestionDTO.getQuestionOptions()
                     .stream()
+                    .sorted(Comparator.comparingInt(listItem -> listItem.position))
                     .map(AdminQuestionOptionDTO.ListItem::getName)
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.joining("\",\"", "\"items\":{\"type\":\"string\",\"enum\":[\"", "\"]}"));
         } else if(AnswerType.RADIO_BUTTON.equals(adminQuestionDTO.getAnswerType())){
             return  adminQuestionDTO.getQuestionOptions()
                     .stream()
+                    .sorted(Comparator.comparingInt(listItem -> listItem.position))
                     .map(AdminQuestionOptionDTO.ListItem::getName)
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]"));
