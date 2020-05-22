@@ -218,6 +218,7 @@ class RoleDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'

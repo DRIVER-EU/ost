@@ -254,6 +254,7 @@ class SessionDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'

@@ -106,6 +106,7 @@ class TrialDetail extends Component {
                   }
                   floatingLabelText='Id'
                   fullWidth
+                  disabled
                   underlineShow={false}
                 />
                 <TextField
