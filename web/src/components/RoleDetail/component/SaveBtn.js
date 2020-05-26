@@ -8,6 +8,7 @@ import WarningModal, {
   checkInputs,
   inputValidationRegex
 } from '../../NewObservationComponent/component/WarningModal'
+import _ from 'lodash'
 
 class SaveBtn extends Component {
   constructor (props) {
@@ -29,7 +30,16 @@ class SaveBtn extends Component {
     new: PropTypes.bool,
     roleType: PropTypes.string,
     inputsValue: PropTypes.array
-  };
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (!_.isEqual(nextProps.roleName, this.props.roleName)) {
+      this.setState({
+        roleName: nextProps.roleName
+      })
+    }
+  }
+
   handleOpenDialog (name) {
     let change = {}
     change[name] = true
@@ -84,8 +94,7 @@ class SaveBtn extends Component {
   render () {
     let role = {
       id: this.props.roleId,
-      // name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
-      name: this.props.roleName,
+      name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
       roleType: this.props.roleType,
       trialId: this.props.trialId
     }
