@@ -15,13 +15,13 @@ class Question extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      questionDetailId: this.props.questionDetailId,
-      questionName: this.props.questionName || '',
-      description: this.props.description || '',
-      position: this.props.position || '',
+      questionDetailId: !this.props.new && this.props.questionDetailId ? this.props.questionDetailId : 0,
+      questionName: !this.props.new && this.props.questionName ? this.props.questionName : '',
+      description: !this.props.new && this.props.description ? this.props.description : '',
+      position: !this.props.new && this.props.position ? this.props.position : '',
       option: this.props.option,
       selectedOption: null,
-      commented: this.props.commented || false,
+      commented: !this.props.new && this.props.commented ? this.props.commented : false,
       required: false,
       answerType: [
         { value: 'CHECKBOX', text: 'checkbox' },
@@ -30,7 +30,7 @@ class Question extends Component {
         { value: 'TEXT_FIELD', text: 'text field' },
         { value: 'RADIO_LINE', text: 'radio line' }
       ],
-      selectedAnswerType: this.props.answerType || 'CHECKBOX'
+      selectedAnswerType: !this.props.new && this.props.answerType ? this.props.answerType : 'CHECKBOX'
     }
   }
   static propTypes = {
@@ -88,7 +88,7 @@ class Question extends Component {
       questionDetailId: nextProps.questionDetailId,
       description: nextProps.description,
       position: nextProps.position,
-      selectedAnswerType: nextProps.answerType,
+      selectedAnswerType: !nextProps.new && nextProps.answerType ? nextProps.answerType : 'CHECKBOX',
       option: nextProps.option
     })
   }
@@ -207,7 +207,14 @@ class Question extends Component {
                 onChange={this.handleChange}
                 disabled={this.state.questionDetailId ? parseInt(this.state.questionDetailId) > 0 : false}
               >
-                <MenuItem
+                {this.state.answerType.map((el, index) =>
+                  <MenuItem
+                    key={index}
+                    value={el.value}
+                    primaryText={el.text}
+                  />
+                )}
+                {/* <MenuItem
                   value={this.state.answerType[0].value}
                   primaryText={this.state.answerType[0].text}
                 />
@@ -226,7 +233,7 @@ class Question extends Component {
                 <MenuItem
                   value={this.state.answerType[4].value}
                   primaryText={this.state.answerType[4].text}
-                />
+                /> */}
               </SelectField>
             </div>
             <div className='position__field'>
