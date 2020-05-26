@@ -22,7 +22,8 @@ class RoleDetail extends Component {
       //   { id: 'PARTICIPANT', name: 'PARTICIPANT' },
       //   { id: 'OBSERVER', name: 'OBSERVER' }
       // ],
-      selectedCurrentRoleType: this.props.roleType || 'OBSERVER',
+      // selectedCurrentRoleType: this.props.roleType || 'OBSERVER',
+      selectedCurrentRoleType: 'OBSERVER',
       questionsList: this.props.questions,
       selectedQuestion: null,
       roleSet: this.props.roleSet,
@@ -44,7 +45,7 @@ class RoleDetail extends Component {
     removeRole: PropTypes.func,
     getRoleById: PropTypes.func,
     addNewRole: PropTypes.func,
-    roleType: PropTypes.string,
+    // roleType: PropTypes.string,
     questions: PropTypes.array,
     userRoles: PropTypes.array,
     roleSet: PropTypes.array,
@@ -65,7 +66,7 @@ class RoleDetail extends Component {
     this.setState({
       name: nextProps.roleName,
       roleId: nextProps.roleId,
-      selectedCurrentRoleType: nextProps.roleType,
+      // selectedCurrentRoleType: nextProps.roleType,
       questionsList: nextProps.questions,
       userRoles: nextProps.userRoles,
       roleSet: nextProps.roleSet,
