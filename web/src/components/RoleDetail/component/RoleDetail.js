@@ -303,16 +303,6 @@ class RoleDetail extends Component {
                 )}
               </div>
             </div>
-            <UserRole
-              userRoles={this.props.userRoles}
-              roleSet={this.props.roleSet}
-              getRoleById={this.props.getRoleById}
-              roleId={this.props.roleId}
-              usersList={this.props.usersList}
-              addUser={this.props.addUser}
-              removeUser={this.props.removeUser}
-              new={this.props.new}
-            />
             <div className='table__wrapper'>
               <ReactTable
                 data={this.state.questionsList}
@@ -403,6 +393,18 @@ class RoleDetail extends Component {
                 }}
               />
             </div> */}
+            <div className='table__wrapper'>
+              <UserRole
+                userRoles={this.props.userRoles}
+                roleSet={this.props.roleSet}
+                getRoleById={this.props.getRoleById}
+                roleId={this.props.roleId}
+                usersList={this.props.usersList}
+                addUser={this.props.addUser}
+                removeUser={this.props.removeUser}
+                new={this.props.new}
+              />
+            </div>
           </div>
         </div>
       </div>
