@@ -68,7 +68,11 @@ class SessionDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
-    change[name] = e.target.value
+    if (name === 'sessionName') {
+      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
+    } else {
+      change[name] = e.target.value
+    }
     this.setState(change)
   }
   componentWillReceiveProps (nextProps) {
