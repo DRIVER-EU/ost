@@ -34,7 +34,6 @@ class SessionDetail extends Component {
     })
   }
   render () {
-    console.log(this.state.sessionDetail)
     const columns = [
       {
         Header: 'Id',
