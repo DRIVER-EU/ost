@@ -321,7 +321,6 @@ class ViewTrials extends Component {
           autoDetectWindowHeight
           autoScrollBodyContent
           open={this.state.open}
-          bodyStyle={{ height: 200 }}
           onRequestClose={this.handleClose}>
           <div style={{ marginTop: 20 }}>
             The answer will be permanently deleted. Please provide, why do you want to remove it:
