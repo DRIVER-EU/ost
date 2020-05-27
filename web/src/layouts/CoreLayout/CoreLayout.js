@@ -129,6 +129,7 @@ class CoreLayout extends Component {
         localStorage.removeItem('driveruser')
         localStorage.removeItem('drivertoken')
         localStorage.removeItem('driverrole')
+        window.location.pathname !== '/' && browserHistory.push('/')
       }
     }
     keycloak.onAuthSuccess = () => {

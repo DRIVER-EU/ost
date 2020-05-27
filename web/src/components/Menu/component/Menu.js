@@ -32,11 +32,12 @@ class Menu extends Component {
           zDepth={3}
           style={{ backgroundColor: 'white', height: 74 }}
           iconElementLeft={
+            this.props.isLoggedIn &&
             <div style={{ display: 'flex' }} className='menu__info'>
               <a
                 onClick={() => browserHistory.push('/')}
                 style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-                <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
+                <img className='img-responsive pull-left logo' src='/images/ost.png' />
                 <span className='driver-title'>
                   Observer Support Tool
                 </span>
