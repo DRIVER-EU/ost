@@ -46,9 +46,9 @@ class SaveBtn extends Component {
 
   async dialogAccepted (session) {
     if (!this.state.new) {
-      this.props.updateSession(session)
+      await this.props.updateSession(session)
       this.handleCloseDialog('openSaveDialog')
-      this.props.getSessionDetail(this.props.sessionId)
+      await this.props.getSessionDetail(this.props.sessionId)
     } else {
       await this.props.addNewSession(session)
       browserHistory.push(

@@ -39,9 +39,9 @@ class SaveBtn extends Component {
   }
   async dialogAccepted (stage) {
     if (!this.state.new) {
-      this.props.updateStage(stage)
+      await this.props.updateStage(stage)
       this.handleCloseDialog('openSaveDialog')
-      this.props.getStage(parseInt(this.props.stageId))
+      await this.props.getStage(parseInt(this.props.stageId))
     } else {
       await this.props.addNewStage(stage)
       browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`)
