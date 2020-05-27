@@ -300,7 +300,7 @@ class ViewTrials extends Component {
               buttonStyle={{ width: '240px' }}
               backgroundColor='#244C7B'
               labelColor='#FCB636'
-              label='Back to questions'
+              label='Go to questions'
               secondary
               onClick={this.newObservation.bind(this)} />
           </div>
