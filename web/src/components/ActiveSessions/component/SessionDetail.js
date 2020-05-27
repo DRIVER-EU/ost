@@ -72,7 +72,7 @@ class SessionDetail extends Component {
             style: { textAlign: 'left' }
           },
           {
-            Header: '',
+            Header: 'Active',
             width: 150,
             Cell: props => <RaisedButton
               backgroundColor='#FCB636'
@@ -81,11 +81,6 @@ class SessionDetail extends Component {
               type='Button' />
           }
         ]
-      },
-      {
-        Header: 'Active',
-        accessor: 'active',
-        style: { textAlign: 'left' }
       }
     ]
     return (
