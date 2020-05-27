@@ -318,17 +318,22 @@ class ViewTrials extends Component {
           title='Do you want to remove this answer?'
           actions={actions}
           modal={false}
+          autoDetectWindowHeight
+          autoScrollBodyContent
           open={this.state.open}
+          bodyStyle={{ height: 200 }}
           onRequestClose={this.handleClose}>
-          The answer will be permanently deleted. Please provide, why do you want to remove it:
-            <TextField
-              value={this.state.answerRemove}
-              hintText='enter the answer'
-              errorText={this.state.answerRemoveErrorText}
-              multiLine
-              fullWidth
-              rows={3}
-              onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
+          <div style={{ marginTop: 20 }}>
+            The answer will be permanently deleted. Please provide, why do you want to remove it:
+          </div>
+          <TextField
+            value={this.state.answerRemove}
+            hintText='enter the answer'
+            errorText={this.state.answerRemoveErrorText}
+            multiLine
+            fullWidth
+            rows={3}
+            onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
         </Dialog>
         <Dialog
           title='Comment'
