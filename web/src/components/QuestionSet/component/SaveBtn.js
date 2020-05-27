@@ -47,9 +47,9 @@ class SaveBtn extends Component {
 
   async dialogAccepted (question) {
     if (!this.state.new) {
-      this.props.updateQuestion(question)
+      await this.props.updateQuestion(question)
       this.handleCloseDialog('openSaveDialog')
-      this.props.getQuestion(this.props.questionId)
+      await this.props.getQuestion(this.props.questionId)
     } else {
       await this.props.addNewQuestion(question)
       let questionId = this.props.questionId
