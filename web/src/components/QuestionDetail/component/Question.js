@@ -15,23 +15,22 @@ class Question extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      questionDetailId: this.props.questionDetailId,
-      questionName: this.props.questionName || '',
-      description: this.props.description || '',
-      position: this.props.position || '',
+      questionDetailId: !this.props.new && this.props.questionDetailId ? this.props.questionDetailId : 0,
+      questionName: !this.props.new && this.props.questionName ? this.props.questionName : '',
+      description: !this.props.new && this.props.description ? this.props.description : '',
+      position: !this.props.new && this.props.position ? this.props.position : '',
       option: this.props.option,
       selectedOption: null,
-      commented: this.props.commented || false,
+      commented: !this.props.new && this.props.commented ? this.props.commented : false,
       required: false,
       answerType: [
         { value: 'CHECKBOX', text: 'checkbox' },
         { value: 'RADIO_BUTTON', text: 'radio button' },
         { value: 'SLIDER', text: 'slider' },
         { value: 'TEXT_FIELD', text: 'text field' },
-        { value: 'BOX_LIST', text: 'box list' },
         { value: 'RADIO_LINE', text: 'radio line' }
       ],
-      selectedAnswerType: this.props.answerType || 'CHECKBOX'
+      selectedAnswerType: !this.props.new && this.props.answerType ? this.props.answerType : 'CHECKBOX'
     }
   }
   static propTypes = {
@@ -89,7 +88,7 @@ class Question extends Component {
       questionDetailId: nextProps.questionDetailId,
       description: nextProps.description,
       position: nextProps.position,
-      selectedAnswerType: nextProps.answerType,
+      selectedAnswerType: !nextProps.new && nextProps.answerType ? nextProps.answerType : 'CHECKBOX',
       option: nextProps.option
     })
   }
@@ -122,19 +121,23 @@ class Question extends Component {
               <div>
                 <a
                   className='header__link'
-                  href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
                 >
                   {this.props.trialName}
                 </a>
                 <a
                   className='header__link'
-                  href={`/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(
+                    `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`)}
                 >
                   {this.props.stageName}
                 </a>
                 <a
                   className='header__link'
-                  href={questionPath}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(questionPath)}
                 >
                   {this.props.questionSetName}
                 </a>
@@ -148,6 +151,7 @@ class Question extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'
@@ -172,6 +176,8 @@ class Question extends Component {
                   required={this.state.required}
                   answerType={this.state.selectedAnswerType}
                   questionId={this.props.questionId}
+                  inputsValue={[this.state.questionName, this.state.description]}
+                  getQuestion={this.props.getQuestion}
                 />
                 {!this.props.new && (
                   <RemoveBtn
@@ -199,8 +205,16 @@ class Question extends Component {
                 floatingLabelText='Answer type'
                 value={this.state.selectedAnswerType}
                 onChange={this.handleChange}
+                disabled={this.state.questionDetailId ? parseInt(this.state.questionDetailId) > 0 : false}
               >
-                <MenuItem
+                {this.state.answerType.map((el, index) =>
+                  <MenuItem
+                    key={index}
+                    value={el.value}
+                    primaryText={el.text}
+                  />
+                )}
+                {/* <MenuItem
                   value={this.state.answerType[0].value}
                   primaryText={this.state.answerType[0].text}
                 />
@@ -219,11 +233,7 @@ class Question extends Component {
                 <MenuItem
                   value={this.state.answerType[4].value}
                   primaryText={this.state.answerType[4].text}
-                />
-                <MenuItem
-                  value={this.state.answerType[5].value}
-                  primaryText={this.state.answerType[5].text}
-                />
+                /> */}
               </SelectField>
             </div>
             <div className='position__field'>

@@ -6,6 +6,7 @@ import SaveBtn from './SaveBtn'
 import RemoveBtn from './RemoveBtn'
 import TabsWithTable from './TabsWithTable'
 import PropTypes from 'prop-types'
+import browserHistory from 'react-router/lib/browserHistory'
 
 class TrialDetail extends Component {
   constructor (props) {
@@ -29,6 +30,7 @@ class TrialDetail extends Component {
     tabs: PropTypes.any,
     params: PropTypes.object
   };
+
   handleOpenDialog (name) {
     let change = {}
     change[name] = true
@@ -42,14 +44,14 @@ class TrialDetail extends Component {
   }
   handleChangeInput (name, e) {
     let change = {}
-    change[name] = e.target.value
+    if (name === 'trialName') {
+      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
+    } else {
+      change[name] = e.target.value
+    }
     this.setState(change)
   }
-  async getTrialDetail () {
-    let id
-    if (this.props.params) {
-      id = this.props.params.id_trial
-    }
+  getTrialDetail = async(id) => {
     if (this.props.getTrialDetail) {
       await this.props.getTrialDetail(id)
     }
@@ -66,7 +68,11 @@ class TrialDetail extends Component {
   }
 
   componentWillMount () {
-    this.getTrialDetail()
+    let id
+    if (this.props.params) {
+      id = this.props.params.id_trial
+    }
+    this.getTrialDetail(id)
   }
 
   componentDidMount () {
@@ -86,7 +92,12 @@ class TrialDetail extends Component {
           <div className='trialDetail__container'>
             <div className='trialDetail__header'>
               <h1 className='header__text'>Trial</h1>
-              <a href={`/trial-manager`} className='header__link'>Trial List</a>
+              <a
+                style={{ cursor: 'pointer' }}
+                onClick={() => browserHistory.push('/trial-manager')}
+                className='header__link'>
+                  Trial List
+              </a>
             </div>
             <div className='trialDetail__info'>
               <div className='info__container'>
@@ -99,6 +110,7 @@ class TrialDetail extends Component {
                   }
                   floatingLabelText='Id'
                   fullWidth
+                  disabled
                   underlineShow={false}
                 />
                 <TextField
@@ -117,6 +129,8 @@ class TrialDetail extends Component {
                   name={this.state.trialName}
                   description={this.state.description}
                   newTrialDetail={this.props.newTrialDetail}
+                  inputsValue={[this.state.trialName, this.state.description]}
+                  getTrialDetail={this.getTrialDetail}
                 />
                 {this.props.removeBtn && (
                   <RemoveBtn

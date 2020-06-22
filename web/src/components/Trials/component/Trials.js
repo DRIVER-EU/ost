@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './Trials.scss'
-import { Accordion, AccordionItem } from 'react-sanfona'
-import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 import Spinner from 'react-spinkit'
+import { List, ListItem } from 'material-ui/List'
+import IconInfo from 'material-ui/svg-icons/action/info'
 
 class Trials extends Component {
   constructor (props) {
@@ -22,6 +22,7 @@ class Trials extends Component {
   }
 
   componentWillMount () {
+    this.props.getTrials()
     let interval = setInterval(() => {
       this.props.getTrials()
     }, 5000)
@@ -31,6 +32,10 @@ class Trials extends Component {
     })
   }
 
+  componentWillUnmount () {
+    clearInterval(this.state.interval)
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.listOfTrials.data &&
       nextProps.listOfTrials.data !== this.state.listOfTrials &&
@@ -38,13 +43,14 @@ class Trials extends Component {
       this.setState({ listOfTrials: nextProps.listOfTrials.data, isLoading: false })
       if (!JSON.parse(localStorage.getItem('openTrial')) && nextProps.listOfTrials.data.length !== 0) {
         localStorage.setItem('openTrial', true)
-        browserHistory.push(`/trials/${nextProps.listOfTrials.data[0].id}/select-observation`)
+        // browserHistory.push(`/trials/${nextProps.listOfTrials.data[0].id}/select-observation`)
+        browserHistory.push(`/trials`)
       }
     }
   }
 
   viewTrial (id) {
-    browserHistory.push(`/trials/${id}`)
+    browserHistory.push(`/trials/${id}/select-observation`)
   }
 
   getShortDesc (str) {
@@ -72,32 +78,31 @@ class Trials extends Component {
             }
             {(!this.state.isLoading && this.state.listOfTrials.length === 0) &&
             <div className={'no-sessions'}> No trial sessions available</div>}
-            <Accordion>
-              {this.state.listOfTrials.map((object) => {
-                return (
-                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
-                    title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
-                      {object.trialName}</h3>
-                      <h5 style={{ margin: '4px 0 10px' }}>
-                        session: #{object.id} stage: {object.name}
-                      </h5>
-                      <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
-                    </div>} expanded={false} >
-                    <div>
-                      <p>{object.trialDescription}</p>
-                      <div style={{ display: 'table', margin: '0 auto' }}>
-                        <RaisedButton
-                          buttonStyle={{ width: '200px' }}
-                          backgroundColor='#244C7B'
-                          labelColor='#FCB636'
-                          onClick={this.viewTrial.bind(this, object.id)}
-                          label='Enter' />
-                      </div>
-                    </div>
-                  </AccordionItem>
-                )
-              })}
-            </Accordion>
+            <List style={{ width: '100%' }}>
+              {this.state.listOfTrials && this.state.listOfTrials.map((object, index) => (
+                <div
+                  key={`${object.id}${index}`}
+                  style={{
+                    border: '1px solid #feb912',
+                    backgroundColor: '#fafafa',
+                    marginBottom: 5,
+                    opacity: object.status !== 'ACTIVE' ? 0.4 : 1 }}>
+                  <ListItem
+                    disabled={object.status !== 'ACTIVE'}
+                    leftIcon={<IconInfo color={'#fcb636'} />}
+                    key={`${object.id}${index}`}
+                    hoverColor='#C4D1DB'
+                    primaryText={<div style={{ color: '#064c7b', fontSize: 24 }}>{object.trialName}</div>}
+                    secondaryText={
+                      <div style={{ color: '#064c7b', fontSize: 14 }}>
+                        <div>session: {object.trialSessionName} stage: {object.name}</div>
+                        <div>{this.getShortDesc(object.trialDescription)}</div>
+                      </div>}
+                    onClick={this.viewTrial.bind(this, object.id)}
+                  />
+                </div>
+            ))}
+            </List>
           </div>
         </div>
       </div>

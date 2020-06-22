@@ -6,7 +6,8 @@ var prefetchedURLs = [
   '/app.js',
   '/version.txt',
   '/images/driver-logo.png',
-  '/images/driver-mini-logo.png'
+  '/images/driver-mini-logo.png',
+  '/images/ost.png'
 ]
 self.addEventListener('install', function (event) {
   console.log('install sw')

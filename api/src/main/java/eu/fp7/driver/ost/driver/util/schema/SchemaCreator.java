@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.model.AnswerTrialRole;
 import eu.fp7.driver.ost.driver.model.Attachment;
 import eu.fp7.driver.ost.driver.model.Question;

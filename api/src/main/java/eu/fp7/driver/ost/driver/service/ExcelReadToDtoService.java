@@ -1,13 +1,13 @@
 package eu.fp7.driver.ost.driver.service;
 
-import eu.fp7.driver.ost.driver.dto.ImportExcelTrialAnswerDTO;
-import eu.fp7.driver.ost.driver.dto.ImportExcelTrialDTO;
-import eu.fp7.driver.ost.driver.dto.ImportExcelTrialPositionDTO;
+import eu.fp7.driver.ost.driver.dto.*;
+import eu.fp7.driver.ost.driver.model.enums.AnswerType;
 import eu.fp7.driver.ost.driver.model.enums.ErrorLevel;
 import eu.fp7.driver.ost.driver.util.ApiJsonAnswer;
 import eu.fp7.driver.ost.driver.util.ApiValidationWarning;
 import eu.fp7.driver.ost.driver.util.ExcelImportException;
 import eu.fp7.driver.ost.driver.util.ReadingToDTOExcelException;
+import lombok.Builder;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -41,6 +41,9 @@ public class ExcelReadToDtoService {
 
   @Autowired
   ExcelImportService excelImportService;
+
+  @Autowired
+  QuestionService questionService;
 
 
   public ImportExcelTrialDTO readExcelAndReturnDTO(MultipartFile multipartFile) throws IOException {
@@ -109,11 +112,21 @@ public class ExcelReadToDtoService {
       }
       ImportExcelTrialPositionDTO importExcelTrialPositionDTO = convertPosition(row);
       importExcelTrialPositionDTO.setExcelAnswers(convertAnswers(row));
-      importExcelTrialPositionDTO.setJsonSchema(createJsonSchema(importExcelTrialPositionDTO));
+      importExcelTrialPositionDTO.setJsonSchema(createSimpleJson(importExcelTrialPositionDTO));
       importExcelTrialPositionDTOList.add(importExcelTrialPositionDTO);
     }
     importExcelTrialDTO.setTrialPositions(importExcelTrialPositionDTOList);
     return importExcelTrialDTO;
+  }
+
+  private String createSimpleJson(ImportExcelTrialPositionDTO importExcelTrialPositionDTO) {
+    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectNode objectNode = objectMapper.createObjectNode();
+    objectNode.put("title",importExcelTrialPositionDTO.getQuestion());
+    objectNode.put("description", importExcelTrialPositionDTO.getDescription() );
+    objectNode.put("type", "string");
+    String response = objectNode.toString();
+    return response;
   }
 
   private ImportExcelTrialPositionDTO convertPosition(Row row) {
@@ -172,7 +185,10 @@ public class ExcelReadToDtoService {
 
     if(row.getCell(cellNumber)!=null ) {
       if(CellType.STRING.equals(row.getCell(cellNumber).getCellType())) {
-        return String.valueOf(row.getCell(cellNumber).getRichStringCellValue());
+
+        String cellValue = String.valueOf(row.getCell(cellNumber).getRichStringCellValue());
+        cellValue = cellValue.replaceAll("/(\\t|\\n|_|\\||\\[|\\]|\\{|\\}|;)/g","");
+        return cellValue;
       }
       else if (CellType.NUMERIC.equals(row.getCell(cellNumber).getCellType()))
       {
@@ -213,42 +229,6 @@ public class ExcelReadToDtoService {
       return listOfQuestion;
     } catch (Exception e) {
       throw new ExcelImportException("Error by converting excel to answers at position = " + position, row, e);
-    }
-  }
-
-  private String createJsonSchema(ImportExcelTrialPositionDTO importExcelTrialPositionDTO) {
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      ObjectNode objectNode = objectMapper.createObjectNode();
-      objectNode.put("title", importExcelTrialPositionDTO.getQuestion());
-      objectNode.put("description", importExcelTrialPositionDTO.getDescription());
-      String answerType = importExcelTrialPositionDTO.getAnswerType();
-      String enumString = "";
-      String jsonStructureToString = "";
-      if (answerType.equals("RADIO_BUTTON")) {
-        objectNode.put("type", "string");
-        enumString = importExcelTrialPositionDTO.getExcelAnswers()
-                .stream()
-                .map(ImportExcelTrialAnswerDTO::getDescription)
-                .filter(s -> !s.isEmpty())
-                .collect(Collectors.joining("\",\"", "\"enum\":[\"", "\"]}"));
-        jsonStructureToString = objectNode.toString().replace("}", ",");
-      } else if (answerType.equals("TEXT_FIELD")) {
-        objectNode.put("type", "string");
-        jsonStructureToString = objectNode.toString();
-      } else if (answerType.equals("CHECKBOX")) {
-        objectNode.put("type", "boolean");
-        jsonStructureToString = objectNode.toString();
-      } else if (answerType.equals("SLIDER")) {
-        objectNode.put("type", "number");
-        jsonStructureToString = objectNode.toString();
-      } else {
-        objectNode.put("type", importExcelTrialPositionDTO.getAnswerType());
-      jsonStructureToString = objectNode.toString();
-      }
-      return jsonStructureToString + enumString;
-    } catch (Exception e) {
-      throw new ExcelImportException("Error by creating JSON for the Position ", importExcelTrialPositionDTO, e);
     }
   }
 }

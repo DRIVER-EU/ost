@@ -35,7 +35,11 @@ class StageDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
-    change[name] = e.target.value
+    if (name === 'stageName') {
+      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
+    } else {
+      change[name] = e.target.value
+    }
     this.setState(change)
   }
   viewQuestion () {
@@ -79,15 +83,18 @@ class StageDetail extends Component {
           {
             Header: 'Id',
             accessor: 'id',
-            width: 100
+            width: 100,
+            style: { textAlign: 'right' }
           },
           {
             Header: 'Name',
-            accessor: 'name'
+            accessor: 'name',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Position',
-            accessor: 'position'
+            accessor: 'position',
+            style: { textAlign: 'right' }
           }
         ]
       }
@@ -100,9 +107,10 @@ class StageDetail extends Component {
               <h1 className='header__text'>Stage</h1>
               <a
                 className='header__link'
-                href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
               >
-                {this.props.trialName}
+                {this.props.trialName || '...'}
               </a>
             </div>
             <div className='stageDetail__info'>
@@ -113,6 +121,7 @@ class StageDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'
@@ -120,6 +129,7 @@ class StageDetail extends Component {
                   value={this.state.stageName}
                   floatingLabelText='Name'
                   fullWidth
+                  required
                 />
               </div>
               <div className='btns__wrapper'>
@@ -130,6 +140,8 @@ class StageDetail extends Component {
                   stageId={this.state.stageId}
                   updateStage={this.props.updateStage}
                   addNewStage={this.props.addNewStage}
+                  inputsValue={[this.state.stageName]}
+                  getStage={this.props.getStage}
                 />
                 {!this.props.new && (
                   <RemoveBtn

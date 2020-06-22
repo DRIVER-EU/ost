@@ -47,7 +47,11 @@ class QuestionDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
-    change[name] = e.target.value
+    if (name === 'questionName') {
+      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
+    } else {
+      change[name] = e.target.value
+    }
     this.setState(change)
   }
   viewQuestionDetail () {
@@ -128,17 +132,18 @@ class QuestionDetail extends Component {
               <div>
                 <a
                   className='header__link'
-                  href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
                 >
                   {this.props.trialName}
                 </a>
                 <a
                   className='header__link'
-                  href={
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(
                     this.props.roleId
-                      ? `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
-                      : `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`
-                  }
+                    ? `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
+                    : `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`)}
                 >
                   {this.props.stageName}
                 </a>
@@ -152,6 +157,7 @@ class QuestionDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'
@@ -176,6 +182,8 @@ class QuestionDetail extends Component {
                   multiplicity={this.state.multiplicity}
                   questionForRole={this.props.questionForRole}
                   roleId={this.props.roleId}
+                  inputsValue={[this.state.questionName, this.state.description]}
+                  getQuestion={this.props.getQuestion}
                 />
                 {!this.props.new && (
                   <RemoveBtn

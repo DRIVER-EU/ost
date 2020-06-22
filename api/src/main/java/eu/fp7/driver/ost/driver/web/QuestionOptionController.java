@@ -25,7 +25,7 @@ public class QuestionOptionController {
 
         try{
             adminQuestionOptionDTO.toDto(questionOptionService.insert(adminQuestionOptionDTO));
-            questionService.updateJonson(adminQuestionOptionDTO.questionId);
+            questionService.updateJson(adminQuestionOptionDTO.questionId);
         }
         catch (Exception e)
         {
@@ -59,7 +59,7 @@ public class QuestionOptionController {
         try {
             QuestionOption questionOption = questionOptionService.findById(id);
             questionOptionService.delete(id);
-            questionService.updateJonson(questionOption.getQuestion().getId());
+            questionService.updateJson(questionOption.getQuestion().getId());
             ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body("Question Option id =" + id + " is deleted");
 
             return responseEntity;

@@ -1,6 +1,6 @@
 package eu.fp7.driver.ost.driver.repository.specification;
 
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.model.ObservationType;
 import eu.fp7.driver.ost.driver.model.ObservationTypeTrialRole;
 import eu.fp7.driver.ost.driver.model.ObservationTypeTrialRole_;
@@ -41,8 +41,8 @@ public class ObservationTypeSpecification {
         };
     }
 
-    public static Specification<ObservationType> user(AuthUser authUser, TrialSession trialSession) {
-        if (authUser == null) {
+    public static Specification<ObservationType> user(String keycloakUserId, TrialSession trialSession) {
+        if (keycloakUserId == null) {
             return null;
         }
 
@@ -56,7 +56,7 @@ public class ObservationTypeSpecification {
 
             return cb.and(
                     cb.equal(trialSessionUserRoleSessionJoin.get(UserRoleSession_.trialSession), trialSession),
-                    cb.equal(trialUserJoin.get(TrialUser_.authUser), authUser),
+                    cb.equal(trialUserJoin.get(TrialUser_.keycloakUserId), keycloakUserId),
                     cb.equal(root.get(ObservationType_.trialStage), trialSession.getLastTrialStage()),
                     cb.equal(trialSessionUserRoleSessionJoin.get(UserRoleSession_.trialRole), observationTypeObservationTypeTrialRoleJoin.get(ObservationTypeTrialRole_.trialRole))
             );

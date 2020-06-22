@@ -157,7 +157,7 @@ export const getUsersList = () => {
     return new Promise(resolve =>
       axios
         .get(
-          `${origin}/api/auth/users?page=0&size=150&sort=login,asc&sort=lastName,desc`,
+          `${origin}/api/auth/users/active`,
           getHeaders()
         )
         .then(response => {
@@ -220,7 +220,7 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       id: action.data.id,
-      sessionName: action.data.name,
+      sessionName: action.data.trialSessionName,
       status: action.data.status,
       stageId: action.data.lastTrialStageId,
       stageName: action.data.lastTrialStageName,
@@ -233,7 +233,7 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       id: action.data.id,
-      sessionName: action.data.name,
+      sessionName: action.data.trialSessionName,
       status: action.data.status,
       manual: action.data.manualStageChange,
       stageId: action.data.lastTrialStageId
@@ -253,7 +253,7 @@ const ACTION_HANDLERS = {
   [GET_USERS_LIST]: (state, action) => {
     return {
       ...state,
-      usersList: action.data.data
+      usersList: action.data
     }
   },
   [ADD_USER]: (state, action) => {

@@ -110,6 +110,7 @@ idea {
 
 repositories {
     maven {
+        mavenCentral()
         url 'https://repo.maven.apache.org/maven2/'
         jcenter()
         maven { url 'https://raw.github.com/DRIVER-EU/maven-repo/master' }
@@ -131,6 +132,9 @@ dependencies {
     //Apache POI Excel-parse
     compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.0'
+
+    // https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl
+    compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
 
     // Swagger-UI
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
@@ -172,22 +176,19 @@ dependencies {
     compile("org.apache.lucene:lucene-core:${luceneVersion}")
     compile("org.apache.lucene:lucene-queryparser:${luceneVersion}")
 
-    // PerPixel
-    // compile("${perpixelGroupName}:perpixel-spring-annotation:${perpixelSpringAnnotationVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-dto:${perpixelSpringDtoVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-exception:${perpixelSpringDtoVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-persistence:${perpixelSpringPersistenceVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-security:${perpixelSpringSecurityVersion}")
-    // compile("${perpixelGroupName}:perpixel-spring-utils:${perpixelSpringUtilsVersion}")
-
     // javax mail
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.0'
 
     // TestBed
-    compile("driver.eu:testbed-adapter:1.2.24")
+    compile("driver.eu:testbed-adapter:2.0.4")
 
-    // Keycloak
-    compile("org.keycloak:keycloak-authz-client:${KEYCLOAK_VERSION}")
+    //Keycloak
+    compile("org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}")
+    compile group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '3.3.0.Final', ext: 'pom'
+    compile group: 'org.keycloak', name: 'keycloak-adapter-core', version: '9.0.3'
+    compile group: 'org.keycloak', name: 'keycloak-admin-client', version: '9.0.3'
+
+
 
     // ----------------------------------------
     // Test
@@ -199,6 +200,8 @@ dependencies {
     // Java JsonPath
     testCompile("com.jayway.jsonpath:json-path:${jsonpathVersion}")
 
+
+
     // ----------------------------------------
     // Integration Test
     // ----------------------------------------
@@ -206,6 +209,7 @@ dependencies {
     // Apache HTTP Client
     integrationTestCompile("org.apache.httpcomponents:httpclient:${httpclientVersion}")
 }
+
 
 // ----------------------------------------
 // TASKS

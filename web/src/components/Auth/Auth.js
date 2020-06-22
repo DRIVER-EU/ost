@@ -13,7 +13,7 @@ class Auth extends Component {
     }
   }
   static propTypes = {
-    checkLogin: PropTypes.func,
+    // checkLogin: PropTypes.func,
     isLoggedIn: PropTypes.any
   }
 
@@ -29,7 +29,7 @@ class Auth extends Component {
   }
 
   componentWillMount () {
-    this.props.checkLogin()
+    // this.props.checkLogin()
     browserHistory.listen(location => {
       if (location.pathname !== '/') {
         if (!this.props.isLoggedIn && !this.isPublicLocation()) {

@@ -1,7 +1,7 @@
 package eu.fp7.driver.ost.driver.service;
 
 import eu.fp7.driver.ost.core.dto.Dto;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.AnswerEventDTO;
 import eu.fp7.driver.ost.driver.model.Answer;
 import eu.fp7.driver.ost.driver.model.Event;
@@ -38,9 +38,9 @@ public class AnswerEventService {
 
     @Transactional(readOnly = true)
     public List<AnswerEventDTO.Item> getAnswersAndEvents(long trialSessionId) {
-        AuthUser currentUser = trialUserService.getCurrentUser();
-        List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(currentUser, trialSessionId));
-        List<Event> events = eventRepository.findAll(getEventSpecifications(currentUser, trialSessionId));
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(keycloakUserId, trialSessionId));
+        List<Event> events = eventRepository.findAll(getEventSpecifications(keycloakUserId, trialSessionId));
 
         List<AnswerEventDTO.Item> items = getAsAnswersEvents(answers, events);
         items.sort(Comparator.comparing(item -> item.time));
@@ -48,18 +48,18 @@ public class AnswerEventService {
         return items;
     }
 
-    private Specifications<Answer> getAnswerSpecifications(AuthUser authUser, Long trialSessionId) {
+    private Specifications<Answer> getAnswerSpecifications(String keycloakUserId, Long trialSessionId) {
         Set<Specification<Answer>> conditions = new HashSet<>();
-        conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
+        conditions.add(AnswerSpecification.isConnectedToAuthUser(keycloakUserId));
         conditions.add(AnswerSpecification.inTrialSession(trialSessionId));
         conditions.add(AnswerSpecification.inLastTrialStage(trialSessionId));
         conditions.add(AnswerSpecification.isNotDeleted());
         return RepositoryUtils.concatenate(conditions);
     }
 
-    private Specifications<Event> getEventSpecifications(AuthUser authUser, Long trialSessionId) {
+    private Specifications<Event> getEventSpecifications(String keycloakUserId, Long trialSessionId) {
         Set<Specification<Event>> conditions = new HashSet<>();
-        conditions.add(EventSpecification.isConnectedToAuthUser(authUser));
+        conditions.add(EventSpecification.isConnectedToAuthUser(keycloakUserId));
         conditions.add(EventSpecification.inTrialSession(trialSessionId));
         return RepositoryUtils.concatenate(conditions);
     }

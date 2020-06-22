@@ -24,12 +24,14 @@ import java.util.stream.Collectors;
 @Service
 
 public class ExcelImportService {
-    //TODO JKW where to find it ?
-    public static final long TEST_BED_STAGE_ID = 1L;
+
     @Autowired
     TrialRepository trialRepository;
     @Autowired
     TrialStageRepository trialStageRepository;
+
+    @Autowired
+    QuestionService questionService;
 
     @Autowired
     ObservationTypeRepository observationTypeRepository;
@@ -88,8 +90,9 @@ public class ExcelImportService {
                         .position(importExcelTrialAnswerDTO.getPosition())
                         .build();
                 questionOptionRepository.save(questionOption);
+                question.getQuestionOptions().add(questionOption);
             }
-
+            questionService.updateJson(question.getId());
             observationType.getQuestions().add(question);
 
 //        }

@@ -1,7 +1,7 @@
 package eu.fp7.driver.ost.driver.service;
 
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.EventDTO;
 import eu.fp7.driver.ost.driver.model.Event;
 import eu.fp7.driver.ost.driver.model.TrialRole;
@@ -40,15 +40,15 @@ public class EventService {
     private TrialUserService trialUserService;
 
     public Page<Event> findByTrialSessionId(long trialSessionId, Pageable pageable) {
-        AuthUser authUser = trialUserService.getCurrentUser();
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
 
-        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
         return eventRepository.findAllByTrialSessionId(trialSessionId, pageable);
     }
 
     public Event create(EventDTO.FormItem formItem) {
-        AuthUser authUser = trialUserService.getCurrentUser();
-        trialUserService.checkIsTrialSessionManager(authUser, formItem.trialSessionId);
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        trialUserService.checkIsTrialSessionManager(keycloakUserId, formItem.trialSessionId);
 
         TrialSession trialSession = trialSessionRepository.findById(formItem.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, formItem.trialSessionId));

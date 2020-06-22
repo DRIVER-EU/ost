@@ -14,14 +14,13 @@ const mapDispatchToProps = {
 
 const mapStateToProps = state => {
   return {
-    questionDetailId: state.newQuestion.id,
-    questionName: state.newQuestion.questionName,
-    description: state.newQuestion.description,
-    position: state.newQuestion.position,
-    commented: state.newQuestion.commented,
-    required: state.newQuestion.required,
-    option: state.newQuestion.option,
-    answerType: state.newQuestion.answerType,
+    questionDetailId: state.newQuestionDetail.id,
+    description: state.newQuestionDetail.description,
+    position: state.newQuestionDetail.position,
+    commented: state.newQuestionDetail.commented,
+    required: state.newQuestionDetail.required,
+    option: state.newQuestionDetail.option,
+    answerType: state.newQuestionDetail.answerType,
     trialName: state.trialDetail.trialName,
     stageName: state.stageDetail.stageName,
     questionSetName: state.questionDetail.questionName

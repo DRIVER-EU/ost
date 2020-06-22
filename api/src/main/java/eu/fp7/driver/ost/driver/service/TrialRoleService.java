@@ -1,6 +1,6 @@
 package eu.fp7.driver.ost.driver.service;
 
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.TrialRoleDTO;
 import eu.fp7.driver.ost.driver.model.Trial;
 import eu.fp7.driver.ost.driver.model.TrialRole;
@@ -40,8 +40,8 @@ public class TrialRoleService {
     private TrialUserService trialUserService;
 
     public Page<TrialRole> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
-        AuthUser authUser = trialUserService.getCurrentUser();
-        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
 
         Set<Specification<TrialRole>> conditions = new HashSet<>();
         conditions.add(TrialRoleSpecification.trialRole(trialSessionId));

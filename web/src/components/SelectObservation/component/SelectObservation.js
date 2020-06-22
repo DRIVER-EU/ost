@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './SelectObservation.scss'
 import { browserHistory } from 'react-router'
-import { RaisedButton, FontIcon } from 'material-ui'
+import { RaisedButton } from 'material-ui'
 import { List, ListItem } from 'material-ui/List'
 import _ from 'lodash'
 import { toastr } from 'react-redux-toastr'
@@ -35,6 +35,7 @@ class SelectObservation extends Component {
 
   componentWillMount () {
     this.props.getObservations(this.props.params.id)
+    this.props.getViewTrials(this.props.params.id)
     this.interval = setInterval(() => {
       this.props.getViewTrials(this.props.params.id)
     }, 3000)
@@ -133,14 +134,12 @@ class SelectObservation extends Component {
         <div className='pages-box'>
           <div className='view-trials-observation-container'>
             <RaisedButton
-              style={{ float: 'right' }}
+              style={{ position: 'absolute', bottom: 46, right: 34 }}
               buttonStyle={{ width: '240px' }}
               backgroundColor='#244C7B'
               labelColor='#FCB636'
-              label='Back to list of events'
+              label='Go to list of events'
               secondary
-              icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
-                <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
               onClick={this.back.bind(this)}
           /><div style={{ clear: 'both' }} />
             <div className='trial-title'>

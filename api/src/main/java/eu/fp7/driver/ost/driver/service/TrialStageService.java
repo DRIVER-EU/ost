@@ -1,7 +1,7 @@
 package eu.fp7.driver.ost.driver.service;
 
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.AdminTrialStageDTO;
 import eu.fp7.driver.ost.driver.model.Trial;
 import eu.fp7.driver.ost.driver.model.TrialStage;
@@ -35,8 +35,8 @@ public class TrialStageService {
 
     @Transactional(readOnly = true)
     public Page<TrialStage> findByTrialSessionId(Long trialSessionId, Pageable pageable) {
-        AuthUser authUser = trialUserService.getCurrentUser();
-        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
         return trialStageRepository.findAll(getTrialStageSessionSpecifications(trialSessionId), pageable);
     }
 

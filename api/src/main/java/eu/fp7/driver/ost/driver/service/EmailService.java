@@ -1,6 +1,6 @@
 package eu.fp7.driver.ost.driver.service;
 
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.form.UserForm;
 import eu.fp7.driver.ost.driver.util.EmailProperties;
 import org.springframework.stereotype.Service;

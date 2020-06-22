@@ -1,0 +1,12 @@
+{
+    "realm": "driver2",
+    "url": "https://testbed-ost.itti.com.pl/auth",
+    "auth-server-url": "https://testbed-ost.itti.com.pl/auth/",
+    "ssl-required": "external",
+    "resource": "ost_app",
+    "public-client": true,
+    "verify-token-audience": true,
+    "use-resource-role-mappings": true,
+    "confidential-port": 0,
+    "clientId": "ost_app"
+  }

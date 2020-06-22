@@ -3,7 +3,7 @@ package eu.fp7.driver.ost.driver.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.driver.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.AnswerDTO;
 import eu.fp7.driver.ost.driver.model.Answer;
 import eu.fp7.driver.ost.driver.model.AnswerTrialRole;
@@ -107,8 +107,9 @@ public class AnswerService {
         org.everit.json.schema.Schema schema = SchemaLoader.load(jsonObject);
         schema.validate(new JSONObject(form.formData.toString()));
 
-        AuthUser currentUser = trialUserService.getCurrentUser();
-        TrialUser currentTrialUser = trialUserRepository.findByAuthUser(currentUser);
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        TrialUser currentTrialUser = trialUserRepository.findByKeycloakUserId(keycloakUserId)
+                .orElseThrow(() -> new EntityNotFoundException(TrialUser.class));
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.trialSessionId));
 
@@ -136,9 +137,9 @@ public class AnswerService {
     }
 
     public List<Answer> findAll(long trialSessionId, String text) {
-        AuthUser currentUser = trialUserService.getCurrentUser();
+        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
 
-        trialUserService.checkIsTrialSessionManager(currentUser, trialSessionId);
+        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
 
         List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
         if (text != null && !text.equals("")) {
@@ -226,10 +227,10 @@ public class AnswerService {
         return answerTrialRoleRepository.save(answerTrialRoles);
     }
 
-    public Boolean hasAnswer(Long observationTypeId, AuthUser authUser) {
+    public Boolean hasAnswer(Long observationTypeId, String keycloakUserId) {
         Set<Specification<Answer>> conditions = new HashSet<>();
         conditions.add(AnswerSpecification.isAnswerForObservationType(observationTypeId));
-        conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
+        conditions.add(AnswerSpecification.isConnectedToAuthUser(keycloakUserId));
         List<Answer> observationTypes = answerRepository.findAll(RepositoryUtils.concatenate(conditions));
         return !observationTypes.isEmpty();
     }
@@ -273,7 +274,7 @@ public class AnswerService {
                         String.valueOf(answer.getTrialSession().getTrial().getName()),
                         String.valueOf(trialSessionId),
                         answer.getSentSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
-                        answer.getTrialUser().getAuthUser().getFirstName() + " " + answer.getTrialUser().getAuthUser().getLastName(),
+                        answer.getTrialUser().getKeycloakUserId().toString(),
                         answer.getTrialUser().getUserRoleSessions().get(0).getTrialRole().getName(),
                         Long.toString(answer.getObservationType().getId()),
                         answer.getObservationType().getName(),

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import eu.fp7.driver.ost.core.dto.EntityDto;
 import eu.fp7.driver.ost.driver.model.ObservationType;
 import eu.fp7.driver.ost.driver.model.Question;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
