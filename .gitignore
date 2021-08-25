@@ -3,7 +3,8 @@ target/
 npm-debug.log
 .vscode
 web/dist/
-
+_know/html
+_know/webapps
 
 ### Linux ###
 *~
