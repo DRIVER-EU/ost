@@ -71,7 +71,7 @@ class SaveBtn extends Component {
     } else {
       await this.props.updateTrial(trial)
       this.handleCloseDialog('openSaveDialog')
-      this.props.getTrialDetail(this.props.id)
+      await this.props.getTrialDetail(this.props.id)
     }
   }
   render () {

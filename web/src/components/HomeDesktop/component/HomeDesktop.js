@@ -8,7 +8,9 @@ const styles = {
     height: '100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'white'
+
   }
 }
 
@@ -25,11 +27,12 @@ class HomeDesktop extends Component {
 
   render () {
     return (
-      <div className='main-container'>
+      <div className='main-container' >
         <div className='pages-box'>
           <div style={styles.logoPosition}>
             <div>
-              <img className='img-responsive driver-logo' src='/images/driver-logo.png' />
+//              <img className='img-responsive driver-logo' src='/images/driver-logo.png' />
+             <img className='img-responsive driver-logo' src='/images/ost.png' />
               <LoginPanel
                 isLoggedIn={this.props.isLoggedIn}
                 logIn={this.props.logIn} />

@@ -4,6 +4,7 @@ import AppBar from 'material-ui/AppBar'
 import { List } from 'material-ui/List'
 import UserComponent from '../../Bar/User'
 import './Menu.scss'
+import browserHistory from 'react-router/lib/browserHistory'
 
 class Menu extends Component {
   constructor () {
@@ -15,7 +16,8 @@ class Menu extends Component {
 
   static propTypes = {
     role: PropTypes.string,
-    isLoggedIn: PropTypes.bool
+    isLoggedIn: PropTypes.bool,
+    keycloak: PropTypes.object
   }
   componentWillMount () {
     fetch('/version.txt')
@@ -31,8 +33,12 @@ class Menu extends Component {
           style={{ backgroundColor: 'white', height: 74 }}
           iconElementLeft={
             <div style={{ display: 'flex' }} className='menu__info'>
-              <a href='/' style={{ display: 'flex', alignItems: 'center' }}>
-                <img className='img-responsive pull-left logo' src='/images/driver-mini-logo.png' />
+              <a
+                onClick={() => this.props.isLoggedIn && browserHistory.push('/')}
+                style={{ display: 'flex',
+                  alignItems: 'center',
+                  cursor: this.props.isLoggedIn ? 'pointer' : 'default' }}>
+                <img className='img-responsive pull-left logo' src='/images/ost.png' />
                 <span className='driver-title'>
                   Observer Support Tool
                 </span>
@@ -43,7 +49,7 @@ class Menu extends Component {
           iconElementRight={
             this.props.isLoggedIn &&
             <List style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-              <UserComponent role={this.props.role} activeClassName='route--active' />
+              <UserComponent role={this.props.role} keycloak={this.props.keycloak} activeClassName='route--active' />
             </List>
           }
   />

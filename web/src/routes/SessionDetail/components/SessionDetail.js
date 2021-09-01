@@ -28,7 +28,10 @@ class SessionDetailView extends Component {
     getUsersList: PropTypes.func,
     addUser: PropTypes.func,
     removeUser: PropTypes.func,
-    manual: PropTypes.bool
+//    manual: PropTypes.bool
+    manual: PropTypes.bool,
+    sessionName: PropTypes.string
+
   }
 
   render () {
@@ -57,6 +60,7 @@ class SessionDetailView extends Component {
           addUser={this.props.addUser}
           removeUser={this.props.removeUser}
           manual={this.props.manual}
+          sessionName={this.props.sessionName}
         />
       </div>
     )

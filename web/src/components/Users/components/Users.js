@@ -33,9 +33,8 @@ class Users extends Component {
       emailError: false,
       contact: '',
       contactError: false,
-      activated: false,
+      activated: true,
       rolesIds: null,
-      positionId: null,
       isAdmin: false
     }
   }
@@ -59,6 +58,13 @@ class Users extends Component {
   }
 
   componentDidUpdate (prevProps) {
+    if (_.isEqual(prevProps.allUsersList, this.props.allUsersList) &&
+        this.props.allUsersList &&
+        this.props.allUsersList.data &&
+        this.props.allUsersList.data.length &&
+        _.isEmpty(this.state.usersOptions)) {
+      this.handleUsers(this.props.allUsersList.data)
+    }
     if (!_.isEqual(prevProps.allUsersList, this.props.allUsersList)) {
       if (this.props.allUsersList.data && this.props.allUsersList.data.length) {
         this.handleUsers(this.props.allUsersList.data)
@@ -142,7 +148,6 @@ class Users extends Component {
     user.email = selectedUser.email ? selectedUser.email : ''
     user.contact = selectedUser.contact ? selectedUser.contact : ''
     user.rolesIds = selectedUser.roles && selectedUser.roles[0] ? [selectedUser.roles[0].id] : null
-    user.positionId = selectedUser.position && selectedUser.position.id ? selectedUser.position.id : null
     user.password = ''
     user.passwordConfirmation = ''
     this.setState({
@@ -243,15 +248,14 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        rolesIds: user.rolesIds,
-        positionId: user.positionId
+        rolesIds: user.rolesIds
       }
       this.props.putUser(updatedUser, userId)
       if (user.password !== '' && user.passwordConfirmation !== '') {
         this.props.putUserPassword(userId, { password: user.password })
       }
     } else {
-      const role = user.isAdmin ? 1 : 2
+      const role = user.isAdmin ? 'ost_admin' : 'ost_observer'
       const updatedUser = {
         login: user.login,
         password: user.password,
@@ -260,8 +264,7 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        rolesIds: [role],
-        positionId: 2
+        roles: [role]
       }
       this.props.addUser(updatedUser)
     }
@@ -303,28 +306,33 @@ class Users extends Component {
   render () {
     const columns = [
       {
-        Header: 'User List',
+        Header: 'Users',
         columns: [
           {
             Header: 'Id',
             accessor: 'id',
+            style: { textAlign: 'right' },
             width: 90
           },
           {
             Header: 'Login',
-            accessor: 'login'
+            accessor: 'login',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'FirstName',
-            accessor: 'firstName'
+            accessor: 'firstName',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'LastName',
-            accessor: 'lastName'
+            accessor: 'lastName',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Deleted',
-            accessor: 'deleted'
+            accessor: 'deleted',
+            style: { textAlign: 'left' }
           }
         ]
       }
@@ -349,9 +357,14 @@ class Users extends Component {
     const isFormValid = this.isFormValid()
     const isSelectedUser = !this.isSelectedUser()
     return (
-      <div className='users-container users-wrapper'>
-        <div style={{ width: '100%', height: '100%' }}>
-          {this.props.allUsersListLoading
+      <div className='main-container'>
+        <div className='pages-box'>
+          <div className='users-container'>
+            <div>
+              <div className='users-header'>
+                <div className={'user-select'}>User List</div>
+              </div>
+              {this.props.allUsersListLoading
           ? <div className='spinner-box'>
             <div className={'spinner'}>
               <Spinner
@@ -398,31 +411,25 @@ class Users extends Component {
                 }
               }
             }} />}
-        </div>
-        <div className='users-btn-container'>
-          <a href='admin-home'>
-            <RaisedButton
-              buttonStyle={{ width: '200px' }}
-              backgroundColor='#244C7B'
-              labelColor='#FCB636'
-              label='Back'
-              type='button' />
-          </a>
-          <RaisedButton
-            onClick={() => this.handleAddUser('newUser')}
-            buttonStyle={{ width: '200px', marginLeft: '25px' }}
-            backgroundColor='#244C7B'
-            labelColor='#FCB636'
-            label='+ New'
-            type='button' />
-          <RaisedButton
-            disabled={isSelectedUser}
-            onClick={() => this.handleEditUser('editUser')}
-            buttonStyle={{ width: '200px', marginLeft: '25px' }}
-            backgroundColor='#244C7B'
-            labelColor='#FCB636'
-            label='Edit'
-            type='button' />
+            </div>
+            <div className='action-btns'>
+              <RaisedButton
+                onClick={() => this.handleAddUser('newUser')}
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='+ New'
+                type='button' />
+              <RaisedButton
+                disabled={isSelectedUser}
+                onClick={() => this.handleEditUser('editUser')}
+                buttonStyle={{ width: '200px' }}
+                backgroundColor='#244C7B'
+                labelColor='#FCB636'
+                label='Edit'
+                type='button' />
+            </div>
+          </div>
         </div>
         {isUserDetailsOpen && this.props.isUserLoading
         ? <div className='users-spinner-fixed'>

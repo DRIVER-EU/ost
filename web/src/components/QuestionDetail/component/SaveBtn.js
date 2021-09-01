@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import browserHistory from 'react-router/lib/browserHistory'
 import WarningModal, { checkInputs, inputValidationRegex } from '../../NewObservationComponent/component/WarningModal'
+import _ from 'lodash'
 
 class SaveBtn extends Component {
   constructor (props) {
@@ -33,6 +34,20 @@ class SaveBtn extends Component {
     questionId: PropTypes.any,
     inputsValue: PropTypes.array
   }
+    componentWillReceiveProps (nextProps) {
+      if (!_.isEqual(nextProps.questionName, this.props.questionName)) {
+        this.setState({
+          questionName: nextProps.questionName
+        })
+      }
+      if (!_.isEqual(nextProps.description, this.props.description)) {
+        this.setState({
+          description: nextProps.description
+        })
+      }
+    }
+
+
   handleOpenDialog (name) {
     let change = {}
     change[name] = true
@@ -47,9 +62,11 @@ class SaveBtn extends Component {
 
   async dialogAccepted (question) {
     if (!this.state.new) {
-      this.props.updateQuestion(question)
+//      this.props.updateQuestion(question)
+      await this.props.updateQuestion(question)
       this.handleCloseDialog('openSaveDialog')
-      this.props.getQuestion(this.props.questionDetailId)
+//      this.props.getQuestion(this.props.questionDetailId)
+      await this.props.getQuestion(this.props.questionDetailId)
     } else {
       await this.props.addNewQuestion(question)
       let questionId = this.props.questionId
@@ -91,8 +108,10 @@ class SaveBtn extends Component {
   render () {
     let question = {
       id: this.props.questionDetailId || 0,
-      name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
-      description: this.state.description === '' ? this.props.description : this.state.description,
+//      name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
+  //    description: this.state.description === '' ? this.props.description : this.state.description,
+        name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
+        description: this.state.description === '' ? this.props.description : this.state.description,
       commented: this.props.commented,
       position: parseInt(this.props.position),
       answerType: this.props.answerType,

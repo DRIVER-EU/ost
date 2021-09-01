@@ -145,11 +145,15 @@ class TrialManager extends Component {
           {
             Header: 'Id',
             accessor: 'id',
-            width: 100
+            width: 100,
+            style: { textAlign: 'right' }
+
           },
           {
             Header: 'Name',
-            accessor: 'name'
+            accessor: 'name',
+            style: { textAlign: 'left' }
+
           }
         ]
       }

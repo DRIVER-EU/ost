@@ -38,26 +38,36 @@ class ActiveSessions extends Component {
           {
             Header: 'Id',
             accessor: 'id',
-            width: 100
+            width: 100,
+                        style: { textAlign: 'right' }
           },
           {
             Header: 'Name',
-            accessor: 'trialName'
+//            accessor: 'trialName'
+            accessor: 'trialSessionName',
+            style: { textAlign: 'left' }
+
           },
           {
             Header: 'Actual Stage Name',
-            accessor: 'lastTrialStage'
+            accessor: 'lastTrialStage',
+            style: { textAlign: 'left' }
+
           },
           {
             Header: 'Manual',
             accessor: 'manualStageChange',
             Cell: props => (
               <span className='manual'>{props.value ? 'yes' : 'no'}</span>
-            )
+            ),
+            style: { textAlign: 'left' }
+
           },
           {
             Header: 'Status',
-            accessor: 'status'
+            accessor: 'status',
+            style: { textAlign: 'left' }
+
           }
         ]
       }

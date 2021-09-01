@@ -103,15 +103,18 @@ class UserRole extends Component {
           {
             Header: 'Id',
             accessor: 'id.trialUserId',
-            width: 100
+            width: 100,
+            style: { textAlign: 'right' }
           },
           {
             Header: 'User name',
-            accessor: 'trialUserName'
+            accessor: 'trialUserName',
+            style: { textAlign: 'left' }
           },
           {
             Header: 'Role name',
-            accessor: 'trialRoleName'
+            accessor: 'trialRoleName',
+            style: { textAlign: 'left' }
           }
         ]
       }

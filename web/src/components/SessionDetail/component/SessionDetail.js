@@ -12,6 +12,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
 import Checkbox from 'material-ui/Checkbox'
 import FlatButton from 'material-ui/FlatButton'
+import { browserHistory } from 'react-router'
 
 class SessionDetail extends Component {
   constructor (props) {
@@ -66,7 +67,13 @@ class SessionDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
-    change[name] = e.target.value
+//    change[name] = e.target.value
+    if (name === 'sessionName') {
+      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
+    } else {
+      change[name] = e.target.value
+    }
+
     this.setState(change)
   }
   componentWillReceiveProps (nextProps) {
@@ -235,7 +242,10 @@ class SessionDetail extends Component {
               <h1 className='header__text'>Session</h1>
               <a
                 className='header__link'
-                href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                //href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
+
               >
                 {this.props.trialName}
               </a>
@@ -248,11 +258,13 @@ class SessionDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
+                  disabled
                 />
                 <TextField
                   type='name'
                   onChange={this.handleChangeInput.bind(this, 'sessionName')}
-                  value={this.props.trialName}
+                  //value={this.props.trialName}
+                  value={this.state.sessionName}
                   floatingLabelText='Name'
                   fullWidth
                 />

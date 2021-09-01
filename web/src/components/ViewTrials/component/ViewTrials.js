@@ -4,7 +4,7 @@ import DateComponent from '../../DateComponent/DateComponent'
 import WarningModal from '../../NewObservationComponent/component/WarningModal'
 import './ViewTrials.scss'
 import { Accordion, AccordionItem } from 'react-sanfona'
-import { RaisedButton, FontIcon } from 'material-ui'
+import { RaisedButton } from 'material-ui'
 import { browserHistory } from 'react-router'
 // import FloatingActionButton from 'material-ui/FloatingActionButton'
 // import ContentAdd from 'material-ui/svg-icons/content/add'
@@ -295,15 +295,17 @@ class ViewTrials extends Component {
               })}
             </Accordion>
             <RaisedButton
-              style={{ float: 'right' }}
+ //             style={{ float: 'right' }}
+              style={{ position: 'absolute', bottom: 46, right: 34 }}
               className={'observation-add'}
               buttonStyle={{ width: '240px' }}
               backgroundColor='#244C7B'
               labelColor='#FCB636'
-              label='Back to questions'
+//              label='Back to questions'
+              label='Go to questions'
               secondary
-              icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
-                <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
+//              icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
+//                <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
               onClick={this.newObservation.bind(this)} />
           </div>
           <SummaryOfObservationModal
@@ -320,17 +322,30 @@ class ViewTrials extends Component {
           title='Do you want to remove this answer?'
           actions={actions}
           modal={false}
+          autoDetectWindowHeight
+          autoScrollBodyContent
           open={this.state.open}
           onRequestClose={this.handleClose}>
-          The answer will be permanently deleted. Please provide, why do you want to remove it:
-            <TextField
-              value={this.state.answerRemove}
-              hintText='enter the answer'
-              errorText={this.state.answerRemoveErrorText}
-              multiLine
-              fullWidth
-              rows={3}
-              onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
+//          The answer will be permanently deleted. Please provide, why do you want to remove it:
+//            <TextField
+//              value={this.state.answerRemove}
+//              hintText='enter the answer'
+//              errorText={this.state.answerRemoveErrorText}
+//              multiLine
+//              fullWidth
+//              rows={3}
+//              onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
+          <div style={{ marginTop: 20 }}>
+            The answer will be permanently deleted. Please provide, why do you want to remove it:
+          </div>
+          <TextField
+            value={this.state.answerRemove}
+            hintText='enter the answer'
+            errorText={this.state.answerRemoveErrorText}
+            multiLine
+            fullWidth
+            rows={3}
+            onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
         </Dialog>
         <Dialog
           title='Comment'

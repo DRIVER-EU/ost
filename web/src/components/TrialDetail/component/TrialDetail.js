@@ -43,7 +43,13 @@ class TrialDetail extends Component {
   }
   handleChangeInput (name, e) {
     let change = {}
-    change[name] = e.target.value
+//    change[name] = e.target.value
+    if (name === 'trialName') {
+      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
+    } else {
+      change[name] = e.target.value
+    }
+
     this.setState(change)
   }
   getTrialDetail = async(id) => {
@@ -100,6 +106,7 @@ class TrialDetail extends Component {
                   }
                   floatingLabelText='Id'
                   fullWidth
+                  disabled
                   underlineShow={false}
                 />
                 <TextField

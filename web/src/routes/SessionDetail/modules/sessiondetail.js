@@ -220,7 +220,8 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       id: action.data.id,
-      sessionName: action.data.name,
+//      sessionName: action.data.name,
+      sessionName: action.data.trialSessionName,
       status: action.data.status,
       stageId: action.data.lastTrialStageId,
       stageName: action.data.lastTrialStageName,
@@ -233,7 +234,8 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       id: action.data.id,
-      sessionName: action.data.name,
+//      sessionName: action.data.name,
+      sessionName: action.data.trialSessionName,
       status: action.data.status,
       manual: action.data.manualStageChange,
       stageId: action.data.lastTrialStageId
