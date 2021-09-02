@@ -181,10 +181,12 @@ public class TrialSessionService {
 
             trialSession.setLastTrialStage(trialStage);
         }
+        trialSession.setName(sessionDTO.trialSessionName);
         trialSession.setStatus(sessionDTO.status);
         trialSession.setIsManualStageChange(sessionDTO.isManualStageChange());
         return trialSessionRepository.save(trialSession);
     }
+
 
     public TrialSession insert(TrialSessionDTO.AdminEditItem sessionDTO) {
 
@@ -192,12 +194,16 @@ public class TrialSessionService {
 
         Trial trial = trialRepository.findById(sessionDTO.trialId)
                 .orElseThrow(() -> new EntityNotFoundException(Trial.class, sessionDTO.trialId));
-        if(trial.getTrialStages().size() >0)
-        {
-            trialStage = trial.getTrialStages().get(0);
-        }
+//        if(trial.getTrialStages().size() >0)
+//        {
+//            trialStage = trial.getTrialStages().get(0);
+//        }
+        trialStage = trial.getTrialStages().stream().findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(TrialStage.class));
+
 
         TrialSession trialSession = TrialSession.builder().trial(trial)
+                .name(sessionDTO.trialSessionName)
                 .startTime(LocalDateTime.now())
                 .status(SessionStatus.ACTIVE)
                 .pausedTime(LocalDateTime.now())
