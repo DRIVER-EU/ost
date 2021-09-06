@@ -6,7 +6,6 @@ import Spinner from 'react-spinkit'
 import { List, ListItem } from 'material-ui/List'
 import IconInfo from 'material-ui/svg-icons/action/info'
 
-
 class Trials extends Component {
   constructor (props) {
     super(props)
@@ -23,7 +22,7 @@ class Trials extends Component {
   }
 
   componentWillMount () {
-      this.props.getTrials()
+    this.props.getTrials()
     let interval = setInterval(() => {
       this.props.getTrials()
     }, 5000)
@@ -31,6 +30,10 @@ class Trials extends Component {
       interval: interval,
       isLoading: true
     })
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.state.interval)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -47,7 +50,6 @@ class Trials extends Component {
   }
 
   viewTrial (id) {
-//    browserHistory.push(`/trials/${id}`)
     browserHistory.push(`/trials/${id}/select-observation`)
   }
 
@@ -76,33 +78,6 @@ class Trials extends Component {
             }
             {(!this.state.isLoading && this.state.listOfTrials.length === 0) &&
             <div className={'no-sessions'}> No trial sessions available</div>}
-//            <Accordion>
-//              {this.state.listOfTrials.map((object) => {
-//                return (
-//                  <AccordionItem key={object.id} disabled={object.status !== 'ACTIVE'}
-//                    title={<div className={'react-sanfona-item-title cursor-pointer'}><h3>
-//                      {object.trialName}</h3>
-//                      <h5 style={{ margin: '4px 0 10px' }}>
-//                //        session: #{object.id} stage: {object.name}
-//                        session: {object.trialSessionName} stage: {object.name}
-//                      </h5>
-//                      <div className={'desc'}>{this.getShortDesc(object.trialDescription)}</div>
-//                    </div>} expanded={false} >
-//                    <div>
-//                      <p>{object.trialDescription}</p>
-//                      <div style={{ display: 'table', margin: '0 auto' }}>
-//                        <RaisedButton
-//                          buttonStyle={{ width: '200px' }}
-//                          backgroundColor='#244C7B'
-//                          labelColor='#FCB636'
-//                          onClick={this.viewTrial.bind(this, object.id)}
-//                          label='Enter' />
-//                      </div>
-//                    </div>
-//                  </AccordionItem>
-//                )
-//              })}
-//            </Accordion>
             <List style={{ width: '100%' }}>
               {this.state.listOfTrials && this.state.listOfTrials.map((object, index) => (
                 <div

@@ -295,17 +295,13 @@ class ViewTrials extends Component {
               })}
             </Accordion>
             <RaisedButton
- //             style={{ float: 'right' }}
               style={{ position: 'absolute', bottom: 46, right: 34 }}
               className={'observation-add'}
               buttonStyle={{ width: '240px' }}
               backgroundColor='#244C7B'
               labelColor='#FCB636'
-//              label='Back to questions'
               label='Go to questions'
               secondary
-//              icon={<FontIcon className='material-icons' style={{ margin: 0 }}>
-//                <i className='material-icons'>keyboard_arrow_left</i></FontIcon>}
               onClick={this.newObservation.bind(this)} />
           </div>
           <SummaryOfObservationModal
@@ -326,15 +322,6 @@ class ViewTrials extends Component {
           autoScrollBodyContent
           open={this.state.open}
           onRequestClose={this.handleClose}>
-//          The answer will be permanently deleted. Please provide, why do you want to remove it:
-//            <TextField
-//              value={this.state.answerRemove}
-//              hintText='enter the answer'
-//              errorText={this.state.answerRemoveErrorText}
-//              multiLine
-//              fullWidth
-//              rows={3}
-//              onChange={this.handleChangeTextField.bind(this, 'answerRemove')} />
           <div style={{ marginTop: 20 }}>
             The answer will be permanently deleted. Please provide, why do you want to remove it:
           </div>
