@@ -34,19 +34,18 @@ class SaveBtn extends Component {
     questionId: PropTypes.any,
     inputsValue: PropTypes.array
   }
-    componentWillReceiveProps (nextProps) {
-      if (!_.isEqual(nextProps.questionName, this.props.questionName)) {
-        this.setState({
-          questionName: nextProps.questionName
-        })
-      }
-      if (!_.isEqual(nextProps.description, this.props.description)) {
-        this.setState({
-          description: nextProps.description
-        })
-      }
+  componentWillReceiveProps (nextProps) {
+    if (!_.isEqual(nextProps.questionName, this.props.questionName)) {
+      this.setState({
+        questionName: nextProps.questionName
+      })
     }
-
+    if (!_.isEqual(nextProps.description, this.props.description)) {
+      this.setState({
+        description: nextProps.description
+      })
+    }
+  }
 
   handleOpenDialog (name) {
     let change = {}
@@ -110,8 +109,8 @@ class SaveBtn extends Component {
       id: this.props.questionDetailId || 0,
 //      name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
   //    description: this.state.description === '' ? this.props.description : this.state.description,
-        name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
-        description: this.state.description === '' ? this.props.description : this.state.description,
+      name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
+      description: this.state.description === '' ? this.props.description : this.state.description,
       commented: this.props.commented,
       position: parseInt(this.props.position),
       answerType: this.props.answerType,

@@ -1,0 +1,13 @@
+FROM gradle:7.2-jdk8 AS builder
+COPY ./api/ ./api/
+WORKDIR api
+RUN ./gradlew -g ./cache/gradle clean assemble -i
+
+FROM drivereu/ost_backend:20200325
+ENV OST_DB_HOST=$OST_DB_HOST
+ENV OST_DB_PORT=$OST_DB_PORT
+ENV OST_DB_NAME=$OST_DB_NAME
+ENV DRIVER_IS_TESTBED_ON=$DRIVER_IS_TESTBED_ON
+RUN rm -r /usr/local/tomcat/webapps/ROOT
+RUN rm -r /usr/local/tomcat/webapps/ROOT.war
+COPY --from=builder /home/gradle/api/build/libs/driver-api-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war

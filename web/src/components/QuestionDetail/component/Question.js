@@ -122,16 +122,15 @@ class Question extends Component {
                 <a
                   className='header__link'
                  // href={`/trial-manager/trial-detail/${this.props.trialId}`}
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
-                                >
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}>
                   {this.props.trialName}
                 </a>
                 <a
                   className='header__link'
  //                 href={`/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`}
-                   style={{ cursor: 'pointer' }}
-                   onClick={() => browserHistory.push(
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(
                      `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`)}
 
                 >
@@ -140,8 +139,8 @@ class Question extends Component {
                 <a
                   className='header__link'
    //               href={questionPath}
-                     style={{ cursor: 'pointer' }}
-                     onClick={() => browserHistory.push(questionPath)}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(questionPath)}
 
                 >
                   {this.props.questionSetName}

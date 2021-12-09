@@ -242,9 +242,9 @@ class SessionDetail extends Component {
               <h1 className='header__text'>Session</h1>
               <a
                 className='header__link'
-                //href={`/trial-manager/trial-detail/${this.props.trialId}`}
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
+                // href={`/trial-manager/trial-detail/${this.props.trialId}`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
 
               >
                 {this.props.trialName}
@@ -263,7 +263,7 @@ class SessionDetail extends Component {
                 <TextField
                   type='name'
                   onChange={this.handleChangeInput.bind(this, 'sessionName')}
-                  //value={this.props.trialName}
+                  // value={this.props.trialName}
                   value={this.state.sessionName}
                   floatingLabelText='Name'
                   fullWidth

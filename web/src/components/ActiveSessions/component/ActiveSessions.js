@@ -39,7 +39,7 @@ class ActiveSessions extends Component {
             Header: 'Id',
             accessor: 'id',
             width: 100,
-                        style: { textAlign: 'right' }
+            style: { textAlign: 'right' }
           },
           {
             Header: 'Name',

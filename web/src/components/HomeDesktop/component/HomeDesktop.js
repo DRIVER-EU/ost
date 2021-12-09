@@ -31,8 +31,7 @@ class HomeDesktop extends Component {
         <div className='pages-box'>
           <div style={styles.logoPosition}>
             <div>
-//              <img className='img-responsive driver-logo' src='/images/driver-logo.png' />
-             <img className='img-responsive driver-logo' src='/images/ost.png' />
+              <img className='img-responsive driver-logo' src='/images/ost.png' />
               <LoginPanel
                 isLoggedIn={this.props.isLoggedIn}
                 logIn={this.props.logIn} />

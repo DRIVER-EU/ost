@@ -134,18 +134,16 @@ class QuestionDetail extends Component {
               <div>
                 <a
                   className='header__link'
-                  //href={`/trial-manager/trial-detail/${this.props.trialId}`}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
-
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
                 >
                   {this.props.trialName}
                 </a>
                 <a
                   className='header__link'
       //            href={
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => browserHistory.push(
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => browserHistory.push(
 
                     this.props.roleId
 //                      ? `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
