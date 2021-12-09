@@ -4,8 +4,8 @@ import './RoleDetail.scss'
 import TextField from 'material-ui/TextField'
 import SaveBtn from './SaveBtn'
 import RemoveBtn from './RemoveBtn'
-// import SelectField from 'material-ui/SelectField'
-// import MenuItem from 'material-ui/MenuItem'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
 import ReactTable from 'react-table'
 // import RaisedButton from 'material-ui/RaisedButton'
 import Checkbox from 'material-ui/Checkbox'
@@ -18,11 +18,11 @@ class RoleDetail extends Component {
     this.state = {
       roleId: '',
       name: this.props.roleName || '',
-      // roleTypes: [
-      //   { id: 'PARTICIPANT', name: 'PARTICIPANT' },
-      //   { id: 'OBSERVER', name: 'OBSERVER' }
-      // ],
-      // selectedCurrentRoleType: this.props.roleType || 'OBSERVER',
+      roleTypes: [
+        { id: 'PARTICIPANT', name: 'PARTICIPANT' },
+        { id: 'OBSERVER', name: 'OBSERVER' }
+      ],
+      electedCurrentRoleType: this.props.roleType || 'OBSERVER',
       selectedCurrentRoleType: 'OBSERVER',
       questionsList: this.props.questions,
       selectedQuestion: null,
@@ -45,7 +45,7 @@ class RoleDetail extends Component {
     removeRole: PropTypes.func,
     getRoleById: PropTypes.func,
     addNewRole: PropTypes.func,
-    // roleType: PropTypes.string,
+    roleType: PropTypes.string,
     questions: PropTypes.array,
     userRoles: PropTypes.array,
     roleSet: PropTypes.array,
@@ -72,7 +72,7 @@ class RoleDetail extends Component {
     this.setState({
       name: nextProps.roleName,
       roleId: nextProps.roleId,
-      // selectedCurrentRoleType: nextProps.roleType,
+      selectedCurrentRoleType: nextProps.roleType,
       questionsList: nextProps.questions,
       userRoles: nextProps.userRoles,
       roleSet: nextProps.roleSet,
@@ -80,9 +80,9 @@ class RoleDetail extends Component {
       unassignedQuestions: nextProps.unassignedQuestions
     })
   }
-  // handleChangeCurrentRoleType = (event, index, value) => {
-  //   this.setState({ selectedCurrentRoleType: value })
-  // };
+  handleChangeCurrentRoleType = (event, index, value) => {
+    this.setState({ selectedCurrentRoleType: value })
+  };
   componentDidMount () {
     if (this.props.getTrialDetail) {
       this.props.getTrialDetail(this.props.trialId)
@@ -149,24 +149,24 @@ class RoleDetail extends Component {
             accessor: 'name',
             style: { textAlign: 'left' }
           },
-          // {
-          //   Header: 'Position',
-          //   accessor: 'position',
-          //   style: { textAlign: 'left' }
-          // },
-          // {
-          //   Header: 'Unassign',
-          //   Cell: props => (
-          //     <RaisedButton
-          //       backgroundColor='#FCB636'
-          //       labelColor='#fff'
-          //       label='Unassign'
-          //       type='Button'
-          //       onClick={this.unassignQuestion.bind(this, props.original.id)}
-          //     />
-          //   ),
-          //   width: 200
-          // }
+          {
+            Header: 'Position',
+            accessor: 'position',
+            style: { textAlign: 'left' }
+          },
+          {
+            Header: 'Unassign',
+            Cell: props => (
+              <RaisedButton
+                backgroundColor='#FCB636'
+                labelColor='#fff'
+                label='Unassign'
+                type='Button'
+                onClick={this.unassignQuestion.bind(this, props.original.id)}
+              />
+             ),
+             width: 200
+           }
           {
             Header: 'Assigned',
             Cell: props => (
@@ -273,7 +273,7 @@ class RoleDetail extends Component {
                   fullWidth
                 />
                 <div>
-                  {/* <SelectField
+                  {<SelectField
                     floatingLabelText='Role Type'
                     value={this.state.selectedCurrentRoleType}
                     onChange={this.handleChangeCurrentRoleType}
@@ -285,7 +285,7 @@ class RoleDetail extends Component {
                         primaryText={role.name}
                       />
                     ))}
-                  </SelectField> */}
+                  </SelectField>}
                 </div>
               </div>
               <div className='btns__wrapper'>
