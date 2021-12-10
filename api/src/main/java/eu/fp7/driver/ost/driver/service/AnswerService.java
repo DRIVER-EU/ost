@@ -102,11 +102,11 @@ public class AnswerService {
     public Answer createAnswer(AnswerDTO.Form form, MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, form.observationTypeId));
-
+/*
         JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
         org.everit.json.schema.Schema schema = SchemaLoader.load(jsonObject);
         schema.validate(new JSONObject(form.formData.toString()));
-
+*/
         AuthUser currentUser = trialUserService.getCurrentUser();
         TrialUser currentTrialUser = trialUserRepository.findByAuthUser(currentUser);
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
