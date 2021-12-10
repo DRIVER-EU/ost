@@ -7,8 +7,7 @@ import RemoveBtn from './RemoveBtn'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import ReactTable from 'react-table'
-// import RaisedButton from 'material-ui/RaisedButton'
-import Checkbox from 'material-ui/Checkbox'
+import RaisedButton from 'material-ui/RaisedButton'
 import { browserHistory } from 'react-router'
 import UserRole from './UserRole'
 
@@ -22,8 +21,7 @@ class RoleDetail extends Component {
         { id: 'PARTICIPANT', name: 'PARTICIPANT' },
         { id: 'OBSERVER', name: 'OBSERVER' }
       ],
-      electedCurrentRoleType: this.props.roleType || 'OBSERVER',
-      selectedCurrentRoleType: 'OBSERVER',
+      selectedCurrentRoleType: this.props.roleType || '',
       questionsList: this.props.questions,
       selectedQuestion: null,
       roleSet: this.props.roleSet,
@@ -58,13 +56,7 @@ class RoleDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
-
-//    change[name] = e.target.value
-    if (name === 'name') {
-      change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
-    } else {
-      change[name] = e.target.value
-    }
+    change[name] = e.target.value
     this.setState(change)
   }
 
@@ -135,24 +127,20 @@ class RoleDetail extends Component {
   render () {
     const columns = [
       {
-        // Header: 'Assigned Question Set',
-        Header: 'Question Set',
+        Header: 'Assigned Question Set',
         columns: [
           {
             Header: 'Id',
             accessor: 'id',
-            width: 100,
-            style: { textAlign: 'right' }
+            width: 100
           },
           {
             Header: 'Name',
-            accessor: 'name',
-            style: { textAlign: 'left' }
+            accessor: 'name'
           },
           {
             Header: 'Position',
-            accessor: 'position',
-            style: { textAlign: 'left' }
+            accessor: 'position'
           },
           {
             Header: 'Unassign',
@@ -164,83 +152,45 @@ class RoleDetail extends Component {
                 type='Button'
                 onClick={this.unassignQuestion.bind(this, props.original.id)}
               />
-             ),
-             width: 200
-           }
-          {
-            Header: 'Assigned',
-            Cell: props => (
-              <Checkbox
-                checked={props.original.assign}
-                onCheck={props.original.assign
-                  ? this.unassignQuestion.bind(this, props.original.id)
-                  : this.assignQuestion.bind(this, props.original.id)}
-                />
-              // props.original.assign
-              // ? <RaisedButton
-              //   backgroundColor='#FCB636'
-              //   labelColor='#fff'
-              //   label='Unassign'
-              //   type='Button'
-              //   onClick={this.unassignQuestion.bind(this, props.original.id)}
-              // />
-              // : <RaisedButton
-              //   backgroundColor='#FCB636'
-              //   labelColor='#fff'
-              //   label='Assign'
-              //   type='Button'
-              //   onClick={this.assignQuestion.bind(this, props.original.id)}
-              // />
             ),
-            width: 100
+            width: 200
           }
         ]
       }
     ]
-    // const columnsUnassignedQuestions = [
-    //   {
-    //     Header: 'Unassigned Question Set',
-    //     columns: [
-    //       {
-    //         Header: 'Id',
-    //         accessor: 'id',
-    //         width: 100,
-    //         style: { textAlign: 'right' }
-    //       },
-    //       {
-    //         Header: 'Name',
-    //         accessor: 'name',
-    //         style: { textAlign: 'left' }
-    //       },
-    //       // {
-    //       //   Header: 'Position',
-    //       //   accessor: 'position',
-    //       //   style: { textAlign: 'left' }
-    //       // },
-    //       {
-    //         Header: 'Assign',
-    //         Cell: props => (
-    //           props.original.assign
-    //           ? <RaisedButton
-    //             backgroundColor='#FCB636'
-    //             labelColor='#fff'
-    //             label='Assign'
-    //             type='Button'
-    //             onClick={this.assignQuestion.bind(this, props.original.id)}
-    //           />
-    //           : <RaisedButton
-    //             backgroundColor='#FCB636'
-    //             labelColor='#fff'
-    //             label='Unassign'
-    //             type='Button'
-    //             onClick={this.unassignQuestion.bind(this, props.original.id)}
-    //           />
-    //         ),
-    //         width: 200
-    //       }
-    //     ]
-    //   }
-    // ]
+    const columnsUnassignedQuestions = [
+      {
+        Header: 'Unassigned Question Set',
+        columns: [
+          {
+            Header: 'Id',
+            accessor: 'id',
+            width: 100
+          },
+          {
+            Header: 'Name',
+            accessor: 'name'
+          },
+          {
+            Header: 'Position',
+            accessor: 'position'
+          },
+          {
+            Header: 'Assign',
+            Cell: props => (
+              <RaisedButton
+                backgroundColor='#FCB636'
+                labelColor='#fff'
+                label='Assign'
+                type='Button'
+                onClick={this.assignQuestion.bind(this, props.original.id)}
+              />
+            ),
+            width: 200
+          }
+        ]
+      }
+    ]
     return (
       <div className='main-container'>
         <div className='pages-box'>
@@ -249,8 +199,7 @@ class RoleDetail extends Component {
               <h1 className='header__text'>Role</h1>
               <a
                 className='header__link'
-                style={{ cursor: 'pointer' }}
-                onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
+                href={`/trial-manager/trial-detail/${this.props.trialId}`}
               >
                 {this.props.trialName}
               </a>
@@ -263,7 +212,6 @@ class RoleDetail extends Component {
                   floatingLabelText='Id'
                   fullWidth
                   underlineShow={false}
-                  disabled
                 />
                 <TextField
                   type='name'
@@ -273,7 +221,7 @@ class RoleDetail extends Component {
                   fullWidth
                 />
                 <div>
-                  {<SelectField
+                  <SelectField
                     floatingLabelText='Role Type'
                     value={this.state.selectedCurrentRoleType}
                     onChange={this.handleChangeCurrentRoleType}
@@ -285,7 +233,7 @@ class RoleDetail extends Component {
                         primaryText={role.name}
                       />
                     ))}
-                  </SelectField>}
+                  </SelectField>
                 </div>
               </div>
               <div className='btns__wrapper'>
@@ -309,6 +257,16 @@ class RoleDetail extends Component {
                 )}
               </div>
             </div>
+            <UserRole
+              userRoles={this.props.userRoles}
+              roleSet={this.props.roleSet}
+              getRoleById={this.props.getRoleById}
+              roleId={this.props.roleId}
+              usersList={this.props.usersList}
+              addUser={this.props.addUser}
+              removeUser={this.props.removeUser}
+              new={this.props.new}
+            />
             <div className='table__wrapper'>
               <ReactTable
                 data={this.state.questionsList}
@@ -325,9 +283,9 @@ class RoleDetail extends Component {
                           selectedQuestion: rowInfo.original
                         })
                       },
-                      // onDoubleClick: e => {
-                      //   this.viewQuestion()
-                      // },
+                      onDoubleClick: e => {
+                        this.viewQuestion()
+                      },
                       style: {
                         background: this.state.selectedQuestion
                           ? rowInfo.original.id ===
@@ -341,7 +299,7 @@ class RoleDetail extends Component {
                   }
                 }}
               />
-              {/* {!this.props.new && (
+              {!this.props.new && (
                 <div className='action-btns'>
                   <RaisedButton
                     buttonStyle={{ width: '200px' }}
@@ -364,9 +322,9 @@ class RoleDetail extends Component {
                     onClick={this.viewQuestion.bind(this)}
                   />
                 </div>
-              )} */}
+              )}
             </div>
-            {/* <div className='table__wrapper'>
+            <div className='table__wrapper'>
               <ReactTable
                 data={this.state.unassignedQuestions}
                 columns={columnsUnassignedQuestions}
@@ -382,9 +340,9 @@ class RoleDetail extends Component {
                           selectedUnassignedQuestion: rowInfo.original
                         })
                       },
-                      // onDoubleClick: e => {
-                      //   this.viewQuestion()
-                      // },
+                      onDoubleClick: e => {
+                        this.viewQuestion()
+                      },
                       style: {
                         background: this.state.selectedUnassignedQuestion
                           ? rowInfo.original.id ===
@@ -397,18 +355,6 @@ class RoleDetail extends Component {
                     }
                   }
                 }}
-              />
-            </div> */}
-            <div className='table__wrapper'>
-              <UserRole
-                userRoles={this.props.userRoles}
-                roleSet={this.props.roleSet}
-                getRoleById={this.props.getRoleById}
-                roleId={this.props.roleId}
-                usersList={this.props.usersList}
-                addUser={this.props.addUser}
-                removeUser={this.props.removeUser}
-                new={this.props.new}
               />
             </div>
           </div>
