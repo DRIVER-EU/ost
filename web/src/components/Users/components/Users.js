@@ -255,7 +255,7 @@ class Users extends Component {
         this.props.putUserPassword(userId, { password: user.password })
       }
     } else {
-      const role = user.isAdmin ? 'ost_admin' : 'ost_observer'
+      const _rolesIds = user.isAdmin ? '1' : '2'
       const updatedUser = {
         login: user.login,
         password: user.password,
@@ -264,7 +264,7 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        roles: [role]
+        rolesIds: [_rolesIds]
       }
       this.props.addUser(updatedUser)
     }

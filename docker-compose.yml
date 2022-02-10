@@ -129,7 +129,7 @@ services:
     hostname: postgres
     container_name: postgres
     ports:
-      - "5432:5342"
+      - "5432:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -176,26 +176,6 @@ services:
     volumes:
       - trial-data:/app/trials
 
-  #  ost_db:
-  #    hostname: ost_db
-  #    container_name: ost_database
-  #    image: drivereu/ost_database:20200325
-  #    ports:
-  #      - "5432:5432"
-  #    volumes:
-  #      - database-OST:/var/lib/postgresql/${DB_NAME}/data
-  #    restart: unless-stopped
-
-#  ost_db:
-#    hostname: ost_db
-#    container_name: ost_database
-#    image: drivereu/ost_database:20200325
-#    ports:
-#      - "25432:5432"
-#    volumes:
-#      - database-OST:/var/lib/postgresql/${DB_NAME}/data
-#    restart: unless-stopped
-
   ost_api:
     hostname: ost_api
     container_name: ost_api
@@ -211,6 +191,9 @@ services:
       - OST_DB_HOST=postgres
       - OST_DB_PORT=5432
       - OST_DB_NAME=TRIAL_ADMIN
+      - OST_DB_USER=postgres
+      - OST_DB_PASSWORD=postgres
+      - OST_ADMIN_PASSWORD=zaq1@WSX
       - DRIVER_IS_TESTBED_ON=true
     volumes:
       - ./_config/server.xml:/usr/local/tomcat/conf/server.xml
