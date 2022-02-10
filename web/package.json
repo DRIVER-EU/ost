@@ -108,7 +108,7 @@
     "material-ui": "^0.17.4",
     "material-ui-datetimepicker": "^1.0.7",
     "moment": "^2.18.1",
-    "node-sass": "4.12.0",
+    "node-sass": "7.0.0",
     "normalize.css": "^5.0.0",
     "postcss-loader": "^1.1.0",
     "prop-types": "^15.6.0",
