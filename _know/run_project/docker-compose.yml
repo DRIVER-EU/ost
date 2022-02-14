@@ -1,0 +1,39 @@
+﻿---
+version: "3"
+services:
+  ost_db:
+    hostname: ost_db
+    image: drivereu/ost_database:20200325
+    ports:
+      - "5437:5432"
+    volumes:
+      - database-OST:/var/lib/postgresql/${DB_NAME}/data
+    restart: unless-stopped
+
+  ost_api:
+    hostname: ost_api
+    image: tomcat:8.5.69-jdk8-openjdk
+    links:
+      - ost_db
+    ports:
+      - "8080:8080"
+    environment:
+      OST_DB_HOST: "ost_db"
+      OST_DB_PORT: "5432"
+      OST_DB_NAME: "itti_driver"
+      DRIVER_IS_TESTBED_ON: "false"
+    volumes:
+      - ./webapps:/usr/local/tomcat/webapps
+
+  ost_web:
+    hostname: ost_web
+    image: nginx:1.16.1
+    links:
+      - ost_db
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+
+volumes:
+  database-OST:

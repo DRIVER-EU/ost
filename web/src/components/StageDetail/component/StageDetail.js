@@ -35,11 +35,13 @@ class StageDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
+//    change[name] = e.target.value
     if (name === 'stageName') {
       change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
     } else {
       change[name] = e.target.value
     }
+
     this.setState(change)
   }
   viewQuestion () {
@@ -85,11 +87,13 @@ class StageDetail extends Component {
             accessor: 'id',
             width: 100,
             style: { textAlign: 'right' }
+
           },
           {
             Header: 'Name',
             accessor: 'name',
             style: { textAlign: 'left' }
+
           },
           {
             Header: 'Position',
@@ -107,8 +111,10 @@ class StageDetail extends Component {
               <h1 className='header__text'>Stage</h1>
               <a
                 className='header__link'
+//                href={`/trial-manager/trial-detail/${this.props.trialId}`}
                 style={{ cursor: 'pointer' }}
                 onClick={() => browserHistory.push(`/trial-manager/trial-detail/${this.props.trialId}`)}
+
               >
                 {this.props.trialName || '...'}
               </a>

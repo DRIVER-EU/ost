@@ -1,0 +1,11 @@
+﻿FROM node:6.10-alpine AS builder
+COPY ./web /web/
+WORKDIR web
+RUN npm install
+RUN npm run deploy:prod
+
+FROM drivereu/ost_frontend:20200325
+RUN rm -r /usr/share/nginx/html/*
+COPY --from=builder /web/dist/* /usr/share/nginx/html/
+
+

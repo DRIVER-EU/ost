@@ -34,6 +34,7 @@ class Users extends Component {
       contact: '',
       contactError: false,
       activated: true,
+      rolesIds: null,
       isAdmin: false
     }
   }
@@ -138,13 +139,15 @@ class Users extends Component {
   handleEditUser = (editionMode) => {
     const user = { ...this.state.user }
     const { selectedUser } = this.props
+    const isAdmin = selectedUser.roles[0].id === 1
     user.activated = selectedUser.activated
-    user.isAdmin = selectedUser.isAdmin
+    user.isAdmin = isAdmin
     user.login = selectedUser.login ? selectedUser.login : ''
     user.firstName = selectedUser.firstName ? selectedUser.firstName : ''
     user.lastName = selectedUser.lastName ? selectedUser.lastName : ''
     user.email = selectedUser.email ? selectedUser.email : ''
     user.contact = selectedUser.contact ? selectedUser.contact : ''
+    user.rolesIds = selectedUser.roles && selectedUser.roles[0] ? [selectedUser.roles[0].id] : null
     user.password = ''
     user.passwordConfirmation = ''
     this.setState({
@@ -180,8 +183,6 @@ class Users extends Component {
       error = !isValidPassword
     } else if (stateName === 'passwordConfirmation') {
       error = updatedError.passwordConfirmation !== updatedError.password
-    } else if (stateName === 'login') {
-      error = this.validateLogin(updatedError.login)
     } else {
       const containsSpecialSigns = regex.test(updatedError[stateName])
       error = updatedError[stateName].length < 1 || containsSpecialSigns
@@ -196,12 +197,6 @@ class Users extends Component {
 
   validateEmail = (email) => {
     if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-      return false
-    } return true
-  }
-
-  validateLogin = (login) => {
-    if (/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/.test(login)) {
       return false
     } return true
   }
@@ -253,13 +248,14 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        isAdmin: user.isAdmin
+        rolesIds: user.rolesIds
       }
       this.props.putUser(updatedUser, userId)
       if (user.password !== '' && user.passwordConfirmation !== '') {
         this.props.putUserPassword(userId, { password: user.password })
       }
     } else {
+      const _rolesIds = user.isAdmin ? '1' : '2'
       const updatedUser = {
         login: user.login,
         password: user.password,
@@ -268,7 +264,7 @@ class Users extends Component {
         email: user.email,
         contact: user.contact,
         activated: user.activated,
-        isAdmin: user.isAdmin
+        rolesIds: [_rolesIds]
       }
       this.props.addUser(updatedUser)
     }

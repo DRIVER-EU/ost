@@ -34,7 +34,6 @@ class SaveBtn extends Component {
     questionId: PropTypes.any,
     inputsValue: PropTypes.array
   }
-
   componentWillReceiveProps (nextProps) {
     if (!_.isEqual(nextProps.questionName, this.props.questionName)) {
       this.setState({
@@ -62,8 +61,10 @@ class SaveBtn extends Component {
 
   async dialogAccepted (question) {
     if (!this.state.new) {
+//      this.props.updateQuestion(question)
       await this.props.updateQuestion(question)
       this.handleCloseDialog('openSaveDialog')
+//      this.props.getQuestion(this.props.questionDetailId)
       await this.props.getQuestion(this.props.questionDetailId)
     } else {
       await this.props.addNewQuestion(question)
@@ -106,6 +107,8 @@ class SaveBtn extends Component {
   render () {
     let question = {
       id: this.props.questionDetailId || 0,
+//      name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
+  //    description: this.state.description === '' ? this.props.description : this.state.description,
       name: this.state.questionName === '' ? this.props.questionName : this.state.questionName,
       description: this.state.description === '' ? this.props.description : this.state.description,
       commented: this.props.commented,

@@ -3,7 +3,7 @@ package eu.fp7.driver.ost.driver.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-import eu.fp7.driver.ost.driver.model.AuthUser;
+import eu.fp7.driver.ost.core.security.security.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.AnswerDTO;
 import eu.fp7.driver.ost.driver.model.Answer;
 import eu.fp7.driver.ost.driver.model.AnswerTrialRole;
@@ -102,14 +102,13 @@ public class AnswerService {
     public Answer createAnswer(AnswerDTO.Form form, MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
                 .orElseThrow(() -> new EntityNotFoundException(ObservationType.class, form.observationTypeId));
-
+/*
         JSONObject jsonObject = SchemaCreator.getSchemaAsJSONObject(observationType.getQuestions());
         org.everit.json.schema.Schema schema = SchemaLoader.load(jsonObject);
         schema.validate(new JSONObject(form.formData.toString()));
-
-        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
-        TrialUser currentTrialUser = trialUserRepository.findByKeycloakUserId(keycloakUserId)
-                .orElseThrow(() -> new EntityNotFoundException(TrialUser.class));
+*/
+        AuthUser currentUser = trialUserService.getCurrentUser();
+        TrialUser currentTrialUser = trialUserRepository.findByAuthUser(currentUser);
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.trialSessionId));
 
@@ -137,9 +136,9 @@ public class AnswerService {
     }
 
     public List<Answer> findAll(long trialSessionId, String text) {
-        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        AuthUser currentUser = trialUserService.getCurrentUser();
 
-        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
+        trialUserService.checkIsTrialSessionManager(currentUser, trialSessionId);
 
         List<Answer> answers = answerRepository.findAll(getAnswerSpecifications(trialSessionId));
         if (text != null && !text.equals("")) {
@@ -227,10 +226,10 @@ public class AnswerService {
         return answerTrialRoleRepository.save(answerTrialRoles);
     }
 
-    public Boolean hasAnswer(Long observationTypeId, String keycloakUserId) {
+    public Boolean hasAnswer(Long observationTypeId, AuthUser authUser) {
         Set<Specification<Answer>> conditions = new HashSet<>();
         conditions.add(AnswerSpecification.isAnswerForObservationType(observationTypeId));
-        conditions.add(AnswerSpecification.isConnectedToAuthUser(keycloakUserId));
+        conditions.add(AnswerSpecification.isConnectedToAuthUser(authUser));
         List<Answer> observationTypes = answerRepository.findAll(RepositoryUtils.concatenate(conditions));
         return !observationTypes.isEmpty();
     }
@@ -274,7 +273,7 @@ public class AnswerService {
                         String.valueOf(answer.getTrialSession().getTrial().getName()),
                         String.valueOf(trialSessionId),
                         answer.getSentSimulationTime().format(DateTimeFormatter.ofPattern(AnswerProperties.TIME_PATTERN)),
-                        answer.getTrialUser().getKeycloakUserId().toString(),
+                        answer.getTrialUser().getAuthUser().getFirstName() + " " + answer.getTrialUser().getAuthUser().getLastName(),
                         answer.getTrialUser().getUserRoleSessions().get(0).getTrialRole().getName(),
                         Long.toString(answer.getObservationType().getId()),
                         answer.getObservationType().getName(),

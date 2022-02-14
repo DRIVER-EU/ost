@@ -28,8 +28,10 @@ class SessionDetailView extends Component {
     getUsersList: PropTypes.func,
     addUser: PropTypes.func,
     removeUser: PropTypes.func,
+//    manual: PropTypes.bool
     manual: PropTypes.bool,
     sessionName: PropTypes.string
+
   }
 
   render () {

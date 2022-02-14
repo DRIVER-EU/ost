@@ -47,11 +47,13 @@ class QuestionDetail extends Component {
   };
   handleChangeInput (name, e) {
     let change = {}
+//    change[name] = e.target.value
     if (name === 'questionName') {
       change[name] = e.target.value.length <= 50 ? e.target.value : e.target.value.substring(0, 50)
     } else {
       change[name] = e.target.value
     }
+
     this.setState(change)
   }
   viewQuestionDetail () {
@@ -139,11 +141,17 @@ class QuestionDetail extends Component {
                 </a>
                 <a
                   className='header__link'
+      //            href={
                   style={{ cursor: 'pointer' }}
                   onClick={() => browserHistory.push(
+
                     this.props.roleId
+//                      ? `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
+//                      : `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`
+//                  }
                     ? `/trial-manager/trial-detail/${this.props.trialId}/role/${this.props.roleId}`
                     : `/trial-manager/trial-detail/${this.props.trialId}/stage/${this.props.stageId}`)}
+
                 >
                   {this.props.stageName}
                 </a>
