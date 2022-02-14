@@ -1,0 +1,173 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "3500:3500"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 3500
+      ZOOKEEPER_TICK_TIME: 2000
+    restart: unless-stopped
+
+  broker:
+    image: confluentinc/cp-kafka:latest
+    hostname: broker
+    container_name: broker
+    links:
+      - zookeeper
+    ports:
+      - "3501:3501"
+    #      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:3500"
+      KAFKA_ADVERTISED_LISTENERS: "EXTERNAL://localhost:3501,PLAINTEXT://broker:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_LISTENERS: "EXTERNAL://0.0.0.0:3501,PLAINTEXT://0.0.0.0:9092"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_MESSAGE_MAX_BYTES: 100000000
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 100000000
+    restart: unless-stopped
+
+  schema_registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema_registry
+    container_name: schema-registry
+    links:
+      - zookeeper
+      - broker
+    ports:
+      - "3502:3502"
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema_registry
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:3502"
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:3500"
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://broker:9092"
+    restart: unless-stopped
+
+  time_service:
+    image: drivereu/test-bed-time-service:latest
+    container_name: time_service
+    depends_on:
+      - broker
+      - schema_registry
+    ports:
+      - "8100:8100"
+    environment:
+      KAFKA_BROKER_URL: broker:9092
+      SCHEMA_REGISTRY_URL: http://schema_registry:3502
+      AUTO_REGISTER_SCHEMAS: 'true'
+    restart: unless-stopped
+
+  bootstrapper:
+    image: drivereu/silent-producer:latest
+    hostname: bootstrapper
+    container_name: bootstrapper
+    depends_on:
+      - broker
+      - schema_registry
+    environment:
+      KAFKA_HOST: broker:9092
+      SCHEMA_REGISTRY: http://schema_registry:3502
+      PRODUCE_TOPICS: simulation_entity_item,simulation_time_mgmt,system_topic_access_invite,simulation_request_startinject,simulation_entity_post,standard_named_geojson,system_heartbeat,system_logging
+      # simulation_request_transport,lcms_plots,simulation_affected_area,simulation_sumo_configuration,standard_cap,chain_power,chain_care,chain_flood,chain,flood_prediction_geojson,flood_actual,system_timing
+    restart: unless-stopped
+#    volumes:
+#      - ./_config/schemas:/src/schemas
+
+  kafka_rest:
+    image: confluentinc/cp-kafka-rest:latest
+    hostname: kafka_rest
+    container_name: kafka_rest
+    links:
+      - zookeeper
+      - schema_registry
+      - broker
+    ports:
+      - "8082:8082"
+    environment:
+      KAFKA_REST_HOST_NAME: kafka_rest
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'PLAINTEXT://broker:9092'
+      KAFKA_REST_ZOOKEEPER_CONNECT: 'zookeeper:3500'
+      KAFKA_REST_LISTENERS: 'http://0.0.0.0:8082'
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema_registry:3502'
+      KAFKA_CONSUMER_REQUEST_TIMEOUT_MS: 30000
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_METHODS: 'GET,POST,PUT,DELETE,OPTIONS'
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
+    restart: unless-stopped
+
+  kafka_topics_ui:
+    image: landoop/kafka-topics-ui:latest
+    hostname: kafka_topics_ui
+    container_name: kafka_topics_ui
+    links:
+      - kafka_rest
+    ports:
+      - "3600:8000"
+    environment:
+      KAFKA_REST_PROXY_URL: "http://kafka_rest:8082"
+      PROXY: "true"
+    restart: unless-stopped
+
+  kafka_schema_registry_ui:
+    image: landoop/schema-registry-ui:latest
+    hostname: kafka_schema_registry_ui
+    container_name: kafka_schema_registry_ui
+    links:
+      - schema_registry
+    ports:
+      - "3601:8000"
+    environment:
+      SCHEMAREGISTRY_URL: "http://schema_registry:3502"
+      PROXY: "true"
+    restart: unless-stopped
+
+  ost_db:
+    image: postgres:9.6
+    hostname: ost_db
+    container_name: ost_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ktHo8mv7Xzq7nDN5YpLwfgDp3T2cPEY9nhooA6GE2ktz9jH8rLLTtNnT8UHgYvcUypDFuK2y
+      POSTGRES_DB: TRIAL_ADMIN
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    restart: unless-stopped
+  
+  
+  ost_api:
+    image: drivereu/ost_backend:without_keycloak
+    hostname: ost_api
+    container_name: ost_api
+    links:
+      - ost_db
+    ports:
+      - "8080:8080"
+    environment:
+      - OST_DB_HOST=ost_db
+      - OST_DB_PORT=5432
+      - OST_DB_NAME=TRIAL_ADMIN
+      - OST_DB_USER=postgres
+      - OST_DB_PASSWORD=ktHo8mv7Xzq7nDN5YpLwfgDp3T2cPEY9nhooA6GE2ktz9jH8rLLTtNnT8UHgYvcUypDFuK2y
+      - DRIVER_IS_TESTBED_ON=true
+    restart: unless-stopped
+
+  ost_web:
+    image: drivereu/ost_frontend:without_keycloak
+    hostname: ost_web
+    container_name: ost_web
+    links:
+      - ost_db
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certificates:/usr/share/certificates
+    restart: unless-stopped
+      
+volumes:
+  trial-data:
+      
