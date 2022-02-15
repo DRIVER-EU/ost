@@ -48,7 +48,7 @@ develop:deploy:
     - develop
   image: alpine:3.5
   tags:
-    - deploy
+    - default-api
   dependencies:
     - backend:build
   <<: *ssh_deploy_develop_key
