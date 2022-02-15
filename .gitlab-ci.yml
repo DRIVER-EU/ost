@@ -51,6 +51,7 @@ develop:deploy:
     - default-api
   dependencies:
     - backend:build
+    - frontend:build
   <<: *ssh_deploy_develop_key
   script:
     - echo "deploy started"
