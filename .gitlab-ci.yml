@@ -1,0 +1,69 @@
+stages:
+  - build
+  - deploy
+
+.ssh_deploy_develop_key: &ssh_deploy_develop_key
+  before_script:
+    - 'which ssh-agent || ( apk update && apk add --update openssh-client && echo -e "Host *\nUseRoaming no\nStrictHostKeyChecking no\n" >> /etc/ssh/ssh_config  )'
+    - eval $(ssh-agent -s)
+    - 'mkdir -m 700 -p ~/.ssh && echo "$PRIVATE_KEY_DEVELOP" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa'
+    - 'ssh-add ~/.ssh/id_rsa'
+    - '[[ -f /.dockerenv ]] && echo "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+backend:build:
+  stage: build
+  only:
+    - develop
+  image: gradle:7.2-jdk8
+  tags:
+    - build
+  script:
+    - cd api
+    - echo "build started"
+    - ./gradlew -g ./cache/gradle clean assemble -i
+  artifacts:
+    paths:
+      - /home/gradle/api/build/libs/driver-api-0.0.1-SNAPSHOT.war
+
+frontend:build:
+  stage: build
+  only:
+    - develop
+  image: node:6.10-alpine
+  tags:
+    - build
+  script:
+    - cd web
+    - echo "build started"
+    - npm install
+    - npm run deploy:prod
+    - tar cvf dist.tar dist
+  artifacts:
+    paths:
+      - /web/dist.tar
+
+develop:deploy:
+  stage: deploy
+  only:
+    - develop
+  image: alpine:3.5
+  tags:
+    - deploy
+  dependencies:
+    - backend:build
+  <<: *ssh_deploy_develop_key
+  script:
+    - echo "deploy started"
+    - "scp -P22 /home/gradle/api/build/libs/driver-api-0.0.1-SNAPSHOT.war user@192.168.0.62:/home/user/ost/ROOT.war"
+    - "scp -P22 /web/dist.tar user@192.168.0.62:/home/user/ost/dist.tar"
+    - "echo '#!/bin/sh' > script.sh"
+    - "echo 'cd /home/user/ost/' > script.sh"
+    - "echo 'tar xvf dist.tar' > script.sh"
+    - "echo 'rm -r html' > script.sh"
+    - "echo 'mv dist html' > script.sh"
+    - "echo 'docker-compose stop ost_web ost_api' >> script.sh"
+    - "echo 'docker-compose build --no-cache ost_api ost_web' >> script.sh"
+    - "echo 'docker-compose up -d' >> script.sh"
+    - "echo 'docker container prune -f' >> script.sh"
+    - "echo 'docker image prune -f' >> script.sh"
+    - "ssh user@192.168.0.62 'bash -s' < script.sh"
