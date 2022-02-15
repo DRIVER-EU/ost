@@ -9,7 +9,6 @@ import WarningModal, {
   inputValidationRegex
 } from '../../NewObservationComponent/component/WarningModal'
 import _ from 'lodash'
-
 class SaveBtn extends Component {
   constructor (props) {
     super(props)
@@ -30,6 +29,7 @@ class SaveBtn extends Component {
     new: PropTypes.bool,
     roleType: PropTypes.string,
     inputsValue: PropTypes.array
+//  };
   }
 
   componentWillReceiveProps (nextProps) {
@@ -54,6 +54,9 @@ class SaveBtn extends Component {
 
   async dialogAccepted (role) {
     if (!this.state.new) {
+      this.props.updateRole(role)
+      this.handleCloseDialog('openSaveDialog')
+      this.props.getRoleById(this.props.roleId)
       await this.props.updateRole(role)
       this.handleCloseDialog('openSaveDialog')
       await this.props.getRoleById(this.props.roleId)
@@ -93,6 +96,7 @@ class SaveBtn extends Component {
   render () {
     let role = {
       id: this.props.roleId,
+//      name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
       name: this.state.roleName === '' ? this.props.roleName : this.state.roleName,
       roleType: this.props.roleType,
       trialId: this.props.trialId

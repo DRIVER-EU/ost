@@ -43,13 +43,16 @@ class ActiveSessions extends Component {
           },
           {
             Header: 'Name',
+//            accessor: 'trialName'
             accessor: 'trialSessionName',
             style: { textAlign: 'left' }
+
           },
           {
             Header: 'Actual Stage Name',
             accessor: 'lastTrialStage',
             style: { textAlign: 'left' }
+
           },
           {
             Header: 'Manual',
@@ -58,11 +61,13 @@ class ActiveSessions extends Component {
               <span className='manual'>{props.value ? 'yes' : 'no'}</span>
             ),
             style: { textAlign: 'left' }
+
           },
           {
             Header: 'Status',
             accessor: 'status',
             style: { textAlign: 'left' }
+
           }
         ]
       }

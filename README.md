@@ -1,8 +1,15 @@
 ###
 
+# Building and running project in debug mode.
+To automatically build and run project in debug mode simply run
+```docker-compose up -d``` in root directory of a project. The needed docker images will be downloaded and after the process of docker start up ends the application will be accessible on https://127.0.0.1:433 address. Right after docker start up it might not be possible to log in to application. It means that backend is still setting up the database and needs more time to start. 
+
+Default admin user has credentials: 
+
+admin
 
 
-#
+admin
 
 # OST documentation
 

@@ -2,22 +2,22 @@ package eu.fp7.driver.ost.driver.service;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Lists;
 import eu.fp7.driver.ost.core.dto.Dto;
 import eu.fp7.driver.ost.core.dto.PageDto;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
-//import eu.fp7.driver.ost.core.security.security.model.AuthRole;
-import eu.fp7.driver.ost.driver.model.AuthUser;
-//import eu.fp7.driver.ost.core.security.security.model.AuthUserPosition;
-//import eu.fp7.driver.ost.core.security.security.repository.AuthRoleRepository;
-//import eu.fp7.driver.ost.core.security.security.repository.AuthUnitRepository;
-//import eu.fp7.driver.ost.core.security.security.repository.AuthUserPositionRepository;
-import eu.fp7.driver.ost.driver.repository.AuthUserRepository;
+import eu.fp7.driver.ost.core.security.security.model.AuthRole;
+import eu.fp7.driver.ost.core.security.security.model.AuthUser;
+import eu.fp7.driver.ost.core.security.security.model.AuthUserPosition;
+import eu.fp7.driver.ost.core.security.security.repository.AuthRoleRepository;
+import eu.fp7.driver.ost.core.security.security.repository.AuthUnitRepository;
+import eu.fp7.driver.ost.core.security.security.repository.AuthUserPositionRepository;
+import eu.fp7.driver.ost.core.security.security.repository.AuthUserRepository;
 import eu.fp7.driver.ost.driver.dto.AdminUserRoleDTO;
 import eu.fp7.driver.ost.driver.dto.TrialSessionDTO;
 import eu.fp7.driver.ost.driver.form.NewSessionForm;
 import eu.fp7.driver.ost.driver.form.UserForm;
 import eu.fp7.driver.ost.driver.model.*;
+import eu.fp7.driver.ost.driver.model.enums.AuthRoleType;
 import eu.fp7.driver.ost.driver.model.enums.Languages;
 import eu.fp7.driver.ost.driver.model.enums.ManagementRoleType;
 import eu.fp7.driver.ost.driver.model.enums.SessionStatus;
@@ -28,7 +28,6 @@ import eu.fp7.driver.ost.driver.util.InvalidDataException;
 import eu.fp7.driver.ost.driver.util.RepositoryUtils;
 import eu.fp7.driver.ost.driver.util.schema.SchemaCreator;
 import org.flywaydb.core.internal.util.StringUtils;
-import org.flywaydb.core.internal.util.logging.apachecommons.ApacheCommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -42,13 +41,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 @Transactional
 public class TrialSessionService {
-
-    @Autowired
-    private AnswerService answerService;
 
     @Autowired
     private TrialSessionRepository trialSessionRepository;
@@ -60,19 +59,25 @@ public class TrialSessionService {
     private TrialUserService trialUserService;
 
     @Autowired
+    private AnswerService answerService;
+
+    @Autowired
+    private AnswerRepository answerRepository;
+
+    @Autowired
     private AuthUserRepository authUserRepository;
 
-//    @Autowired
-//    private AuthUserPositionRepository authUserPositionRepository;
+    @Autowired
+    private AuthUserPositionRepository authUserPositionRepository;
 
-//    @Autowired
-//    private AuthUnitRepository authUnitRepository;
+    @Autowired
+    private AuthUnitRepository authUnitRepository;
 
     @Autowired
     private TrialUserRepository trialUserRepository;
 
-//    @Autowired
-//    private AuthRoleRepository authRoleRepository;
+    @Autowired
+    private AuthRoleRepository authRoleRepository;
 
     @Autowired
     private TrialRoleRepository trialRoleRepository;
@@ -99,32 +104,26 @@ public class TrialSessionService {
         return trialSessionRepository.findById(trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, trialSessionId));
     }
-
-    @Transactional()
-    public List<Trial> findAll() {
-        return Lists.newArrayList(trialRepository.findAll());
-    }
-
     @Transactional(readOnly = true)
     public Page<TrialSession> findAllByManager(Pageable pageable) {
-        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        AuthUser authUser = trialUserService.getCurrentUser();
 
         return trialSessionRepository.findAll(
-                getTrialSessionManagerSpecifications(keycloakUserId),
+                getTrialSessionManagerSpecifications(authUser),
                 pageable
         );
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PageDto<TrialSessionDTO.ActiveListItem> findByStatus(SessionStatus sessionStatus, Pageable pageable) {
-        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
+        AuthUser authUser = trialUserService.getCurrentUser();
 
         Page<TrialSession> trialSessions = trialSessionRepository.findAll(
-                getTrialSessionStatusSpecifications(keycloakUserId, sessionStatus),
+                getTrialSessionStatusSpecifications(authUser, sessionStatus),
                 pageable);
 
         PageDto<TrialSessionDTO.ActiveListItem> pageDTO = Dto.from(trialSessions, TrialSessionDTO.ActiveListItem.class);
-        pageDTO.getData().forEach(d -> d.initHasAnswer = setInitAnswer(d, keycloakUserId));
+        pageDTO.getData().forEach(d -> d.initHasAnswer = setInitAnswer(d, authUser));
         return pageDTO;
     }
 
@@ -143,8 +142,8 @@ public class TrialSessionService {
     }
 
     public TrialSession updateLastTrialStage(long trialSessionId, long lastTrialStageId) {
-        String keycloakUserId = trialUserService.getCurrentKeycloakUserId();
-        trialUserService.checkIsTrialSessionManager(keycloakUserId, trialSessionId);
+        AuthUser authUser = trialUserService.getCurrentUser();
+        trialUserService.checkIsTrialSessionManager(authUser, trialSessionId);
 
         TrialSession trialSession = trialSessionRepository.findOne(trialSessionId);
         TrialStage trialStage = trialStageRepository.findById(lastTrialStageId)
@@ -172,10 +171,6 @@ public class TrialSessionService {
         trialSessionRepository.delete(trialSessionId);
     }
 
-    public TrialSession save(TrialSession trialSession){
-        return trialSessionRepository.save(trialSession);
-    }
-
     public TrialSession update(TrialSessionDTO.AdminEditItem sessionDTO) {
         TrialSession trialSession = trialSessionRepository.findById(sessionDTO.id)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, sessionDTO.id));
@@ -192,14 +187,20 @@ public class TrialSessionService {
         return trialSessionRepository.save(trialSession);
     }
 
+
     public TrialSession insert(TrialSessionDTO.AdminEditItem sessionDTO) {
 
         TrialStage trialStage =null;
 
         Trial trial = trialRepository.findById(sessionDTO.trialId)
                 .orElseThrow(() -> new EntityNotFoundException(Trial.class, sessionDTO.trialId));
+//        if(trial.getTrialStages().size() >0)
+//        {
+//            trialStage = trial.getTrialStages().get(0);
+//        }
         trialStage = trial.getTrialStages().stream().findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(TrialStage.class));
+
 
         TrialSession trialSession = TrialSession.builder().trial(trial)
                 .name(sessionDTO.trialSessionName)
@@ -214,8 +215,17 @@ public class TrialSessionService {
     }
 
     public UserRoleSession insertUserRoleSession(AdminUserRoleDTO.FullItem  adminUserRoleDTO) {
-        TrialUser trialUser = trialUserRepository.findByKeycloakUserId(adminUserRoleDTO.getKeycloakUserId())
-                .orElseThrow(() -> new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getKeycloakUserId()));
+        AuthUser authUser = authUserRepository.findOne(adminUserRoleDTO.getTrialUserId());
+        if(authUser== null)
+        {
+            new EntityNotFoundException(AuthUser.class, adminUserRoleDTO.getTrialUserId());
+        }
+
+        TrialUser trialUser = trialUserRepository.findByAuthUser(authUser);
+        if(trialUser== null)
+        {
+            new EntityNotFoundException(TrialUser.class, adminUserRoleDTO.getTrialUserId());
+        }
 
         UserRoleSessionId userRoleSessionId =  new UserRoleSessionId();
         userRoleSessionId.setTrialRoleId(adminUserRoleDTO.getTrialRoleId());
@@ -256,23 +266,24 @@ public class TrialSessionService {
         newSessionForm.getUsers().forEach(user -> {
             try {
                 String password = StringUtils.left(UUID.randomUUID().toString(), 8);
+                AuthUser authUser = createUser(user, password, newSessionForm.prefix);
 
-//                users.put(user.getEmail(), trialUserRepository.save(getTrialUser(keycloakUserId)));
-//                AuthRole authRole = StreamSupport.stream(authRoleRepository.findAll().spliterator(), false)
-//                        .filter(role -> role.getShortName().contains("ROLE_USER"))
-//                        .findFirst()
-//                        .orElse(null);
-//                authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
-//                if (isEmail) {
-//                    String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
-//                    EmailService.sendNewSessionMail(authUser, password, trialName, user);
-//                } else {
-//                    emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), password));
-//                    longestEmail.replace(0, longestEmail.length(), authUser.getEmail().length() > longestEmail.length() ?
-//                            authUser.getEmail() : longestEmail.toString());
-//                    longestLogin.replace(0, longestLogin.length(), authUser.getLogin().length() > longestLogin.length() ?
-//                            authUser.getLogin() : longestLogin.toString());
-//                }
+                users.put(user.getEmail(), trialUserRepository.save(getTrialUser(authUser)));
+                AuthRole authRole = StreamSupport.stream(authRoleRepository.findAll().spliterator(), false)
+                        .filter(role -> role.getShortName().contains("ROLE_USER"))
+                        .findFirst()
+                        .orElse(null);
+                authUser.setRoles(Stream.of(authRole).collect(Collectors.toSet()));
+                if (isEmail) {
+                    String trialName = trialRepository.findById(newSessionForm.getTrialId()).get().getName();
+                    EmailService.sendNewSessionMail(authUser, password, trialName, user);
+                } else {
+                    emails.put(authUser.getEmail(), Arrays.asList(authUser.getLogin(), password));
+                    longestEmail.replace(0, longestEmail.length(), authUser.getEmail().length() > longestEmail.length() ?
+                            authUser.getEmail() : longestEmail.toString());
+                    longestLogin.replace(0, longestLogin.length(), authUser.getLogin().length() > longestLogin.length() ?
+                            authUser.getLogin() : longestLogin.toString());
+                }
             } catch (Exception e) {
                 throw new InternalServerException("Cannot crate new user: " + e.getMessage());
             }
@@ -288,8 +299,7 @@ public class TrialSessionService {
 
         trialSessionRepository.save(trialSession);
         TrialSessionManager trialSessionManager = TrialSessionManager.builder().trialSession(trialSession)
-                .trialUser(trialUserRepository.findByKeycloakUserId(trialUserService.getCurrentKeycloakUserId())
-                    .orElseThrow(() -> new EntityNotFoundException(TrialUser.class)))
+                .trialUser(trialUserRepository.findByAuthUser(trialUserService.getCurrentUser()))
                 .build();
 
         trialSessionManagerRepository.save(trialSessionManager);
@@ -324,8 +334,8 @@ public class TrialSessionService {
         return Collections.EMPTY_LIST;
     }
 
-    private TrialUser getTrialUser(String keycloakUserId) {
-        return TrialUser.builder().keycloakUserId(keycloakUserId)
+    private TrialUser getTrialUser(AuthUser authUser) {
+        return TrialUser.builder().authUser(authUser)
                 .userLanguage(Languages.ENGLISH)
                 .isTrialCreator(true)
                 .build();
@@ -350,13 +360,13 @@ public class TrialSessionService {
         authUser.setPassword(bCryptPasswordEncoder.encode(password));
         authUser.setCreatedAt(ZonedDateTime.now());
 
-//        AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
-//                .filter(position -> position.getName().contains("User"))
-//                .findFirst()
-//                .orElse(null);
+        AuthUserPosition authUserPosition = authUserPositionRepository.findAllByOrderByPositionAsc().stream()
+                .filter(position -> position.getName().contains("User"))
+                .findFirst()
+                .orElse(null);
 
-//        authUser.setPosition(authUserPosition);
-//        authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
+        authUser.setPosition(authUserPosition);
+        authUser.setUnit(authUnitRepository.findOneCurrentlyAuthenticated().get());
 
         try {
             return authUserRepository.saveAndFlush(authUser);
@@ -366,8 +376,7 @@ public class TrialSessionService {
     }
 
     public Map<Long, String> getTrials() {
-        TrialUser trialUser = trialUserRepository.findByKeycloakUserId(trialUserService.getCurrentKeycloakUserId())
-                .orElseThrow(() -> new EntityNotFoundException(TrialUser.class));
+        TrialUser trialUser = trialUserRepository.findByAuthUser(trialUserService.getCurrentUser());
         Map<Long, String> trialNames = new HashMap<>();
 
         for (TrialManager trialManager : trialUser.getTrialManagers()) {
@@ -394,34 +403,34 @@ public class TrialSessionService {
         List<TrialRole> trialRoles = trialRoleRepository.findAllByTrialId(trialId);
         List<AuthUser> authUsers = new ArrayList<>();
 
-//        for (AuthUser user : authUserRepository.findAll()) {
-//            for (AuthRole role : user.getRoles()) {
-//                if (AuthRoleType.ROLE_USER.name().contains(role.getShortName())) {
-//                    authUsers.add(user);
-//                    break;
-//                }
-//            }
-//        }
+        for (AuthUser user : authUserRepository.findAll()) {
+            for (AuthRole role : user.getRoles()) {
+                if (AuthRoleType.ROLE_USER.name().contains(role.getShortName())) {
+                    authUsers.add(user);
+                    break;
+                }
+            }
+        }
 
-        authUsers.remove(trialUserService.getCurrentKeycloakUserId());
+        authUsers.remove(trialUserService.getCurrentUser());
         return SchemaCreator.createNewSessionSchemaForm(trialStages, trialRoles, authUsers);
     }
 
-    private Specifications<TrialSession> getTrialSessionStatusSpecifications(String keycloakUserId, SessionStatus sessionStatus) {
+    private Specifications<TrialSession> getTrialSessionStatusSpecifications(AuthUser authUser, SessionStatus sessionStatus) {
         Set<Specification<TrialSession>> conditions = new HashSet<>();
         conditions.add(TrialSessionSpecification.status(sessionStatus));
-        conditions.add(TrialSessionSpecification.loggedUser(keycloakUserId));
+        conditions.add(TrialSessionSpecification.loggedUser(authUser));
         return RepositoryUtils.concatenate(conditions);
     }
 
-    private Specifications<TrialSession> getTrialSessionManagerSpecifications(String keycloakUserId) {
+    private Specifications<TrialSession> getTrialSessionManagerSpecifications(AuthUser authUser) {
         Set<Specification<TrialSession>> conditions = new HashSet<>();
-        conditions.add(TrialSessionSpecification.trialSessionManager(keycloakUserId));
+        conditions.add(TrialSessionSpecification.trialSessionManager(authUser));
         return RepositoryUtils.concatenate(conditions);
     }
 
-    private Boolean setInitAnswer(TrialSessionDTO.ActiveListItem activeListItem, String keycloakUserId) {
-        return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, keycloakUserId) : null;
+    private Boolean setInitAnswer(TrialSessionDTO.ActiveListItem activeListItem, AuthUser authUser) {
+        return activeListItem.initId != null ? answerService.hasAnswer(activeListItem.initId, authUser) : null;
     }
 
     public String setManualStageChange(long sessionId, boolean isManual){

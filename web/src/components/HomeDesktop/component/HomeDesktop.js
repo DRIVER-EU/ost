@@ -10,6 +10,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white'
+
   }
 }
 
@@ -21,8 +22,7 @@ class HomeDesktop extends Component {
 
   static propTypes = {
     logIn: PropTypes.func,
-    isLoggedIn: PropTypes.bool,
-    keycloak: PropTypes.object
+    isLoggedIn: PropTypes.bool
   }
 
   render () {
@@ -33,7 +33,6 @@ class HomeDesktop extends Component {
             <div>
               <img className='img-responsive driver-logo' src='/images/ost.png' />
               <LoginPanel
-                keycloak={this.props.keycloak}
                 isLoggedIn={this.props.isLoggedIn}
                 logIn={this.props.logIn} />
             </div>

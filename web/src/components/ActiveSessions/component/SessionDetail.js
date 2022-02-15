@@ -40,18 +40,21 @@ class SessionDetail extends Component {
         accessor: 'id',
         width: 100,
         style: { textAlign: 'right' }
+
       },
       {
         Header: 'Login',
         width: 200,
         accessor: 'login',
         style: { textAlign: 'left' }
+
       },
       {
         Header: 'Role',
         accessor: 'trialRoleName',
         width: 200,
         style: { textAlign: 'left' }
+
       },
       {
         Header: 'Account',
@@ -60,27 +63,38 @@ class SessionDetail extends Component {
             Header: 'Questions',
             accessor: 'activeSession.stageStatistics[0].numberOfQuestions',
             style: { textAlign: 'left' }
+
           },
           {
             Header: 'Answers',
             accessor: 'activeSession.stageStatistics[0].totalNumberOfAnswers',
             style: { textAlign: 'left' }
+
           },
           {
             Header: 'Missing questions',
             accessor: 'activeSession.stageStatistics[0].numberOfQuestionsWithOutAnswer',
             style: { textAlign: 'left' }
+
           },
           {
+//            Header: '',
             Header: 'Active',
             width: 150,
             Cell: props => <RaisedButton
               backgroundColor='#FCB636'
               labelColor='#fff'
               label='Send Message'
-              type='Button' />
+              type='Button'
+                      />
           }
         ]
+//      },
+//      {
+//        Header: 'Active',
+//        accessor: 'active',
+//          style: { textAlign: 'left' }
+
       }
     ]
     return (
