@@ -23,7 +23,7 @@ backend:build:
     - ./gradlew -g ./cache/gradle clean assemble -i
   artifacts:
     paths:
-      - /home/gradle/api/build/libs/driver-api-0.0.1-SNAPSHOT.war
+      - api/build/libs/driver-api-0.0.1-SNAPSHOT.war
 
 frontend:build:
   stage: build
@@ -40,7 +40,7 @@ frontend:build:
     - tar cvf dist.tar dist
   artifacts:
     paths:
-      - /web/dist.tar
+      - web/dist.tar
 
 develop:deploy:
   stage: deploy
