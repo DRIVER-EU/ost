@@ -55,8 +55,8 @@ develop:deploy:
   <<: *ssh_deploy_develop_key
   script:
     - echo "deploy started"
-    - "scp -P22 /home/gradle/api/build/libs/driver-api-0.0.1-SNAPSHOT.war user@192.168.0.62:/home/user/ost/ROOT.war"
-    - "scp -P22 /web/dist.tar user@192.168.0.62:/home/user/ost/dist.tar"
+    - "scp -P22 api/build/libs/driver-api-0.0.1-SNAPSHOT.war user@192.168.0.62:/home/user/ost/ROOT.war"
+    - "scp -P22 web/dist.tar user@192.168.0.62:/home/user/ost/dist.tar"
     - "echo '#!/bin/sh' > script.sh"
     - "echo 'cd /home/user/ost/' > script.sh"
     - "echo 'tar xvf dist.tar' > script.sh"
