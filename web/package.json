@@ -131,7 +131,7 @@
     "react-table": "^6.9.2",
     "react-tap-event-plugin": "^2.0.1",
     "react-tooltip": "^3.4.0",
-    "recharts": "^1.0.0-beta.10",
+    "recharts": "^2.1.14",
     "redux": "^3.6.0",
     "redux-thunk": "^2.0.0",
     "rimraf": "^2.5.4",
