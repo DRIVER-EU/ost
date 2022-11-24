@@ -328,38 +328,38 @@ _ #     - schema\_registry_
    volumes:
      - trial-data:/app/trials
 
- ost\_db:
-   image: janbalbierzitti/ost\_database:fddr2\_2
-   ports:
+  ost\_db:
+    image: janbalbierzitti/ost\_database:fddr2\_2
+    ports:
     - &quot;5437:5432&quot;
-   volumes:
+    volumes:
     - database-OST:/var/lib/postgresql/data
 _#    restart: always_
-_ _ost\_web:
-   image: janbalbierzitti/ost\_frontend:fddr2\_2
-   links:
-   - ost\_api
-   ports:
-   - &quot;127.0.0.1:85:80&quot;
-   - &quot;127.0.0.1:445:443&quot;
+  ost\_web:
+    image: janbalbierzitti/ost\_frontend:fddr2\_2
+    links:
+    - ost\_api
+    ports:
+    - &quot;127.0.0.1:85:80&quot;
+    - &quot;127.0.0.1:445:443&quot;
 _#        restart: always_
-_ _ost\_api:
-   image: janbalbierzitti/ost\_backend:fddr2\_2
-   links:
-   - ost\_db
-   ports:
-   - &quot;8080:8080&quot;
+  ost\_api:
+    image: janbalbierzitti/ost\_backend:fddr2\_2
+    links:
+    - ost\_db
+    ports:
+    - &quot;8080:8080&quot;
 _#    restart: always_
 
- silent-producer:
-   image: silent-producer
-   depends\_on:
+  silent-producer:
+    image: silent-producer
+    depends\_on:
      - broker
      - schema\_registry
-   environment:
-     KAFKA\_HOST: broker:9092
-     SCHEMA\_REGISTRY: http://schema\_registry:3502
-     PRODUCE\_TOPICS: simulation\_request\_unittransport,simulation\_request\_startinject,simulation\_entity\_item,sumo\_AffectedArea,standard\_cap,system\_timing,system\_topic\_access\_invite
+    environment:
+      KAFKA\_HOST: broker:9092
+      SCHEMA\_REGISTRY: http://schema\_registry:3502
+      PRODUCE\_TOPICS: simulation\_request\_unittransport,simulation\_request\_startinject,simulation\_entity\_item,sumo\_AffectedArea,standard\_cap,system\_timing,system\_topic\_access\_invite
 
 volumes:
  database-OST:
