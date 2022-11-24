@@ -9,7 +9,7 @@ Backend, frontend and database can be launched by one docker compose.  Backend c
 
 ### 2. User Manual
 
-              User can login to server as admin or observer. Admin can manage trials, session, stages, roles, add question to roles and stages, add and edit users and control active session.  Observer can answer on question and comment it.
+User can login to server as admin or observer. Admin can manage trials, session, stages, roles, add question to roles and stages, add and edit users and control active session.  Observer can answer on question and comment it.
 
 #### Admin
 
@@ -39,8 +39,6 @@ After choosing stage from trial details and click edit or after double clicking 
 
 ![Figure 4. Stage detail view.](./doc/fig04.png)
 
-
-
 ### Question set details
 
 In question set details windows admin can change name or description also list of questions of this question set is shown. User can redirect to the chosen question by double clicking on question or clicking question and edit. You can redirect to trial or stage by clicking trial name or stage name above save button.
@@ -58,7 +56,6 @@ In question details admin can modify question, description or type of answer. Al
 ##### Role details
 
 After choosing role from trial details and click edit or after double clicking left mouse button on role from trial details, system redirects to role details. There are basic details about role, which can be edited. Also in  role details we can manage of user assignment to role and question set, which should be show, when right stage is chosen. You can redirect to trial by clicking trial name above save button.
-
 
 ![Figure 7. Role detail view.](./doc/fig07.png)
 
@@ -109,7 +106,6 @@ Observer after login to system can choosing from question set from active sessio
 
 Observer after choosing question set is redirected to questions from chosen question set. Observer can answer to question from this question set by writing text (textfield) or choosing option (checkbox, radiobutton, slider).
 
-
 ![Figure 13. Question view.](./doc/fig13.png)
 
 ###  3.  Deployment Manual
@@ -121,173 +117,173 @@ Observer after choosing question set is redirected to questions from chosen ques
 ```yml
 version: &#39;3&#39;
 services:
- zookeeper:
-   image: confluentinc/cp-zookeeper:latest
-   hostname: zookeeper
-   ports:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    ports:
      - &quot;3500:3500&quot;
-   environment:
-     ZOOKEEPER\_CLIENT\_PORT: 3500
-     ZOOKEEPER\_TICK\_TIME: 2000
+    environment:
+      ZOOKEEPER\_CLIENT\_PORT: 3500
+      ZOOKEEPER\_TICK\_TIME: 2000
 
- broker:
-   image: confluentinc/cp-kafka:latest
-   hostname: broker
-   depends\_on:
-     - zookeeper
-   ports:
-     - &quot;3501:3501&quot;
-   environment:
-     KAFKA\_BROKER\_ID: 1
-     KAFKA\_ZOOKEEPER\_CONNECT: &#39;zookeeper:3500&#39;
-     KAFKA\_ADVERTISED\_LISTENERS: &#39;EXTERNAL://localhost:3501,PLAINTEXT://broker:9092&#39;
-     KAFKA\_LISTENER\_SECURITY\_PROTOCOL\_MAP: &#39;EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT&#39;
-     KAFKA\_LISTENERS: &#39;EXTERNAL://0.0.0.0:3501,PLAINTEXT://0.0.0.0:9092&#39;
-     KAFKA\_OFFSETS\_TOPIC\_REPLICATION\_FACTOR: 1
-     KAFKA\_DEFAULT\_REPLICATION\_FACTOR: 1
-     KAFKA\_MESSAGE\_MAX\_BYTES: 100000000
-     KAFKA\_REPLICA\_FETCH\_MAX\_BYTES: 100000000
+  broker:
+    image: confluentinc/cp-kafka:latest
+    hostname: broker
+    depends\_on:
+      - zookeeper
+    ports:
+      - &quot;3501:3501&quot;
+    environment:
+      KAFKA\_BROKER\_ID: 1
+      KAFKA\_ZOOKEEPER\_CONNECT: &#39;zookeeper:3500&#39;
+      KAFKA\_ADVERTISED\_LISTENERS: &#39;EXTERNAL://localhost:3501,PLAINTEXT://broker:9092&#39;
+      KAFKA\_LISTENER\_SECURITY\_PROTOCOL\_MAP: &#39;EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT&#39;
+      KAFKA\_LISTENERS: &#39;EXTERNAL://0.0.0.0:3501,PLAINTEXT://0.0.0.0:9092&#39;
+      KAFKA\_OFFSETS\_TOPIC\_REPLICATION\_FACTOR: 1
+      KAFKA\_DEFAULT\_REPLICATION\_FACTOR: 1
+      KAFKA\_MESSAGE\_MAX\_BYTES: 100000000
+      KAFKA\_REPLICA\_FETCH\_MAX\_BYTES: 100000000
 
- schema\_registry:
-   image: confluentinc/cp-schema-registry:latest
-   hostname: schema\_registry
-   depends\_on:
-     - zookeeper
-     - broker
-   ports:
-     - &quot;3502:3502&quot;
-   environment:
-     SCHEMA\_REGISTRY\_HOST\_NAME: schema\_registry
-     SCHEMA\_REGISTRY\_LISTENERS: &#39;http://0.0.0.0:3502&#39;
-     SCHEMA\_REGISTRY\_KAFKASTORE\_CONNECTION\_URL: &#39;zookeeper:3500&#39;
-     SCHEMA\_REGISTRY\_KAFKASTORE\_BOOTSTRAP\_SERVERS: &#39;PLAINTEXT://broker:9092&#39;
+  schema\_registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema\_registry
+    depends\_on:
+      - zookeeper
+      - broker
+    ports:
+      - &quot;3502:3502&quot;
+    environment:
+      SCHEMA\_REGISTRY\_HOST\_NAME: schema\_registry
+      SCHEMA\_REGISTRY\_LISTENERS: &#39;http://0.0.0.0:3502&#39;
+      SCHEMA\_REGISTRY\_KAFKASTORE\_CONNECTION\_URL: &#39;zookeeper:3500&#39;
+      SCHEMA\_REGISTRY\_KAFKASTORE\_BOOTSTRAP\_SERVERS: &#39;PLAINTEXT://broker:9092&#39;
 
- kafka\_rest:
-   image: confluentinc/cp-kafka-rest:latest
-   hostname: kafka\_rest
-   depends\_on:
-     - zookeeper
-     - schema\_registry
-     - broker
-   ports:
-     - &quot;8082:8082&quot;
-   environment:
-     KAFKA\_REST\_HOST\_NAME: kafka\_rest
-     KAFKA\_REST\_BOOTSTRAP\_SERVERS: &#39;PLAINTEXT://broker:9092&#39;
-     KAFKA\_REST\_ZOOKEEPER\_CONNECT: &#39;zookeeper:3500&#39;
-     KAFKA\_REST\_LISTENERS: &#39;http://0.0.0.0:8082&#39;
-     KAFKA\_REST\_SCHEMA\_REGISTRY\_URL: &#39;http://schema\_registry:3502&#39;
-     KAFKA\_CONSUMER\_REQUEST\_TIMEOUT\_MS: 30000
-     KAFKA\_REST\_ACCESS\_CONTROL\_ALLOW\_METHODS: &#39;GET,POST,PUT,DELETE,OPTIONS&#39;
-     KAFKA\_REST\_ACCESS\_CONTROL\_ALLOW\_ORIGIN: &#39;\*&#39;
+  kafka\_rest:
+    image: confluentinc/cp-kafka-rest:latest
+    hostname: kafka\_rest
+    depends\_on:
+      - zookeeper
+      - schema\_registry
+      - broker
+    ports:
+      - &quot;8082:8082&quot;
+    environment:
+      KAFKA\_REST\_HOST\_NAME: kafka\_rest
+      KAFKA\_REST\_BOOTSTRAP\_SERVERS: &#39;PLAINTEXT://broker:9092&#39;
+      KAFKA\_REST\_ZOOKEEPER\_CONNECT: &#39;zookeeper:3500&#39;
+      KAFKA\_REST\_LISTENERS: &#39;http://0.0.0.0:8082&#39;
+      KAFKA\_REST\_SCHEMA\_REGISTRY\_URL: &#39;http://schema\_registry:3502&#39;
+      KAFKA\_CONSUMER\_REQUEST\_TIMEOUT\_MS: 30000
+      KAFKA\_REST\_ACCESS\_CONTROL\_ALLOW\_METHODS: &#39;GET,POST,PUT,DELETE,OPTIONS&#39;
+      KAFKA\_REST\_ACCESS\_CONTROL\_ALLOW\_ORIGIN: &#39;\*&#39;
 
- kafka\_topics\_ui:
-   image: landoop/kafka-topics-ui:latest
-   hostname: kafka\_topics\_ui
-   depends\_on:
-     - kafka\_rest
-   ports:
-     - &quot;3600:8000&quot;
-   environment:
-     KAFKA\_REST\_PROXY\_URL: &#39;http://kafka\_rest:8082&#39;
-     PROXY: &#39;true&#39;
+  kafka\_topics\_ui:
+    image: landoop/kafka-topics-ui:latest
+    hostname: kafka\_topics\_ui
+    depends\_on:
+      - kafka\_rest
+    ports:
+      - &quot;3600:8000&quot;
+    environment:
+      KAFKA\_REST\_PROXY\_URL: &#39;http://kafka\_rest:8082&#39;
+      PROXY: &#39;true&#39;
 
- kafka\_schema\_registry\_ui:
-   image: landoop/schema-registry-ui:latest
-   hostname: kafka\_schema\_registry\_ui
-   depends\_on:
-     - schema\_registry
-   ports:
-     - &quot;3601:8000&quot;
-   environment:
-     SCHEMAREGISTRY\_URL: &#39;http://schema\_registry:3502&#39;
-     PROXY: &#39;true&#39;
+  kafka\_schema\_registry\_ui:
+    image: landoop/schema-registry-ui:latest
+    hostname: kafka\_schema\_registry\_ui
+    depends\_on:
+      - schema\_registry
+    ports:
+      - &quot;3601:8000&quot;
+    environment:
+      SCHEMAREGISTRY\_URL: &#39;http://schema\_registry:3502&#39;
+      PROXY: &#39;true&#39;
 
- postgres:
-   image: postgres:9.6
-   hostname: postgres
-   environment:
-     POSTGRES\_USER: postgres
-     POSTGRES\_PASSWORD: postgres
-     POSTGRES\_DB: TRIAL\_ADMIN
-   volumes:
-      - postgres-data:/var/lib/postgresql/data
-_#    restart: unless-stopped_
+  postgres:
+    image: postgres:9.6
+    hostname: postgres
+    environment:
+      POSTGRES\_USER: postgres
+      POSTGRES\_PASSWORD: postgres
+      POSTGRES\_DB: TRIAL\_ADMIN
+    volumes:
+       - postgres-data:/var/lib/postgresql/data
+_#  restart: unless-stopped_
+ 
+  admintool:
+    image: drivereu/test-bed-admin:latest
+    depends\_on:
+      - postgres
+      - broker
+      - schema\_registry
+    ports:
+      - &quot;8090:8090&quot;
+    volumes:
+      - ./admintool-config/gateways.json:/opt/application/config/gateways.json
+      - ./admintool-config/solutions.json:/opt/application/config/solutions.json
+      - ./admintool-config/topics.json:/opt/application/config/topics.json
+      - ./admintool-config/standards.json:/opt/application/config/standards.json
+      - ./admintool-config/testbed-solutions.json:/opt/application/config/testbed-solutions.json
+      - ./admintool-config/testbed-topics.json:/opt/application/config/testbed-topics.json
+      - ./admintool-config/configurations.json:/opt/application/config/configurations.json
+    environment:
+      KAFKA\_BROKER\_URL: broker:9092
+      SCHEMA\_REGISTRY\_URL: http://schema\_registry:3502
+      zookeeper\_host: zookeeper
+      zookeeper\_port: 3500
+      schema\_registry\_url: http://schema\_registry:3502
+      testbed\_secure\_mode: &#39;DEVELOP&#39;
+      testbed\_init\_auto: &#39;false&#39;
+      management\_ca\_cert\_path: http://localhost:9090
+      cert\_handler\_url: https://localhost:8443
+      cert\_pem\_handler\_url: https://localhost:8443
+      security\_rest\_path\_group: https://localhost:9443
+      security\_rest\_path\_topic: https://localhost:9443
 
-admintool:
-   image: drivereu/test-bed-admin:latest
-   depends\_on:
-     - postgres
-     - broker
-     - schema\_registry
-   ports:
-     - &quot;8090:8090&quot;
-   volumes:
-     - ./admintool-config/gateways.json:/opt/application/config/gateways.json
-     - ./admintool-config/solutions.json:/opt/application/config/solutions.json
-     - ./admintool-config/topics.json:/opt/application/config/topics.json
-     - ./admintool-config/standards.json:/opt/application/config/standards.json
-     - ./admintool-config/testbed-solutions.json:/opt/application/config/testbed-solutions.json
-     - ./admintool-config/testbed-topics.json:/opt/application/config/testbed-topics.json
-     - ./admintool-config/configurations.json:/opt/application/config/configurations.json
+  afteractionreview:
+    image: drivereu/after-action-review:latest
+    depends\_on:
+      - postgres
+      - broker
+      - schema\_registry
+    ports:
+      - &quot;8095:8095&quot;
+    environment:
+      KAFKA\_BROKER\_URL: broker:9092
+      SCHEMA\_REGISTRY\_URL: http://schema\_registry:3502
+      zookeeper\_host: zookeeper
+      zookeeper\_port: 3500
+      schema\_registry\_url: http://schema\_registry:3502
 
-   environment:
-     KAFKA\_BROKER\_URL: broker:9092
-     SCHEMA\_REGISTRY\_URL: http://schema\_registry:3502
-     zookeeper\_host: zookeeper
-     zookeeper\_port: 3500
-     schema\_registry\_url: http://schema\_registry:3502
-     testbed\_secure\_mode: &#39;DEVELOP&#39;
-     testbed\_init\_auto: &#39;false&#39;
-     management\_ca\_cert\_path: http://localhost:9090
-     cert\_handler\_url: https://localhost:8443
-     cert\_pem\_handler\_url: https://localhost:8443
-     security\_rest\_path\_group: https://localhost:9443
-     security\_rest\_path\_topic: https://localhost:9443
+  pgadmin:
+    image: fenglc/pgadmin4
+    depends\_on:
+      - postgres
+    ports:
+      - &quot;5050:5050&quot;
+_#   restart: unless-stopped_
 
- afteractionreview:
-   image: drivereu/after-action-review:latest
-   depends\_on:
-     - postgres
-     - broker
-     - schema\_registry
-   ports:
-     - &quot;8095:8095&quot;
-   environment:
-     KAFKA\_BROKER\_URL: broker:9092
-     SCHEMA\_REGISTRY\_URL: http://schema\_registry:3502
-     zookeeper\_host: zookeeper
-     zookeeper\_port: 3500
-     schema\_registry\_url: http://schema\_registry:3502
+  time\_service:
+    image: drivereu/test-bed-time-service:latest
+    depends\_on:
+      - broker
+      - schema\_registry
+    ports:
+      - &quot;8100:8100&quot;
+    environment:
+      KAFKA\_BROKER\_URL: broker:9092
+      SCHEMA\_REGISTRY\_URL: http://schema\_registry:3502
+      AUTO\_REGISTER\_SCHEMAS: &#39;true&#39;
 
- pgadmin:
-   image: fenglc/pgadmin4
-   depends\_on:
-     - postgres
-   ports:
-       - &quot;5050:5050&quot;
-_#    restart: unless-stopped_
-
- time\_service:
-   image: drivereu/test-bed-time-service:latest
-   depends\_on:
-     - broker
-     - schema\_registry
-   ports:
-     - &quot;8100:8100&quot;
-   environment:
-     KAFKA\_BROKER\_URL: broker:9092
-     SCHEMA\_REGISTRY\_URL: http://schema\_registry:3502
-     AUTO\_REGISTER\_SCHEMAS: &#39;true&#39;
-
- large\_file\_service:
-   image: drivereu/large-file-service:latest
-   ports:
-     - &quot;9090:9090&quot;
-   environment:
-     HOST: localhost
-     PORT: 9090
- _# wms\_service:_
+  large\_file\_service:
+    image: drivereu/large-file-service:latest
+    ports:
+      - &quot;9090:9090&quot;
+    environment:
+      HOST: localhost
+      PORT: 9090
+ 
+_# wms\_service:_
 _ #   image: drivereu/test-bed-wms-service:1.0.10_
 _ #   hostname: wmsservice_
 _ #   environment:_
@@ -309,62 +305,62 @@ _ #     - broker_
 _ #     - schema\_registry_
 
   trial\_management\_tool:
-   image: drivereu/trial-management-tool:latest
-   depends\_on:
-     - broker
-     - schema\_registry
-   ports:
-     - &#39;3210:3210&#39;
-   environment:
-     CLIENT\_ID: TB-TrialMgmt
-     KAFKA\_HOST: broker:9092
-     SCHEMA\_REGISTRY: http://schema\_registry:3502
-     TRIAL\_MANAGER\_SERVER\_PORT: 3210
-     PRODUCE: system\_request\_change\_of\_trial\_stage,system\_tm\_phase\_message,system\_tm\_role\_player,system\_tm\_session\_mgmt
-     SSL: &#39;false&#39;
-     SSL\_PFX: certs/TB-TrialMgmt.p12
-     SSL\_PASSPHRASE: changeit
-     SSL\_CA: certs/test-ca.pem
-   volumes:
-     - trial-data:/app/trials
-
-  ost\_db:
-    image: janbalbierzitti/ost\_database:fddr2\_2
+    image: drivereu/trial-management-tool:latest
+    depends\_on:
+      - broker
+      - schema\_registry
     ports:
-    - &quot;5437:5432&quot;
+      - &#39;3210:3210&#39;
+    environment:
+      CLIENT\_ID: TB-TrialMgmt
+      KAFKA\_HOST: broker:9092
+      SCHEMA\_REGISTRY: http://schema\_registry:3502
+      TRIAL\_MANAGER\_SERVER\_PORT: 3210
+      PRODUCE: system\_request\_change\_of\_trial\_stage,system\_tm\_phase\_message,system\_tm\_role\_player,system\_tm\_session\_mgmt
+      SSL: &#39;false&#39;
+      SSL\_PFX: certs/TB-TrialMgmt.p12
+      SSL\_PASSPHRASE: changeit
+      SSL\_CA: certs/test-ca.pem
     volumes:
-    - database-OST:/var/lib/postgresql/data
+      - trial-data:/app/trials
+ 
+   ost\_db:
+     image: janbalbierzitti/ost\_database:fddr2\_2
+     ports:
+       - &quot;5437:5432&quot;
+     volumes:
+       - database-OST:/var/lib/postgresql/data
 _#    restart: always_
   ost\_web:
     image: janbalbierzitti/ost\_frontend:fddr2\_2
     links:
-    - ost\_api
+      - ost\_api
     ports:
-    - &quot;127.0.0.1:85:80&quot;
-    - &quot;127.0.0.1:445:443&quot;
+      - &quot;127.0.0.1:85:80&quot;
+      - &quot;127.0.0.1:445:443&quot;
 _#        restart: always_
   ost\_api:
     image: janbalbierzitti/ost\_backend:fddr2\_2
     links:
-    - ost\_db
+      - ost\_db
     ports:
-    - &quot;8080:8080&quot;
+      - &quot;8080:8080&quot;
 _#    restart: always_
 
   silent-producer:
     image: silent-producer
     depends\_on:
-     - broker
-     - schema\_registry
+      - broker
+      - schema\_registry
     environment:
       KAFKA\_HOST: broker:9092
       SCHEMA\_REGISTRY: http://schema\_registry:3502
       PRODUCE\_TOPICS: simulation\_request\_unittransport,simulation\_request\_startinject,simulation\_entity\_item,sumo\_AffectedArea,standard\_cap,system\_timing,system\_topic\_access\_invite
 
 volumes:
- database-OST:
- postgres-data:
- trial-data:
+  database-OST:
+  postgres-data:
+  trial-data:
 ```
 
 1. Go back to the required folder.
