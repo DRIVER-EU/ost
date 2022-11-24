@@ -304,14 +304,14 @@ _#   restart: unless-stopped_
       - trial-data:/app/trials
  
    ost_db:
-     image: janbalbierzitti/ost_database:fddr2_2
+     image: drivereu/ost_database
      ports:
        - 5437:5432
      volumes:
        - database-OST:/var/lib/postgresql/data
 _#    restart: always_
   ost_web:
-    image: janbalbierzitti/ost_frontend:fddr2
+    image: drivereu/ost_frontend:without_keycloak
     links:
       - ost_api
     ports:
@@ -319,7 +319,7 @@ _#    restart: always_
       - 127.0.0.1:445:443
 _#        restart: always_
   ost_api:
-    image: janbalbierzitti/ost_backend:fddr2_2
+    image: drivereu/ost_backend:without_keycloak
     links:
       - ost_db
     ports:
