@@ -7,7 +7,7 @@ import eu.fp7.driver.ost.driver.model.Trial;
 import eu.fp7.driver.ost.driver.service.ObservationTypeService;
 import eu.fp7.driver.ost.driver.service.TrialService;
 import eu.fp7.driver.ost.driver.service.TrialSessionService;
-import eu.fp7.driver.ost.driver.util.BrokerUtil;
+//import eu.fp7.driver.ost.driver.util.BrokerUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,20 +47,20 @@ public class TrialController {
         return observationTypeService.generateSchemaList(observationTypeCriteriaDTO);
     }
 
-    @GetMapping("/ostTrialId")
-    public Long ostTrialId() {
-        return BrokerUtil.trialId;
-    }
-
-    @GetMapping("/ostTrialSessionId")
-    public Long timeElapsed() {
-        return BrokerUtil.trialSessionId;
-    }
-
-    @GetMapping("/ostTrialStageId")
-    public Long ostTrialStageId(){
-        return BrokerUtil.trialStageId;
-    }
+//    @GetMapping("/ostTrialId")
+//    public Long ostTrialId() {
+//        return BrokerUtil.trialId;
+//    }
+//
+//    @GetMapping("/ostTrialSessionId")
+//    public Long timeElapsed() {
+//        return BrokerUtil.trialSessionId;
+//    }
+//
+//    @GetMapping("/ostTrialStageId")
+//    public Long ostTrialStageId(){
+//        return BrokerUtil.trialStageId;
+//    }
 
     @GetMapping("/admin/ostTrials")
     public ResponseEntity getTrial(@RequestParam(value = "id") long id) {

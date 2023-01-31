@@ -5,28 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.fp7.driver.ost.core.exception.EntityNotFoundException;
 import eu.fp7.driver.ost.core.security.security.model.AuthUser;
 import eu.fp7.driver.ost.driver.dto.AnswerDTO;
-import eu.fp7.driver.ost.driver.model.Answer;
-import eu.fp7.driver.ost.driver.model.AnswerTrialRole;
-import eu.fp7.driver.ost.driver.model.AnswerTrialRoleId;
-import eu.fp7.driver.ost.driver.model.Attachment;
-import eu.fp7.driver.ost.driver.model.ObservationType;
-import eu.fp7.driver.ost.driver.model.Question;
-import eu.fp7.driver.ost.driver.model.TrialRole;
-import eu.fp7.driver.ost.driver.model.TrialSession;
-import eu.fp7.driver.ost.driver.model.TrialUser;
+import eu.fp7.driver.ost.driver.dto.AnswerKafkaDTO;
+import eu.fp7.driver.ost.driver.model.*;
 import eu.fp7.driver.ost.driver.model.enums.AttachmentType;
-import eu.fp7.driver.ost.driver.repository.AnswerRepository;
-import eu.fp7.driver.ost.driver.repository.AnswerTrialRoleRepository;
-import eu.fp7.driver.ost.driver.repository.ObservationTypeRepository;
-import eu.fp7.driver.ost.driver.repository.TrialRoleRepository;
-import eu.fp7.driver.ost.driver.repository.TrialSessionRepository;
-import eu.fp7.driver.ost.driver.repository.TrialUserRepository;
+import eu.fp7.driver.ost.driver.repository.*;
 import eu.fp7.driver.ost.driver.repository.specification.AnswerSpecification;
-import eu.fp7.driver.ost.driver.util.AnswerProperties;
-import eu.fp7.driver.ost.driver.util.BrokerUtil;
-import eu.fp7.driver.ost.driver.util.CSVUtils;
-import eu.fp7.driver.ost.driver.util.InternalServerException;
-import eu.fp7.driver.ost.driver.util.RepositoryUtils;
+import eu.fp7.driver.ost.driver.util.*;
 import eu.fp7.driver.ost.driver.util.schema.SchemaCreator;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -72,9 +56,6 @@ import java.util.stream.Collectors;
 public class AnswerService {
 
     @Autowired
-    BrokerUtil brokerUtil;
-
-    @Autowired
     private AnswerRepository answerRepository;
 
     @Autowired
@@ -98,6 +79,12 @@ public class AnswerService {
     @Autowired
     private TrialUserService trialUserService;
 
+    @Autowired
+    private KafkaUtil kafkaUtil;
+
+    @Autowired
+    UserRoleSessionRepository userRoleSessionRepository;
+
 
     public Answer createAnswer(AnswerDTO.Form form, MultipartFile[] files) throws ValidationException, IOException {
         ObservationType observationType = observationTypeRepository.findById(form.observationTypeId)
@@ -111,7 +98,7 @@ public class AnswerService {
         TrialUser currentTrialUser = trialUserRepository.findByAuthUser(currentUser);
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.trialSessionId));
-
+        String userLogin = currentUser.getLogin();
         Answer answer = answerRepository.save(
                 Answer.builder()
                         .trialSession(trialSession)
@@ -119,7 +106,8 @@ public class AnswerService {
                         .observationType(observationType)
                         .simulationTime(form.simulationTime)
                         .sentSimulationTime(LocalDateTime.now())
-                        .trialTime(Optional.ofNullable(BrokerUtil.getTrialTime()).orElse(LocalDateTime.now()))
+//                        .trialTime(Optional.ofNullable(BrokerUtil.getTrialTime()).orElse(LocalDateTime.now()))
+                        .trialTime(LocalDateTime.now())
                         .fieldValue(form.fieldValue)
                         .formData(form.formData.toString())
                         .comment(form.comment)
@@ -130,8 +118,47 @@ public class AnswerService {
         }
         answer.setAttachments(assignAttachments(form, files, answer));
 
-        brokerUtil.sendAnswerToTestBed(answer);
+        String questionTypeOfAnswer = "";
+        String questionName = "";
+        String questionDescription = "";
+        String answers = "";
+        String userRole = "";
+        System.out.println("");
+        if (answer.getObservationType().getQuestions() != null) {
+            switch (answer.getObservationType().getQuestions().get(0).getAnswerType()) {
+                case CHECKBOX:
+                    questionTypeOfAnswer = "checkbox";
+                    break;
+                case RADIO_BUTTON:
+                    questionTypeOfAnswer = "radiobutton";
+                    break;
+                case SLIDER:
+                    questionTypeOfAnswer = "slider";
+                    break;
+                case TEXT_FIELD:
+                    questionTypeOfAnswer = "text";
+                    break;
+            }
+            questionDescription = answer.getObservationType().getQuestions().get(0).getDescription();
+            questionName = answer.getObservationType().getQuestions().get(0).getName();
+            answers = SchemaCreator.getValueFromJSONObject(answer.getFormData(),
+                    AnswerProperties.QUESTION_KEY + answer.getObservationType().getQuestions().get(0).getId());
+        }
+        List<UserRoleSession> userRoleSessionList = userRoleSessionRepository.findByTrialSession(trialSession);
+        if (userRoleSessionList != null)
+            userRole = userRoleSessionList.get(0).getTrialRole().getName();
 
+//        brokerUtil.sendAnswerToTestBed(answer);
+        AnswerKafkaDTO answerKafkaDTO = new AnswerKafkaDTO(
+                questionName,
+                questionDescription,
+                questionTypeOfAnswer,
+                answers,
+                userRole,
+                userLogin,
+                form.simulationTime.toInstant().toEpochMilli()
+        );
+        kafkaUtil.sendAnswer(answerKafkaDTO);
         return answerRepository.save(answer);
     }
 
