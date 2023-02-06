@@ -29,9 +29,9 @@ import java.io.IOException;
 @RequestMapping("/api")
 public class ReadExcelController {
 
-    public static final int QUESTION_SET_ID = 0;
-    public static final int TRIAL_NAME = 1;
-    public static final int STAGE_NAME = 2;
+    public static final int QUESTION_SET_ID = 2;
+    public static final int TRIAL_NAME = 0;
+    public static final int STAGE_NAME = 1;
     public static final int ROLE_NAME = 3;
     public static final int QUESTION = 4;
     public static final int DESCRIPTION = 5;
