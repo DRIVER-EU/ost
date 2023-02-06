@@ -230,8 +230,8 @@ public class ObservationTypeService {
                 .build();
 
         return observationTypeRepository.save(observationType);
-
     }
+
 
     @Transactional
     public ObservationType getFullObservationType(Long id) {

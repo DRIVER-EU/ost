@@ -99,6 +99,8 @@ public class AnswerService {
         TrialSession trialSession = trialSessionRepository.findById(form.trialSessionId)
                 .orElseThrow(() -> new EntityNotFoundException(TrialSession.class, form.trialSessionId));
         String userLogin = currentUser.getLogin();
+        String trialName = trialSession.getTrial().getName();
+        String stageName = trialSession.getLastTrialStage().getName();
         Answer answer = answerRepository.save(
                 Answer.builder()
                         .trialSession(trialSession)
@@ -118,14 +120,13 @@ public class AnswerService {
         }
         answer.setAttachments(assignAttachments(form, files, answer));
 
-        String questionTypeOfAnswer = "";
-        String questionName = "";
-        String questionDescription = "";
-        String answers = "";
-        String userRole = "";
-        System.out.println("");
-        if (answer.getObservationType().getQuestions() != null) {
-            switch (answer.getObservationType().getQuestions().get(0).getAnswerType()) {
+        for(int i = 0; i < answer.getObservationType().getQuestions().size(); i++) {
+            String questionTypeOfAnswer = "";
+            String questionName = "";
+            String questionDescription = "";
+            String answers = "";
+            String userRole = "";
+            switch (answer.getObservationType().getQuestions().get(i).getAnswerType()) {
                 case CHECKBOX:
                     questionTypeOfAnswer = "checkbox";
                     break;
@@ -138,27 +139,29 @@ public class AnswerService {
                 case TEXT_FIELD:
                     questionTypeOfAnswer = "text";
                     break;
-            }
-            questionDescription = answer.getObservationType().getQuestions().get(0).getDescription();
-            questionName = answer.getObservationType().getQuestions().get(0).getName();
+                }
+            questionDescription = answer.getObservationType().getQuestions().get(i).getDescription();
+            questionName = answer.getObservationType().getQuestions().get(i).getName();
             answers = SchemaCreator.getValueFromJSONObject(answer.getFormData(),
-                    AnswerProperties.QUESTION_KEY + answer.getObservationType().getQuestions().get(0).getId());
-        }
-        List<UserRoleSession> userRoleSessionList = userRoleSessionRepository.findByTrialSession(trialSession);
-        if (userRoleSessionList != null)
-            userRole = userRoleSessionList.get(0).getTrialRole().getName();
+                    AnswerProperties.QUESTION_KEY + answer.getObservationType().getQuestions().get(i).getId());
+            List<UserRoleSession> userRoleSessionList = userRoleSessionRepository.findByTrialSession(trialSession);
+            if (userRoleSessionList != null)
+                userRole = userRoleSessionList.get(0).getTrialRole().getName();
 
-//        brokerUtil.sendAnswerToTestBed(answer);
-        AnswerKafkaDTO answerKafkaDTO = new AnswerKafkaDTO(
-                questionName,
-                questionDescription,
-                questionTypeOfAnswer,
-                answers,
-                userRole,
-                userLogin,
-                form.simulationTime.toInstant().toEpochMilli()
-        );
-        kafkaUtil.sendAnswer(answerKafkaDTO);
+            //        brokerUtil.sendAnswerToTestBed(answer);
+            AnswerKafkaDTO answerKafkaDTO = new AnswerKafkaDTO(
+                    questionName,
+                    questionDescription,
+                    questionTypeOfAnswer,
+                    answers,
+                    userRole,
+                    userLogin,
+                    form.simulationTime.toInstant().toEpochMilli(),
+                    trialName,
+                    stageName
+            );
+            kafkaUtil.sendAnswer(answerKafkaDTO);
+        }
         return answerRepository.save(answer);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public final class ImportExcelTrialPositionDTO {
-  private Long questionSetId;
+  private String questionSetName;
   private String stageName;
   private String roleName;
   private String question;
@@ -24,6 +24,7 @@ public final class ImportExcelTrialPositionDTO {
   private String answerType;
   private int comments;
   private String jsonSchema;
+  private int excelRow;
   @Builder.Default
   private List<ImportExcelTrialAnswerDTO> excelAnswers = new ArrayList<>();
 

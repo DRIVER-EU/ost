@@ -203,9 +203,10 @@ services:
   ost_web:
     hostname: ost_web
     container_name: ost_web
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
+    image: drivereu/ost_frontend:without_keycloak
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.frontend
     links:
       - postgres
     ports:

@@ -17,8 +17,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,10 +52,22 @@ public class ExcelImportService {
 
         archiveTrailsWithTheSameNameIfTheyAlreadyExists(importExcelTrialDTO.getTrialName());
         Trial trial = createNewTrial(importExcelTrialDTO);
+        Map<String, ObservationTypeTrialRole> observationTypeTrialRoleMap = new HashMap<>();
+//        Map<String, ObservationType> observationTypeMap = new HashMap<>();
+//        List<ObservationTypeTrialRole> observationTypeTrialRoleList = new ArrayList<>();
+//        List<ObservationType> observationTypeList = new ArrayList<>();
 
         for (ImportExcelTrialPositionDTO trailPosition : importExcelTrialDTO.getTrialPositions()) {
             ObservationType observationType = createObservationType(trial, trailPosition);
-            createObservationTypeTrialRole(observationType, trial, trailPosition);
+//            observationTypeMap.put(observationType.getName(), observationType);
+            ObservationTypeTrialRole observationTypeTrialRole = createObservationTypeTrialRole(
+                    observationType,
+                    trial,
+                    trailPosition,
+                    observationTypeTrialRoleMap);
+            observationTypeTrialRoleMap.put(observationTypeTrialRole.getObservationType().getId().toString() + ":" +
+                    observationTypeTrialRole.getTrialRole().getId().toString(), observationTypeTrialRole);
+
             addQuestionsToObservationType(trailPosition, observationType);
             trial.getObservationTypes().add(observationType);
         }
@@ -108,13 +119,22 @@ public class ExcelImportService {
     }
     private ObservationType createObservationType(Trial trial, ImportExcelTrialPositionDTO trailPosition) {
         TrialStage stage = getTrialStage(trial, trailPosition);
-        ObservationType observationType = ObservationType.builder()
+        ObservationType observationType;
+        List<ObservationType> observationTypeList = observationTypeRepository.findAllByTrialIdAndTrialStageIdAndName(
+                trial.getId(),
+                stage.getId(),
+                trailPosition.getQuestionSetName());
+        if (observationTypeList.size() == 0)
+        observationType = ObservationType.builder()
                 .description(trailPosition.getDescription())
-                .name(trailPosition.getStageName())
+                .name(trailPosition.getQuestionSetName())
                 .position(trailPosition.getPosition())
                 .trial(trial)
                 .trialStage(stage)
                 .build();
+        else{
+            observationType = observationTypeList.get(0);
+        }
         observationType = observationTypeRepository.save(observationType);
         return observationType;
     }
@@ -157,17 +177,26 @@ public class ExcelImportService {
         return trial;
     }
 
-    private ObservationTypeTrialRole createObservationTypeTrialRole(ObservationType observationType, Trial trial, ImportExcelTrialPositionDTO trailExcelPosition) {
+    private ObservationTypeTrialRole createObservationTypeTrialRole(ObservationType observationType, Trial trial,
+                                                                    ImportExcelTrialPositionDTO trailExcelPosition,
+                                                                    Map<String, ObservationTypeTrialRole>
+                                                                            observationTypeTrialRoleMap) {
 
         TrialRole trialRole = getTrialRoleIfNotExistCreateIt(trial, trailExcelPosition);
-        ObservationTypeTrialRole observationTypeTrialRole = ObservationTypeTrialRole.builder()
-                .trialRole(trialRole)
-                .observationType(observationType)
-                .build();
+        ObservationTypeTrialRole observationTypeTrialRole = null;
 
-        observationTypeTrialRole = observationTypeRoleRepository.save(observationTypeTrialRole);
-        observationType.getObservationTypeTrialRoles().add(observationTypeTrialRole);
+        if(observationTypeTrialRoleMap.containsKey(observationType.getId().toString() +":"+ trialRole.getId().toString()))
+            observationTypeTrialRole = observationTypeTrialRoleMap.get(observationType.getId().toString() +":"+ trialRole.getId().toString());
 
+        if (observationTypeTrialRole == null) {
+            observationTypeTrialRole = ObservationTypeTrialRole.builder()
+                    .trialRole(trialRole)
+                    .observationType(observationType)
+                    .build();
+
+            observationTypeTrialRole = observationTypeRoleRepository.save(observationTypeTrialRole);
+            observationType.getObservationTypeTrialRoles().add(observationTypeTrialRole);
+        }
         return observationTypeTrialRole;
     }
 
@@ -181,7 +210,7 @@ public class ExcelImportService {
                     .trial(trial)
                     .name(trailPosition.getRoleName())
                     //TODO JKW where to find the info in the excel file ?
-                    .roleType(RoleType.PARTICIPANT)
+                    .roleType(RoleType.OBSERVER)
                     .build();
             trial.getTrialRoles().add(newTrailRole);
             return trialRoleRepository.save(newTrailRole);

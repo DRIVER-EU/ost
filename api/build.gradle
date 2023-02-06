@@ -193,8 +193,8 @@ dependencies {
     compile("org.keycloak:keycloak-authz-client:${KEYCLOAK_VERSION}")
 
     // Kafka
-    compile("org.springframework.kafka:spring-kafka:${springKafkaVersion}")
-    //compile("org.springframework.kafka:spring-kafka-test:${springKafkaTestVersion}")
+    compile("org.springframework.kafka:spring-kafka")
+    compile("org.springframework.kafka:spring-kafka-test")
 
     // ----------------------------------------
     // Test

@@ -25,18 +25,18 @@ import java.util.stream.Collectors;
 @Service
 public class ExcelReadToDtoService {
 
-  public static final int QUESTION_SET_ID = 0;
-  public static final int TRIAL_NAME = 1;
-  public static final int STAGE_NAME = 2;
+  public static final int QUESTION_SET_NAME = 2;
+  public static final int TRIAL_NAME = 0;
+  public static final int STAGE_NAME = 1;
   public static final int ROLE_NAME = 3;
   public static final int QUESTION = 4;
   public static final int DESCRIPTION = 5;
   public static final int DIMENSION = 6;
-  public static final int POSITION = 7;
-  public static final int REQUIRED = 8;
-  public static final int ANSWER_TYPE = 9;
-  public static final int COMMENTS = 10;
-  public static final int MAX_NUMBER_OF_ANSWERS = 10;
+  public static final int POSITION = 6;
+  public static final int REQUIRED = 7;
+  public static final int ANSWER_TYPE = 8;
+  public static final int COMMENTS = 9;
+  public static final int BEGINNING_OF_ANSWERS = 9;
 
 
   @Autowired
@@ -73,11 +73,14 @@ public class ExcelReadToDtoService {
 
     for (ImportExcelTrialPositionDTO importExcelTrialPositionDTO : importExcelTrialDTO.getTrialPositions()) {
       if (importExcelTrialPositionDTO.getStageName().isEmpty()) {
-        apiValidationWarnings.add(new ApiValidationWarning("Empty stage name at question setId = " + importExcelTrialPositionDTO.getQuestionSetId(), ErrorLevel.WARN));
+        apiValidationWarnings.add(new ApiValidationWarning("Empty stage name at row = "
+                + importExcelTrialPositionDTO.getExcelRow(), ErrorLevel.WARN));
       }
 
-      if (importExcelTrialPositionDTO.getExcelAnswers().size() == 0 && importExcelTrialPositionDTO.getRequired() == Boolean.TRUE) {
-        apiValidationWarnings.add(new ApiValidationWarning("Answers not defined question setId = " + importExcelTrialPositionDTO.getQuestionSetId(), ErrorLevel.WARN));
+      if (importExcelTrialPositionDTO.getExcelAnswers().size() == 0 &&
+              importExcelTrialPositionDTO.getRequired() == Boolean.TRUE &&
+              !importExcelTrialPositionDTO.getAnswerType().equals("TEXT_FIELD")) {
+        apiValidationWarnings.add(new ApiValidationWarning("Answers not defined at row = " + importExcelTrialPositionDTO.getExcelRow(), ErrorLevel.WARN));
       }
 
       //Errors
@@ -133,16 +136,18 @@ public class ExcelReadToDtoService {
 
     try {
       ImportExcelTrialPositionDTO importExcelTrialPositionDTO = ImportExcelTrialPositionDTO.builder()
-              .questionSetId((long) getNumericCellValue (row,QUESTION_SET_ID))
+              .questionSetName(getStringCellValue(row,QUESTION_SET_NAME))
               .stageName(getStringCellValue(row,STAGE_NAME))
               .roleName(getStringCellValue(row,ROLE_NAME))
               .question(getStringCellValue(row,QUESTION))
               .description(getStringCellValue(row,DESCRIPTION))
-              .dimension(getStringCellValue(row,DIMENSION))
+              //.dimension(getStringCellValue(row,DIMENSION))
+              .dimension("")
               .position(getNumericCellValue (row,POSITION))
               .required(getBooleanValueFromInt(getNumericCellValue (row,REQUIRED)))
               .answerType(getStringCellValue(row,ANSWER_TYPE))
               .comments(getNumericCellValue (row,COMMENTS))
+              .excelRow(row.getRowNum())
               .build();
       return importExcelTrialPositionDTO;
     } catch (Exception e) {
@@ -215,7 +220,7 @@ public class ExcelReadToDtoService {
     int position = 1;
     try {
       for (Cell cell : row) {
-        if (cell.getColumnIndex() <= MAX_NUMBER_OF_ANSWERS) {
+        if (cell.getColumnIndex() <= BEGINNING_OF_ANSWERS) {
           continue;
         }
         String cellValue = cell.getRichStringCellValue().getString().trim();

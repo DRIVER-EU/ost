@@ -1,0 +1,11 @@
+.idea
+.gitlab
+_know
+doc
+install_package
+.gitignore
+.gitlab-ci.yml
+docker-compose.yml
+Documentation.pdf
+LICENSE
+README.md

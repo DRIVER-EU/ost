@@ -1,18 +1,20 @@
 package eu.fp7.driver.ost.driver.dto;
 
 public class AnswerKafkaDTO {
-    Long timeMs = 0L;
-    String questionName = "";
-    String questionDescription = "";
-    String answerType;
-    String answers;
-    String userRole;
-    String userLogin;
+    private Long timeMs = 0L;
+    private String questionName = "";
+    private String questionDescription = "";
+    private String answerType;
+    private String answers;
+    private String userRole;
+    private String userLogin;
+    private String trialName;
+    private String stageName;
 
     public AnswerKafkaDTO(){}
 
     public AnswerKafkaDTO(String questionName, String questionDescription, String answerType, String answers,
-                          String userRole, String userLogin, Long time) {
+                          String userRole, String userLogin, Long time, String trialName, String stageName) {
         this.questionName = questionName;
         this.questionDescription = questionDescription;
         this.answerType = answerType;
@@ -20,6 +22,8 @@ public class AnswerKafkaDTO {
         this.userRole = userRole;
         this.userLogin = userLogin;
         this.timeMs = time;
+        this.trialName = trialName;
+        this.stageName = stageName;
     }
 
     public void setAnswers(String answers){
@@ -50,6 +54,12 @@ public class AnswerKafkaDTO {
         this.userLogin = userLogin;
     }
 
+    public void setTrialName(String trialName) { this.trialName = trialName; }
+
+    public void setStageName(String stageName) { this.stageName = stageName; }
+
+//    public void setQuestionSetName(String questionSetName) { this.questionSetName = questionSetName; }
+
     public String getQuestionName(){
         return this.questionName;
     }
@@ -77,4 +87,10 @@ public class AnswerKafkaDTO {
     public Long getTimeMs(){
         return this.timeMs;
     }
+
+    public String getTrialName() { return this.trialName; }
+
+    public String getStageName() { return this.stageName; }
+
+//    public String getQuestionSetName() { return this.questionSetName; }
 }

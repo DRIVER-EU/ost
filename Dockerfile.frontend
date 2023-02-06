@@ -1,5 +1,6 @@
 ﻿FROM node:6.10-alpine AS builder
 COPY ./web /web/
+RUN chown -R root:root web
 WORKDIR web
 RUN npm install
 RUN npm run deploy:prod

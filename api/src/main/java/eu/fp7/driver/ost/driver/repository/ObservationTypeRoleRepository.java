@@ -11,5 +11,5 @@ public interface ObservationTypeRoleRepository
         extends PagingAndSortingRepository<ObservationTypeTrialRole, Long>, JpaSpecificationExecutor<ObservationTypeTrialRole> {
 
     Optional<ObservationTypeTrialRole> findObservationTypeTrialRoleById(ObservationTypeTrialRoleId observationTypeTrialRoleId);
-
+    ObservationTypeTrialRole findByObservationTypeIdAndTrialRole(long observationTypeId, long trialRoleId);
 }
