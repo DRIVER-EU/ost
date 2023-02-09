@@ -10,11 +10,12 @@ public class AnswerKafkaDTO {
     private String userLogin;
     private String trialName;
     private String stageName;
+    private String sessionName;
 
     public AnswerKafkaDTO(){}
 
     public AnswerKafkaDTO(String questionName, String questionDescription, String answerType, String answers,
-                          String userRole, String userLogin, Long time, String trialName, String stageName) {
+                          String userRole, String userLogin, Long time, String trialName, String stageName, String sessionName) {
         this.questionName = questionName;
         this.questionDescription = questionDescription;
         this.answerType = answerType;
@@ -24,6 +25,7 @@ public class AnswerKafkaDTO {
         this.timeMs = time;
         this.trialName = trialName;
         this.stageName = stageName;
+        this.sessionName = sessionName;
     }
 
     public void setAnswers(String answers){
@@ -91,6 +93,7 @@ public class AnswerKafkaDTO {
     public String getTrialName() { return this.trialName; }
 
     public String getStageName() { return this.stageName; }
+    public String getSessionName() { return this.sessionName; }
 
 //    public String getQuestionSetName() { return this.questionSetName; }
 }

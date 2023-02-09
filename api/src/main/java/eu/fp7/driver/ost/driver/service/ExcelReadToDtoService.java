@@ -7,7 +7,7 @@ import eu.fp7.driver.ost.driver.util.ApiJsonAnswer;
 import eu.fp7.driver.ost.driver.util.ApiValidationWarning;
 import eu.fp7.driver.ost.driver.util.ExcelImportException;
 import eu.fp7.driver.ost.driver.util.ReadingToDTOExcelException;
-import lombok.Builder;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -19,8 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Service
 public class ExcelReadToDtoService {
@@ -31,7 +29,6 @@ public class ExcelReadToDtoService {
   public static final int ROLE_NAME = 3;
   public static final int QUESTION = 4;
   public static final int DESCRIPTION = 5;
-  public static final int DIMENSION = 6;
   public static final int POSITION = 6;
   public static final int REQUIRED = 7;
   public static final int ANSWER_TYPE = 8;
@@ -110,7 +107,7 @@ public class ExcelReadToDtoService {
     List<ImportExcelTrialPositionDTO> importExcelTrialPositionDTOList = new ArrayList<>();
 
     for (Row row : sheet) {
-      if (row.getRowNum() == 0) {
+      if (row.getRowNum() == 0 || row.getPhysicalNumberOfCells() < 9) {
         continue;
       }
       ImportExcelTrialPositionDTO importExcelTrialPositionDTO = convertPosition(row);
@@ -135,7 +132,7 @@ public class ExcelReadToDtoService {
   private ImportExcelTrialPositionDTO convertPosition(Row row) {
 
     try {
-      ImportExcelTrialPositionDTO importExcelTrialPositionDTO = ImportExcelTrialPositionDTO.builder()
+      return ImportExcelTrialPositionDTO.builder()
               .questionSetName(getStringCellValue(row,QUESTION_SET_NAME))
               .stageName(getStringCellValue(row,STAGE_NAME))
               .roleName(getStringCellValue(row,ROLE_NAME))
@@ -149,9 +146,9 @@ public class ExcelReadToDtoService {
               .comments(getNumericCellValue (row,COMMENTS))
               .excelRow(row.getRowNum())
               .build();
-      return importExcelTrialPositionDTO;
     } catch (Exception e) {
       throw new ExcelImportException("Invalid data Type inside Excel document - please check data-types of Excel Columns", row, e);
+
     }
   }
 

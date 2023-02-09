@@ -29,8 +29,8 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
+//import org.everit.json.schema.loader.SchemaLoader;
+//import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
@@ -158,7 +158,8 @@ public class AnswerService {
                     userLogin,
                     form.simulationTime.toInstant().toEpochMilli(),
                     trialName,
-                    stageName
+                    stageName,
+                    trialSession.getName()
             );
             kafkaUtil.sendAnswer(answerKafkaDTO);
         }

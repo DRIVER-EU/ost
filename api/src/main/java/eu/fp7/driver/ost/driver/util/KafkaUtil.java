@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct;
 
 @Service
 public class KafkaUtil {
@@ -17,11 +17,11 @@ public class KafkaUtil {
     @Value("${driver.is_testbed_on}")
     private boolean is_testbed_on;
 
-    @PostConstruct
-    private void init(){
-        if (!is_testbed_on) return;
+//    @PostConstruct
+//    private void init(){
+//        if (!is_testbed_on) return;
 //        createNewTopic(answerTopic);
-    }
+//    }
 
 //    public void createNewTopic(String topicName){
 //        TopicBuilder.name(topicName)
@@ -31,6 +31,7 @@ public class KafkaUtil {
 //    }
 
     public void sendAnswer(AnswerKafkaDTO answer){
+        if (!is_testbed_on) return;
         kafkaTemplate.send(answerTopic, answer);
     }
 }
