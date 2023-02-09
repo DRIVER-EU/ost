@@ -13,7 +13,7 @@ Wykonanie tej komendy pobierze odpowiednie obrazy dockerowe i zbuduje na ich pod
 W folderze _config znajdują się pliki konfiguracyjne do tomcat'a i nginx'a oraz certyfikaty ssl. W razie gdyby certyfikaty wygasły 
 wystarczy je usunąć i wygenerować nowe komendą:
 ```shell
-penssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem -subj "/C=PL/ST=itti/L=itti/O=itti/OU=itti/CN=itti"
+openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem -subj "/C=PL/ST=itti/L=itti/O=itti/OU=itti/CN=itti"
 ```
 Aby wyłączyć w backendzie debugging wystarczy w docker-compose.yml zakomentować linijkę 
 ```
