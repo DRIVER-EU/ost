@@ -120,12 +120,20 @@ public class AnswerService {
         }
         answer.setAttachments(assignAttachments(form, files, answer));
 
+        StringBuilder trialRoles = new StringBuilder();
+        List<ObservationTypeTrialRole> observationTypeTrialRoles =
+                answer.getObservationType().getObservationTypeTrialRoles();
+        trialRoles.append(observationTypeTrialRoles.get(0).getTrialRole().getName());
+        for(int j = 1; j < observationTypeTrialRoles.size(); j++)
+        {
+            trialRoles.append(", ").append(observationTypeTrialRoles.get(j).getTrialRole().getName());
+        }
+
         for(int i = 0; i < answer.getObservationType().getQuestions().size(); i++) {
             String questionTypeOfAnswer = "";
             String questionName = "";
             String questionDescription = "";
             String answers = "";
-            String userRole = "";
             switch (answer.getObservationType().getQuestions().get(i).getAnswerType()) {
                 case CHECKBOX:
                     questionTypeOfAnswer = "checkbox";
@@ -144,17 +152,13 @@ public class AnswerService {
             questionName = answer.getObservationType().getQuestions().get(i).getName();
             answers = SchemaCreator.getValueFromJSONObject(answer.getFormData(),
                     AnswerProperties.QUESTION_KEY + answer.getObservationType().getQuestions().get(i).getId());
-            List<UserRoleSession> userRoleSessionList = userRoleSessionRepository.findByTrialSession(trialSession);
-            if (userRoleSessionList != null)
-                userRole = userRoleSessionList.get(0).getTrialRole().getName();
-
             //        brokerUtil.sendAnswerToTestBed(answer);
             AnswerKafkaDTO answerKafkaDTO = new AnswerKafkaDTO(
                     questionName,
                     questionDescription,
                     questionTypeOfAnswer,
                     answers,
-                    userRole,
+                    trialRoles.toString(),
                     userLogin,
                     form.simulationTime.toInstant().toEpochMilli(),
                     trialName,
