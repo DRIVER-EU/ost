@@ -123,6 +123,7 @@ public class AnswerService {
         StringBuilder trialRoles = new StringBuilder();
         List<ObservationTypeTrialRole> observationTypeTrialRoles =
                 answer.getObservationType().getObservationTypeTrialRoles();
+        String questionSetName = answer.getObservationType().getName();
         trialRoles.append(observationTypeTrialRoles.get(0).getTrialRole().getName());
         for(int j = 1; j < observationTypeTrialRoles.size(); j++)
         {
@@ -163,7 +164,8 @@ public class AnswerService {
                     form.simulationTime.toInstant().toEpochMilli(),
                     trialName,
                     stageName,
-                    trialSession.getName()
+                    trialSession.getName(),
+                    questionSetName
             );
             kafkaUtil.sendAnswer(answerKafkaDTO);
         }
