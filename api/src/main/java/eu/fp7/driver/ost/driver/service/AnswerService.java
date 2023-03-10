@@ -135,6 +135,7 @@ public class AnswerService {
             String questionName = "";
             String questionDescription = "";
             String answers = "";
+            String comment = "";
             switch (answer.getObservationType().getQuestions().get(i).getAnswerType()) {
                 case CHECKBOX:
                     questionTypeOfAnswer = "checkbox";
@@ -153,6 +154,9 @@ public class AnswerService {
             questionName = answer.getObservationType().getQuestions().get(i).getName();
             answers = SchemaCreator.getValueFromJSONObject(answer.getFormData(),
                     AnswerProperties.QUESTION_KEY + answer.getObservationType().getQuestions().get(i).getId());
+            comment = SchemaCreator.getValueFromJSONObject(answer.getFormData(), AnswerProperties.QUESTION_KEY +
+                    answer.getObservationType().getQuestions().get(i).getId() + AnswerProperties.COMMENT_KEY);
+
             //        brokerUtil.sendAnswerToTestBed(answer);
             AnswerKafkaDTO answerKafkaDTO = new AnswerKafkaDTO(
                     questionName,
@@ -165,7 +169,8 @@ public class AnswerService {
                     trialName,
                     stageName,
                     trialSession.getName(),
-                    questionSetName
+                    questionSetName,
+                    comment
             );
             kafkaUtil.sendAnswer(answerKafkaDTO);
         }

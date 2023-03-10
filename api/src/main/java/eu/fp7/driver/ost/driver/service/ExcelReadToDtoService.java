@@ -107,7 +107,7 @@ public class ExcelReadToDtoService {
     List<ImportExcelTrialPositionDTO> importExcelTrialPositionDTOList = new ArrayList<>();
 
     for (Row row : sheet) {
-      if (row.getRowNum() == 0 || row.getPhysicalNumberOfCells() < 9) {
+      if (row.getRowNum() == 0 || row.getPhysicalNumberOfCells() < 9 || row.getCell(TRIAL_NAME).getRichStringCellValue().toString().isEmpty()) {
         continue;
       }
       ImportExcelTrialPositionDTO importExcelTrialPositionDTO = convertPosition(row);
